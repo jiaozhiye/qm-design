@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-02-08 14:35:05
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-02-11 08:49:10
+ * @Last Modified time: 2021-02-11 17:30:59
  */
 'use strict';
 
@@ -11,7 +11,6 @@ const webpack = require('webpack');
 const utils = require('./utils');
 const VueLoaderPlugin = require('vue-loader').VueLoaderPlugin;
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const CaseSensitivePathsPlugin = require('case-sensitive-paths-webpack-plugin');
 
 process.env.NODE_ENV = 'development';
 
@@ -164,7 +163,6 @@ module.exports = {
     }),
     new webpack.HotModuleReplacementPlugin(),
     new VueLoaderPlugin(),
-    new CaseSensitivePathsPlugin(),
     new HtmlWebpackPlugin({
       filename: 'index.html',
       template: 'public/index.html',
