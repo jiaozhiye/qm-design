@@ -1,0 +1,14 @@
+/*
+ * @Author: 焦质晔
+ * @Date: 2021-02-09 14:11:02
+ * @Last Modified by: 焦质晔
+ * @Last Modified time: 2021-02-11 15:45:52
+ */
+@import './src/themes';
+
+$--color-primary: $primary-color;
+
+/* 改变 icon 字体路径变量，必需 */
+$--font-path: '~element-plus/lib/theme-chalk/fonts';
+
+@import 'element-plus/packages/theme-chalk/src/index';
