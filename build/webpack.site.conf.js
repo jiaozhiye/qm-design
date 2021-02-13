@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-02-08 14:35:05
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-02-11 17:44:52
+ * @Last Modified time: 2021-02-13 10:34:17
  */
 'use strict';
 
@@ -138,7 +138,7 @@ module.exports = {
     /* 当使用 HTML5 History API 时，任意的 404 响应都可能需要被替代为 index.html */
     historyApiFallback: {
       disableDotRule: true,
-      rewrites: [{ from: /.*/, to: utils.resolve('dist/index.html') }],
+      rewrites: [{ from: /.*/, to: '/index.html' }],
     },
     publicPath: '/',
     contentBase: utils.resolve('dist'),
