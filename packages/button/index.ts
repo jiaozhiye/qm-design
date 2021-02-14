@@ -5,13 +5,13 @@
  * @Last Modified time: 2021-02-09 11:03:09
  */
 import { App } from 'vue';
-import { WithInstall } from '../_utils/types';
-import Button from './src/button';
+import { SFCWithInstall } from '../_utils/types';
+import Button from './src/button.tsx';
 
 Button.install = (app: App): void => {
   app.component(Button.name, Button);
 };
 
-const _Button = WithInstall(Button);
+const _Button: SFCWithInstall<typeof Button> = Button;
 
 export default _Button;
