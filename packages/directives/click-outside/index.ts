@@ -1,12 +1,13 @@
 /*
  * @Author: 焦质晔
  * @Date: 2021-02-08 19:28:35
- * @Last Modified by:   焦质晔
- * @Last Modified time: 2021-02-08 19:28:35
+ * @Last Modified by: 焦质晔
+ * @Last Modified time: 2021-02-14 14:26:53
  */
 import { on } from '../../_utils/dom';
 import isServer from '../../_utils/isServer';
 import type { ComponentPublicInstance, DirectiveBinding, ObjectDirective } from 'vue';
+import { Nullable } from '../../_utils/types';
 
 type DocumentHandler = <T extends MouseEvent>(mouseup: T, mousedown: T) => void;
 

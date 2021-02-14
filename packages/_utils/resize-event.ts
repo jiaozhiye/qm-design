@@ -1,13 +1,12 @@
 /*
  * @Author: 焦质晔
  * @Date: 2021-02-08 19:28:25
- * @Last Modified by:   焦质晔
- * @Last Modified time: 2021-02-08 19:28:25
+ * @Last Modified by: 焦质晔
+ * @Last Modified time: 2021-02-14 14:28:17
  */
 import ResizeObserver from 'resize-observer-polyfill';
 import isServer from './isServer';
-
-type CustomizedHTMLElement<T> = HTMLElement & T;
+import { CustomizedHTMLElement } from './types';
 
 export type ResizableElement = CustomizedHTMLElement<{
   __resizeListeners__: Array<(...args: unknown[]) => unknown>;

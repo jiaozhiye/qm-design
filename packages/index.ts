@@ -2,9 +2,10 @@
  * @Author: 焦质晔
  * @Date: 2021-02-08 16:39:21
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-02-11 01:11:10
+ * @Last Modified time: 2021-02-14 14:28:49
  */
 import type { App } from 'vue';
+import { ComponentSize } from './_utils/types';
 
 import QmButton from './button';
 

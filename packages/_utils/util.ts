@@ -2,12 +2,13 @@
  * @Author: 焦质晔
  * @Date: 2021-02-08 19:28:31
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-02-09 13:48:47
+ * @Last Modified time: 2021-02-14 14:27:46
  */
 import { getCurrentInstance } from 'vue';
 import { isObject, isArray, hasOwn, camelize } from '@vue/shared';
 import isServer from './isServer';
 import type { Ref } from 'vue';
+import { AnyFunction } from './types';
 
 export const isIE = (): boolean => {
   return !isServer && !isNaN(Number(document.DOCUMENT_NODE));
