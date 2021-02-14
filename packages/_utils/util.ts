@@ -8,7 +8,8 @@ import { getCurrentInstance } from 'vue';
 import { isObject, isArray, hasOwn, camelize } from '@vue/shared';
 import isServer from './isServer';
 import type { Ref } from 'vue';
-import { AnyFunction } from './types';
+import { AnyFunction, LooseObject } from './types';
+import { InstallOptions } from './config';
 
 export const isIE = (): boolean => {
   return !isServer && !isNaN(Number(document.DOCUMENT_NODE));
@@ -30,7 +31,7 @@ export { isVNode } from 'vue';
 
 export { hasOwn, camelize };
 
-export const useGlobalConfig = (): unknown => {
+export const useGlobalConfig = (): Partial<InstallOptions> => {
   const vm: any = getCurrentInstance();
   if ('$DESIGN' in vm.proxy) {
     return vm.proxy.$DESIGN;
@@ -49,7 +50,7 @@ export const isEmpty = (val: unknown): boolean => {
   return false;
 };
 
-export const isValid = (val: unknown): boolean => {
+export const isValid = (val: string): boolean => {
   return val !== undefined && val !== null && val !== '';
 };
 
@@ -113,10 +114,15 @@ export const download = (blob: Blob, fileName: string): void => {
   }
 };
 
-export const initDefaultProps = (propTypes: unknown, defaultProps: unknown): unknown => {
+export const initDefaultProps = <T extends LooseObject<any>>(
+  propTypes: T,
+  defaultProps: {
+    [P in keyof T]: T[P];
+  }
+): T => {
   Object.keys(defaultProps).forEach((k) => {
     if (propTypes[k]) {
-      propTypes[k].def && (propTypes[k] = propTypes[k].def(defaultProps[k]));
+      propTypes[k].def && ((propTypes[k] as any) = propTypes[k].def(defaultProps[k]));
     } else {
       throw new Error(`not have ${k} prop`);
     }
