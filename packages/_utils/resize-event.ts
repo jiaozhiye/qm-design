@@ -6,9 +6,9 @@
  */
 import ResizeObserver from 'resize-observer-polyfill';
 import isServer from './isServer';
-import { CustomizedHTMLElement } from './types';
+import { CustomHTMLElement } from './types';
 
-export type ResizableElement = CustomizedHTMLElement<{
+export type ResizableElement = CustomHTMLElement<{
   __resizeListeners__: Array<(...args: unknown[]) => unknown>;
   __ro__: ResizeObserver;
 }>;

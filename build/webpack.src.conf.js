@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-02-08 14:35:05
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-02-13 10:34:17
+ * @Last Modified time: 2021-02-16 11:02:14
  */
 'use strict';
 
@@ -20,7 +20,7 @@ module.exports = {
   target: 'web', // webpack5.x 加上之后热更新才有效果
   devtool: 'eval-cheap-source-map',
   entry: {
-    app: utils.resolve('website/index.ts'),
+    app: utils.resolve('src/index.ts'),
   },
   output: {
     path: utils.resolve('dist'),
@@ -41,7 +41,7 @@ module.exports = {
     extensions: ['.ts', '.tsx', '.js', '.jsx', '.vue', '.json'],
     alias: {
       vue$: 'vue/dist/vue.runtime.esm-bundler.js',
-      '@': utils.resolve('website'),
+      '@': utils.resolve('src'),
     },
     fallback: {
       crypto: false,
@@ -102,7 +102,7 @@ module.exports = {
           {
             loader: 'style-resources-loader',
             options: {
-              patterns: [utils.resolve('website/assets/variables.scss')],
+              patterns: [utils.resolve('src/assets/variables.scss')],
             },
           },
         ],

@@ -8,7 +8,7 @@ import { getCurrentInstance } from 'vue';
 import { isObject, isArray, hasOwn, camelize } from '@vue/shared';
 import isServer from './isServer';
 import type { Ref } from 'vue';
-import { AnyFunction, LooseObject } from './types';
+import { AnyFunction, AnyObject } from './types';
 import { InstallOptions } from './config';
 
 export const isIE = (): boolean => {
@@ -114,7 +114,7 @@ export const download = (blob: Blob, fileName: string): void => {
   }
 };
 
-export const initDefaultProps = <T extends LooseObject<any>>(
+export const initDefaultProps = <T extends AnyObject<any>>(
   propTypes: T,
   defaultProps: {
     [P in keyof T]: T[P];

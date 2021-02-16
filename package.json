@@ -1,10 +1,10 @@
 {
-  "name": "vue3-cli",
+  "name": "qm-design",
   "version": "0.1.0",
   "license": "MIT",
   "private": true,
   "scripts": {
-    "dev": "cross-env NODE_ENV=development BABEL_ENV=web webpack serve --inline --hot --progress --config build/webpack.site.conf.js",
+    "dev": "cross-env NODE_ENV=development BABEL_ENV=web webpack serve --inline --hot --progress --config build/webpack.src.conf.js",
     "build:lib": "yarn clean:lib && cross-env NODE_ENV=production BABEL_ENV=lib webpack --config ./build/webpack.build.conf.js && yarn build:type && yarn build:locale && yarn build:theme",
     "build:type": "gulp build --gulpfile ./build/build-type.gulp.js && cp-cli lib/packages lib && rimraf lib/packages",
     "build:locale": "cross-env BABEL_ENV=lib babel packages/locale --extensions .ts --out-dir lib/locale",
@@ -12,7 +12,9 @@
     "clean:lib": "rimraf lib",
     "lint": "eslint ./src --ext .vue,.js,.ts",
     "lint-fix": "eslint --fix ./src --ext .vue,.js,.ts",
-    "format": "prettier --write \"./src/**/*.{vue,js,ts}\""
+    "format": "prettier --write \"./src/**/*.{vue,js,ts}\"",
+    "website-dev": "",
+    "website-build": ""
   },
   "gitHooks": {
     "pre-commit": "lint-staged"
