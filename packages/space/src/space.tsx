@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-02-09 09:03:59
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-02-21 09:57:50
+ * @Last Modified time: 2021-02-21 16:48:04
  */
 import { defineComponent } from 'vue';
 import PropTypes from '../../_utils/vue-types';
@@ -33,7 +33,7 @@ export default defineComponent({
     },
     wrap: PropTypes.bool.def(true),
     spacer: {
-      type: [Object, String] as PropType<JSXNode>,
+      type: [String, Object] as PropType<string | JSXNode>,
       default: null,
       validator: (val: unknown): boolean => {
         return isVNode(val) || isString(val);

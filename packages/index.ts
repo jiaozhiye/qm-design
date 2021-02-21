@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-02-08 16:39:21
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-02-21 08:56:38
+ * @Last Modified time: 2021-02-21 17:50:37
  */
 import type { App } from 'vue';
 import { ComponentSize } from './_utils/types';
@@ -11,6 +11,7 @@ import QmButton from './button';
 import QmSpace from './space';
 import QmAnchor from './anchor';
 import QmAnchorItem from './anchor-item';
+import QmDivider from './divider';
 
 import { use as locale, i18n } from './locale';
 import { version } from './version';
@@ -29,16 +30,14 @@ const defaultInstallOpt: InstallOptions = {
 };
 
 // 组件列表
-const components = [QmButton, QmSpace, QmAnchor, QmAnchorItem];
+const components = [QmButton, QmSpace, QmAnchor, QmAnchorItem, QmDivider];
 
 const install = (app: App, opt: InstallOptions): void => {
   // use ElementPlus
-  app.use(ElementPlus, {
-    locale: lang,
-  });
+  app.use(ElementPlus, Object.assign({ locale: lang }, defaultInstallOpt, opt));
 
   // use QmDesign
-  const option = Object.assign(defaultInstallOpt, opt);
+  const option = Object.assign({}, defaultInstallOpt, opt);
   locale(option.locale);
   if (option.i18n) {
     i18n(option.i18n);
@@ -50,7 +49,7 @@ const install = (app: App, opt: InstallOptions): void => {
   });
 };
 
-export { QmButton, QmSpace, QmAnchor, QmAnchorItem, version, install, locale };
+export { QmButton, QmSpace, QmAnchor, QmAnchorItem, QmDivider, version, install, locale };
 
 export default {
   version,

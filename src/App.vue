@@ -3,6 +3,11 @@ import { defineComponent, VNode } from 'vue';
 
 export default defineComponent({
   name: 'App',
+  data() {
+    return {
+      expand: true,
+    };
+  },
   methods: {
     clickHandle() {
       this.$message.success('asdasd');
@@ -16,6 +21,11 @@ export default defineComponent({
           <qm-button onClick={this.clickHandle} />
           <qm-button onClick={this.clickHandle} />
         </qm-space>
+        <qm-divider
+          v-model={[this.expand, 'collapse']}
+          label="标题名称"
+          extra="asdasdasdasdasd"
+        ></qm-divider>
         <qm-anchor style="height: 400px">
           <div>asdasd</div>
           <qm-anchor-item label="标题名称">

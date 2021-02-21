@@ -4,5 +4,9 @@ export default {
     table: {
       emptyText: '暂无数据',
     },
+    divider: {
+      collect: '收起',
+      spread: '展开',
+    },
   },
 };

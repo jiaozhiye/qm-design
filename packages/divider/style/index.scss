@@ -1,0 +1,40 @@
+/*
+ * @Author: 焦质晔
+ * @Date: 2021-02-09 09:27:46
+ * @Last Modified by: 焦质晔
+ * @Last Modified time: 2021-02-21 18:51:56
+ */
+@import '../../style/src/common';
+
+$prefix: '#{$qm-prefix}-divider';
+
+.#{$prefix} {
+  @include reset-component();
+  display: flex;
+  align-items: center;
+  padding: 0 $padding-base;
+  height: 40px;
+  border: 1px solid $border-color-base;
+  background-color: $background-color-cecondary;
+  position: relative;
+  &::before {
+    content: ' ';
+    position: absolute;
+    width: 6px;
+    left: -1px;
+    top: -1px;
+    bottom: -1px;
+    background-color: $primary-color;
+  }
+  &__title {
+    margin-left: 4px;
+  }
+  &__extra {
+    @include text-overflow-cut;
+    flex: 1;
+    margin-left: $margin-base;
+  }
+  &__collapse {
+    margin-left: $margin-base;
+  }
+}
