@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-02-09 09:03:59
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-02-21 15:26:14
+ * @Last Modified time: 2021-02-21 19:25:57
  */
 import { defineComponent, VNode, ComponentInternalInstance, PropType } from 'vue';
 import addEventListener from 'add-dom-event-listener';
@@ -11,7 +11,7 @@ import { JSXNode } from '../../_utils/types';
 import { isNumber } from 'lodash-es';
 import { isValidWidthUnit } from '../../_utils/validators';
 
-import { getParserWidth, debounce, useGlobalConfig } from '../../_utils/util';
+import { getParserWidth, throttle, useGlobalConfig } from '../../_utils/util';
 import { getValidSlot, getInstanceFromSlot } from '../../_utils/instance-children';
 import { getPrefixCls } from '../../_utils/prefix';
 
@@ -45,7 +45,7 @@ export default defineComponent({
     this.scrollEvent = addEventListener(
       this.$refs[`scroll`],
       'scroll',
-      debounce(this.scrollHandle, 20)
+      throttle(this.scrollHandle, 20)
     );
   },
   beforeUnmount() {

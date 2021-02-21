@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-02-08 16:39:21
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-02-21 17:50:37
+ * @Last Modified time: 2021-02-21 19:09:25
  */
 import type { App } from 'vue';
 import { ComponentSize } from './_utils/types';
@@ -34,7 +34,7 @@ const components = [QmButton, QmSpace, QmAnchor, QmAnchorItem, QmDivider];
 
 const install = (app: App, opt: InstallOptions): void => {
   // use ElementPlus
-  app.use(ElementPlus, Object.assign({ locale: lang }, defaultInstallOpt, opt));
+  app.use(ElementPlus, Object.assign({}, { locale: lang }, defaultInstallOpt, opt));
 
   // use QmDesign
   const option = Object.assign({}, defaultInstallOpt, opt);
