@@ -2,12 +2,15 @@
  * @Author: 焦质晔
  * @Date: 2021-02-08 16:39:21
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-02-14 14:28:49
+ * @Last Modified time: 2021-02-21 08:56:38
  */
 import type { App } from 'vue';
 import { ComponentSize } from './_utils/types';
 
 import QmButton from './button';
+import QmSpace from './space';
+import QmAnchor from './anchor';
+import QmAnchorItem from './anchor-item';
 
 import { use as locale, i18n } from './locale';
 import { version } from './version';
@@ -26,7 +29,7 @@ const defaultInstallOpt: InstallOptions = {
 };
 
 // 组件列表
-const components = [QmButton];
+const components = [QmButton, QmSpace, QmAnchor, QmAnchorItem];
 
 const install = (app: App, opt: InstallOptions): void => {
   // use ElementPlus
@@ -47,7 +50,7 @@ const install = (app: App, opt: InstallOptions): void => {
   });
 };
 
-export { QmButton, version, install, locale };
+export { QmButton, QmSpace, QmAnchor, QmAnchorItem, version, install, locale };
 
 export default {
   version,

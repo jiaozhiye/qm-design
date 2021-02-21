@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-02-08 19:28:20
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-02-14 14:26:36
+ * @Last Modified time: 2021-02-21 09:19:38
  */
 import { camelize } from '@vue/shared';
 import isServer from './isServer';
@@ -42,6 +42,10 @@ export const once = function (el: HTMLElement, event: string, fn: EventListener)
   };
   on(el, event, listener);
 };
+
+export const stop = (e: Event): void => e.stopPropagation();
+
+export const prevent = (e: Event): void => e.preventDefault();
 
 export const getStyle = (element: HTMLElement, styleName: string): string => {
   if (isServer) return;
@@ -99,8 +103,6 @@ export const getOffsetTop = (el: HTMLElement): number => {
 export const getOffsetTopDistance = (el: HTMLElement, containerEl: HTMLElement): number => {
   return Math.abs(getOffsetTop(el) - getOffsetTop(containerEl));
 };
-
-export const stop = (e: Event): void => e.stopPropagation();
 
 /**
  * @description 获取满足条件的祖先元素

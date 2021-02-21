@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-02-14 14:25:07
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-02-16 11:21:29
+ * @Last Modified time: 2021-02-21 15:16:45
  */
 import { App, VNode } from 'vue';
 
@@ -22,4 +22,4 @@ export type CustomHTMLElement<T> = HTMLElement & T;
 
 export type SFCWithInstall<T> = T & { install(app: App): void };
 
-export type ComponentSize = 'large' | 'medium' | 'small' | 'mini';
+export type ComponentSize = 'medium' | 'small' | 'mini'; // 40  36  32  28

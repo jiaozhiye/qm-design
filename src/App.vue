@@ -11,13 +11,32 @@ export default defineComponent({
   render(): VNode {
     return (
       <>
-        <h3>vue3-cli</h3>
-        <h5 class="iconfont icon-delete">hello world</h5>
-        <qm-button onClick={this.clickHandle} />
+        <qm-space spacer={'|'}>
+          <qm-button onClick={this.clickHandle} />
+          <qm-button onClick={this.clickHandle} />
+          <qm-button onClick={this.clickHandle} />
+        </qm-space>
+        <qm-anchor style="height: 400px">
+          <div>asdasd</div>
+          <qm-anchor-item label="标题名称">
+            <div class="box">内容1</div>
+          </qm-anchor-item>
+          <qm-anchor-item label="页签名称">
+            <div class="box">内容2</div>
+          </qm-anchor-item>
+          <qm-anchor-item label="导航名称">
+            <div class="box">内容3</div>
+          </qm-anchor-item>
+        </qm-anchor>
       </>
     );
   },
 });
 </script>
 
-<style></style>
+<style lang="scss">
+.box {
+  border: 1px solid #000;
+  height: 300px;
+}
+</style>

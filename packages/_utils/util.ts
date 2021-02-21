@@ -2,10 +2,11 @@
  * @Author: 焦质晔
  * @Date: 2021-02-08 19:28:31
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-02-14 14:27:46
+ * @Last Modified time: 2021-02-21 13:15:28
  */
 import { getCurrentInstance } from 'vue';
 import { isObject, isArray, hasOwn, camelize } from '@vue/shared';
+import { isNumber, debounce, throttle } from 'lodash-es';
 import isServer from './isServer';
 import type { Ref } from 'vue';
 import { AnyFunction, AnyObject } from './types';
@@ -30,6 +31,9 @@ export const isFirefox = (): boolean => {
 export { isVNode } from 'vue';
 
 export { hasOwn, camelize };
+
+// 函数的 防抖 和 节流，使用 lodash 工具函数
+export { debounce, throttle };
 
 export const useGlobalConfig = (): Partial<InstallOptions> => {
   const vm: any = getCurrentInstance();
@@ -62,6 +66,13 @@ export const getValueByPath = (obj: unknown, paths = ''): unknown => {
   return ret;
 };
 
+export const getParserWidth = (val: number | string): string => {
+  if (isNumber(val)) {
+    return `${val}px`;
+  }
+  return val.toString();
+};
+
 /**
  * Unwraps refed value
  * @param ref Refed value
@@ -91,26 +102,6 @@ export const errorCapture = async (asyncFn: AnyFunction<any>, ...params: any[]):
     return [null, res];
   } catch (e) {
     return [e, null];
-  }
-};
-
-/**
- * @description 文件下载
- * @param {Blob} blob 对象
- * @param {string} fileName 文件名
- * @returns
- */
-export const download = (blob: Blob, fileName: string): void => {
-  // ie10+
-  if (navigator.msSaveBlob) {
-    navigator.msSaveBlob(blob, decodeURI(fileName));
-  } else {
-    const downloadUrl: string = window.URL.createObjectURL(blob);
-    let a: HTMLAnchorElement = document.createElement('a');
-    a.href = downloadUrl;
-    a.download = decodeURI(fileName);
-    a.click();
-    a = null;
   }
 };
 
