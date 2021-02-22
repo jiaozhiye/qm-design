@@ -6,13 +6,15 @@ export default defineComponent({
   data() {
     return {
       expand: true,
-      loading: true,
+      loading: false,
+      visible: false,
     };
   },
   methods: {
     clickHandle() {
       this.$message.success('asdasd');
-      this.loading = false;
+      // this.loading = false;
+      this.visible = true;
     },
   },
   render(): VNode {
@@ -41,6 +43,15 @@ export default defineComponent({
             </qm-anchor-item>
           </qm-anchor>
         </qm-spin>
+        <qm-drawer
+          v-model={[this.visible, 'visible']}
+          title="抽屉标题"
+          destroyOnClose
+          containerStyle={{ paddingBottom: '30px' }}
+        >
+          <div style="height: 1000px">asd</div>
+          <div style="position: absolute; left: 0; bottom: 0; right: 0;">footer</div>
+        </qm-drawer>
       </>
     );
   },
