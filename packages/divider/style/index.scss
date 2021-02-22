@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-02-09 09:27:46
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-02-21 18:51:56
+ * @Last Modified time: 2021-02-22 10:00:22
  */
 @import '../../style/src/common';
 
@@ -36,5 +36,16 @@ $prefix: '#{$qm-prefix}-divider';
   }
   &__collapse {
     margin-left: $margin-base;
+  }
+  // ------ size ------
+  // 40  36  32  28
+  &--medium {
+    height: 36px;
+  }
+  &--small {
+    height: 32px;
+  }
+  &--mini {
+    height: 28px;
   }
 }

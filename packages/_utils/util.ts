@@ -4,11 +4,10 @@
  * @Last Modified by: 焦质晔
  * @Last Modified time: 2021-02-21 13:15:28
  */
-import { getCurrentInstance } from 'vue';
+import { getCurrentInstance, Ref, Fragment, Comment, Text } from 'vue';
 import { isObject, isArray, hasOwn, camelize } from '@vue/shared';
 import { isNumber, debounce, throttle } from 'lodash-es';
 import isServer from './isServer';
-import type { Ref } from 'vue';
 import { AnyFunction, AnyObject } from './types';
 import { InstallOptions } from './config';
 
@@ -29,6 +28,18 @@ export const isFirefox = (): boolean => {
 };
 
 export { isVNode } from 'vue';
+
+export const isEmptyElement = (c): boolean => {
+  return (
+    c.type === Comment ||
+    (c.type === Fragment && c.children.length === 0) ||
+    (c.type === Text && c.children.trim() === '')
+  );
+};
+
+export const isValidElement = (c): boolean => {
+  return c && c.__v_isVNode && typeof c.type !== 'symbol'; // remove text node
+};
 
 export { hasOwn, camelize };
 
