@@ -4,6 +4,8 @@
  * @Last Modified by:   焦质晔
  * @Last Modified time: 2021-02-21 13:13:47
  */
+import { Nullable } from './types';
+
 /**
  * @description 文件下载
  * @param {Blob} blob 对象
@@ -16,7 +18,7 @@ export const download = (blob: Blob, fileName: string): void => {
     navigator.msSaveBlob(blob, decodeURI(fileName));
   } else {
     const downloadUrl: string = window.URL.createObjectURL(blob);
-    let a: HTMLAnchorElement = document.createElement('a');
+    let a: Nullable<HTMLAnchorElement> = document.createElement('a');
     a.href = downloadUrl;
     a.download = decodeURI(fileName);
     a.click();

@@ -69,7 +69,7 @@ export const isValid = (val: string): boolean => {
   return val !== undefined && val !== null && val !== '';
 };
 
-export const getValueByPath = (obj: unknown, paths = ''): unknown => {
+export const getValueByPath = (obj: AnyObject<any>, paths = ''): unknown => {
   let ret = obj;
   paths.split('.').map((path) => {
     ret = ret?.[path];

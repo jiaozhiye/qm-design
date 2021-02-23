@@ -22,6 +22,7 @@ export default defineComponent({
     },
     anchorItems: {
       type: Array as PropType<ComponentInternalInstance[]>,
+      default: () => [],
     },
     onTabClick: {
       type: Function as PropType<(index: number, ev: Event) => void>,
