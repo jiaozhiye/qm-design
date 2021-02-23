@@ -14,6 +14,33 @@ export default defineComponent({
       visible: false,
       visible2: false,
       tabName: 'second',
+      formList: [
+        {
+          type: 'INPUT',
+          fieldName: 'a',
+          label: '表单项1',
+        },
+        {
+          type: 'INPUT',
+          fieldName: 'b',
+          label: '表单项2',
+        },
+        {
+          type: 'INPUT',
+          fieldName: 'c',
+          label: '表单项3',
+        },
+        {
+          type: 'INPUT',
+          fieldName: 'd',
+          label: '表单项4',
+        },
+        {
+          type: 'INPUT',
+          fieldName: 'e',
+          label: '表单项5',
+        },
+      ],
     };
   },
   methods: {
@@ -60,7 +87,7 @@ export default defineComponent({
             按钮
           </qm-button>
         </qm-space>
-        <qm-form></qm-form>
+        <qm-form list={this.formList} formType="search"></qm-form>
         <qm-tabs
           v-model={this.tabName}
           extraNode="asdasd"
