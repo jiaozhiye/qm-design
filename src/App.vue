@@ -1,6 +1,10 @@
 <script lang="ts">
 import { defineComponent, VNode } from 'vue';
 
+const sleep = async (delay: number): Promise<any> => {
+  return new Promise((resolve) => setTimeout(resolve, delay));
+};
+
 export default defineComponent({
   name: 'App',
   data() {
@@ -9,6 +13,7 @@ export default defineComponent({
       loading: false,
       visible: false,
       visible2: false,
+      tabName: 'second',
     };
   },
   methods: {
@@ -17,6 +22,34 @@ export default defineComponent({
       // this.loading = false;
       // this.visible = true;
       this.visible2 = true;
+    },
+    async beforeLeave() {
+      await sleep(1000);
+
+      // new Promise((resolve, reject) => {
+      //   setTimeout(() => {
+      //     reject();
+      //   }, 1000);
+      // })
+      //   .then(() => {
+      //     console.log('成功');
+      //   })
+      //   .catch(() => {
+      //     console.log('失败2');
+      //   });
+
+      // Promise.reject()
+      //   .then(() => {
+      //     console.log('成功');
+      //   })
+      //   .catch(() => {
+      //     console.log('失败2');
+      //   });
+
+      // 注意
+      // new Promise((resolve, reject) => reject()) === Promise.reject()
+
+      return Promise.reject();
     },
   },
   render(): VNode {
@@ -27,6 +60,24 @@ export default defineComponent({
             按钮
           </qm-button>
         </qm-space>
+        <qm-tabs
+          v-model={this.tabName}
+          extraNode="asdasd"
+          onChange={(name) => {
+            console.log(11, name);
+          }}
+        >
+          <div>asd</div>
+          <qm-tab-pane label="用户管理" name="first">
+            用户管理1
+          </qm-tab-pane>
+          <qm-tab-pane label="配置管理" name="second">
+            配置管理2
+          </qm-tab-pane>
+          <qm-tab-pane label="角色管理" name="third">
+            角色管理3
+          </qm-tab-pane>
+        </qm-tabs>
         <qm-divider
           v-model={[this.expand, 'collapse']}
           label="标题名称"

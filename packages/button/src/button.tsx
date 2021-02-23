@@ -17,7 +17,7 @@ export default defineComponent({
   props: {
     // ajax 防止重复提交，对应的执行方法通过 click 参数传进来，异步方法
     click: {
-      type: Function as PropType<AnyFunction<any>>,
+      type: Function as PropType<AnyFunction<Promise<void>>>,
       default: null,
     },
     size: PropTypes.string,

@@ -77,9 +77,15 @@ export default defineComponent({
     };
   },
   computed: {
+    disTop() {
+      if (this.fullscreen || isNaN(Number.parseInt(this.height))) {
+        return this.top;
+      }
+      return `calc((100vh - ${getParserWidth(this.height)}) / 2)`;
+    },
     dialogHeight(): Nullable<string> {
       if (this.height === 'auto') {
-        return this.fullscreen ? `100vh` : `calc(100vh - ${this.top} - ${this.top})`;
+        return this.fullscreen ? `100vh` : `calc(100vh - ${this.disTop} - ${this.disTop})`;
       }
       return this.height !== 'none' ? getParserWidth(this.height) : this.height;
     },
@@ -151,7 +157,7 @@ export default defineComponent({
     },
   },
   render(): JSXNode {
-    const { fullscreen, height, containerStyle, $props } = this;
+    const { fullscreen, disTop, height, containerStyle, $props } = this;
 
     const $DESIGN = useGlobalConfig();
     const prefixCls = getPrefixCls('dialog');
@@ -167,7 +173,7 @@ export default defineComponent({
     const wrapProps = {
       customClass: classnames(cls),
       modelValue: $props.visible,
-      top: $props.top,
+      top: disTop,
       // withHeader: $props.showHeader,
       showClose: $props.showClose,
       fullscreen,

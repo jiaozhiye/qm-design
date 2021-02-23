@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-02-08 16:39:21
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-02-22 18:03:28
+ * @Last Modified time: 2021-02-23 12:17:06
  */
 import type { App } from 'vue';
 import { ComponentSize, AnyObject } from './_utils/types';
@@ -15,6 +15,8 @@ import QmDivider from './divider';
 import QmSpin from './spin';
 import QmDrawer from './drawer';
 import QmDialog from './dialog';
+import QmTabs from './tabs';
+import QmTabPane from './tab-pane';
 
 import { use as locale, i18n } from './locale';
 import { version } from './version';
@@ -42,6 +44,8 @@ const components = [
   QmSpin,
   QmDrawer,
   QmDialog,
+  QmTabs,
+  QmTabPane,
 ];
 
 const install = (
@@ -74,6 +78,8 @@ export {
   QmSpin,
   QmDrawer,
   QmDialog,
+  QmTabs,
+  QmTabPane,
   version,
   install,
   locale,
