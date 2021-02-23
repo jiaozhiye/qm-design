@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-02-09 09:03:59
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-02-22 20:23:29
+ * @Last Modified time: 2021-02-23 14:19:29
  */
 import { defineComponent, PropType, CSSProperties } from 'vue';
 import classnames from 'classnames';
@@ -117,7 +117,7 @@ export default defineComponent({
       this.$emit('opened');
       this.$emit('afterVisibleChange', true);
       if (this.insideSpinCtrl) {
-        setTimeout(() => (this.spinning = false), 300);
+        setTimeout(() => (this.spinning = false), 200);
       }
     },
     close(): void {

@@ -20,8 +20,8 @@ export default defineComponent({
     clickHandle() {
       this.$message.success('asdasd');
       // this.loading = false;
-      // this.visible = true;
-      this.visible2 = true;
+      this.visible = true;
+      // this.visible2 = true;
     },
     async beforeLeave() {
       await sleep(1000);
@@ -60,6 +60,7 @@ export default defineComponent({
             按钮
           </qm-button>
         </qm-space>
+        <qm-form></qm-form>
         <qm-tabs
           v-model={this.tabName}
           extraNode="asdasd"
