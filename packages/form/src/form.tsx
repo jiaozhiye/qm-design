@@ -2,12 +2,12 @@
  * @Author: 焦质晔
  * @Date: 2021-02-09 09:03:59
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-02-24 18:25:24
+ * @Last Modified time: 2021-02-24 18:27:16
  */
 import { ComponentPublicInstance, defineComponent } from 'vue';
 import scrollIntoView from 'scroll-into-view-if-needed';
-import { AnyObject, JSXNode, Nullable, ValueOf } from '../../_utils/types';
 import { isObject, isFunction, cloneDeep, xor } from 'lodash-es';
+import { AnyObject, JSXNode, Nullable, ValueOf } from '../../_utils/types';
 import { useGlobalConfig, getParserWidth } from '../../_utils/util';
 import { getPrefixCls } from '../../_utils/prefix';
 import { t } from '../../locale';
@@ -27,6 +27,7 @@ import {
 } from './types';
 
 import FormInput from './form-input';
+import FromInputNumber from './form-input-number';
 import FromCheckbox from './form-checkbox';
 
 const EMITS = ['collapse', 'valuesChange', 'change', 'finish', 'finishFailed', 'reset'];
@@ -301,6 +302,9 @@ export default defineComponent({
     // input + search helper
     INPUT(option: IFormItem): JSXNode {
       return <FormInput ref={option.fieldName} option={option} />;
+    },
+    INPUT_NUMBER(option: IFormItem): JSXNode {
+      return <FromInputNumber ref={option.fieldName} option={option} />;
     },
     CHECKBOX(option: IFormItem): JSXNode {
       return <FromCheckbox ref={option.fieldName} option={option} />;

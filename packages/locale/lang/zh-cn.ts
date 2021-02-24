@@ -20,6 +20,7 @@ export default {
       collect: '收起',
       trueText: '是',
       falseText: '否',
+      inputPlaceholder: '请输入...',
     },
   },
 };

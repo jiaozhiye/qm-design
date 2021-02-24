@@ -26,9 +26,10 @@ export default defineComponent({
           label: '表单项2',
         },
         {
-          type: 'INPUT',
+          type: 'INPUT_NUMBER',
           fieldName: 'c',
           label: '表单项3',
+          rules: [{ required: true, message: '请输入', trigger: 'blur' }],
         },
         {
           type: 'INPUT',
