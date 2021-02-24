@@ -34,6 +34,7 @@ type IFormItem = {
   offsetLeft?: number;
   offsetRight?: number;
   render?: AnyFunction<JSXNode>;
+  __cols__?: number; // 私有属性
 };
 
 const ARRAY_TYPE: string[] = ['RANGE_DATE'];
@@ -48,6 +49,7 @@ export default defineComponent({
       $$form: this,
     };
   },
+  emits: ['collapseChange'],
   props: {
     list: PropTypes.arrayOf(
       PropTypes.shape({
@@ -132,12 +134,25 @@ export default defineComponent({
   },
   watch: {
     fieldNames: {
-      handler(next: string[]): void {
+      handler(next: string[], prev: string[]): void {
         if ([...new Set(next)].length !== next.length) {
           warn('qm-form', `配置项 fieldName 属性是唯一的，不能重复`);
         }
       },
       immediate: true,
+    },
+    formType: {
+      handler(next: IFormType): void {
+        if (next !== 'onlyShow') return;
+        this.formItemList.forEach((x) => {
+          x.disabled = true;
+        });
+      },
+      immediate: true,
+    },
+    expand(next: boolean): void {
+      if (!this.showCollapse) return;
+      this.$emit('collapseChange', next);
     },
   },
   methods: {
@@ -161,6 +176,7 @@ export default defineComponent({
     createFormLayout(): Array<JSXNode> {
       const { flexCols: cols, defaultRows, formType, expand, showCollapse } = this;
 
+      // 栅格列的数组
       const colsArr: Partial<IFormItem>[] = [];
       this.list
         .filter((x) => !x.hidden)
@@ -176,47 +192,55 @@ export default defineComponent({
         });
 
       const colSpan = 24 / cols;
-      const totalCols = colsArr.reduce((prev: any, cur) => {
+      // 栅格所占的总列数
+      const total = colsArr.reduce((prev, cur) => {
         const { selfCols = 1 } = cur;
-        if (isObject(prev)) {
-          return (prev.selfCols ?? 1) + selfCols;
-        }
-        return (prev as number) + selfCols;
-      }) as number;
+        const sum: number = prev + selfCols;
+        cur.__cols__ = sum; // 当前栅格及之前所跨的列数
+        return sum;
+      }, 0);
 
+      // 默认展示的行数
       const defaultPlayRows: number =
-        defaultRows > Math.ceil(totalCols / cols) ? Math.ceil(totalCols / cols) : defaultRows;
-      const count = expand ? totalCols : defaultPlayRows * cols - 1;
+        defaultRows > Math.ceil(total / cols) ? Math.ceil(total / cols) : defaultRows;
 
+      const tmpArr: number[] = []; // 用于获取最后一个展示栅格的 __cols__
       const colFormItems = colsArr.map((x, i) => {
-        const { fieldName, selfCols = 1 } = x;
+        const { fieldName, selfCols = 1, __cols__ } = x;
+        // 判断改栅格是否显示
+        const isBlock: boolean = expand ? true : __cols__ < defaultPlayRows * cols;
+        if (isBlock) {
+          tmpArr.push(__cols__);
+        }
         return (
           <el-col
             key={i}
             span={selfCols * colSpan}
-            style={{
-              display: (formType === 'search' && !showCollapse) || i < count ? 'block' : 'none',
-            }}
+            style={
+              formType === 'search' && {
+                display: !showCollapse || isBlock ? 'block' : 'none',
+              }
+            }
           >
             {fieldName ? this.createFormItem(x) : null}
           </el-col>
         );
       });
 
-      return [...colFormItems, this.createSearchButtonLayout(totalCols, defaultPlayRows)];
+      return [...colFormItems, this.createSearchButtonLayout(tmpArr[tmpArr.length - 1])];
     },
     // 搜索类型按钮布局
-    createSearchButtonLayout(total: number, defaultRows: number): Nullable<JSXNode> {
+    createSearchButtonLayout(lastCols = 0): Nullable<JSXNode> {
       const { flexCols: cols, expand, showCollapse, formType, isSubmitBtn } = this;
+
       // 不是搜索类型
-      if (formType !== 'search') return null;
+      if (formType !== 'search') {
+        return null;
+      }
 
       const colSpan = 24 / cols;
-      let offset = defaultRows * cols - total > 0 ? defaultRows * cols - total - 1 : 0;
-      // 展开
-      if (!showCollapse || expand) {
-        offset = cols - (total % cols) - 1;
-      }
+      // 左侧偏移量
+      const offset = cols - (lastCols % cols) - 1;
 
       return isSubmitBtn ? (
         <el-col key="-" span={colSpan} offset={offset * colSpan} style={{ textAlign: 'right' }}>
