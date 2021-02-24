@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-02-09 09:03:59
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-02-24 15:53:28
+ * @Last Modified time: 2021-02-24 18:25:24
  */
 import { ComponentPublicInstance, defineComponent } from 'vue';
 import scrollIntoView from 'scroll-into-view-if-needed';
@@ -14,6 +14,7 @@ import { t } from '../../locale';
 import { warn } from '../../_utils/error';
 import { noop, difference, secretFormat } from './utils';
 import { FormColsMixin } from './form-cols-mixin';
+import { PublicMethodsMixin } from './public-methods-mixin';
 import {
   IFormType,
   IFormData,
@@ -28,13 +29,13 @@ import {
 import FormInput from './form-input';
 import FromCheckbox from './form-checkbox';
 
-const EMITS = ['collapseChange', 'valuesChange', 'change', 'finish', 'finishFailed', 'reset'];
+const EMITS = ['collapse', 'valuesChange', 'change', 'finish', 'finishFailed', 'reset'];
 
 export default defineComponent({
   name: 'QmForm',
   componentName: 'QmForm',
   inheritAttrs: false,
-  mixins: [FormColsMixin],
+  mixins: [FormColsMixin, PublicMethodsMixin],
   provide() {
     return {
       $$form: this,
@@ -46,7 +47,8 @@ export default defineComponent({
     return {
       form: {}, // 表单
       desc: {}, // 描述信息
-      expand: false, // 展开收起状态
+      view: {}, // 视图数据
+      collapse: false, // 展开收起状态
     };
   },
   computed: {
@@ -78,18 +80,18 @@ export default defineComponent({
         .filter((x) => isObject(x.descOptions))
         .map((x) => ({ fieldName: x.fieldName, content: x.descOptions.content }));
     },
+    isFilterType(): boolean {
+      return this.formType === 'search';
+    },
     dividers(): Array<IFormItem> {
       return this.list.filter((x) => x.type === 'BREAK_SPACE');
     },
-    isFormCollapse(): boolean {
+    isDividerCollapse(): boolean {
       return this.dividers.some((x) => !!x.collapse);
     },
-    isFilterCollapse(): boolean {
+    showFilterCollapse(): boolean {
       const total: number = this.list.filter((x) => !x.hidden).length;
       return this.isCollapse && total >= this.flexCols;
-    },
-    isFormFilter(): boolean {
-      return this.formType === 'search';
     },
   },
   watch: {
@@ -148,9 +150,9 @@ export default defineComponent({
     descContents(val: Array<IFormDesc>): void {
       val.forEach((x) => (this.desc[x.fieldName] = x.content));
     },
-    expand(next: boolean): void {
-      if (!this.isFilterCollapse) return;
-      this.$emit('collapseChange', next);
+    collapse(next: boolean): void {
+      if (!this.showFilterCollapse) return;
+      this.$emit('collapse', next);
     },
   },
   created() {
@@ -203,7 +205,7 @@ export default defineComponent({
       return val;
     },
     setViewValue(fieldName: string, val: unknown): void {
-      if (!this.isFormCollapse) return;
+      if (!this.isDividerCollapse) return;
       if (val !== this.view[fieldName]) {
         this.view = Object.assign({}, this.view, { [fieldName]: val });
       }
@@ -345,7 +347,7 @@ export default defineComponent({
       const formData = {};
       for (let key in form) {
         if (typeof form[key] !== 'undefined') continue;
-        !this.isFormFilter && (formData[key] = '');
+        !this.isFilterType && (formData[key] = '');
       }
       return cloneDeep(Object.assign({}, form, formData));
     },
@@ -355,7 +357,7 @@ export default defineComponent({
         this.$refs[`form`].validate((valid, fields) => {
           if (!valid) {
             reject(fields);
-            !this.isFormFilter && this.scrollToField(fields);
+            !this.isFilterType && this.scrollToField(fields);
           } else {
             resolve(this.form);
           }
@@ -404,7 +406,7 @@ export default defineComponent({
       this.$nextTick(() => {
         this.$refs[`form`].clearValidate();
         // 筛选器
-        if (this.isFormFilter) {
+        if (this.isFilterType) {
           this.$emit('reset');
           this.submitForm();
         }
@@ -430,7 +432,7 @@ export default defineComponent({
     },
     // 表单布局
     createFormLayout(): Array<JSXNode> {
-      const { flexCols: cols, defaultRows, isFormFilter, expand, isFilterCollapse } = this;
+      const { flexCols: cols, defaultRows, isFilterType, collapse, showFilterCollapse } = this;
 
       // 栅格列的数组
       const colsArr: Partial<IFormItem>[] = [];
@@ -466,7 +468,7 @@ export default defineComponent({
         // 调整 selfCols 的大小
         selfCols = selfCols >= 24 || type === 'BREAK_SPACE' || type === 'TINYMCE' ? cols : selfCols;
         // 判断改栅格是否显示
-        const isBlock: boolean = expand ? true : __cols__ < defaultPlayRows * cols;
+        const isBlock: boolean = collapse ? true : __cols__ < defaultPlayRows * cols;
         if (isBlock) {
           tmpArr.push(__cols__);
         }
@@ -477,8 +479,8 @@ export default defineComponent({
             id={type !== 'BREAK_SPACE' ? `${fieldName}` : null}
             span={selfCols * colSpan}
             style={
-              isFormFilter && {
-                display: !isFilterCollapse || isBlock ? 'block' : 'none',
+              isFilterType && {
+                display: !showFilterCollapse || isBlock ? 'block' : 'none',
               }
             }
           >
@@ -491,10 +493,10 @@ export default defineComponent({
     },
     // 搜索类型按钮布局
     createSearchButtonLayout(lastCols = 0): Nullable<JSXNode> {
-      const { flexCols: cols, expand, isFilterCollapse, isFormFilter, isSubmitBtn } = this;
+      const { flexCols: cols, collapse, showFilterCollapse, isFilterType, isSubmitBtn } = this;
 
       // 不是搜索类型
-      if (!isFormFilter) {
+      if (!isFilterType) {
         return null;
       }
 
@@ -510,10 +512,10 @@ export default defineComponent({
           <el-button icon="iconfont icon-reload" onClick={this.resetForm}>
             {t('qm.form.reset')}
           </el-button>
-          {isFilterCollapse ? (
-            <el-button type="text" onClick={() => (this.expand = !expand)}>
-              {expand ? t('qm.form.collect') : t('qm.form.spread')}{' '}
-              <i class={expand ? 'el-icon-arrow-up' : 'el-icon-arrow-down'} />
+          {showFilterCollapse ? (
+            <el-button type="text" onClick={() => (this.collapse = !collapse)}>
+              {collapse ? t('qm.form.collect') : t('qm.form.spread')}{' '}
+              <i class={collapse ? 'el-icon-arrow-up' : 'el-icon-arrow-down'} />
             </el-button>
           ) : null}
         </el-col>
@@ -521,8 +523,8 @@ export default defineComponent({
     },
     // 表单类型按钮列表
     createFormButtonLayout(): Nullable<JSXNode> {
-      const { flexCols: cols, formType, isFormFilter, isSubmitBtn } = this;
-      if (isFormFilter) return null;
+      const { flexCols: cols, formType, isFilterType, isSubmitBtn } = this;
+      if (isFilterType) return null;
       const colSpan = 24 / cols;
       return isSubmitBtn && formType === 'default' ? (
         <el-row gutter={4}>
@@ -544,54 +546,6 @@ export default defineComponent({
         ret = ret.$refs?.[path];
       });
       return ret;
-    },
-    // 公开方法
-    // 设置表单项的值，参数是表单值得集合 { fieldName: val, ... }
-    SET_FIELDS_VALUE(values: IFormData = {}): void {
-      for (let key in values) {
-        if (this.fieldNames.includes(key)) {
-          let item: IFormItem = this.formItemList.find((x) => x.fieldName === key);
-          this.form[key] = this.getInitialValue(item, values[key]);
-        }
-      }
-    },
-    SET_FORM_VALUES(values: IFormData = {}): void {
-      for (let key in values) {
-        if (this.fieldNames.includes(key)) {
-          this.SET_FIELDS_VALUE({ [key]: values[key] });
-        } else {
-          this.form[key] = values[key];
-        }
-      }
-    },
-    SUBMIT_FORM(): void {
-      this.submitForm();
-    },
-    RESET_FORM(): void {
-      this.resetForm();
-    },
-    CLEAR_FORM(): void {
-      this.clearForm();
-    },
-    VALIDATE_FIELDS(fieldNames: string[] | string): void {
-      const fields: string[] = Array.isArray(fieldNames) ? fieldNames : [fieldNames];
-      fields.forEach((fieldName) => this.formItemValidate(fieldName));
-    },
-    CREATE_FOCUS(fieldName: string): void {
-      const formItem: IFormItem = this.formItemList.find((x) => x.fieldName === fieldName);
-      if (!formItem) return;
-      this.$refs[`${formItem.type}-${fieldName}`]?.focus();
-    },
-    async GET_FORM_DATA(): Promise<any[]> {
-      try {
-        const res = await this.formValidate();
-        return [false, this.formatFormValue(res)];
-      } catch (err) {
-        return [err, null];
-      }
-    },
-    GET_FIELD_VALUE(fieldName: string): ValueOf<IFormData> {
-      return this.form[fieldName];
     },
   },
   render(): JSXNode {
