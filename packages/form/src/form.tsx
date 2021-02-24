@@ -2,25 +2,26 @@
  * @Author: 焦质晔
  * @Date: 2021-02-09 09:03:59
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-02-23 23:31:38
+ * @Last Modified time: 2021-02-24 11:51:02
  */
 import { defineComponent, PropType } from 'vue';
 import PropTypes from '../../_utils/vue-types';
-import { AnyFunction, JSXNode, Nullable } from '../../_utils/types';
+import { AnyFunction, JSXNode, Nullable, ValueOf } from '../../_utils/types';
 
-import { isNumber, isObject, isFunction } from 'lodash-es';
+import { isNumber, isObject, isFunction, isUndefined, cloneDeep, xor } from 'lodash-es';
 import { useGlobalConfig, getParserWidth } from '../../_utils/util';
 import { getPrefixCls } from '../../_utils/prefix';
 import { isValidWidthUnit } from '../../_utils/validators';
 import { t } from '../../locale';
 import { warn } from '../../_utils/error';
+import { difference, secretFormat } from './utils';
 import { FormColsMixin } from './form-cols-mixin';
 
 import FormInput from './form-input';
 
 type IFormType = 'default' | 'search' | 'onlyShow';
 
-type IForm = Record<string, string | number | Array<string | number> | undefined>;
+type IFormData = Record<string, string | number | Array<string | number> | undefined>;
 
 type IFormItem = {
   type: string;
@@ -33,9 +34,16 @@ type IFormItem = {
   selfCols?: number;
   offsetLeft?: number;
   offsetRight?: number;
+  options?: {
+    falseValue?: number | string;
+    secretType?: string;
+  };
+  readonly?: boolean;
   render?: AnyFunction<JSXNode>;
   __cols__?: number; // 私有属性
 };
+
+type IFormDesc = Record<string, string>;
 
 const ARRAY_TYPE: string[] = ['RANGE_DATE'];
 
@@ -49,7 +57,7 @@ export default defineComponent({
       $$form: this,
     };
   },
-  emits: ['collapseChange'],
+  emits: ['collapseChange', 'valuesChange'],
   props: {
     list: PropTypes.arrayOf(
       PropTypes.shape({
@@ -74,7 +82,7 @@ export default defineComponent({
       },
     },
     initialValue: {
-      type: Object as PropType<IForm>,
+      type: Object as PropType<IFormData>,
       default: () => ({}),
     },
     cols: {
@@ -99,7 +107,8 @@ export default defineComponent({
   },
   data() {
     return {
-      form: {},
+      form: {}, // 表单
+      desc: {}, // 描述信息
       expand: false, // 展开收起状态
     };
   },
@@ -107,7 +116,7 @@ export default defineComponent({
     formItemList() {
       const result: Array<IFormItem> = [];
       this.list
-        .filter((x) => x.fieldName)
+        .filter((x) => x.type !== 'BREAK_SPACE' && x.fieldName)
         .forEach((x) => {
           if (isObject(x.labelOptions) && x.labelOptions.fieldName) {
             result.push(x.labelOptions);
@@ -127,6 +136,14 @@ export default defineComponent({
       });
       return result;
     },
+    descContents(): Array<IFormDesc> {
+      return this.formItemList
+        .filter((x) => isObject(x.descOptions))
+        .map((x) => ({ fieldName: x.fieldName, content: x.descOptions.content }));
+    },
+    dividers(): Array<IFormItem> {
+      return this.list.filter((x) => x.type === 'BREAK_SPACE');
+    },
     showCollapse(): boolean {
       const total: number = this.list.filter((x) => !x.hidden).length;
       return this.isCollapse && total >= this.flexCols;
@@ -138,6 +155,20 @@ export default defineComponent({
         if ([...new Set(next)].length !== next.length) {
           warn('qm-form', `配置项 fieldName 属性是唯一的，不能重复`);
         }
+        if (!Array.isArray(prev)) return;
+        const diffs: string[] = xor(prev, next);
+        if (!diffs.length) return;
+        diffs.forEach((x) => {
+          if (prev.includes(x)) {
+            delete this.form[x];
+          } else {
+            let item: IFormItem = this.formItemList.find((k) => k.fieldName === x);
+            if (this.formType === 'onlyShow') {
+              item.disabled = true;
+            }
+            this.form[x] = this.getInitialValue(item, this.form[x] ?? this.initialValue[x]);
+          }
+        });
       },
       immediate: true,
     },
@@ -150,12 +181,84 @@ export default defineComponent({
       },
       immediate: true,
     },
+    form: {
+      handler(val: IFormData): void {
+        const diff: IFormData = difference(val, this.initialValues) as IFormData;
+        if (!Object.keys(diff).length) return;
+        this.$emit('valuesChange', diff);
+      },
+      deep: true,
+    },
+    desc: {
+      handler(val: IFormDesc): void {
+        this.formItemList.forEach((x) => {
+          if (isObject(x.descOptions)) {
+            x.descOptions.content = val[x.fieldName];
+          }
+        });
+      },
+      deep: true,
+    },
+    rules(): void {
+      this.$nextTick(() => this.$refs[`form`].clearValidate());
+    },
+    descContents(val: Array<IFormDesc>): void {
+      val.forEach((x) => (this.desc[x.fieldName] = x.content));
+    },
     expand(next: boolean): void {
       if (!this.showCollapse) return;
       this.$emit('collapseChange', next);
     },
   },
+  created() {
+    this.initialHandle();
+  },
   methods: {
+    // 组件初始化方法
+    initialHandle(): void {
+      const _form = this.createFormValue();
+      const _desc = this.createDescription();
+      this.initialValues = cloneDeep(_form); // 用于重置表单值 - 深拷贝
+      this.initialExtras = Object.assign({}, _desc); // 用于重置描述 - 浅拷贝
+      this.form = _form;
+      this.desc = _desc;
+    },
+    // 创建表单数据
+    createFormValue(): IFormData {
+      const target: IFormData = {};
+      this.formItemList.forEach((x) => {
+        target[x.fieldName] = this.getInitialValue(x, this.initialValue[x.fieldName]);
+      });
+      return Object.assign({}, this.initialValue, target);
+    },
+    // 创建描述数据
+    createDescription(): IFormDesc {
+      const target: IFormDesc = {};
+      this.formItemList
+        .filter((x) => isObject(x.descOptions))
+        .forEach((x) => {
+          target[x.fieldName] = x.descOptions.content;
+        });
+      return Object.assign({}, target);
+    },
+    // 获取表单数据的初始值
+    getInitialValue(item: IFormItem, val: any): ValueOf<IFormData> {
+      const { type = '', options = {}, readonly } = item;
+      val = val ?? undefined;
+      if (ARRAY_TYPE.includes(type)) {
+        val = val ?? [];
+      }
+      if (type === 'INPUT' && (readonly || item.disabled)) {
+        const { secretType } = options;
+        if (secretType) {
+          val = secretFormat(val, secretType);
+        }
+      }
+      if (type === 'CHECKBOX') {
+        val = val ?? options.falseValue ?? '0';
+      }
+      return val;
+    },
     // input + search helper
     INPUT(): JSXNode {
       return <FormInput />;
@@ -259,7 +362,7 @@ export default defineComponent({
     },
   },
   render(): JSXNode {
-    const { form, rules, labelWidth } = this;
+    const { form, rules, labelWidth, formType } = this;
 
     const $DESIGN = useGlobalConfig();
     const prefixCls = getPrefixCls('form');
@@ -276,6 +379,7 @@ export default defineComponent({
       [`${prefixCls}--medium`]: $DESIGN.size === 'medium',
       [`${prefixCls}--small`]: $DESIGN.size === 'small',
       [`${prefixCls}--mini`]: $DESIGN.size === 'mini',
+      [`${prefixCls}__only-show`]: formType === 'onlyShow',
     };
 
     return (

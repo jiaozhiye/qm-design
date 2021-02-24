@@ -8,6 +8,8 @@ import { App, VNode } from 'vue';
 
 export type Nullable<T> = T | null;
 
+export type ValueOf<T> = T[keyof T];
+
 export type DeepPartial<T> = {
   [P in keyof T]?: T[P] extends Record<string, unknown> ? DeepPartial<T[P]> : T[P];
 };
