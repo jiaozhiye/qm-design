@@ -18,6 +18,8 @@ export default {
       save: '保 存',
       spread: '展开',
       collect: '收起',
+      trueText: '是',
+      falseText: '否',
     },
   },
 };

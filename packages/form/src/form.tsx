@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-02-09 09:03:59
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-02-24 11:51:02
+ * @Last Modified time: 2021-02-24 12:29:52
  */
 import { defineComponent, PropType } from 'vue';
 import PropTypes from '../../_utils/vue-types';
@@ -14,17 +14,20 @@ import { getPrefixCls } from '../../_utils/prefix';
 import { isValidWidthUnit } from '../../_utils/validators';
 import { t } from '../../locale';
 import { warn } from '../../_utils/error';
-import { difference, secretFormat } from './utils';
+import { noop, difference, secretFormat } from './utils';
 import { FormColsMixin } from './form-cols-mixin';
 
 import FormInput from './form-input';
+import FromCheckbox from './form-checkbox';
 
 type IFormType = 'default' | 'search' | 'onlyShow';
+
+type IFormItemType = 'INPUT' | 'CHECKBOX' | 'RANGE_DATE';
 
 type IFormData = Record<string, string | number | Array<string | number> | undefined>;
 
 type IFormItem = {
-  type: string;
+  type: IFormItemType;
   fieldName: string;
   label: string;
   hidden?: boolean;
@@ -45,7 +48,7 @@ type IFormItem = {
 
 type IFormDesc = Record<string, string>;
 
-const ARRAY_TYPE: string[] = ['RANGE_DATE'];
+const ARRAY_TYPE: IFormItemType[] = ['RANGE_DATE'];
 
 export default defineComponent({
   name: 'QmForm',
@@ -144,7 +147,10 @@ export default defineComponent({
     dividers(): Array<IFormItem> {
       return this.list.filter((x) => x.type === 'BREAK_SPACE');
     },
-    showCollapse(): boolean {
+    isFormCollapse(): boolean {
+      return this.dividers.some((x) => !!x.collapse);
+    },
+    isFilterCollapse(): boolean {
       const total: number = this.list.filter((x) => !x.hidden).length;
       return this.isCollapse && total >= this.flexCols;
     },
@@ -206,7 +212,7 @@ export default defineComponent({
       val.forEach((x) => (this.desc[x.fieldName] = x.content));
     },
     expand(next: boolean): void {
-      if (!this.showCollapse) return;
+      if (!this.isFilterCollapse) return;
       this.$emit('collapseChange', next);
     },
   },
@@ -259,10 +265,90 @@ export default defineComponent({
       }
       return val;
     },
-    // input + search helper
-    INPUT(): JSXNode {
-      return <FormInput />;
+    setViewValue(fieldName: string, val: unknown): void {
+      if (!this.isFormCollapse) return;
+      if (val !== this.view[fieldName]) {
+        this.view = Object.assign({}, this.view, { [fieldName]: val });
+      }
     },
+    createFormItemLabel(option): JSXNode {
+      const { form } = this;
+      const {
+        label,
+        type = 'SELECT',
+        fieldName,
+        options = {},
+        style = {},
+        disabled,
+        onChange = noop,
+      } = option;
+      const { itemList, trueValue = '1', falseValue = '0' } = options;
+      return (
+        <div class="label-wrap" style={{ ...style }}>
+          {type === 'SELECT' && (
+            <el-select
+              v-model={form[fieldName]}
+              placeholder=""
+              disabled={disabled}
+              onChange={onChange}
+            >
+              {itemList.map((x) => (
+                <el-option key={x.value} label={x.text} value={x.value} disabled={x.disabled} />
+              ))}
+            </el-select>
+          )}
+          {type === 'CHECKBOX' && (
+            <span>
+              <span class="desc-text" style={{ paddingRight: '10px' }}>
+                {label}
+              </span>
+              <el-checkbox
+                v-model={form[fieldName]}
+                trueLabel={trueValue}
+                falseLabel={falseValue}
+                disabled={disabled}
+                onChange={onChange}
+              />
+            </span>
+          )}
+        </div>
+      );
+    },
+    createFormItemDesc(option): JSXNode {
+      const { fieldName, isTooltip, style = {} } = option;
+      const content: JSXNode | string = this.desc[fieldName] ?? '';
+      if (isTooltip) {
+        return (
+          <el-tooltip
+            effect="dark"
+            placement="right"
+            v-slots={{
+              content: (): JSXNode => <div>{content}</div>,
+            }}
+          >
+            <i class="desc-icon el-icon-info" />
+          </el-tooltip>
+        );
+      }
+      return (
+        <span
+          title={content as string}
+          class="desc-text text_overflow_cut"
+          style={{ display: 'inline-block', paddingLeft: '10px', ...style }}
+        >
+          {content}
+        </span>
+      );
+    },
+    // ============================================
+    // input + search helper
+    INPUT(option: IFormItem): JSXNode {
+      return <FormInput option={option} />;
+    },
+    CHECKBOX(option: IFormItem): JSXNode {
+      return <FromCheckbox option={option} />;
+    },
+    // ============================================
     // 表单元素
     createFormItem(item: IFormItem): Nullable<JSXNode> {
       if (!isFunction(this[item.type])) {
@@ -277,7 +363,7 @@ export default defineComponent({
     },
     // 表单布局
     createFormLayout(): Array<JSXNode> {
-      const { flexCols: cols, defaultRows, formType, expand, showCollapse } = this;
+      const { flexCols: cols, defaultRows, formType, expand, isFilterCollapse } = this;
 
       // 栅格列的数组
       const colsArr: Partial<IFormItem>[] = [];
@@ -321,7 +407,7 @@ export default defineComponent({
             span={selfCols * colSpan}
             style={
               formType === 'search' && {
-                display: !showCollapse || isBlock ? 'block' : 'none',
+                display: !isFilterCollapse || isBlock ? 'block' : 'none',
               }
             }
           >
@@ -334,7 +420,7 @@ export default defineComponent({
     },
     // 搜索类型按钮布局
     createSearchButtonLayout(lastCols = 0): Nullable<JSXNode> {
-      const { flexCols: cols, expand, showCollapse, formType, isSubmitBtn } = this;
+      const { flexCols: cols, expand, isFilterCollapse, formType, isSubmitBtn } = this;
 
       // 不是搜索类型
       if (formType !== 'search') {
@@ -351,13 +437,29 @@ export default defineComponent({
             {t('qm.form.search')}
           </el-button>
           <el-button icon="iconfont icon-reload">{t('qm.form.reset')}</el-button>
-          {showCollapse ? (
+          {isFilterCollapse ? (
             <el-button type="text" onClick={() => (this.expand = !expand)}>
               {expand ? t('qm.form.collect') : t('qm.form.spread')}{' '}
               <i class={expand ? 'el-icon-arrow-up' : 'el-icon-arrow-down'} />
             </el-button>
           ) : null}
         </el-col>
+      ) : null;
+    },
+    // 表单类型按钮列表
+    createFormButtonLayout(): Nullable<JSXNode> {
+      const { flexCols: cols, formType, isSubmitBtn } = this;
+      if (formType === 'search') return null;
+      const colSpan = 24 / cols;
+      return isSubmitBtn && formType === 'default' ? (
+        <el-row gutter={4}>
+          <el-col key="-" span={colSpan}>
+            <el-form-item label={''}>
+              <el-button type="primary">{t('qm.form.save')}</el-button>
+              <el-button>{t('qm.form.reset')}</el-button>
+            </el-form-item>
+          </el-col>
+        </el-row>
       ) : null;
     },
   },
@@ -386,6 +488,7 @@ export default defineComponent({
       <div class={cls}>
         <el-form ref="form" {...wrapProps}>
           <el-row gutter={4}>{this.createFormLayout()}</el-row>
+          {this.createFormButtonLayout()}
         </el-form>
       </div>
     );

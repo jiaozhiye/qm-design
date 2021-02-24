@@ -16,9 +16,10 @@ export default defineComponent({
       tabName: 'second',
       formList: [
         {
-          type: 'INPUT',
+          type: 'CHECKBOX',
           fieldName: 'a',
           label: '表单项1',
+          onChange: (val) => console.log(val),
         },
         {
           type: 'INPUT',

@@ -2,9 +2,11 @@
  * @Author: 焦质晔
  * @Date: 2021-02-24 10:24:37
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-02-24 10:58:38
+ * @Last Modified time: 2021-02-24 12:08:12
  */
 import { transform, isEqual, isObject } from 'lodash-es';
+
+export const noop = (): void => {};
 
 // 数值类型格式化
 export const formatNumber = (value = ''): string => {
