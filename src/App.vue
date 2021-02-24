@@ -19,10 +19,9 @@ export default defineComponent({
           type: 'CHECKBOX',
           fieldName: 'a',
           label: '表单项1',
-          onChange: (val) => console.log(val),
         },
         {
-          type: 'INPUT',
+          type: 'CHECKBOX',
           fieldName: 'b',
           label: '表单项2',
         },

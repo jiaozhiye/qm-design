@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-02-24 13:02:36
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-02-24 15:09:11
+ * @Last Modified time: 2021-02-24 15:15:22
  */
 import { CSSProperties, PropType } from 'vue';
 import PropTypes from '../../_utils/vue-types';
@@ -64,7 +64,10 @@ export const props = {
       offsetLeft: PropTypes.number.def(0),
       offsetRight: PropTypes.number.def(0),
       style: PropTypes.object,
-      options: PropTypes.object,
+      options: PropTypes.shape({
+        falseValue: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+        secretType: PropTypes.string,
+      }),
       labelOptions: PropTypes.object,
       render: PropTypes.func,
     }).loose

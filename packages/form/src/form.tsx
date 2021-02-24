@@ -2,9 +2,9 @@
  * @Author: 焦质晔
  * @Date: 2021-02-09 09:03:59
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-02-24 15:10:30
+ * @Last Modified time: 2021-02-24 15:53:28
  */
-import { defineComponent } from 'vue';
+import { ComponentPublicInstance, defineComponent } from 'vue';
 import scrollIntoView from 'scroll-into-view-if-needed';
 import { AnyObject, JSXNode, Nullable, ValueOf } from '../../_utils/types';
 import { isObject, isFunction, cloneDeep, xor } from 'lodash-es';
@@ -16,7 +16,6 @@ import { noop, difference, secretFormat } from './utils';
 import { FormColsMixin } from './form-cols-mixin';
 import {
   IFormType,
-  IFormItemType,
   IFormData,
   IFormItem,
   IFormDesc,
@@ -51,7 +50,7 @@ export default defineComponent({
     };
   },
   computed: {
-    formItemList() {
+    formItemList(): IFormItem[] {
       const result: Array<IFormItem> = [];
       this.list
         .filter((x) => x.type !== 'BREAK_SPACE' && x.fieldName)
@@ -89,7 +88,7 @@ export default defineComponent({
       const total: number = this.list.filter((x) => !x.hidden).length;
       return this.isCollapse && total >= this.flexCols;
     },
-    isFormFilter() {
+    isFormFilter(): boolean {
       return this.formType === 'search';
     },
   },
@@ -299,10 +298,10 @@ export default defineComponent({
     // ============================================
     // input + search helper
     INPUT(option: IFormItem): JSXNode {
-      return <FormInput option={option} />;
+      return <FormInput ref={option.fieldName} option={option} />;
     },
     CHECKBOX(option: IFormItem): JSXNode {
-      return <FromCheckbox option={option} />;
+      return <FromCheckbox ref={option.fieldName} option={option} />;
     },
     // ============================================
     // 锚点定位没有通过校验的表单项
@@ -537,6 +536,14 @@ export default defineComponent({
           </el-col>
         </el-row>
       ) : null;
+    },
+    // 获取子组件实例
+    $$(paths: string): ComponentPublicInstance {
+      let ret = this;
+      paths.split('-').map((path) => {
+        ret = ret.$refs?.[path];
+      });
+      return ret;
     },
     // 公开方法
     // 设置表单项的值，参数是表单值得集合 { fieldName: val, ... }

@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-02-23 21:56:33
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-02-24 14:45:44
+ * @Last Modified time: 2021-02-24 15:28:04
  */
 import { defineComponent } from 'vue';
 import { JSXNode } from '../../_utils/types';
@@ -19,6 +19,7 @@ export default defineComponent({
   render(): JSXNode {
     const { form } = this.$$form;
     const {
+      type,
       label,
       fieldName,
       labelWidth,
@@ -46,6 +47,7 @@ export default defineComponent({
       >
         <div style={{ display: 'inline-flex', ...style }}>
           <el-checkbox
+            ref={type}
             v-model={form[fieldName]}
             disabled={disabled}
             trueLabel={trueValue}
