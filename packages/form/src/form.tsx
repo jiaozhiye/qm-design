@@ -2,53 +2,34 @@
  * @Author: 焦质晔
  * @Date: 2021-02-09 09:03:59
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-02-24 12:29:52
+ * @Last Modified time: 2021-02-24 15:10:30
  */
-import { defineComponent, PropType } from 'vue';
-import PropTypes from '../../_utils/vue-types';
-import { AnyFunction, JSXNode, Nullable, ValueOf } from '../../_utils/types';
-
-import { isNumber, isObject, isFunction, isUndefined, cloneDeep, xor } from 'lodash-es';
+import { defineComponent } from 'vue';
+import scrollIntoView from 'scroll-into-view-if-needed';
+import { AnyObject, JSXNode, Nullable, ValueOf } from '../../_utils/types';
+import { isObject, isFunction, cloneDeep, xor } from 'lodash-es';
 import { useGlobalConfig, getParserWidth } from '../../_utils/util';
 import { getPrefixCls } from '../../_utils/prefix';
-import { isValidWidthUnit } from '../../_utils/validators';
 import { t } from '../../locale';
 import { warn } from '../../_utils/error';
 import { noop, difference, secretFormat } from './utils';
 import { FormColsMixin } from './form-cols-mixin';
+import {
+  IFormType,
+  IFormItemType,
+  IFormData,
+  IFormItem,
+  IFormDesc,
+  props,
+  ARRAY_TYPE,
+  FORMAT_ARRAY_TYPE,
+  UNFIX_TYPE,
+} from './types';
 
 import FormInput from './form-input';
 import FromCheckbox from './form-checkbox';
 
-type IFormType = 'default' | 'search' | 'onlyShow';
-
-type IFormItemType = 'INPUT' | 'CHECKBOX' | 'RANGE_DATE';
-
-type IFormData = Record<string, string | number | Array<string | number> | undefined>;
-
-type IFormItem = {
-  type: IFormItemType;
-  fieldName: string;
-  label: string;
-  hidden?: boolean;
-  invisible?: boolean;
-  disabled?: boolean;
-  rules?: Record<string, any>[];
-  selfCols?: number;
-  offsetLeft?: number;
-  offsetRight?: number;
-  options?: {
-    falseValue?: number | string;
-    secretType?: string;
-  };
-  readonly?: boolean;
-  render?: AnyFunction<JSXNode>;
-  __cols__?: number; // 私有属性
-};
-
-type IFormDesc = Record<string, string>;
-
-const ARRAY_TYPE: IFormItemType[] = ['RANGE_DATE'];
+const EMITS = ['collapseChange', 'valuesChange', 'change', 'finish', 'finishFailed', 'reset'];
 
 export default defineComponent({
   name: 'QmForm',
@@ -60,54 +41,8 @@ export default defineComponent({
       $$form: this,
     };
   },
-  emits: ['collapseChange', 'valuesChange'],
-  props: {
-    list: PropTypes.arrayOf(
-      PropTypes.shape({
-        type: PropTypes.string,
-        fieldName: PropTypes.string,
-        label: PropTypes.string,
-        hidden: PropTypes.bool,
-        invisible: PropTypes.bool,
-        disabled: PropTypes.bool,
-        rules: PropTypes.array,
-        selfCols: PropTypes.number.def(1),
-        offsetLeft: PropTypes.number.def(0),
-        offsetRight: PropTypes.number.def(0),
-        render: PropTypes.func,
-      }).loose
-    ).def([]),
-    labelWidth: {
-      type: [Number, String] as PropType<number | string>,
-      default: '80px',
-      validator: (val: number | string): boolean => {
-        return isNumber(val) || isValidWidthUnit(val);
-      },
-    },
-    initialValue: {
-      type: Object as PropType<IFormData>,
-      default: () => ({}),
-    },
-    cols: {
-      type: Number,
-    },
-    defaultRows: {
-      type: Number,
-      default: 1,
-    },
-    formType: {
-      type: String as PropType<IFormType>,
-      default: 'default',
-    },
-    isCollapse: {
-      type: Boolean,
-      default: true,
-    },
-    isSubmitBtn: {
-      type: Boolean,
-      default: true,
-    },
-  },
+  emits: EMITS,
+  props,
   data() {
     return {
       form: {}, // 表单
@@ -153,6 +88,9 @@ export default defineComponent({
     isFilterCollapse(): boolean {
       const total: number = this.list.filter((x) => !x.hidden).length;
       return this.isCollapse && total >= this.flexCols;
+    },
+    isFormFilter() {
+      return this.formType === 'search';
     },
   },
   watch: {
@@ -249,7 +187,7 @@ export default defineComponent({
     },
     // 获取表单数据的初始值
     getInitialValue(item: IFormItem, val: any): ValueOf<IFormData> {
-      const { type = '', options = {}, readonly } = item;
+      const { type, options = {}, readonly } = item;
       val = val ?? undefined;
       if (ARRAY_TYPE.includes(type)) {
         val = val ?? [];
@@ -288,7 +226,7 @@ export default defineComponent({
           {type === 'SELECT' && (
             <el-select
               v-model={form[fieldName]}
-              placeholder=""
+              placeholder={''}
               disabled={disabled}
               onChange={onChange}
             >
@@ -340,6 +278,24 @@ export default defineComponent({
         </span>
       );
     },
+    renderFormItem(option: IFormItem): JSXNode {
+      const { label, fieldName, labelWidth, labelOptions, style = {}, render = noop } = option;
+      return (
+        <el-form-item
+          key={fieldName}
+          label={label}
+          labelWidth={labelWidth && getParserWidth(labelWidth)}
+          prop={fieldName}
+          v-slots={{
+            label: (): JSXNode => labelOptions && this.createFormItemLabel(labelOptions),
+          }}
+        >
+          <div class="desc-text" style={{ width: '100%', ...style }}>
+            {render(option, this)}
+          </div>
+        </el-form-item>
+      );
+    },
     // ============================================
     // input + search helper
     INPUT(option: IFormItem): JSXNode {
@@ -349,6 +305,118 @@ export default defineComponent({
       return <FromCheckbox option={option} />;
     },
     // ============================================
+    // 锚点定位没有通过校验的表单项
+    scrollToField(fields: AnyObject<unknown>): void {
+      const ids: string[] = Object.keys(fields);
+      if (!ids.length) return;
+      scrollIntoView(document.getElementById(ids[0]), {
+        scrollMode: 'if-needed',
+        block: 'nearest',
+      });
+    },
+    // 处理 from data 数据
+    excuteFormValue(form: IFormData): void {
+      this.formItemList
+        .filter((x) => FORMAT_ARRAY_TYPE.includes(x.type))
+        .map((x) => x.fieldName)
+        .forEach((fieldName) => {
+          if ((form[fieldName] as Array<unknown>).length > 0) {
+            let isEmpty = (form[fieldName] as Array<unknown>).every((x) => {
+              let val = x ?? '';
+              return val === '';
+            });
+            if (isEmpty) {
+              form[fieldName] = [];
+            }
+          }
+        });
+      for (let attr in form) {
+        if (form[attr] === '' || form[attr] === null) {
+          form[attr] = undefined;
+        }
+        if (attr.includes('|') && Array.isArray(form[attr])) {
+          let [start, end] = attr.split('|');
+          form[start] = form[attr][0];
+          form[end] = form[attr][1];
+        }
+      }
+    },
+    // 对返回数据进行格式化
+    formatFormValue(form: IFormData): IFormData {
+      const formData = {};
+      for (let key in form) {
+        if (typeof form[key] !== 'undefined') continue;
+        !this.isFormFilter && (formData[key] = '');
+      }
+      return cloneDeep(Object.assign({}, form, formData));
+    },
+    // 表单校验
+    formValidate(): Promise<IFormData> {
+      return new Promise((resolve, reject) => {
+        this.$refs[`form`].validate((valid, fields) => {
+          if (!valid) {
+            reject(fields);
+            !this.isFormFilter && this.scrollToField(fields);
+          } else {
+            resolve(this.form);
+          }
+        });
+      });
+    },
+    // 表单字段校验
+    formItemValidate(fieldName: string): void {
+      this.$refs[`form`].validateField(fieldName);
+    },
+    // 表单提交
+    async submitForm(ev: Event): Promise<void> {
+      ev?.preventDefault();
+      try {
+        const res = await this.formValidate();
+        const data = this.formatFormValue(res);
+        this.$emit('finish', data);
+        this.$emit('change', data);
+      } catch (err) {
+        this.$emit('finishFailed', err);
+      }
+    },
+    // 表单重置
+    resetForm(): void {
+      this.formItemList.forEach((x: IFormItem) => {
+        if (!x.noResetable) {
+          this.SET_FIELDS_VALUE({ [x.fieldName]: cloneDeep(this.initialValues[x.fieldName]) });
+        }
+        // 搜索帮助
+        let extraKeys: string[] = this[`${x.fieldName}ExtraKeys`];
+        if (Array.isArray(extraKeys) && extraKeys.length) {
+          extraKeys.forEach((key) => {
+            this.SET_FORM_VALUES({ [key]: undefined });
+          });
+        }
+        let descKeys: string[] = this[`${x.fieldName}DescKeys`];
+        if (Array.isArray(descKeys) && descKeys.length) {
+          descKeys.forEach((key) => {
+            this.desc[key] = undefined;
+          });
+        }
+      });
+      // this.$refs[`form`].resetFields();
+      this.desc = Object.assign({}, this.initialExtras);
+      // 解决日期区间(拆分后)重复校验的 bug
+      this.$nextTick(() => {
+        this.$refs[`form`].clearValidate();
+        // 筛选器
+        if (this.isFormFilter) {
+          this.$emit('reset');
+          this.submitForm();
+        }
+      });
+    },
+    // 清空表单
+    clearForm(): void {
+      for (let key in this.form) {
+        this.form[key] = Array.isArray(this.form[key]) ? [] : undefined;
+      }
+    },
     // 表单元素
     createFormItem(item: IFormItem): Nullable<JSXNode> {
       if (!isFunction(this[item.type])) {
@@ -363,7 +431,7 @@ export default defineComponent({
     },
     // 表单布局
     createFormLayout(): Array<JSXNode> {
-      const { flexCols: cols, defaultRows, formType, expand, isFilterCollapse } = this;
+      const { flexCols: cols, defaultRows, isFormFilter, expand, isFilterCollapse } = this;
 
       // 栅格列的数组
       const colsArr: Partial<IFormItem>[] = [];
@@ -395,7 +463,9 @@ export default defineComponent({
 
       const tmpArr: number[] = []; // 用于获取最后一个展示栅格的 __cols__
       const colFormItems = colsArr.map((x, i) => {
-        const { fieldName, selfCols = 1, __cols__ } = x;
+        let { fieldName, selfCols = 1, __cols__, type } = x;
+        // 调整 selfCols 的大小
+        selfCols = selfCols >= 24 || type === 'BREAK_SPACE' || type === 'TINYMCE' ? cols : selfCols;
         // 判断改栅格是否显示
         const isBlock: boolean = expand ? true : __cols__ < defaultPlayRows * cols;
         if (isBlock) {
@@ -404,9 +474,11 @@ export default defineComponent({
         return (
           <el-col
             key={i}
+            type={UNFIX_TYPE.includes(type) ? 'UN_FIXED' : 'FIXED'}
+            id={type !== 'BREAK_SPACE' ? `${fieldName}` : null}
             span={selfCols * colSpan}
             style={
-              formType === 'search' && {
+              isFormFilter && {
                 display: !isFilterCollapse || isBlock ? 'block' : 'none',
               }
             }
@@ -420,10 +492,10 @@ export default defineComponent({
     },
     // 搜索类型按钮布局
     createSearchButtonLayout(lastCols = 0): Nullable<JSXNode> {
-      const { flexCols: cols, expand, isFilterCollapse, formType, isSubmitBtn } = this;
+      const { flexCols: cols, expand, isFilterCollapse, isFormFilter, isSubmitBtn } = this;
 
       // 不是搜索类型
-      if (formType !== 'search') {
+      if (!isFormFilter) {
         return null;
       }
 
@@ -433,10 +505,12 @@ export default defineComponent({
 
       return isSubmitBtn ? (
         <el-col key="-" span={colSpan} offset={offset * colSpan} style={{ textAlign: 'right' }}>
-          <el-button type="primary" icon="iconfont icon-search">
+          <el-button type="primary" icon="iconfont icon-search" onClick={this.submitForm}>
             {t('qm.form.search')}
           </el-button>
-          <el-button icon="iconfont icon-reload">{t('qm.form.reset')}</el-button>
+          <el-button icon="iconfont icon-reload" onClick={this.resetForm}>
+            {t('qm.form.reset')}
+          </el-button>
           {isFilterCollapse ? (
             <el-button type="text" onClick={() => (this.expand = !expand)}>
               {expand ? t('qm.form.collect') : t('qm.form.spread')}{' '}
@@ -448,19 +522,69 @@ export default defineComponent({
     },
     // 表单类型按钮列表
     createFormButtonLayout(): Nullable<JSXNode> {
-      const { flexCols: cols, formType, isSubmitBtn } = this;
-      if (formType === 'search') return null;
+      const { flexCols: cols, formType, isFormFilter, isSubmitBtn } = this;
+      if (isFormFilter) return null;
       const colSpan = 24 / cols;
       return isSubmitBtn && formType === 'default' ? (
         <el-row gutter={4}>
           <el-col key="-" span={colSpan}>
             <el-form-item label={''}>
-              <el-button type="primary">{t('qm.form.save')}</el-button>
-              <el-button>{t('qm.form.reset')}</el-button>
+              <el-button type="primary" onClick={this.submitForm}>
+                {t('qm.form.save')}
+              </el-button>
+              <el-button onClick={this.resetForm}>{t('qm.form.reset')}</el-button>
             </el-form-item>
           </el-col>
         </el-row>
       ) : null;
+    },
+    // 公开方法
+    // 设置表单项的值，参数是表单值得集合 { fieldName: val, ... }
+    SET_FIELDS_VALUE(values: IFormData = {}): void {
+      for (let key in values) {
+        if (this.fieldNames.includes(key)) {
+          let item: IFormItem = this.formItemList.find((x) => x.fieldName === key);
+          this.form[key] = this.getInitialValue(item, values[key]);
+        }
+      }
+    },
+    SET_FORM_VALUES(values: IFormData = {}): void {
+      for (let key in values) {
+        if (this.fieldNames.includes(key)) {
+          this.SET_FIELDS_VALUE({ [key]: values[key] });
+        } else {
+          this.form[key] = values[key];
+        }
+      }
+    },
+    SUBMIT_FORM(): void {
+      this.submitForm();
+    },
+    RESET_FORM(): void {
+      this.resetForm();
+    },
+    CLEAR_FORM(): void {
+      this.clearForm();
+    },
+    VALIDATE_FIELDS(fieldNames: string[] | string): void {
+      const fields: string[] = Array.isArray(fieldNames) ? fieldNames : [fieldNames];
+      fields.forEach((fieldName) => this.formItemValidate(fieldName));
+    },
+    CREATE_FOCUS(fieldName: string): void {
+      const formItem: IFormItem = this.formItemList.find((x) => x.fieldName === fieldName);
+      if (!formItem) return;
+      this.$refs[`${formItem.type}-${fieldName}`]?.focus();
+    },
+    async GET_FORM_DATA(): Promise<any[]> {
+      try {
+        const res = await this.formValidate();
+        return [false, this.formatFormValue(res)];
+      } catch (err) {
+        return [err, null];
+      }
+    },
+    GET_FIELD_VALUE(fieldName: string): ValueOf<IFormData> {
+      return this.form[fieldName];
     },
   },
   render(): JSXNode {

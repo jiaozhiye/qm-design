@@ -2,13 +2,14 @@
  * @Author: 焦质晔
  * @Date: 2021-02-23 21:56:33
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-02-24 12:24:19
+ * @Last Modified time: 2021-02-24 14:45:44
  */
 import { defineComponent } from 'vue';
 import { JSXNode } from '../../_utils/types';
 
 import { t } from '../../locale';
 import { noop } from './utils';
+import { getParserWidth } from '../../_utils/util';
 
 export default defineComponent({
   name: 'FormInput',
@@ -37,7 +38,7 @@ export default defineComponent({
       <el-form-item
         key={fieldName}
         label={label}
-        labelWidth={labelWidth}
+        labelWidth={labelWidth && getParserWidth(labelWidth)}
         prop={fieldName}
         v-slots={{
           label: (): JSXNode => labelOptions && this.$$form.createFormItemLabel(labelOptions),

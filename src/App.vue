@@ -79,6 +79,9 @@ export default defineComponent({
 
       return Promise.reject();
     },
+    finish(val) {
+      console.log(val);
+    },
   },
   render(): VNode {
     return (
@@ -88,7 +91,7 @@ export default defineComponent({
             按钮
           </qm-button>
         </qm-space>
-        <qm-form list={this.formList} formType="search"></qm-form>
+        <qm-form list={this.formList} formType="search" onFinish={this.finish}></qm-form>
         <qm-tabs
           v-model={this.tabName}
           extraNode="asdasd"
