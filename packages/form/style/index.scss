@@ -9,4 +9,9 @@
 $prefix: '#{$qm-prefix}-form';
 
 .#{$prefix} {
+  .el-input-number {
+    .el-input__inner {
+      text-align: left;
+    }
+  }
 }

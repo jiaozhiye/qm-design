@@ -412,6 +412,7 @@ export default defineComponent({
         // 筛选器
         if (this.isFilterType) {
           this.$emit('reset');
+          // 重置后，执行表单提交 - 次功能待确认
           this.submitForm();
         }
       });
@@ -480,7 +481,7 @@ export default defineComponent({
           <el-col
             key={i}
             type={UNFIX_TYPE.includes(type) ? 'UN_FIXED' : 'FIXED'}
-            id={type !== 'BREAK_SPACE' ? `${fieldName}` : null}
+            id={fieldName}
             span={selfCols * colSpan}
             style={
               isFilterType && {

@@ -12,8 +12,9 @@ import { useGlobalConfig } from '../../_utils/util';
 
 export default defineComponent({
   name: 'InputNumber',
+  componentName: 'InputNumber',
   inheritAttrs: false,
-  inject: ['elForm', 'elFormItem'],
+  inject: ['elFormItem'],
   emits: ['update:modelValue', 'change'],
   props: {
     modelValue: PropTypes.number,
@@ -109,7 +110,7 @@ export default defineComponent({
     const cls = [
       'el-input-number',
       {
-        [`el-input-number--${$DESIGN.size}`]: true,
+        [`el-input-number--${$DESIGN.size}`]: !!$DESIGN.size,
       },
       { 'is-disabled': disabled },
       { 'is-without-controls': !controls },
@@ -118,8 +119,7 @@ export default defineComponent({
     const wrapProps = {
       modelValue: currentValue,
       'onUpdate:modelValue': (val) => {
-        let isPassed: boolean =
-          (!Number.isNaN(val) && regExp.test(val)) || val === '' || val === '-';
+        let isPassed = (!Number.isNaN(val) && regExp.test(val)) || val === '' || val === '-';
         if (!isPassed) return;
         // 不允许是负数
         if (min === 0 && val === '-') return;
@@ -174,7 +174,7 @@ export default defineComponent({
             this.emitEventHandle(val);
           }}
           onBlur={this.blur}
-          onKeydown={(ev: KeyboardEvent) => {
+          onKeydown={(ev: KeyboardEvent): void => {
             this.$emit('keydown', ev);
           }}
         />

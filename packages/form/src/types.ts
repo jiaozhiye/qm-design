@@ -13,7 +13,7 @@ import { isValidWidthUnit } from '../../_utils/validators';
 
 export type IFormType = 'default' | 'search' | 'onlyShow';
 
-export type IFormItemType = 'BREAK_SPACE' | 'INPUT' | 'CHECKBOX' | 'TINYMCE';
+export type IFormItemType = 'BREAK_SPACE' | 'INPUT' | 'INPUT_NUMBER' | 'CHECKBOX' | 'TINYMCE';
 
 export const ARRAY_TYPE: IFormItemType[] = [];
 export const FORMAT_ARRAY_TYPE: IFormItemType[] = [];
