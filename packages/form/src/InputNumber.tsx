@@ -13,7 +13,6 @@ import { useGlobalConfig } from '../../_utils/util';
 export default defineComponent({
   name: 'InputNumber',
   componentName: 'InputNumber',
-  inheritAttrs: false,
   inject: ['elFormItem'],
   emits: ['update:modelValue', 'change'],
   props: {

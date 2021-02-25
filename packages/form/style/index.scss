@@ -9,9 +9,45 @@
 $prefix: '#{$qm-prefix}-form';
 
 .#{$prefix} {
-  .el-input-number {
-    .el-input__inner {
-      text-align: left;
+  .el-col {
+    .el-form-item {
+      margin-bottom: 0;
+      .el-form-item__label {
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        padding-right: 6px;
+        .label-wrap {
+          display: inline-block;
+          .el-input__inner {
+            border-color: $border-color-base;
+          }
+          .el-input__suffix {
+            background-color: transparent;
+          }
+        }
+      }
+      .el-form-item__content {
+        display: flex;
+        align-items: center;
+        .el-form-item__error {
+          margin-top: -2px;
+          transform-origin: 0 50%;
+          -webkit-transform: scale(0.9);
+          transform: scale(0.9);
+        }
+      }
+      .el-input__inner {
+        padding-left: $padding-base;
+        text-align: left;
+      }
+      .el-input-number {
+        width: 100%;
+        .el-input-number__increase:hover ~ .el-input .el-input__inner:not(.is-disabled),
+        .el-input-number__decrease:hover ~ .el-input .el-input__inner:not(.is-disabled) {
+          border-color: $border-color-base;
+        }
+      }
     }
   }
 }

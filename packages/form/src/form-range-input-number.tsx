@@ -14,29 +14,26 @@ import { getParserWidth } from '../../_utils/util';
 import InputNumber from './InputNumber';
 
 export default defineComponent({
-  name: 'FormInputNumber',
+  name: 'FormRangeInputNumber',
   inheritAttrs: false,
   inject: ['$$form'],
   props: ['option'],
   render(): JSXNode {
     const { form } = this.$$form;
     const {
-      type,
       label,
       fieldName,
       labelWidth,
       labelOptions,
-      descOptions,
       options = {},
-      style = {},
-      placeholder = t('qm.form.inputPlaceholder'),
       clearable,
       readonly,
       disabled,
       onChange = noop,
     } = this.option;
-    const { maxlength, min = 0, max, step, precision, controls = !1, onEnter = noop } = options;
-    this.$$form.setViewValue(fieldName, form[fieldName]);
+    const { min = 0, max, step = 1, precision } = options;
+    const [startVal = min, endVal = max] = form[fieldName];
+    this.$$form.setViewValue(fieldName, form[fieldName].join('-'));
     return (
       <el-form-item
         key={fieldName}
@@ -48,28 +45,34 @@ export default defineComponent({
         }}
       >
         <InputNumber
-          v-model={form[fieldName]}
+          v-model={form[fieldName][0]}
           min={min}
-          max={max}
+          max={endVal}
           step={step}
           precision={precision}
-          maxlength={maxlength}
-          controls={controls}
-          placeholder={!disabled ? placeholder : ''}
+          controls={false}
+          placeholder={!disabled ? t('qm.form.rangeInputNumberPlaceholder')[0] : ''}
           clearable={clearable}
           readonly={readonly}
           disabled={disabled}
-          style={{ ...style }}
-          onChange={onChange}
-          onKeydown={(ev: KeyboardEvent) => {
-            if (ev.keyCode !== 13) return;
-            setTimeout(() => {
-              onEnter(form[fieldName] ?? '');
-              this.$$form.formItemValidate(fieldName);
-            });
-          }}
+          style={{ width: `calc(50% - 7px)` }}
+          onChange={() => onChange(form[fieldName])}
         />
-        {descOptions && this.$$form.createFormItemDesc({ fieldName, ...descOptions })}
+        <span style="display: inline-block; text-align: center; width: 14px;">-</span>
+        <InputNumber
+          v-model={form[fieldName][1]}
+          min={startVal}
+          max={max}
+          step={step}
+          precision={precision}
+          controls={false}
+          placeholder={!disabled ? t('qm.form.rangeInputNumberPlaceholder')[1] : ''}
+          clearable={clearable}
+          readonly={readonly}
+          disabled={disabled}
+          style={{ width: `calc(50% - 7px)` }}
+          onChange={() => onChange(form[fieldName])}
+        />
       </el-form-item>
     );
   },

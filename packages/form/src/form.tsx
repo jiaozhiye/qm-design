@@ -28,6 +28,7 @@ import {
 
 import FormInput from './form-input';
 import FromInputNumber from './form-input-number';
+import FromRangeInputNumber from './form-range-input-number';
 import FromCheckbox from './form-checkbox';
 
 const EMITS = ['collapse', 'valuesChange', 'change', 'finish', 'finishFailed', 'reset'];
@@ -306,6 +307,9 @@ export default defineComponent({
     INPUT_NUMBER(option: IFormItem): JSXNode {
       return <FromInputNumber ref={option.fieldName} option={option} />;
     },
+    RANGE_INPUT_NUMBER(option: IFormItem): JSXNode {
+      return <FromRangeInputNumber ref={option.fieldName} option={option} />;
+    },
     CHECKBOX(option: IFormItem): JSXNode {
       return <FromCheckbox ref={option.fieldName} option={option} />;
     },
@@ -332,6 +336,8 @@ export default defineComponent({
             });
             if (isEmpty) {
               form[fieldName] = [];
+            } else {
+              form[fieldName] = Object.assign([], [undefined, undefined], form[fieldName]);
             }
           }
         });
@@ -357,6 +363,7 @@ export default defineComponent({
     },
     // 表单校验
     formValidate(): Promise<IFormData> {
+      this.excuteFormValue(this.form);
       return new Promise((resolve, reject) => {
         this.$refs[`form`].validate((valid, fields) => {
           if (!valid) {

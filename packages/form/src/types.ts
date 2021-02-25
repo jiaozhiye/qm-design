@@ -13,10 +13,16 @@ import { isValidWidthUnit } from '../../_utils/validators';
 
 export type IFormType = 'default' | 'search' | 'onlyShow';
 
-export type IFormItemType = 'BREAK_SPACE' | 'INPUT' | 'INPUT_NUMBER' | 'CHECKBOX' | 'TINYMCE';
+export type IFormItemType =
+  | 'BREAK_SPACE'
+  | 'INPUT'
+  | 'INPUT_NUMBER'
+  | 'RANGE_INPUT_NUMBER'
+  | 'CHECKBOX'
+  | 'TINYMCE';
 
-export const ARRAY_TYPE: IFormItemType[] = [];
-export const FORMAT_ARRAY_TYPE: IFormItemType[] = [];
+export const ARRAY_TYPE: IFormItemType[] = ['RANGE_INPUT_NUMBER'];
+export const FORMAT_ARRAY_TYPE: IFormItemType[] = ['RANGE_INPUT_NUMBER'];
 export const UNFIX_TYPE: IFormItemType[] = ['TINYMCE'];
 
 export type IFormData = Record<string, string | number | Array<string | number> | undefined>;
