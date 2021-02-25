@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-02-24 13:02:36
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-02-25 19:48:52
+ * @Last Modified time: 2021-02-25 20:36:01
  */
 import { CSSProperties, PropType } from 'vue';
 import PropTypes from '../../_utils/vue-types';
@@ -24,6 +24,8 @@ export type IFormItemType =
   | 'CASCADER'
   | 'MULTIPLE_CASCADER'
   | 'SELECT'
+  | 'MULTIPLE_SELECT'
+  | 'RADIO'
   | 'CHECKBOX'
   | 'TINYMCE';
 
@@ -32,6 +34,7 @@ export const ARRAY_TYPE: IFormItemType[] = [
   'RANGE_INPUT_NUMBER',
   'MULTIPLE_TREE_SELECT',
   'MULTIPLE_CASCADER',
+  'MULTIPLE_SELECT',
 ];
 export const FORMAT_TYPE: IFormItemType[] = ['RANGE_INPUT', 'RANGE_INPUT_NUMBER'];
 export const UNFIX_TYPE: IFormItemType[] = ['TINYMCE'];
