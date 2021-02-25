@@ -21,7 +21,7 @@ export default defineComponent({
           label: '表单项1',
         },
         {
-          type: 'MULTIPLE_CASCADER',
+          type: 'CASCADER',
           fieldName: 'b',
           label: '表单项2',
           options: {

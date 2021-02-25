@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-02-24 13:02:36
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-02-24 16:41:39
+ * @Last Modified time: 2021-02-25 19:48:52
  */
 import { CSSProperties, PropType } from 'vue';
 import PropTypes from '../../_utils/vue-types';
@@ -23,6 +23,7 @@ export type IFormItemType =
   | 'MULTIPLE_TREE_SELECT'
   | 'CASCADER'
   | 'MULTIPLE_CASCADER'
+  | 'SELECT'
   | 'CHECKBOX'
   | 'TINYMCE';
 

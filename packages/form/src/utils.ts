@@ -2,10 +2,10 @@
  * @Author: 焦质晔
  * @Date: 2021-02-24 10:24:37
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-02-25 19:38:32
+ * @Last Modified time: 2021-02-25 20:30:28
  */
 import { transform, isEqual, isObject } from 'lodash-es';
-import { Nullable } from '../../_utils/types';
+import { AnyObject, Nullable } from '../../_utils/types';
 
 export const noop = (): void => {};
 
@@ -66,6 +66,17 @@ export const deepFind = (arr: any[], mark: unknown): Nullable<any> => {
     }
   }
   return res;
+};
+
+export const deepMapList = (list: any[], valueKey: string, textKey: string): any[] => {
+  return list.map((x) => {
+    const item: AnyObject<any> = { value: x[valueKey], text: x[textKey] };
+    x.disabled && (item.disabled = true);
+    if (Array.isArray(x.children)) {
+      item.children = deepMapList(x.children, valueKey, textKey);
+    }
+    return item;
+  });
 };
 
 export const deepFindValues = (arr: any[], str: string, depth = 0): any[] => {

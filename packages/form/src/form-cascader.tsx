@@ -2,14 +2,14 @@
  * @Author: 焦质晔
  * @Date: 2021-02-23 21:56:33
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-02-25 19:39:41
+ * @Last Modified time: 2021-02-25 20:32:09
  */
 import { defineComponent } from 'vue';
 import { AnyObject, JSXNode, Nullable } from '../../_utils/types';
 
 import { get } from 'lodash-es';
 import { t } from '../../locale';
-import { noop, deepFindValues } from './utils';
+import { noop, deepFindValues, deepMapList } from './utils';
 import { getParserWidth } from '../../_utils/util';
 
 export default defineComponent({
@@ -79,7 +79,7 @@ export default defineComponent({
       const res = await fetchApi(params);
       if (res.code === 200) {
         const dataList = !datakey ? res.data : get(res.data, datakey, []);
-        this.itemList = dataList.map((x) => ({ value: x[valueKey], text: x[textKey] }));
+        this.itemList = deepMapList(dataList, valueKey, textKey);
       }
     },
   },
@@ -123,7 +123,7 @@ export default defineComponent({
           options={this.itemList}
           clearable={clearable}
           disabled={disabled}
-          placeholder={placeholder}
+          placeholder={!disabled ? placeholder : ''}
           style={{ ...style }}
           filterable
           collapse-tags
