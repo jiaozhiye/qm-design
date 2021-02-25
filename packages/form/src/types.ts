@@ -16,13 +16,14 @@ export type IFormType = 'default' | 'search' | 'onlyShow';
 export type IFormItemType =
   | 'BREAK_SPACE'
   | 'INPUT'
+  | 'RANGE_INPUT'
   | 'INPUT_NUMBER'
   | 'RANGE_INPUT_NUMBER'
   | 'CHECKBOX'
   | 'TINYMCE';
 
-export const ARRAY_TYPE: IFormItemType[] = ['RANGE_INPUT_NUMBER'];
-export const FORMAT_ARRAY_TYPE: IFormItemType[] = ['RANGE_INPUT_NUMBER'];
+export const ARRAY_TYPE: IFormItemType[] = ['RANGE_INPUT', 'RANGE_INPUT_NUMBER'];
+export const FORMAT_TYPE: IFormItemType[] = ['RANGE_INPUT', 'RANGE_INPUT_NUMBER'];
 export const UNFIX_TYPE: IFormItemType[] = ['TINYMCE'];
 
 export type IFormData = Record<string, string | number | Array<string | number> | undefined>;

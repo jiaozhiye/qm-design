@@ -1,0 +1,64 @@
+/*
+ * @Author: 焦质晔
+ * @Date: 2021-02-23 21:56:33
+ * @Last Modified by: 焦质晔
+ * @Last Modified time: 2021-02-24 20:04:20
+ */
+import { defineComponent } from 'vue';
+import { JSXNode } from '../../_utils/types';
+
+import { t } from '../../locale';
+import { noop } from './utils';
+import { getParserWidth } from '../../_utils/util';
+
+export default defineComponent({
+  name: 'FormRangeInputNumber',
+  inheritAttrs: false,
+  inject: ['$$form'],
+  props: ['option'],
+  render(): JSXNode {
+    const { form } = this.$$form;
+    const {
+      label,
+      fieldName,
+      labelWidth,
+      labelOptions,
+      clearable,
+      readonly,
+      disabled,
+      onChange = noop,
+    } = this.option;
+    this.$$form.setViewValue(fieldName, form[fieldName].join('-'));
+    return (
+      <el-form-item
+        key={fieldName}
+        label={label}
+        labelWidth={labelWidth && getParserWidth(labelWidth)}
+        prop={fieldName}
+        v-slots={{
+          label: (): JSXNode => labelOptions && this.$$form.createFormItemLabel(labelOptions),
+        }}
+      >
+        <el-input
+          v-model={form[fieldName][0]}
+          placeholder={!disabled ? t('qm.form.rangeInputNumberPlaceholder')[0] : ''}
+          clearable={clearable}
+          readonly={readonly}
+          disabled={disabled}
+          style={{ width: `calc(50% - 7px)` }}
+          onChange={() => onChange(form[fieldName])}
+        />
+        <span style="display: inline-block; text-align: center; width: 14px;">-</span>
+        <el-input
+          v-model={form[fieldName][1]}
+          placeholder={!disabled ? t('qm.form.rangeInputNumberPlaceholder')[1] : ''}
+          clearable={clearable}
+          readonly={readonly}
+          disabled={disabled}
+          style={{ width: `calc(50% - 7px)` }}
+          onChange={() => onChange(form[fieldName])}
+        />
+      </el-form-item>
+    );
+  },
+});

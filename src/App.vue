@@ -26,7 +26,7 @@ export default defineComponent({
           label: '表单项2',
         },
         {
-          type: 'RANGE_INPUT_NUMBER',
+          type: 'RANGE_INPUT',
           fieldName: 'c',
           label: '表单项3',
         },

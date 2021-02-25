@@ -22,11 +22,12 @@ import {
   IFormDesc,
   props,
   ARRAY_TYPE,
-  FORMAT_ARRAY_TYPE,
+  FORMAT_TYPE,
   UNFIX_TYPE,
 } from './types';
 
 import FormInput from './form-input';
+import FormRangeInput from './form-range-input';
 import FromInputNumber from './form-input-number';
 import FromRangeInputNumber from './form-range-input-number';
 import FromCheckbox from './form-checkbox';
@@ -304,6 +305,9 @@ export default defineComponent({
     INPUT(option: IFormItem): JSXNode {
       return <FormInput ref={option.fieldName} option={option} />;
     },
+    RANGE_INPUT(option: IFormItem): JSXNode {
+      return <FormRangeInput ref={option.fieldName} option={option} />;
+    },
     INPUT_NUMBER(option: IFormItem): JSXNode {
       return <FromInputNumber ref={option.fieldName} option={option} />;
     },
@@ -326,7 +330,7 @@ export default defineComponent({
     // 处理 from data 数据
     excuteFormValue(form: IFormData): void {
       this.formItemList
-        .filter((x) => FORMAT_ARRAY_TYPE.includes(x.type))
+        .filter((x) => FORMAT_TYPE.includes(x.type))
         .map((x) => x.fieldName)
         .forEach((fieldName) => {
           if ((form[fieldName] as Array<unknown>).length > 0) {
