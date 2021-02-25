@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-02-24 13:02:36
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-02-25 20:36:01
+ * @Last Modified time: 2021-02-25 20:42:04
  */
 import { CSSProperties, PropType } from 'vue';
 import PropTypes from '../../_utils/vue-types';
@@ -27,6 +27,7 @@ export type IFormItemType =
   | 'MULTIPLE_SELECT'
   | 'RADIO'
   | 'CHECKBOX'
+  | 'MULTIPLE_CHECKBOX'
   | 'TINYMCE';
 
 export const ARRAY_TYPE: IFormItemType[] = [
@@ -35,9 +36,10 @@ export const ARRAY_TYPE: IFormItemType[] = [
   'MULTIPLE_TREE_SELECT',
   'MULTIPLE_CASCADER',
   'MULTIPLE_SELECT',
+  'MULTIPLE_CHECKBOX',
 ];
 export const FORMAT_TYPE: IFormItemType[] = ['RANGE_INPUT', 'RANGE_INPUT_NUMBER'];
-export const UNFIX_TYPE: IFormItemType[] = ['TINYMCE'];
+export const UNFIX_TYPE: IFormItemType[] = ['MULTIPLE_CHECKBOX', 'TINYMCE'];
 
 export type IFormData = Record<string, string | number | Array<string | number> | undefined>;
 
