@@ -30,6 +30,7 @@ import FormInput from './form-input';
 import FormRangeInput from './form-range-input';
 import FromInputNumber from './form-input-number';
 import FromRangeInputNumber from './form-range-input-number';
+import FormTreeSelect from './form-tree-select';
 import FromCheckbox from './form-checkbox';
 
 const EMITS = ['collapse', 'valuesChange', 'change', 'finish', 'finishFailed', 'reset'];
@@ -313,6 +314,9 @@ export default defineComponent({
     },
     RANGE_INPUT_NUMBER(option: IFormItem): JSXNode {
       return <FromRangeInputNumber ref={option.fieldName} option={option} />;
+    },
+    TREE_SELECT(option: IFormItem): JSXNode {
+      return <FormTreeSelect ref={option.fieldName} option={option} />;
     },
     CHECKBOX(option: IFormItem): JSXNode {
       return <FromCheckbox ref={option.fieldName} option={option} />;

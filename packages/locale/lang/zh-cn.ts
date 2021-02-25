@@ -21,6 +21,7 @@ export default {
       trueText: '是',
       falseText: '否',
       inputPlaceholder: '请输入...',
+      treePlaceholder: '树节点过滤',
       rangeInputNumberPlaceholder: ['开始值', '结束值'],
     },
   },

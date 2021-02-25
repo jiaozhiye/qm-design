@@ -19,10 +19,16 @@ export type IFormItemType =
   | 'RANGE_INPUT'
   | 'INPUT_NUMBER'
   | 'RANGE_INPUT_NUMBER'
+  | 'TREE_SELECT'
+  | 'MULTIPLE_TREE_SELECT'
   | 'CHECKBOX'
   | 'TINYMCE';
 
-export const ARRAY_TYPE: IFormItemType[] = ['RANGE_INPUT', 'RANGE_INPUT_NUMBER'];
+export const ARRAY_TYPE: IFormItemType[] = [
+  'RANGE_INPUT',
+  'RANGE_INPUT_NUMBER',
+  'MULTIPLE_TREE_SELECT',
+];
 export const FORMAT_TYPE: IFormItemType[] = ['RANGE_INPUT', 'RANGE_INPUT_NUMBER'];
 export const UNFIX_TYPE: IFormItemType[] = ['TINYMCE'];
 

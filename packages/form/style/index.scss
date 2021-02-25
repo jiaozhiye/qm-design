@@ -48,6 +48,11 @@ $prefix: '#{$qm-prefix}-form';
           border-color: $border-color-base;
         }
       }
+      .tree-select {
+        .select-option {
+          display: none !important;
+        }
+      }
     }
   }
 }

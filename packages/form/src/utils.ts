@@ -43,7 +43,7 @@ export const secretFormat = (value = '', type: string): string => {
   return value;
 };
 
-export const difference = (object: unknown, base: unknown): unknown => {
+export const difference = (object: unknown, base: unknown): any => {
   return transform(object, (result, value, key) => {
     if (!isEqual(value ?? '', base[key] ?? '')) {
       result[key] = isObject(value) && isObject(base[key]) ? difference(value, base[key]) : value;
@@ -51,7 +51,7 @@ export const difference = (object: unknown, base: unknown): unknown => {
   });
 };
 
-export const deepFind = (arr: any[], mark: unknown): unknown => {
+export const deepFind = (arr: any[], mark: unknown): any => {
   let res = null;
   for (let i = 0; i < arr.length; i++) {
     if (Array.isArray(arr[i].children)) {
@@ -67,7 +67,7 @@ export const deepFind = (arr: any[], mark: unknown): unknown => {
   return res;
 };
 
-export const deepFindValues = (arr: any[], str: string, depth = 0): unknown[] => {
+export const deepFindValues = (arr: any[], str: string, depth = 0): any[] => {
   const result = [];
   arr.forEach((x) => {
     if (x.value == str.split(',')[depth]) {
@@ -80,7 +80,7 @@ export const deepFindValues = (arr: any[], str: string, depth = 0): unknown[] =>
   return result;
 };
 
-export const deppGetPath = (arr: any[], value): unknown[] | undefined => {
+export const deppGetPath = (arr: any[], value): any[] => {
   for (let i = 0; i < arr.length; i++) {
     if (arr[i].value == value) {
       return [value];

@@ -4,6 +4,7 @@
  * @Last Modified by: 焦质晔
  * @Last Modified time: 2021-02-14 14:26:53
  */
+import { isFunction } from 'lodash-es';
 import { on } from '../../_utils/dom';
 import isServer from '../../_utils/isServer';
 import type { ComponentPublicInstance, DirectiveBinding, ObjectDirective } from 'vue';
@@ -40,6 +41,9 @@ function createDocumentHandler(el: HTMLElement, binding: DirectiveBinding): Docu
     // due to current implementation on binding type is wrong the type casting is necessary here
     excludes.push((binding.arg as unknown) as HTMLElement);
   }
+  if (Array.isArray(binding.value?.excludes)) {
+    excludes.push(...binding.value.excludes);
+  }
   return function (mouseup, mousedown) {
     const popperRef = (binding.instance as ComponentPublicInstance<{
       popperRef: Nullable<HTMLElement>;
@@ -66,7 +70,12 @@ function createDocumentHandler(el: HTMLElement, binding: DirectiveBinding): Docu
     ) {
       return;
     }
-    binding.value();
+    if (isFunction(binding.value)) {
+      return binding.value();
+    }
+    if (isFunction(binding.value?.callback)) {
+      return binding.value.callback();
+    }
   };
 }
 

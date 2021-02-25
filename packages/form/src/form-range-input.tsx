@@ -12,7 +12,7 @@ import { noop } from './utils';
 import { getParserWidth } from '../../_utils/util';
 
 export default defineComponent({
-  name: 'FormRangeInputNumber',
+  name: 'FormRangeInput',
   inheritAttrs: false,
   inject: ['$$form'],
   props: ['option'],
