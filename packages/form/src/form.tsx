@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-02-09 09:03:59
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-02-24 18:27:16
+ * @Last Modified time: 2021-02-25 19:45:23
  */
 import { ComponentPublicInstance, defineComponent } from 'vue';
 import scrollIntoView from 'scroll-into-view-if-needed';
@@ -31,6 +31,7 @@ import FormRangeInput from './form-range-input';
 import FromInputNumber from './form-input-number';
 import FromRangeInputNumber from './form-range-input-number';
 import FormTreeSelect from './form-tree-select';
+import FormCascader from './form-cascader';
 import FromCheckbox from './form-checkbox';
 
 const EMITS = ['collapse', 'valuesChange', 'change', 'finish', 'finishFailed', 'reset'];
@@ -317,6 +318,15 @@ export default defineComponent({
     },
     TREE_SELECT(option: IFormItem): JSXNode {
       return <FormTreeSelect ref={option.fieldName} option={option} />;
+    },
+    MULTIPLE_TREE_SELECT(option: IFormItem): JSXNode {
+      return <FormTreeSelect ref={option.fieldName} option={option} multiple />;
+    },
+    CASCADER(option: IFormItem): JSXNode {
+      return <FormCascader ref={option.fieldName} option={option} />;
+    },
+    MULTIPLE_CASCADER(option: IFormItem): JSXNode {
+      return <FormCascader ref={option.fieldName} option={option} multiple />;
     },
     CHECKBOX(option: IFormItem): JSXNode {
       return <FromCheckbox ref={option.fieldName} option={option} />;

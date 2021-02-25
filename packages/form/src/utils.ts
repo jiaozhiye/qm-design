@@ -2,9 +2,10 @@
  * @Author: 焦质晔
  * @Date: 2021-02-24 10:24:37
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-02-24 15:38:40
+ * @Last Modified time: 2021-02-25 19:38:32
  */
 import { transform, isEqual, isObject } from 'lodash-es';
+import { Nullable } from '../../_utils/types';
 
 export const noop = (): void => {};
 
@@ -51,7 +52,7 @@ export const difference = (object: unknown, base: unknown): any => {
   });
 };
 
-export const deepFind = (arr: any[], mark: unknown): any => {
+export const deepFind = (arr: any[], mark: unknown): Nullable<any> => {
   let res = null;
   for (let i = 0; i < arr.length; i++) {
     if (Array.isArray(arr[i].children)) {
@@ -80,7 +81,7 @@ export const deepFindValues = (arr: any[], str: string, depth = 0): any[] => {
   return result;
 };
 
-export const deppGetPath = (arr: any[], value): any[] => {
+export const deppGetPath = (arr: any[], value): any[] | undefined => {
   for (let i = 0; i < arr.length; i++) {
     if (arr[i].value == value) {
       return [value];

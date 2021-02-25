@@ -21,25 +21,25 @@ export default defineComponent({
           label: '表单项1',
         },
         {
-          type: 'TREE_SELECT',
+          type: 'MULTIPLE_CASCADER',
           fieldName: 'b',
           label: '表单项2',
           options: {
             itemList: [
               {
-                value: 1,
+                value: '1',
                 text: '一级 1',
                 children: [
                   {
-                    value: 4,
+                    value: '4',
                     text: '二级 1-1',
                     children: [
                       {
-                        value: 9,
+                        value: '9',
                         text: '三级 1-1-1',
                       },
                       {
-                        value: 10,
+                        value: '10',
                         text: '三级 1-1-2',
                       },
                     ],
@@ -47,34 +47,37 @@ export default defineComponent({
                 ],
               },
               {
-                value: 2,
+                value: '2',
                 text: '一级 2',
                 children: [
                   {
-                    value: 5,
+                    value: '5',
                     text: '二级 2-1',
                   },
                   {
-                    value: 6,
+                    value: '6',
                     text: '二级 2-2',
                   },
                 ],
               },
               {
-                value: 3,
+                value: '3',
                 text: '一级 3',
                 children: [
                   {
-                    value: 7,
+                    value: '7',
                     text: '二级 3-1',
                   },
                   {
-                    value: 8,
+                    value: '8',
                     text: '二级 3-2',
                   },
                 ],
               },
             ],
+          },
+          onChange: (val) => {
+            console.log(111, val);
           },
         },
         {
@@ -142,7 +145,12 @@ export default defineComponent({
             按钮
           </qm-button>
         </qm-space>
-        <qm-form list={this.formList} formType="search" onFinish={this.finish}></qm-form>
+        <qm-form
+          list={this.formList}
+          initialValue={{}}
+          formType="search"
+          onFinish={this.finish}
+        ></qm-form>
         <qm-tabs
           v-model={this.tabName}
           extraNode="asdasd"
