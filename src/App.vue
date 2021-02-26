@@ -105,7 +105,7 @@ export default defineComponent({
   render(): VNode {
     return (
       <>
-        <qm-space spacer={'|'}>
+        <qm-space spacer={'|'} size={20}>
           {this.btnList.map((x) => (
             <qm-button
               class="asd"
@@ -117,6 +117,7 @@ export default defineComponent({
               按钮
             </qm-button>
           ))}
+          <span>asdasd</span>
         </qm-space>
         <qm-form
           list={this.formList}
