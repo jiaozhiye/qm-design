@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-02-09 09:03:59
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-02-26 12:41:19
+ * @Last Modified time: 2021-02-26 13:03:18
  */
 import { ComponentPublicInstance, defineComponent } from 'vue';
 import scrollIntoView from 'scroll-into-view-if-needed';
@@ -39,6 +39,7 @@ import FromCheckbox from './form-checkbox';
 import FormCheckboxGroup from './form-checkbox-group';
 import FormTextArea from './form-text-area';
 import FormDivider from './form-divider';
+import FormSearchHelper from './form-search-helper';
 
 const EMITS = ['collapse', 'valuesChange', 'change', 'finish', 'finishFailed', 'reset'];
 
@@ -354,6 +355,9 @@ export default defineComponent({
     },
     TEXT_AREA(option: IFormItem): JSXNode {
       return <FormTextArea ref={option.fieldName} option={option} />;
+    },
+    SEARCH_HELPER(option: IFormItem): JSXNode {
+      return <FormSearchHelper ref={option.fieldName} option={option} />;
     },
     // ============================================
     // 锚点定位没有通过校验的表单项

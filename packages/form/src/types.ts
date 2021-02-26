@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-02-24 13:02:36
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-02-26 12:31:08
+ * @Last Modified time: 2021-02-26 13:44:55
  */
 import { CSSProperties, PropType } from 'vue';
 import PropTypes from '../../_utils/vue-types';
@@ -29,6 +29,7 @@ export type IFormItemType =
   | 'CHECKBOX'
   | 'MULTIPLE_CHECKBOX'
   | 'TEXT_AREA'
+  | 'SEARCH_HELPER'
   | 'TINYMCE';
 
 export const ARRAY_TYPE: IFormItemType[] = [
@@ -62,6 +63,8 @@ export type IFormItem = {
     trueValue?: number | string;
     falseValue?: number | string;
     secretType?: string;
+    columns?: Record<string, string>[];
+    fieldAliasMap?: AnyFunction<any>;
     onInput?: AnyFunction<any>;
     onClick?: AnyFunction<any>;
     onDblClick?: AnyFunction<any>;
@@ -114,6 +117,8 @@ export const props = {
         trueValue: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
         falseValue: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
         secretType: PropTypes.string,
+        columns: PropTypes.array,
+        fieldAliasMap: PropTypes.func,
         onInput: PropTypes.func,
         onClick: PropTypes.func,
         onDblClick: PropTypes.func,

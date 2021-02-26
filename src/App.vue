@@ -16,9 +16,23 @@ export default defineComponent({
       tabName: 'second',
       formList: [
         {
-          type: 'BREAK_SPACE',
+          type: 'SEARCH_HELPER',
+          label: '条件6',
           fieldName: 'a',
-          label: '表单项1',
+          request: {
+            fetchApi: () => {},
+            params: {},
+            datakey: 'items',
+          },
+          options: {
+            columns: [
+              { dataIndex: 'name', title: '姓名' },
+              { dataIndex: 'price', title: '价格' },
+            ],
+            fieldAliasMap: () => {
+              return { a: 'name' };
+            },
+          },
         },
         {
           type: 'SELECT',

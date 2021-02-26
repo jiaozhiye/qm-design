@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-02-09 09:27:46
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-02-23 14:26:20
+ * @Last Modified time: 2021-02-26 13:11:20
  */
 @import '../../style/src/common';
 
@@ -51,6 +51,30 @@ $prefix: '#{$qm-prefix}-form';
       .tree-select {
         .select-option {
           display: none !important;
+        }
+      }
+    }
+  }
+}
+
+.qm-search-helper__popper {
+  .el-autocomplete-suggestion__wrap {
+    padding: 0;
+    ul {
+      width: 100%;
+      display: table;
+      li {
+        display: table-row;
+        th,
+        td {
+          line-height: 28px;
+          border-bottom: 1px solid $border-color-secondary;
+          span {
+            padding: 0 $padding-base;
+          }
+        }
+        th {
+          background-color: $background-color-cecondary;
         }
       }
     }
