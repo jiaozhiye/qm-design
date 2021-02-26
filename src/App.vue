@@ -14,6 +14,7 @@ export default defineComponent({
       visible: false,
       visible2: false,
       tabName: 'second',
+      btnList: [1, 2],
       formList: [
         {
           type: 'TREE_SELECT',
@@ -62,10 +63,11 @@ export default defineComponent({
     };
   },
   methods: {
-    clickHandle() {
-      this.$message.success('asdasd');
+    clickHandle(k) {
+      console.log(1111, k);
+      // this.$message.success('asdasd');
       // this.loading = false;
-      this.visible = true;
+      // this.visible = true;
       // this.visible2 = true;
     },
     async beforeLeave() {
@@ -104,9 +106,17 @@ export default defineComponent({
     return (
       <>
         <qm-space spacer={'|'}>
-          <qm-button size="large" class="asd" onClick={this.clickHandle}>
-            按钮
-          </qm-button>
+          {this.btnList.map((x) => (
+            <qm-button
+              class="asd"
+              confirm={{
+                onConfirm: () => {},
+              }}
+              click={this.clickHandle.bind(this, x)}
+            >
+              按钮
+            </qm-button>
+          ))}
         </qm-space>
         <qm-form
           list={this.formList}

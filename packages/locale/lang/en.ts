@@ -4,6 +4,9 @@ export default {
     table: {
       emptyText: 'No Data',
     },
+    button: {
+      confirmTitle: '确认执行删除吗？',
+    },
     divider: {
       collect: '收起',
       spread: '展开',
