@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-02-24 13:02:36
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-02-25 20:42:04
+ * @Last Modified time: 2021-02-26 08:46:23
  */
 import { CSSProperties, PropType } from 'vue';
 import PropTypes from '../../_utils/vue-types';
@@ -62,6 +62,13 @@ export type IFormItem = {
     falseValue?: number | string;
     secretType?: string;
   };
+  request?: {
+    fetchApi: AnyFunction<any>;
+    params?: Record<string, any>;
+    datakey?: string;
+    valueKey?: string;
+    textKey?: string;
+  };
   labelOptions: IFormItem;
   readonly?: boolean;
   noResetable?: boolean;
@@ -93,6 +100,13 @@ export const props = {
         trueValue: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
         falseValue: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
         secretType: PropTypes.string,
+      }),
+      request: PropTypes.shape({
+        fetchApi: PropTypes.func.isRequired,
+        params: PropTypes.object,
+        datakey: PropTypes.string,
+        valueKey: PropTypes.string.def('value'),
+        textKey: PropTypes.string.def('text'),
       }),
       labelOptions: PropTypes.object,
       render: PropTypes.func,

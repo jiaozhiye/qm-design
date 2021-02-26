@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-02-09 09:03:59
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-02-26 08:31:05
+ * @Last Modified time: 2021-02-26 08:42:37
  */
 import { ComponentPublicInstance, defineComponent } from 'vue';
 import scrollIntoView from 'scroll-into-view-if-needed';
@@ -596,18 +596,14 @@ export default defineComponent({
   },
   render(): JSXNode {
     const { form, rules, labelWidth, formType } = this;
-
     const prefixCls = getPrefixCls('form');
-
     const wrapProps = {
       model: form,
       rules,
       labelWidth: getParserWidth(labelWidth),
       onSubmit: (ev: Event): void => ev.preventDefault(),
     };
-
     const { $size } = useSize(this.$props);
-
     const cls = {
       [prefixCls]: true,
       [`${prefixCls}--medium`]: $size === 'medium',
@@ -615,7 +611,6 @@ export default defineComponent({
       [`${prefixCls}--mini`]: $size === 'mini',
       [`${prefixCls}__only-show`]: formType === 'onlyShow',
     };
-
     return (
       <div class={cls}>
         <el-form ref="form" {...wrapProps}>
