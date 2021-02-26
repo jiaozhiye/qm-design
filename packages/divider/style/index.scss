@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-02-09 09:27:46
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-02-22 10:00:22
+ * @Last Modified time: 2021-02-26 12:42:48
  */
 @import '../../style/src/common';
 
@@ -27,7 +27,7 @@ $prefix: '#{$qm-prefix}-divider';
     background-color: $primary-color;
   }
   &__title {
-    margin-left: 4px;
+    margin-left: 5px;
   }
   &__extra {
     @include text-overflow-cut;

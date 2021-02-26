@@ -16,14 +16,9 @@ export default defineComponent({
       tabName: 'second',
       formList: [
         {
-          type: 'TEXT_AREA',
+          type: 'BREAK_SPACE',
           fieldName: 'a',
           label: '表单项1',
-          options: {
-            onDblClick: (val) => {
-              console.log(val);
-            },
-          },
         },
         {
           type: 'SELECT',

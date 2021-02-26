@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-02-09 09:03:59
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-02-26 12:21:07
+ * @Last Modified time: 2021-02-26 12:41:19
  */
 import { ComponentPublicInstance, defineComponent } from 'vue';
 import scrollIntoView from 'scroll-into-view-if-needed';
@@ -38,6 +38,7 @@ import FormRadio from './form-radio';
 import FromCheckbox from './form-checkbox';
 import FormCheckboxGroup from './form-checkbox-group';
 import FormTextArea from './form-text-area';
+import FormDivider from './form-divider';
 
 const EMITS = ['collapse', 'valuesChange', 'change', 'finish', 'finishFailed', 'reset'];
 
@@ -308,6 +309,9 @@ export default defineComponent({
       );
     },
     // ============================================
+    BREAK_SPACE(option: IFormItem): JSXNode {
+      return <FormDivider ref={option.fieldName} option={option} />;
+    },
     // input + search helper
     INPUT(option: IFormItem): JSXNode {
       return <FormInput ref={option.fieldName} option={option} />;
