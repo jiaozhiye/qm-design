@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-02-09 09:03:59
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-02-26 08:42:37
+ * @Last Modified time: 2021-02-26 12:21:07
  */
 import { ComponentPublicInstance, defineComponent } from 'vue';
 import scrollIntoView from 'scroll-into-view-if-needed';
@@ -37,6 +37,7 @@ import FormSelect from './form-select';
 import FormRadio from './form-radio';
 import FromCheckbox from './form-checkbox';
 import FormCheckboxGroup from './form-checkbox-group';
+import FormTextArea from './form-text-area';
 
 const EMITS = ['collapse', 'valuesChange', 'change', 'finish', 'finishFailed', 'reset'];
 
@@ -346,6 +347,9 @@ export default defineComponent({
     },
     MULTIPLE_CHECKBOX(option: IFormItem): JSXNode {
       return <FormCheckboxGroup ref={option.fieldName} option={option} />;
+    },
+    TEXT_AREA(option: IFormItem): JSXNode {
+      return <FormTextArea ref={option.fieldName} option={option} />;
     },
     // ============================================
     // 锚点定位没有通过校验的表单项

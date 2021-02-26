@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-02-24 13:02:36
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-02-26 12:07:18
+ * @Last Modified time: 2021-02-26 12:31:08
  */
 import { CSSProperties, PropType } from 'vue';
 import PropTypes from '../../_utils/vue-types';
@@ -28,6 +28,7 @@ export type IFormItemType =
   | 'RADIO'
   | 'CHECKBOX'
   | 'MULTIPLE_CHECKBOX'
+  | 'TEXT_AREA'
   | 'TINYMCE';
 
 export const ARRAY_TYPE: IFormItemType[] = [
@@ -39,7 +40,7 @@ export const ARRAY_TYPE: IFormItemType[] = [
   'MULTIPLE_CHECKBOX',
 ];
 export const FORMAT_TYPE: IFormItemType[] = ['RANGE_INPUT', 'RANGE_INPUT_NUMBER'];
-export const UNFIX_TYPE: IFormItemType[] = ['MULTIPLE_CHECKBOX', 'TINYMCE'];
+export const UNFIX_TYPE: IFormItemType[] = ['TEXT_AREA', 'MULTIPLE_CHECKBOX', 'TINYMCE'];
 
 export type IFormData = Record<string, string | number | Array<string | number> | undefined>;
 
@@ -61,6 +62,9 @@ export type IFormItem = {
     trueValue?: number | string;
     falseValue?: number | string;
     secretType?: string;
+    onInput?: AnyFunction<any>;
+    onClick?: AnyFunction<any>;
+    onDblClick?: AnyFunction<any>;
   };
   request?: {
     fetchApi: AnyFunction<any>;
@@ -110,6 +114,9 @@ export const props = {
         trueValue: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
         falseValue: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
         secretType: PropTypes.string,
+        onInput: PropTypes.func,
+        onClick: PropTypes.func,
+        onDblClick: PropTypes.func,
       }),
       request: PropTypes.shape({
         fetchApi: PropTypes.func.isRequired,

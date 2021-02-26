@@ -16,9 +16,14 @@ export default defineComponent({
       tabName: 'second',
       formList: [
         {
-          type: 'CHECKBOX',
+          type: 'TEXT_AREA',
           fieldName: 'a',
           label: '表单项1',
+          options: {
+            onDblClick: (val) => {
+              console.log(val);
+            },
+          },
         },
         {
           type: 'SELECT',
@@ -32,9 +37,6 @@ export default defineComponent({
               { text: '标题4', value: '4' },
               { text: '大海', value: '5' },
             ],
-          },
-          onChange: (val) => {
-            console.log(111, val);
           },
         },
         {
