@@ -2,13 +2,14 @@
  * @Author: 焦质晔
  * @Date: 2021-02-09 09:03:59
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-02-23 22:37:57
+ * @Last Modified time: 2021-02-26 08:36:32
  */
 import { defineComponent, PropType, VNode } from 'vue';
 import PropTypes from '../../_utils/vue-types';
 import { isString } from 'lodash-es';
 import { AnyFunction, JSXNode } from '../../_utils/types';
-import { isVNode, useGlobalConfig } from '../../_utils/util';
+import { useSize } from '../../hooks/useSize';
+import { isVNode } from '../../_utils/util';
 import { getPrefixCls } from '../../_utils/prefix';
 import { getValidSlot } from '../../_utils/instance-children';
 
@@ -78,14 +79,14 @@ export default defineComponent({
   render(): JSXNode {
     const { modelValue, tabPosition, beforeLeave, extraNode, $props } = this;
 
-    const $DESIGN = useGlobalConfig();
+    const { $size } = useSize(this.$props);
     const prefixCls = getPrefixCls('tabs');
 
     const cls = {
       [prefixCls]: true,
-      [`${prefixCls}--medium`]: $DESIGN.size === 'medium',
-      [`${prefixCls}--small`]: $DESIGN.size === 'small',
-      [`${prefixCls}--mini`]: $DESIGN.size === 'mini',
+      [`${prefixCls}--medium`]: $size === 'medium',
+      [`${prefixCls}--small`]: $size === 'small',
+      [`${prefixCls}--mini`]: $size === 'mini',
     };
 
     const wrapProps = {

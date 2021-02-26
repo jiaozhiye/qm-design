@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-02-09 09:03:59
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-02-21 19:25:57
+ * @Last Modified time: 2021-02-26 08:32:28
  */
 import { defineComponent, VNode, ComponentInternalInstance, PropType } from 'vue';
 import addEventListener from 'add-dom-event-listener';
@@ -11,7 +11,8 @@ import { JSXNode } from '../../_utils/types';
 import { isNumber } from 'lodash-es';
 import { isValidWidthUnit } from '../../_utils/validators';
 
-import { getParserWidth, throttle, useGlobalConfig } from '../../_utils/util';
+import { useSize } from '../../hooks/useSize';
+import { getParserWidth, throttle } from '../../_utils/util';
 import { getValidSlot, getInstanceFromSlot } from '../../_utils/instance-children';
 import { getPrefixCls } from '../../_utils/prefix';
 
@@ -92,12 +93,12 @@ export default defineComponent({
   },
   render(): JSXNode {
     const { activeKey, labelWidth, anchorItemInstances } = this;
-    const $DESIGN = useGlobalConfig();
+    const { $size } = useSize(this.$props);
     const cls = {
       [prefixCls]: true,
-      [`${prefixCls}--medium`]: $DESIGN.size === 'medium',
-      [`${prefixCls}--small`]: $DESIGN.size === 'small',
-      [`${prefixCls}--mini`]: $DESIGN.size === 'mini',
+      [`${prefixCls}--medium`]: $size === 'medium',
+      [`${prefixCls}--small`]: $size === 'small',
+      [`${prefixCls}--mini`]: $size === 'mini',
     };
     return (
       <div class={cls}>

@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-02-09 09:03:59
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-02-22 16:57:32
+ * @Last Modified time: 2021-02-26 08:40:26
  */
 import { CSSProperties, defineComponent, PropType } from 'vue';
 import classnames from 'classnames';
@@ -11,7 +11,8 @@ import { AnyFunction, JSXNode } from '../../_utils/types';
 
 import { isNumber, isUndefined } from 'lodash-es';
 import { isValidWidthUnit } from '../../_utils/validators';
-import { useGlobalConfig } from '../../_utils/util';
+import { useSize } from '../../hooks/useSize';
+import { useGlobalConfig } from '../../hooks/useGlobalConfig';
 import { getPrefixCls } from '../../_utils/prefix';
 import { t } from '../../locale';
 
@@ -156,13 +157,14 @@ export default defineComponent({
     const { contentSize, direction, containerStyle, $props } = this;
 
     const $DESIGN = useGlobalConfig();
+    const { $size } = useSize(this.$props);
     const prefixCls = getPrefixCls('drawer');
 
     const cls = {
       [prefixCls]: true,
-      [`${prefixCls}--medium`]: $DESIGN.size === 'medium',
-      [`${prefixCls}--small`]: $DESIGN.size === 'small',
-      [`${prefixCls}--mini`]: $DESIGN.size === 'mini',
+      [`${prefixCls}--medium`]: $size === 'medium',
+      [`${prefixCls}--small`]: $size === 'small',
+      [`${prefixCls}--mini`]: $size === 'mini',
     };
 
     const wrapProps = {

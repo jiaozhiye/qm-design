@@ -2,13 +2,13 @@
  * @Author: 焦质晔
  * @Date: 2020-08-11 08:19:36
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-02-24 20:00:31
+ * @Last Modified time: 2021-02-26 08:34:50
  */
 import { defineComponent } from 'vue';
 import { JSXNode } from '../../_utils/types';
 
 import PropTypes from '../../_utils/vue-types';
-import { useGlobalConfig } from '../../_utils/util';
+import { useSize } from '../../hooks/useSize';
 
 export default defineComponent({
   name: 'InputNumber',
@@ -104,12 +104,12 @@ export default defineComponent({
       minDisabled,
       maxDisabled,
     } = this;
-    const $DESIGN = useGlobalConfig();
+    const { $size } = useSize(this.$props);
     const regExp = /^-?(0|[1-9][0-9]*)(\.[0-9]*)?$/;
     const cls = [
       'el-input-number',
       {
-        [`el-input-number--${$DESIGN.size}`]: !!$DESIGN.size,
+        [`el-input-number--${$size}`]: !!$size,
       },
       { 'is-disabled': disabled },
       { 'is-without-controls': !controls },

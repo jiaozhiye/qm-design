@@ -2,12 +2,12 @@
  * @Author: 焦质晔
  * @Date: 2021-02-09 09:03:59
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-02-22 20:24:03
+ * @Last Modified time: 2021-02-26 08:37:00
  */
 import { defineComponent, PropType, CSSProperties } from 'vue';
 import PropTypes from '../../_utils/vue-types';
 import { JSXNode } from '../../_utils/types';
-import { useGlobalConfig } from '../../_utils/util';
+import { useSize } from '../../hooks/useSize';
 import { getPrefixCls } from '../../_utils/prefix';
 
 const prefixCls = getPrefixCls('spin');
@@ -61,13 +61,13 @@ export default defineComponent({
     const { tip, containerStyle, ...restProps } = this.$props;
     const { sSpinning } = this;
 
-    const $DESIGN = useGlobalConfig();
+    const { $size } = useSize(this.$props);
 
     const spinClassName = {
       [prefixCls]: true,
-      [`${prefixCls}--medium`]: $DESIGN.size === 'medium',
-      [`${prefixCls}--small`]: $DESIGN.size === 'small',
-      [`${prefixCls}--mini`]: $DESIGN.size === 'mini',
+      [`${prefixCls}--medium`]: $size === 'medium',
+      [`${prefixCls}--small`]: $size === 'small',
+      [`${prefixCls}--mini`]: $size === 'mini',
       [`${prefixCls}-spinning`]: sSpinning,
       [`${prefixCls}-show-text`]: !!tip,
     };

@@ -2,14 +2,13 @@
  * @Author: 焦质晔
  * @Date: 2021-02-08 19:28:31
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-02-21 13:15:28
+ * @Last Modified time: 2021-02-26 08:37:18
  */
-import { getCurrentInstance, Ref, Fragment, Comment, Text } from 'vue';
+import { Ref, Fragment, Comment, Text } from 'vue';
 import { isObject, isArray, hasOwn, camelize } from '@vue/shared';
 import { isNumber, debounce, throttle } from 'lodash-es';
 import isServer from './isServer';
 import { AnyFunction, AnyObject } from './types';
-import { InstallOptions } from './config';
 
 export const isIE = (): boolean => {
   return !isServer && !isNaN(Number(document.DOCUMENT_NODE));
@@ -45,14 +44,6 @@ export { hasOwn, camelize };
 
 // 函数的 防抖 和 节流，使用 lodash 工具函数
 export { debounce, throttle };
-
-export const useGlobalConfig = (): Partial<InstallOptions> => {
-  const vm: any = getCurrentInstance();
-  if ('$DESIGN' in vm.proxy) {
-    return vm.proxy.$DESIGN;
-  }
-  return {};
-};
 
 export const isEmpty = (val: unknown): boolean => {
   if (

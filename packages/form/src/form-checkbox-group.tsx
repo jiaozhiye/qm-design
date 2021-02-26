@@ -5,8 +5,9 @@
  * @Last Modified time: 2021-02-25 20:45:37
  */
 import { defineComponent } from 'vue';
-import { JSXNode } from '../../_utils/types';
+import { AnyObject, JSXNode, Nullable } from '../../_utils/types';
 
+import { get } from 'lodash-es';
 import { noop } from './utils';
 import { getParserWidth } from '../../_utils/util';
 
@@ -15,7 +16,45 @@ export default defineComponent({
   inheritAttrs: false,
   inject: ['$$form'],
   props: ['option'],
+  data() {
+    return {
+      itemList: [],
+    };
+  },
+  computed: {
+    isFetch(): boolean {
+      return !!this.option.request?.fetchApi;
+    },
+    fetchParams(): Nullable<AnyObject<unknown>> {
+      return this.isFetch ? this.option.request.params ?? {} : null;
+    },
+  },
+  watch: {
+    fetchParams(): void {
+      this.getItemList();
+    },
+  },
+  created() {
+    this.isFetch && this.getItemList();
+  },
+  methods: {
+    async getItemList(): Promise<void> {
+      const {
+        fetchApi,
+        params = {},
+        datakey = '',
+        valueKey = 'value',
+        textKey = 'text',
+      } = this.option.request;
+      const res = await fetchApi(params);
+      if (res.code === 200) {
+        const dataList = !datakey ? res.data : get(res.data, datakey, []);
+        this.itemList = dataList.map((x) => ({ value: x[valueKey], text: x[textKey] }));
+      }
+    },
+  },
   render(): JSXNode {
+    const { isFetch } = this;
     const { form } = this.$$form;
     const {
       type,
@@ -25,14 +64,18 @@ export default defineComponent({
       labelOptions,
       descOptions,
       options = {},
+      request = {},
       style = {},
       disabled,
       onChange = noop,
     } = this.option;
-    const { itemList = [], limit } = options;
+    const { itemList, limit } = options;
+    if (!isFetch) {
+      this.itemList = itemList ?? [];
+    }
     this.$$form.setViewValue(
       fieldName,
-      itemList
+      this.itemList
         .filter((x) => form[fieldName].includes(x.value))
         .map((x) => x.text)
         .join(',')
@@ -54,7 +97,7 @@ export default defineComponent({
           style={{ ...style }}
           onChange={onChange}
         >
-          {itemList.map((x) => {
+          {this.itemList.map((x) => {
             return (
               <el-checkbox key={x.value} label={x.value} disabled={x.disabled}>
                 {x.text}

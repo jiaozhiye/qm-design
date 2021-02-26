@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-02-09 09:03:59
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-02-23 14:19:29
+ * @Last Modified time: 2021-02-26 08:39:55
  */
 import { defineComponent, PropType, CSSProperties } from 'vue';
 import classnames from 'classnames';
@@ -11,7 +11,9 @@ import { JSXNode, Nullable, AnyFunction } from '../../_utils/types';
 
 import { isNumber, isUndefined } from 'lodash-es';
 import { isValidWidthUnit } from '../../_utils/validators';
-import { useGlobalConfig, getParserWidth } from '../../_utils/util';
+import { useSize } from '../../hooks/useSize';
+import { useGlobalConfig } from '../../hooks/useGlobalConfig';
+import { getParserWidth } from '../../_utils/util';
 import { getPrefixCls } from '../../_utils/prefix';
 import { t } from '../../locale';
 
@@ -162,12 +164,14 @@ export default defineComponent({
     const $DESIGN = useGlobalConfig();
     const prefixCls = getPrefixCls('dialog');
 
+    const { $size } = useSize(this.$props);
+
     const cls = {
       [prefixCls]: true,
       [`${prefixCls}__flex`]: height !== 'none',
-      [`${prefixCls}--medium`]: $DESIGN.size === 'medium',
-      [`${prefixCls}--small`]: $DESIGN.size === 'small',
-      [`${prefixCls}--mini`]: $DESIGN.size === 'mini',
+      [`${prefixCls}--medium`]: $size === 'medium',
+      [`${prefixCls}--small`]: $size === 'small',
+      [`${prefixCls}--mini`]: $size === 'mini',
     };
 
     const wrapProps = {
