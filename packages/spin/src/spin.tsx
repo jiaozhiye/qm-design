@@ -2,13 +2,14 @@
  * @Author: 焦质晔
  * @Date: 2021-02-09 09:03:59
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-02-26 08:37:00
+ * @Last Modified time: 2021-02-26 14:00:56
  */
 import { defineComponent, PropType, CSSProperties } from 'vue';
 import PropTypes from '../../_utils/vue-types';
-import { JSXNode } from '../../_utils/types';
+import { ComponentSize, JSXNode } from '../../_utils/types';
 import { useSize } from '../../hooks/useSize';
 import { getPrefixCls } from '../../_utils/prefix';
+import { isValidComponentSize } from '../../_utils/validators';
 
 const prefixCls = getPrefixCls('spin');
 
@@ -18,6 +19,10 @@ export default defineComponent({
   inheritAttrs: false,
   props: {
     spinning: PropTypes.bool.def(false),
+    size: {
+      type: String as PropType<ComponentSize>,
+      validator: isValidComponentSize,
+    },
     delay: PropTypes.number.def(100),
     tip: PropTypes.string,
     containerStyle: {

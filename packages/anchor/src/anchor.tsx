@@ -2,14 +2,14 @@
  * @Author: 焦质晔
  * @Date: 2021-02-09 09:03:59
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-02-26 08:32:28
+ * @Last Modified time: 2021-02-26 13:57:58
  */
 import { defineComponent, VNode, ComponentInternalInstance, PropType } from 'vue';
 import addEventListener from 'add-dom-event-listener';
 import scrollIntoView from 'scroll-into-view-if-needed';
-import { JSXNode } from '../../_utils/types';
+import { ComponentSize, JSXNode } from '../../_utils/types';
 import { isNumber } from 'lodash-es';
-import { isValidWidthUnit } from '../../_utils/validators';
+import { isValidComponentSize, isValidWidthUnit } from '../../_utils/validators';
 
 import { useSize } from '../../hooks/useSize';
 import { getParserWidth, throttle } from '../../_utils/util';
@@ -31,6 +31,10 @@ export default defineComponent({
       validator: (val: string | number): boolean => {
         return isNumber(val) || isValidWidthUnit(val);
       },
+    },
+    size: {
+      type: String as PropType<ComponentSize>,
+      validator: isValidComponentSize,
     },
   },
   data() {

@@ -2,15 +2,16 @@
  * @Author: 焦质晔
  * @Date: 2021-02-09 09:03:59
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-02-26 08:33:52
+ * @Last Modified time: 2021-02-26 13:58:44
  */
 import { defineComponent, PropType, isVNode } from 'vue';
-import { JSXNode } from '../../_utils/types';
+import { ComponentSize, JSXNode } from '../../_utils/types';
 import { isString, isNull } from 'lodash-es';
 import DividerExpand from './divider-expand';
 
 import { useSize } from '../../hooks/useSize';
 import { getPrefixCls } from '../../_utils/prefix';
+import { isValidComponentSize } from '../../_utils/validators';
 
 export default defineComponent({
   name: 'QmDivider',
@@ -23,6 +24,10 @@ export default defineComponent({
   props: {
     label: {
       type: String,
+    },
+    size: {
+      type: String as PropType<ComponentSize>,
+      validator: isValidComponentSize,
     },
     extra: {
       type: [String, Object] as PropType<string | JSXNode>,

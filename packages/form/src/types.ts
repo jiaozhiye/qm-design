@@ -2,14 +2,14 @@
  * @Author: 焦质晔
  * @Date: 2021-02-24 13:02:36
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-02-26 13:44:55
+ * @Last Modified time: 2021-02-26 13:57:28
  */
 import { CSSProperties, PropType } from 'vue';
 import PropTypes from '../../_utils/vue-types';
-import { JSXNode, AnyFunction, Nullable } from '../../_utils/types';
+import { JSXNode, AnyFunction, Nullable, ComponentSize } from '../../_utils/types';
 
 import { isNumber } from 'lodash-es';
-import { isValidWidthUnit } from '../../_utils/validators';
+import { isValidWidthUnit, isValidComponentSize } from '../../_utils/validators';
 
 export type IFormType = 'default' | 'search' | 'onlyShow';
 
@@ -144,6 +144,10 @@ export const props = {
   initialValue: {
     type: Object as PropType<IFormData>,
     default: () => ({}),
+  },
+  size: {
+    type: String as PropType<ComponentSize>,
+    validator: isValidComponentSize,
   },
   cols: {
     type: Number,

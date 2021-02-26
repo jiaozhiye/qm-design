@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-02-09 09:03:59
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-02-26 13:03:18
+ * @Last Modified time: 2021-02-26 13:56:51
  */
 import { ComponentPublicInstance, defineComponent } from 'vue';
 import scrollIntoView from 'scroll-into-view-if-needed';
@@ -552,6 +552,7 @@ export default defineComponent({
     // 搜索类型按钮布局
     createSearchButtonLayout(lastCols = 0): Nullable<JSXNode> {
       const { flexCols: cols, collapse, showFilterCollapse, isFilterType, isSubmitBtn } = this;
+      const { $size } = useSize(this.$props);
 
       // 不是搜索类型
       if (!isFilterType) {
@@ -564,14 +565,19 @@ export default defineComponent({
 
       return isSubmitBtn ? (
         <el-col key="-" span={colSpan} offset={offset * colSpan} style={{ textAlign: 'right' }}>
-          <el-button type="primary" icon="iconfont icon-search" onClick={this.submitForm}>
+          <el-button
+            type="primary"
+            size={$size}
+            icon="iconfont icon-search"
+            onClick={this.submitForm}
+          >
             {t('qm.form.search')}
           </el-button>
-          <el-button icon="iconfont icon-reload" onClick={this.resetForm}>
+          <el-button size={$size} icon="iconfont icon-reload" onClick={this.resetForm}>
             {t('qm.form.reset')}
           </el-button>
           {showFilterCollapse ? (
-            <el-button type="text" onClick={() => (this.collapse = !collapse)}>
+            <el-button type="text" size={$size} onClick={() => (this.collapse = !collapse)}>
               {collapse ? t('qm.form.collect') : t('qm.form.spread')}{' '}
               <i class={collapse ? 'el-icon-arrow-up' : 'el-icon-arrow-down'} />
             </el-button>
@@ -582,16 +588,19 @@ export default defineComponent({
     // 表单类型按钮列表
     createFormButtonLayout(): Nullable<JSXNode> {
       const { flexCols: cols, formType, isFilterType, isSubmitBtn } = this;
+      const { $size } = useSize(this.$props);
       if (isFilterType) return null;
       const colSpan = 24 / cols;
       return isSubmitBtn && formType === 'default' ? (
         <el-row gutter={4}>
           <el-col key="-" span={colSpan}>
             <el-form-item label={''}>
-              <el-button type="primary" onClick={this.submitForm}>
+              <el-button type="primary" size={$size} onClick={this.submitForm}>
                 {t('qm.form.save')}
               </el-button>
-              <el-button onClick={this.resetForm}>{t('qm.form.reset')}</el-button>
+              <el-button size={$size} onClick={this.resetForm}>
+                {t('qm.form.reset')}
+              </el-button>
             </el-form-item>
           </el-col>
         </el-row>
@@ -609,13 +618,14 @@ export default defineComponent({
   render(): JSXNode {
     const { form, rules, labelWidth, formType } = this;
     const prefixCls = getPrefixCls('form');
+    const { $size } = useSize(this.$props);
     const wrapProps = {
+      size: $size,
       model: form,
       rules,
       labelWidth: getParserWidth(labelWidth),
       onSubmit: (ev: Event): void => ev.preventDefault(),
     };
-    const { $size } = useSize(this.$props);
     const cls = {
       [prefixCls]: true,
       [`${prefixCls}--medium`]: $size === 'medium',

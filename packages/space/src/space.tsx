@@ -2,14 +2,14 @@
  * @Author: 焦质晔
  * @Date: 2021-02-09 09:03:59
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-02-26 08:36:00
+ * @Last Modified time: 2021-02-26 14:04:05
  */
 import { defineComponent } from 'vue';
 import PropTypes from '../../_utils/vue-types';
 import { JSXNode } from '../../_utils/types';
 import { useSize } from '../../hooks/useSize';
 import { isVNode } from '../../_utils/util';
-import { isValidWidthUnit } from '../../_utils/validators';
+import { isValidComponentSize, isValidWidthUnit } from '../../_utils/validators';
 import { getPrefixCls } from '../../_utils/prefix';
 import { isString, isNumber } from 'lodash-es';
 import type { PropType } from 'vue';
@@ -29,7 +29,7 @@ export default defineComponent({
     size: {
       type: [Number, String] as PropType<number | string>,
       validator: (val: string | number): boolean => {
-        return isNumber(val) || isValidWidthUnit(val);
+        return isNumber(val) || isValidWidthUnit(val) || isValidComponentSize(val as string);
       },
     },
     wrap: PropTypes.bool.def(true),

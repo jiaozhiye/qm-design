@@ -2,16 +2,17 @@
  * @Author: 焦质晔
  * @Date: 2021-02-09 09:03:59
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-02-26 08:36:32
+ * @Last Modified time: 2021-02-26 14:01:19
  */
 import { defineComponent, PropType, VNode } from 'vue';
 import PropTypes from '../../_utils/vue-types';
 import { isString } from 'lodash-es';
-import { AnyFunction, JSXNode } from '../../_utils/types';
+import { AnyFunction, ComponentSize, JSXNode } from '../../_utils/types';
 import { useSize } from '../../hooks/useSize';
 import { isVNode } from '../../_utils/util';
 import { getPrefixCls } from '../../_utils/prefix';
 import { getValidSlot } from '../../_utils/instance-children';
+import { isValidComponentSize } from '../../_utils/validators';
 
 type BeforeLeave = (newTabName: string, oldTabName: string) => void | Promise<void> | boolean;
 
@@ -28,6 +29,10 @@ export default defineComponent({
     tabPosition: {
       type: String as PropType<'top' | 'right' | 'bottom' | 'left'>,
       default: 'top',
+    },
+    size: {
+      type: String as PropType<ComponentSize>,
+      validator: isValidComponentSize,
     },
     lazyLoad: PropTypes.bool.def(true),
     tabCustomClass: PropTypes.string,

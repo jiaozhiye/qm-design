@@ -2,15 +2,15 @@
  * @Author: 焦质晔
  * @Date: 2021-02-09 09:03:59
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-02-26 08:40:26
+ * @Last Modified time: 2021-02-26 13:58:59
  */
 import { CSSProperties, defineComponent, PropType } from 'vue';
 import classnames from 'classnames';
 import PropTypes from '../../_utils/vue-types';
-import { AnyFunction, JSXNode } from '../../_utils/types';
+import { AnyFunction, ComponentSize, JSXNode } from '../../_utils/types';
 
 import { isNumber, isUndefined } from 'lodash-es';
-import { isValidWidthUnit } from '../../_utils/validators';
+import { isValidComponentSize, isValidWidthUnit } from '../../_utils/validators';
 import { useSize } from '../../hooks/useSize';
 import { useGlobalConfig } from '../../hooks/useGlobalConfig';
 import { getPrefixCls } from '../../_utils/prefix';
@@ -33,6 +33,10 @@ export default defineComponent({
     visible: PropTypes.bool.def(false),
     title: PropTypes.string,
     position: PropTypes.oneOf(['right', 'left', 'top', 'bottom']).def('right'),
+    size: {
+      type: String as PropType<ComponentSize>,
+      validator: isValidComponentSize,
+    },
     width: {
       type: [Number, String] as PropType<number | string>,
       default: '75%',
