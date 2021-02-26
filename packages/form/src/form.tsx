@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-02-09 09:03:59
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-02-26 13:56:51
+ * @Last Modified time: 2021-02-26 16:56:47
  */
 import { ComponentPublicInstance, defineComponent } from 'vue';
 import scrollIntoView from 'scroll-into-view-if-needed';
@@ -27,6 +27,7 @@ import {
   UNFIX_TYPE,
 } from './types';
 
+import FieldsFilter from './fields-filter';
 import FormInput from './form-input';
 import FormRangeInput from './form-range-input';
 import FromInputNumber from './form-input-number';
@@ -576,9 +577,10 @@ export default defineComponent({
           <el-button size={$size} icon="iconfont icon-reload" onClick={this.resetForm}>
             {t('qm.form.reset')}
           </el-button>
+          <FieldsFilter size={$size} list={this.list} fieldsChange={this.fieldsChange} />
           {showFilterCollapse ? (
             <el-button type="text" size={$size} onClick={() => (this.collapse = !collapse)}>
-              {collapse ? t('qm.form.collect') : t('qm.form.spread')}{' '}
+              {collapse ? t('qm.form.collect') : t('qm.form.spread')}
               <i class={collapse ? 'el-icon-arrow-up' : 'el-icon-arrow-down'} />
             </el-button>
           ) : null}

@@ -113,6 +113,9 @@ export default defineComponent({
           initialValue={{}}
           formType="search"
           onFinish={this.finish}
+          fieldsChange={(list) => {
+            this.formList = list;
+          }}
         ></qm-form>
         <qm-tabs
           v-model={this.tabName}

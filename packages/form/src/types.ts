@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-02-24 13:02:36
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-02-26 13:57:28
+ * @Last Modified time: 2021-02-26 16:58:21
  */
 import { CSSProperties, PropType } from 'vue';
 import PropTypes from '../../_utils/vue-types';
@@ -10,6 +10,7 @@ import { JSXNode, AnyFunction, Nullable, ComponentSize } from '../../_utils/type
 
 import { isNumber } from 'lodash-es';
 import { isValidWidthUnit, isValidComponentSize } from '../../_utils/validators';
+import { noop } from './utils';
 
 export type IFormType = 'default' | 'search' | 'onlyShow';
 
@@ -167,5 +168,9 @@ export const props = {
   isSubmitBtn: {
     type: Boolean,
     default: true,
+  },
+  fieldsChange: {
+    type: Function as AnyFunction<void>,
+    default: noop,
   },
 };

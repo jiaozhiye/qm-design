@@ -1,0 +1,15 @@
+/*
+ * @Author: 焦质晔
+ * @Date: 2021-02-26 16:41:10
+ * @Last Modified by: 焦质晔
+ * @Last Modified time: 2021-02-26 16:46:04
+ */
+@import '../../style/src/common';
+
+$prefix: '#{$qm-prefix}-fields-filter';
+
+.#{$prefix} {
+  .filter-item {
+    line-height: 1.75;
+  }
+}
