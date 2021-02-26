@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-02-08 19:28:35
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-02-14 14:26:53
+ * @Last Modified time: 2021-02-26 14:11:12
  */
 import { isFunction } from 'lodash-es';
 import { on } from '../../_utils/dom';
@@ -41,8 +41,8 @@ function createDocumentHandler(el: HTMLElement, binding: DirectiveBinding): Docu
     // due to current implementation on binding type is wrong the type casting is necessary here
     excludes.push((binding.arg as unknown) as HTMLElement);
   }
-  if (Array.isArray(binding.value?.excludes)) {
-    excludes.push(...binding.value.excludes);
+  if (Array.isArray(binding.value) && binding.value.length >= 2) {
+    excludes.push(...binding.value.slice(1));
   }
   return function (mouseup, mousedown) {
     const popperRef = (binding.instance as ComponentPublicInstance<{
@@ -73,8 +73,8 @@ function createDocumentHandler(el: HTMLElement, binding: DirectiveBinding): Docu
     if (isFunction(binding.value)) {
       return binding.value();
     }
-    if (isFunction(binding.value?.callback)) {
-      return binding.value.callback();
+    if (Array.isArray(binding.value) && isFunction(binding.value[0])) {
+      return binding.value[0]();
     }
   };
 }

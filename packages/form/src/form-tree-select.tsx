@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-02-23 21:56:33
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-02-25 20:31:22
+ * @Last Modified time: 2021-02-26 14:11:39
  */
 import { defineComponent } from 'vue';
 import { AnyObject, JSXNode, Nullable } from '../../_utils/types';
@@ -132,10 +132,10 @@ export default defineComponent({
                   style={readonly && { pointerEvents: 'none' }}
                   popper-append-to-body={false}
                   // v-click-outside={() => (this.visible = !1)}
-                  v-click-outside={{
-                    callback: () => (this.visible = !1),
-                    excludes: [document.querySelector(`.popover-${fieldName}`)],
-                  }}
+                  v-click-outside={[
+                    () => (this.visible = !1),
+                    document.querySelector(`.popover-${fieldName}`),
+                  ]}
                   onClick={(): void => {
                     if (!(disabled || readonly)) {
                       this.visible = !this.visible;

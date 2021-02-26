@@ -16,22 +16,17 @@ export default defineComponent({
       tabName: 'second',
       formList: [
         {
-          type: 'SEARCH_HELPER',
+          type: 'TREE_SELECT',
           label: '条件6',
           fieldName: 'a',
-          request: {
-            fetchApi: () => {},
-            params: {},
-            datakey: 'items',
-          },
           options: {
-            columns: [
-              { dataIndex: 'name', title: '姓名' },
-              { dataIndex: 'price', title: '价格' },
+            itemList: [
+              { text: '标题1', value: '1' },
+              { text: '标题2', value: '2' },
+              { text: '标题3', value: '3' },
+              { text: '标题4', value: '4' },
+              { text: '大海', value: '5' },
             ],
-            fieldAliasMap: () => {
-              return { a: 'name' };
-            },
           },
         },
         {
