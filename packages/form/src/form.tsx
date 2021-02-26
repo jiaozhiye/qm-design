@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-02-09 09:03:59
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-02-26 16:56:47
+ * @Last Modified time: 2021-02-26 21:56:08
  */
 import { ComponentPublicInstance, defineComponent } from 'vue';
 import scrollIntoView from 'scroll-into-view-if-needed';
@@ -61,7 +61,7 @@ export default defineComponent({
       form: {}, // 表单
       desc: {}, // 描述信息
       view: {}, // 视图数据
-      collapse: false, // 展开收起状态
+      collapse: false, // 展开/收起状态
     };
   },
   computed: {
@@ -415,7 +415,11 @@ export default defineComponent({
         this.$refs[`form`].validate((valid, fields) => {
           if (!valid) {
             reject(fields);
-            !this.isFilterType && this.scrollToField(fields);
+            if (!this.isFilterType) {
+              this.scrollToField(fields);
+            } else {
+              this.collapse = true;
+            }
           } else {
             resolve(this.form);
           }

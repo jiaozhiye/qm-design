@@ -20,6 +20,7 @@ export default {
       collect: '收起',
       trueText: '是',
       falseText: '否',
+      draggable: '拖动排序',
       inputPlaceholder: '请输入...',
       treePlaceholder: '树节点过滤',
       selectPlaceholder: '请选择...',

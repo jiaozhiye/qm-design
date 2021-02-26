@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-02-24 13:02:36
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-02-26 16:58:21
+ * @Last Modified time: 2021-02-26 21:16:12
  */
 import { CSSProperties, PropType } from 'vue';
 import PropTypes from '../../_utils/vue-types';
@@ -80,6 +80,7 @@ export type IFormItem = {
   labelOptions: IFormItem;
   readonly?: boolean;
   noResetable?: boolean;
+  fieldsChange?: AnyFunction<void>;
   render?: AnyFunction<JSXNode>;
   __cols__?: number; // 私有属性
 };

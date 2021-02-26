@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-02-26 14:53:54
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-02-26 16:57:13
+ * @Last Modified time: 2021-02-26 21:52:35
  */
 import { defineComponent, PropType } from 'vue';
 import { JSXNode } from '../../_utils/types';
@@ -10,6 +10,7 @@ import { JSXNode } from '../../_utils/types';
 import Draggable from 'vuedraggable';
 
 import { getPrefixCls } from '../../_utils/prefix';
+import { t } from '../../locale';
 import { isValidComponentSize } from '../../_utils/validators';
 
 export default defineComponent({
@@ -34,12 +35,12 @@ export default defineComponent({
     };
   },
   render(): JSXNode {
-    const { size } = this;
+    const { size, list } = this;
     const prefixCls = getPrefixCls('fields-filter');
 
     const wrapProps = {
-      modelValue: this.list,
-      itemKey: 'id',
+      modelValue: list,
+      itemKey: 'fieldName',
       animation: 200,
       handle: '.v-handle',
       tag: 'transition-group',
@@ -47,8 +48,8 @@ export default defineComponent({
         tag: 'ul',
         type: 'transition-group',
       },
-      'onUpdate:modelValue': (val) => {
-        this.fieldsChange([...val]);
+      'onUpdate:modelValue': (val): void => {
+        this.fieldsChange(val);
       },
     };
 
@@ -61,6 +62,7 @@ export default defineComponent({
 
     return (
       <el-popover
+        popper-class="popover-fields-filter"
         v-model={[this.visible, 'visible']}
         width={'auto'}
         trigger="click"
@@ -81,13 +83,16 @@ export default defineComponent({
           <Draggable
             {...wrapProps}
             v-slots={{
-              item: ({ element }) => (
-                <li class="filter-item">
-                  <el-checkbox />
-                  <i class="iconfont icon-menu v-handle" title="排序" />
-                  <span title={element.label}>{element.label}</span>
-                </li>
-              ),
+              item: ({ element }): JSXNode => {
+                const isDisabled: boolean = element.rules?.findIndex((x) => x.required) > -1;
+                return (
+                  <li class="filter-item">
+                    <el-checkbox v-model={element.hidden} disabled={isDisabled} />
+                    <i class="iconfont icon-menu v-handle" title={t('qm.form.draggable')} />
+                    <span title={element.label}>{element.label}</span>
+                  </li>
+                );
+              },
             }}
           />
         </div>

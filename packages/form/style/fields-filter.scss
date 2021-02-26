@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-02-26 16:41:10
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-02-26 16:46:04
+ * @Last Modified time: 2021-02-26 21:42:44
  */
 @import '../../style/src/common';
 
@@ -11,5 +11,16 @@ $prefix: '#{$qm-prefix}-fields-filter';
 .#{$prefix} {
   .filter-item {
     line-height: 1.75;
+    .el-checkbox {
+      transform: translateY(-1px);
+    }
+    .v-handle {
+      margin: 0 5px;
+      cursor: s-resize;
+    }
   }
+}
+
+.popover-fields-filter {
+  min-width: 100px !important;
 }
