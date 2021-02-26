@@ -2,11 +2,11 @@
  * @Author: 焦质晔
  * @Date: 2021-02-24 13:02:36
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-02-26 08:46:23
+ * @Last Modified time: 2021-02-26 12:07:18
  */
 import { CSSProperties, PropType } from 'vue';
 import PropTypes from '../../_utils/vue-types';
-import { JSXNode, AnyFunction } from '../../_utils/types';
+import { JSXNode, AnyFunction, Nullable } from '../../_utils/types';
 
 import { isNumber } from 'lodash-es';
 import { isValidWidthUnit } from '../../_utils/validators';
@@ -77,6 +77,16 @@ export type IFormItem = {
 };
 
 export type IFormDesc = Record<string, string>;
+
+export type IDict = {
+  text: string;
+  value: string;
+  disabled?: boolean;
+};
+
+export type IDictDeep = IDict & {
+  children?: Array<IDict> | Nullable<undefined>;
+};
 
 export const props = {
   list: PropTypes.arrayOf(

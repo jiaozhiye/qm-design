@@ -2,15 +2,17 @@
  * @Author: 焦质晔
  * @Date: 2021-02-23 21:56:33
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-02-25 20:11:49
+ * @Last Modified time: 2021-02-26 12:17:14
  */
 import { defineComponent } from 'vue';
 import { AnyObject, JSXNode, Nullable } from '../../_utils/types';
+import { IDict } from './types';
 
 import { get } from 'lodash-es';
 import { t } from '../../locale';
 import { noop } from './utils';
 import { getParserWidth } from '../../_utils/util';
+import pinyin, { STYLE_FIRST_LETTER } from '../../pinyin';
 
 export default defineComponent({
   name: 'FormSelect',
@@ -20,6 +22,7 @@ export default defineComponent({
   data() {
     return {
       itemList: [],
+      originItemList: [], // 原始数据
     };
   },
   computed: {
@@ -34,6 +37,14 @@ export default defineComponent({
     fetchParams(): void {
       this.getItemList();
     },
+    ['option.options.itemList']: {
+      handler(next: Array<IDict>): void {
+        if (this.isFetch) return;
+        this.itemList = next ?? [];
+        this.originItemList = [...this.itemList];
+      },
+      immediate: true,
+    },
   },
   created() {
     this.isFetch && this.getItemList();
@@ -47,6 +58,21 @@ export default defineComponent({
             .map((x) => x.text)
             .join(',');
     },
+    filterMethodHandle(queryString = '', isPyt: boolean): Array<IDict> {
+      const res: IDict[] = this.originItemList.filter(
+        this.createSearchHelpFilter(queryString, isPyt)
+      );
+      // 动态改变列表项
+      this.itemList = res;
+      return res;
+    },
+    createSearchHelpFilter(queryString: string, isPyt = true): Function {
+      return (state) => {
+        const pyt: string = pinyin(state.text, { style: STYLE_FIRST_LETTER }).flat().join('');
+        const str: string = isPyt ? `${state.text}|${pyt}` : state.text;
+        return str.toLowerCase().includes(queryString.toLowerCase());
+      };
+    },
     async getItemList(): Promise<void> {
       const {
         fetchApi,
@@ -59,11 +85,12 @@ export default defineComponent({
       if (res.code === 200) {
         const dataList = !datakey ? res.data : get(res.data, datakey, []);
         this.itemList = dataList.map((x) => ({ value: x[valueKey], text: x[textKey] }));
+        this.originItemList = [...this.itemList];
       }
     },
   },
   render(): JSXNode {
-    const { multiple, isFetch } = this;
+    const { multiple } = this;
     const { form } = this.$$form;
     const {
       type,
@@ -82,12 +109,11 @@ export default defineComponent({
       disabled,
       onChange = noop,
     } = this.option;
-    const { itemList, filterable = !0, openPyt = !0, limit } = options;
-    if (!isFetch) {
-      this.itemList = itemList ?? [];
-    }
-    const textVal = this.createViewText(form[fieldName]);
+    const { filterable = !0, openPyt = !0, limit } = options;
+
+    const textVal: string = this.createViewText(form[fieldName]);
     this.$$form.setViewValue(fieldName, textVal);
+
     const wrapProps = {
       modelValue: form[fieldName],
       'onUpdate:modelValue': (val: string): void => {
@@ -98,6 +124,7 @@ export default defineComponent({
         }
       },
     };
+
     return (
       <el-form-item
         key={fieldName}
@@ -120,24 +147,24 @@ export default defineComponent({
           clearable={clearable}
           disabled={disabled}
           style={{ ...style }}
-          onVisibleChange={(visible) => {
+          onVisibleChange={(visible: boolean): void => {
             if (filterable && !visible) {
-              this.$refs[type].blur();
-              setTimeout(() => this.filterMethodHandle(fieldName, ''), 300);
+              setTimeout(() => this.filterMethodHandle(''), 300);
             }
           }}
-          onChange={(val) => {
+          onChange={(val: string): void => {
             onChange(val, this.createViewText(val));
             if (!filterable) return;
-            this.filterMethodHandle(fieldName, '');
+            this.filterMethodHandle('');
           }}
-          filterMethod={(queryString) => {
+          filterMethod={(queryString: string): void => {
             if (!filterable) return;
-            const res = this.filterMethodHandle(fieldName, queryString, openPyt);
+            const res: Array<IDict> = this.filterMethodHandle(queryString, openPyt);
+            // 精确匹配，直接赋值
             if (!multiple && res.length === 1) {
-              this.form[fieldName] = res[0].value;
-              this.$refs[type].blur();
-              onChange(res[0].value, res[0].text);
+              form[fieldName] = res[0].value;
+              onChange(form[fieldName], res[0].text);
+              this.$nextTick(() => this.$refs[type].blur());
             }
           }}
         >
