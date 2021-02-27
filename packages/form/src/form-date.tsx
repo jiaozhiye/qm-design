@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-02-23 21:56:33
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-02-27 12:55:57
+ * @Last Modified time: 2021-02-27 13:25:25
  */
 import { defineComponent } from 'vue';
 import dayjs from 'dayjs';
@@ -93,6 +93,7 @@ export default defineComponent({
       'onUpdate:modelValue': (val) => {
         form[fieldName] = dateFormat(val ?? undefined, DATE_CONF[dateType].valueFormat);
       },
+      ...(dateType === 'week' ? { format: 'gggg 第 ww 周' } : null),
     };
 
     return (

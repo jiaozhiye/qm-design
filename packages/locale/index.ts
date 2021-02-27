@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-02-08 16:48:18
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-02-10 15:34:48
+ * @Last Modified time: 2021-02-27 13:24:55
  */
 import defaultLang from './lang/zh-cn';
 import dayjs from 'dayjs';
@@ -53,7 +53,7 @@ export const t = (...args: any[]): string => {
 export const use = (l: Language): void => {
   lang = l || lang;
   if (lang.name) {
-    dayjs.locale(lang.name);
+    dayjs.locale(lang.name, { weekStart: 1 });
   }
 };
 
