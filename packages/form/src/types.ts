@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-02-24 13:02:36
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-02-27 08:38:53
+ * @Last Modified time: 2021-02-27 08:48:16
  */
 import { CSSProperties, PropType } from 'vue';
 import PropTypes from '../../_utils/vue-types';
@@ -33,6 +33,7 @@ export type IFormItemType =
   | 'SEARCH_HELPER'
   | 'TIME'
   | 'RANGE_TIME'
+  | 'TIME_SELECT'
   | 'TINYMCE';
 
 export const ARRAY_TYPE: IFormItemType[] = [
