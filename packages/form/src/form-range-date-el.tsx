@@ -9,7 +9,7 @@ import dayjs from 'dayjs';
 import { JSXNode } from '../../_utils/types';
 
 import { t } from '../../locale';
-import { noop, toDate, dateFormat } from './utils';
+import { noop, toDate, dateFormat, setDisabledDate } from './utils';
 import { getParserWidth } from '../../_utils/util';
 import { DATE_RANGE_CONF } from './types';
 
@@ -18,23 +18,6 @@ export default defineComponent({
   inheritAttrs: false,
   inject: ['$$form'],
   props: ['option'],
-  methods: {
-    // 设置日期控件的禁用状态
-    setDisabledDate(oDate: Date, [minDateTime, maxDateTime]): boolean {
-      const min = minDateTime ? dayjs(minDateTime).toDate().getTime() : 0;
-      const max = maxDateTime ? dayjs(maxDateTime).toDate().getTime() : 0;
-      if (min && max) {
-        return !(oDate.getTime() >= min && oDate.getTime() <= max);
-      }
-      if (!!min) {
-        return oDate.getTime() < min;
-      }
-      if (!!max) {
-        return oDate.getTime() > max;
-      }
-      return false;
-    },
-  },
   render(): JSXNode {
     const { form } = this.$$form;
     const {
@@ -138,7 +121,7 @@ export default defineComponent({
           disabled={disabled}
           style={{ ...style }}
           disabledDate={(time: Date): boolean => {
-            return this.setDisabledDate(time, [minDateTime, maxDateTime]);
+            return setDisabledDate(time, [minDateTime, maxDateTime]);
           }}
           shortcuts={shortCuts ? pickers : null}
           onChange={(): void => onChange(form[fieldName])}

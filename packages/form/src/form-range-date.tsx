@@ -10,7 +10,7 @@ import dayjs from 'dayjs';
 import { JSXNode, Nullable } from '../../_utils/types';
 
 import { t } from '../../locale';
-import { noop, toDate, dateFormat } from './utils';
+import { noop, toDate, dateFormat, setDisabledDate } from './utils';
 import { getParserWidth } from '../../_utils/util';
 import { DATE_RANGE_CONF } from './types';
 
@@ -36,23 +36,6 @@ export default defineComponent({
   beforeUnmount() {
     this._start?.remove();
     this._end?.remove();
-  },
-  methods: {
-    // 设置日期控件的禁用状态
-    setDisabledDate(oDate: Date, [minDateTime, maxDateTime]): boolean {
-      const min = minDateTime ? dayjs(minDateTime).toDate().getTime() : 0;
-      const max = maxDateTime ? dayjs(maxDateTime).toDate().getTime() : 0;
-      if (min && max) {
-        return !(oDate.getTime() >= min && oDate.getTime() <= max);
-      }
-      if (!!min) {
-        return oDate.getTime() < min;
-      }
-      if (!!max) {
-        return oDate.getTime() > max;
-      }
-      return false;
-    },
   },
   render(): JSXNode {
     const { form } = this.$$form;
@@ -181,7 +164,7 @@ export default defineComponent({
             disabled={disabled || startDisabled}
             style={{ width: `calc(50% - 7px)` }}
             disabledDate={(time: Date): boolean => {
-              return this.setDisabledDate(time, [minDateTime, form[fieldName][1]]);
+              return setDisabledDate(time, [minDateTime, form[fieldName][1]]);
             }}
             shortcuts={shortCuts ? pickers : null}
             onChange={(): void => onChange(form[fieldName])}
@@ -213,10 +196,7 @@ export default defineComponent({
                   .slice(0, 19);
               }
               const oDate: Date = dayjs(val).toDate();
-              const passed: boolean = !this.setDisabledDate(oDate, [
-                minDateTime,
-                form[fieldName][1],
-              ]);
+              const passed: boolean = !setDisabledDate(oDate, [minDateTime, form[fieldName][1]]);
               if (!passed) return;
               val = dateFormat(oDate, DATE_RANGE_CONF[dateType].valueFormat) as string;
               form[fieldName][0] =
@@ -240,7 +220,7 @@ export default defineComponent({
             disabled={disabled || endDisabled}
             style={{ width: `calc(50% - 7px)` }}
             disabledDate={(time: Date): boolean => {
-              return this.setDisabledDate(time, [form[fieldName][0], maxDateTime]);
+              return setDisabledDate(time, [form[fieldName][0], maxDateTime]);
             }}
             onChange={(): void => onChange(form[fieldName])}
             onBlur={() => {
@@ -260,10 +240,7 @@ export default defineComponent({
                   .slice(0, 19);
               }
               const oDate: Date = dayjs(val).toDate();
-              const passed: boolean = !this.setDisabledDate(oDate, [
-                form[fieldName][0],
-                maxDateTime,
-              ]);
+              const passed: boolean = !setDisabledDate(oDate, [form[fieldName][0], maxDateTime]);
               if (!passed) return;
               val = dateFormat(oDate, DATE_RANGE_CONF[dateType].valueFormat) as string;
               form[fieldName][1] =

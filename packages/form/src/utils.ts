@@ -28,6 +28,22 @@ export const dateFormat = (val: Date | Date[], vf: string): string | string[] =>
   return Array.isArray(val) ? result : result[0];
 };
 
+// 设置日期控件的禁用状态
+export const setDisabledDate = (oDate: Date, [minDateTime, maxDateTime]): boolean => {
+  const min = minDateTime ? dayjs(minDateTime).toDate().getTime() : 0;
+  const max = maxDateTime ? dayjs(maxDateTime).toDate().getTime() : 0;
+  if (min && max) {
+    return !(oDate.getTime() >= min && oDate.getTime() <= max);
+  }
+  if (min) {
+    return oDate.getTime() < min;
+  }
+  if (max) {
+    return oDate.getTime() > max;
+  }
+  return false;
+};
+
 // 数值类型格式化
 export const formatNumber = (value = ''): string => {
   value += '';
