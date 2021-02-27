@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-02-23 21:56:33
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-02-26 14:11:39
+ * @Last Modified time: 2021-02-27 14:45:45
  */
 import { defineComponent } from 'vue';
 import { AnyObject, JSXNode, Nullable } from '../../_utils/types';
@@ -75,7 +75,7 @@ export default defineComponent({
       request = {},
       style = {},
       placeholder = t('qm.form.inputPlaceholder'),
-      clearable,
+      clearable = !0,
       readonly,
       disabled,
       onChange = noop,

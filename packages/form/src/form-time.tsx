@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-02-23 21:56:33
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-02-27 08:37:34
+ * @Last Modified time: 2021-02-27 14:44:51
  */
 import { defineComponent } from 'vue';
 import { JSXNode } from '../../_utils/types';
@@ -28,7 +28,7 @@ export default defineComponent({
       options = {},
       style = {},
       placeholder = t('qm.form.timePlaceholder'),
-      clearable,
+      clearable = !0,
       readonly,
       disabled,
       onChange = noop,

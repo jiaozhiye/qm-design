@@ -45,7 +45,7 @@ export default defineComponent({
           },
         },
         {
-          type: 'DATE',
+          type: 'RANGE_DATE',
           fieldName: 'c',
           label: '表单项3',
         },
