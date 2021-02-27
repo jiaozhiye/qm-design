@@ -2,11 +2,12 @@
  * @Author: 焦质晔
  * @Date: 2021-02-23 21:56:33
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-02-27 15:18:39
+ * @Last Modified time: 2021-02-27 16:06:45
  */
 import { defineComponent } from 'vue';
+import addEventListener from 'add-dom-event-listener';
 import dayjs from 'dayjs';
-import { JSXNode } from '../../_utils/types';
+import { JSXNode, Nullable } from '../../_utils/types';
 
 import { t } from '../../locale';
 import { noop, toDate, dateFormat } from './utils';
@@ -71,7 +72,6 @@ export default defineComponent({
         value: (() => {
           const date = new Date();
           date.setTime(date.getTime() - 3600 * 1000 * 24 * 7);
-          // !endDisabled && (form[fieldName][1] = `${dayjs(date).format('YYYY-MM-DD')} 23:59:59`);
           return date;
         })(),
       },
@@ -100,6 +100,11 @@ export default defineComponent({
         })(),
       },
     ];
+
+    const shortcutClickHandle = (ev: Event): void => {
+      if ((ev.target as HTMLElement).nodeName !== 'BUTTON') return;
+      !endDisabled && (form[fieldName][1] = `${dayjs().format('YYYY-MM-DD')} 23:59:59`);
+    };
 
     const startWrapProps = {
       modelValue: toDate(form[fieldName][0]),
@@ -137,6 +142,7 @@ export default defineComponent({
           <el-date-picker
             ref={`${type}__start`}
             type={dateType.replace('exact', '').slice(0, -5)}
+            popper-class={`date-picker__${fieldName}`}
             {...startWrapProps}
             range-separator={'-'}
             placeholder={!disabled ? DATE_RANGE_CONF[dateType].placeholder[0] : ''}
@@ -149,33 +155,46 @@ export default defineComponent({
             }}
             shortcuts={shortCuts ? pickers : null}
             onChange={(): void => onChange(form[fieldName])}
+            onFocus={(): void => {
+              this.$nextTick(() => {
+                const $pickerBar: Nullable<HTMLElement> = document
+                  .querySelector(`.date-picker__${fieldName}`)
+                  .querySelector('.el-picker-panel__sidebar');
+                if ($pickerBar?.nodeType === 1) {
+                  this._event = addEventListener($pickerBar, 'click', shortcutClickHandle);
+                }
+              });
+            }}
             onBlur={() => {
+              setTimeout(() => this._event?.remove(), 300);
               const types = ['date', 'exactdate', 'datetime'];
               if (!types.includes(dateType)) return;
               const target: HTMLInputElement = this.$refs[
                 `${type}__start`
               ].$el.nextElementSibling?.querySelector('.el-input__inner');
               if (!target) return;
-              let val: string = target.value;
-              // 检测格式是否合法
-              if (!/^[\d-\s\:]+$/.test(val)) return;
-              const dateReg: RegExp = /^(\d{4})-?(\d{2})-?(\d{2})/;
-              const dateTimeReg: RegExp = /^(\d{4})-?(\d{2})-?(\d{2}) (\d{2}):?(\d{2}):?(\d{2})/;
-              if (dateType === 'date' || dateType === 'exactdate') {
-                val = val.replace(dateReg, '$1-$2-$3').slice(0, 10);
-              }
-              if (dateType === 'datetime') {
-                val = val
-                  .replace(dateReg, '$1-$2-$3')
-                  .replace(dateTimeReg, '$1-$2-$3 $4:$5:$6')
-                  .slice(0, 19);
-              }
-              const passed: boolean = !this.setDisabledDate(dayjs(val).toDate(), [
-                minDateTime,
-                endDate,
-              ]);
-              if (!passed) return;
-              form[fieldName] = val;
+              this.$nextTick(() => {
+                let val: string = target.value;
+                // 检测格式是否合法
+                if (!/^[\d-\s\:]+$/.test(val)) return;
+                const dateReg: RegExp = /^(\d{4})-?(\d{2})-?(\d{2})/;
+                const dateTimeReg: RegExp = /^(\d{4})-?(\d{2})-?(\d{2}) (\d{2}):?(\d{2}):?(\d{2})/;
+                if (dateType === 'date' || dateType === 'exactdate') {
+                  val = val.replace(dateReg, '$1-$2-$3').slice(0, 10);
+                }
+                if (dateType === 'datetime') {
+                  val = val
+                    .replace(dateReg, '$1-$2-$3')
+                    .replace(dateTimeReg, '$1-$2-$3 $4:$5:$6')
+                    .slice(0, 19);
+                }
+                const passed: boolean = !this.setDisabledDate(dayjs(val).toDate(), [
+                  minDateTime,
+                  endDate,
+                ]);
+                if (!passed) return;
+                form[fieldName] = val;
+              });
             }}
           />
           <span
@@ -205,26 +224,28 @@ export default defineComponent({
                 `${type}__end`
               ].$el.nextElementSibling?.querySelector('.el-input__inner');
               if (!target) return;
-              let val: string = target.value;
-              // 检测格式是否合法
-              if (!/^[\d-\s\:]+$/.test(val)) return;
-              const dateReg: RegExp = /^(\d{4})-?(\d{2})-?(\d{2})/;
-              const dateTimeReg: RegExp = /^(\d{4})-?(\d{2})-?(\d{2}) (\d{2}):?(\d{2}):?(\d{2})/;
-              if (dateType === 'date' || dateType === 'exactdate') {
-                val = val.replace(dateReg, '$1-$2-$3').slice(0, 10);
-              }
-              if (dateType === 'datetime') {
-                val = val
-                  .replace(dateReg, '$1-$2-$3')
-                  .replace(dateTimeReg, '$1-$2-$3 $4:$5:$6')
-                  .slice(0, 19);
-              }
-              const passed: boolean = !this.setDisabledDate(dayjs(val).toDate(), [
-                startDate,
-                maxDateTime,
-              ]);
-              if (!passed) return;
-              form[fieldName] = val;
+              this.$nextTick(() => {
+                let val: string = target.value;
+                // 检测格式是否合法
+                if (!/^[\d-\s\:]+$/.test(val)) return;
+                const dateReg: RegExp = /^(\d{4})-?(\d{2})-?(\d{2})/;
+                const dateTimeReg: RegExp = /^(\d{4})-?(\d{2})-?(\d{2}) (\d{2}):?(\d{2}):?(\d{2})/;
+                if (dateType === 'date' || dateType === 'exactdate') {
+                  val = val.replace(dateReg, '$1-$2-$3').slice(0, 10);
+                }
+                if (dateType === 'datetime') {
+                  val = val
+                    .replace(dateReg, '$1-$2-$3')
+                    .replace(dateTimeReg, '$1-$2-$3 $4:$5:$6')
+                    .slice(0, 19);
+                }
+                const passed: boolean = !this.setDisabledDate(dayjs(val).toDate(), [
+                  startDate,
+                  maxDateTime,
+                ]);
+                if (!passed) return;
+                form[fieldName] = val;
+              });
             }}
           />
         </div>
