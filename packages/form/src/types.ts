@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-02-24 13:02:36
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-02-26 21:16:12
+ * @Last Modified time: 2021-02-27 08:38:53
  */
 import { CSSProperties, PropType } from 'vue';
 import PropTypes from '../../_utils/vue-types';
@@ -32,6 +32,7 @@ export type IFormItemType =
   | 'TEXT_AREA'
   | 'SEARCH_HELPER'
   | 'TIME'
+  | 'RANGE_TIME'
   | 'TINYMCE';
 
 export const ARRAY_TYPE: IFormItemType[] = [
@@ -41,8 +42,9 @@ export const ARRAY_TYPE: IFormItemType[] = [
   'MULTIPLE_CASCADER',
   'MULTIPLE_SELECT',
   'MULTIPLE_CHECKBOX',
+  'RANGE_TIME',
 ];
-export const FORMAT_TYPE: IFormItemType[] = ['RANGE_INPUT', 'RANGE_INPUT_NUMBER'];
+export const FORMAT_TYPE: IFormItemType[] = ['RANGE_INPUT', 'RANGE_INPUT_NUMBER', 'RANGE_TIME'];
 export const UNFIX_TYPE: IFormItemType[] = ['TEXT_AREA', 'MULTIPLE_CHECKBOX', 'TINYMCE'];
 
 export type IFormData = Record<string, string | number | Array<string | number> | undefined>;

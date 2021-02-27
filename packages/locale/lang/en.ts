@@ -29,6 +29,7 @@ export default {
       selectPlaceholder: '请选择...',
       rangeInputNumberPlaceholder: ['开始值', '结束值'],
       timePlaceholder: '选择时间',
+      timerangePlaceholder: ['开始时间', '结束时间'],
     },
   },
 };
