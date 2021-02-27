@@ -2,12 +2,31 @@
  * @Author: 焦质晔
  * @Date: 2021-02-24 10:24:37
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-02-25 20:30:28
+ * @Last Modified time: 2021-02-27 11:21:00
  */
 import { transform, isEqual, isObject } from 'lodash-es';
+import dayjs from 'dayjs';
 import { AnyObject, Nullable } from '../../_utils/types';
 
 export const noop = (): void => {};
+
+// 转日期对象
+export const toDate = (val: string | string[]): Date | Date[] => {
+  const vals: string[] = Array.isArray(val) ? val : [val];
+  const result: Date[] = vals.map((x) => {
+    return dayjs(x).toDate();
+  });
+  return Array.isArray(val) ? result : result[0];
+};
+
+// 转日期格式
+export const dateFormat = (val: Date | Date[], vf: string): string | string[] => {
+  const vals: Date[] = Array.isArray(val) ? val : [val];
+  const result: string[] = vals.map((x) => {
+    return dayjs(x).format(vf);
+  });
+  return Array.isArray(val) ? result : result[0];
+};
 
 // 数值类型格式化
 export const formatNumber = (value = ''): string => {

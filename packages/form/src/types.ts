@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-02-24 13:02:36
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-02-27 08:52:16
+ * @Last Modified time: 2021-02-27 09:53:47
  */
 import { CSSProperties, PropType } from 'vue';
 import PropTypes from '../../_utils/vue-types';
@@ -11,6 +11,7 @@ import { JSXNode, AnyFunction, Nullable, ComponentSize } from '../../_utils/type
 import { isNumber } from 'lodash-es';
 import { isValidWidthUnit, isValidComponentSize } from '../../_utils/validators';
 import { noop } from './utils';
+import { t } from '../../locale';
 
 export type IFormType = 'default' | 'search' | 'onlyShow';
 
@@ -31,6 +32,7 @@ export type IFormItemType =
   | 'MULTIPLE_CHECKBOX'
   | 'TEXT_AREA'
   | 'SEARCH_HELPER'
+  | 'RANGE_DATE_EL'
   | 'TIME'
   | 'RANGE_TIME'
   | 'TIME_SELECT'
@@ -44,12 +46,14 @@ export const ARRAY_TYPE: IFormItemType[] = [
   'MULTIPLE_CASCADER',
   'MULTIPLE_SELECT',
   'MULTIPLE_CHECKBOX',
+  'RANGE_DATE_EL',
   'RANGE_TIME',
   'RANGE_TIME_SELECT',
 ];
 export const FORMAT_TYPE: IFormItemType[] = [
   'RANGE_INPUT',
   'RANGE_INPUT_NUMBER',
+  'RANGE_DATE_EL',
   'RANGE_TIME',
   'RANGE_TIME_SELECT',
 ];
@@ -106,6 +110,29 @@ export type IDict = {
 
 export type IDictDeep = IDict & {
   children?: Array<IDict> | Nullable<undefined>;
+};
+
+export const DATE_RANGE_CONF = {
+  daterange: {
+    placeholder: t('qm.form.daterangePlaceholder'),
+    valueFormat: 'YYYY-MM-DD HH:mm:ss',
+  },
+  datetimerange: {
+    placeholder: t('qm.form.timerangePlaceholder'),
+    valueFormat: 'YYYY-MM-DD HH:mm:ss',
+  },
+  exactdaterange: {
+    placeholder: t('qm.form.daterangePlaceholder'),
+    valueFormat: 'YYYY-MM-DD',
+  },
+  monthrange: {
+    placeholder: t('qm.form.monthrangePlaceholder'),
+    valueFormat: 'YYYY-MM',
+  },
+  yearrange: {
+    placeholder: t('qm.form.yearrangePlaceholder'),
+    valueFormat: 'YYYY',
+  },
 };
 
 export const props = {

@@ -29,7 +29,12 @@ export default {
       selectPlaceholder: '请选择...',
       rangeInputNumberPlaceholder: ['开始值', '结束值'],
       timePlaceholder: '选择时间',
+      daterangePlaceholder: ['开始日期', '结束日期'],
       timerangePlaceholder: ['开始时间', '结束时间'],
+      monthrangePlaceholder: ['开始月份', '结束月份'],
+      yearrangePlaceholder: ['开始年份', '结束年份'],
+      datePickers: ['今天', '昨天', '一周前', '一个月前'],
+      dateRangePickers: ['最近一周', '最近一个月', '最近三个月', '最近六个月'],
     },
   },
 };
