@@ -31,6 +31,7 @@ export type IFormItemType =
   | 'MULTIPLE_CHECKBOX'
   | 'TEXT_AREA'
   | 'SEARCH_HELPER'
+  | 'TIME'
   | 'TINYMCE';
 
 export const ARRAY_TYPE: IFormItemType[] = [

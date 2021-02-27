@@ -28,6 +28,7 @@ export default {
       treePlaceholder: '树节点过滤',
       selectPlaceholder: '请选择...',
       rangeInputNumberPlaceholder: ['开始值', '结束值'],
+      timePlaceholder: '选择时间',
     },
   },
 };
