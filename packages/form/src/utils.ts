@@ -127,13 +127,13 @@ export const deepFindValues = (arr: any[], str: string, depth = 0): any[] => {
   return result;
 };
 
-export const deppGetPath = (arr: any[], value): any[] | undefined => {
+export const deepGetPath = (arr: any[], value): any[] | undefined => {
   for (let i = 0; i < arr.length; i++) {
     if (arr[i].value == value) {
       return [value];
     }
     if (Array.isArray(arr[i].children)) {
-      const temp = deppGetPath(arr[i].children, value);
+      const temp = deepGetPath(arr[i].children, value);
       if (temp) {
         return [arr[i].value, temp].flat();
       }

@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-02-24 13:02:36
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-02-27 14:12:02
+ * @Last Modified time: 2021-02-27 23:35:48
  */
 import { CSSProperties, PropType } from 'vue';
 import PropTypes from '../../_utils/vue-types';
@@ -82,6 +82,7 @@ export type IFormItem = {
     itemList?: Record<string, string | number>[];
     trueValue?: number | string;
     falseValue?: number | string;
+    dateType?: string;
     secretType?: string;
     columns?: Record<string, string>[];
     fieldAliasMap?: AnyFunction<any>;
@@ -187,6 +188,7 @@ export const props = {
         itemList: PropTypes.array,
         trueValue: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
         falseValue: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+        dateType: PropTypes.string,
         secretType: PropTypes.string,
         columns: PropTypes.array,
         fieldAliasMap: PropTypes.func,
