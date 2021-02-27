@@ -104,12 +104,11 @@ export default defineComponent({
       style = {},
       placeholder = t('qm.form.selectPlaceholder'),
       clearable = !0,
-      showTags,
       readonly,
       disabled,
       onChange = noop,
     } = this.option;
-    const { filterable = !0, openPyt = !0, limit } = options;
+    const { filterable = !0, showTags = !1, openPyt = !0, limit } = options;
 
     const textVal: string = this.createViewText(form[fieldName]);
     this.$$form.setViewValue(fieldName, textVal);
@@ -117,11 +116,7 @@ export default defineComponent({
     const wrapProps = {
       modelValue: form[fieldName],
       'onUpdate:modelValue': (val: string): void => {
-        if (!(multiple && filterable)) {
-          form[fieldName] = val;
-        } else {
-          setTimeout(() => (form[fieldName] = val), 20);
-        }
+        form[fieldName] = val;
       },
     };
 
@@ -147,11 +142,6 @@ export default defineComponent({
           clearable={clearable}
           disabled={disabled}
           style={{ ...style }}
-          onVisibleChange={(visible: boolean): void => {
-            if (filterable && !visible) {
-              setTimeout(() => this.filterMethodHandle(''), 300);
-            }
-          }}
           onChange={(val: string): void => {
             onChange(val, this.createViewText(val));
             if (!filterable) return;
@@ -163,7 +153,10 @@ export default defineComponent({
             // 精确匹配，直接赋值
             if (!multiple && res.length === 1) {
               form[fieldName] = res[0].value;
+              // 触发 change 事件
               onChange(form[fieldName], res[0].text);
+              this.filterMethodHandle('');
+              // 失去焦点，自动带值
               this.$nextTick(() => this.$refs[type].blur());
             }
           }}

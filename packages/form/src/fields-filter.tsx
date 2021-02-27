@@ -89,7 +89,9 @@ export default defineComponent({
                   <li class="filter-item">
                     <el-checkbox v-model={element.hidden} disabled={isDisabled} />
                     <i class="iconfont icon-menu v-handle" title={t('qm.form.draggable')} />
-                    <span title={element.label}>{element.label}</span>
+                    <span class="title" title={element.label}>
+                      {element.label}
+                    </span>
                   </li>
                 );
               },
