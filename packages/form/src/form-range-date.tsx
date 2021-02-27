@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-02-23 21:56:33
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-02-27 16:06:45
+ * @Last Modified time: 2021-02-27 16:49:34
  */
 import { defineComponent } from 'vue';
 import addEventListener from 'add-dom-event-listener';
@@ -61,7 +61,6 @@ export default defineComponent({
       endDisabled,
       shortCuts = !0,
     } = options;
-    const [startDate = minDateTime, endDate = maxDateTime] = form[fieldName];
 
     this.$$form.setViewValue(fieldName, form[fieldName].join('-'));
 
@@ -151,7 +150,7 @@ export default defineComponent({
             disabled={disabled || startDisabled}
             style={{ width: `calc(50% - 7px)` }}
             disabledDate={(time: Date): boolean => {
-              return this.setDisabledDate(time, [minDateTime, endDate]);
+              return this.setDisabledDate(time, [minDateTime, form[fieldName][1]]);
             }}
             shortcuts={shortCuts ? pickers : null}
             onChange={(): void => onChange(form[fieldName])}
@@ -167,22 +166,28 @@ export default defineComponent({
             }}
             onBlur={() => {
               setTimeout(() => this._event?.remove(), 300);
-              const types = ['date', 'exactdate', 'datetime'];
+              const types = ['daterange', 'exactdaterange', 'datetimerange'];
               if (!types.includes(dateType)) return;
               const target: HTMLInputElement = this.$refs[
                 `${type}__start`
               ].$el.nextElementSibling?.querySelector('.el-input__inner');
               if (!target) return;
+              const prevVal = target.value;
+              console.log(111, prevVal);
               this.$nextTick(() => {
                 let val: string = target.value;
+                console.log(222, val);
+                if (prevVal && !val) {
+                  val = prevVal;
+                }
                 // 检测格式是否合法
                 if (!/^[\d-\s\:]+$/.test(val)) return;
                 const dateReg: RegExp = /^(\d{4})-?(\d{2})-?(\d{2})/;
                 const dateTimeReg: RegExp = /^(\d{4})-?(\d{2})-?(\d{2}) (\d{2}):?(\d{2}):?(\d{2})/;
-                if (dateType === 'date' || dateType === 'exactdate') {
+                if (dateType === 'daterange' || dateType === 'exactdaterange') {
                   val = val.replace(dateReg, '$1-$2-$3').slice(0, 10);
                 }
-                if (dateType === 'datetime') {
+                if (dateType === 'datetimerange') {
                   val = val
                     .replace(dateReg, '$1-$2-$3')
                     .replace(dateTimeReg, '$1-$2-$3 $4:$5:$6')
@@ -190,10 +195,10 @@ export default defineComponent({
                 }
                 const passed: boolean = !this.setDisabledDate(dayjs(val).toDate(), [
                   minDateTime,
-                  endDate,
+                  form[fieldName][1],
                 ]);
                 if (!passed) return;
-                form[fieldName] = val;
+                form[fieldName][0] = val;
               });
             }}
           />
@@ -214,7 +219,7 @@ export default defineComponent({
             disabled={disabled || endDisabled}
             style={{ width: `calc(50% - 7px)` }}
             disabledDate={(time: Date): boolean => {
-              return this.setDisabledDate(time, [startDate, maxDateTime]);
+              return this.setDisabledDate(time, [form[fieldName][0], maxDateTime]);
             }}
             onChange={(): void => onChange(form[fieldName])}
             onBlur={() => {
@@ -240,11 +245,11 @@ export default defineComponent({
                     .slice(0, 19);
                 }
                 const passed: boolean = !this.setDisabledDate(dayjs(val).toDate(), [
-                  startDate,
+                  form[fieldName][0],
                   maxDateTime,
                 ]);
                 if (!passed) return;
-                form[fieldName] = val;
+                form[fieldName][1] = val;
               });
             }}
           />

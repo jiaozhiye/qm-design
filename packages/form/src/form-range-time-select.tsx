@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-02-23 21:56:33
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-02-27 14:45:06
+ * @Last Modified time: 2021-02-27 16:42:06
  */
 import { defineComponent } from 'vue';
 import { JSXNode } from '../../_utils/types';
@@ -41,7 +41,6 @@ export default defineComponent({
       startDisabled,
       endDisabled,
     } = options;
-    const [startVal, endVal] = form[fieldName];
     this.$$form.setViewValue(fieldName, form[fieldName].join('-'));
     const startWrapProps = {
       modelValue: form[fieldName][0],
@@ -72,7 +71,7 @@ export default defineComponent({
               start: startTime,
               end: endTime,
               step: stepTime,
-              maxTime: endVal,
+              maxTime: form[fieldName][1],
             }}
             value-format={valueFormat}
             placeholder={!disabled ? t('qm.form.timerangePlaceholder')[0] : ''}
@@ -89,7 +88,7 @@ export default defineComponent({
               start: startTime,
               end: endTime,
               step: stepTime,
-              minTime: startVal,
+              minTime: form[fieldName][0],
             }}
             value-format={valueFormat}
             placeholder={!disabled ? t('qm.form.timerangePlaceholder')[1] : ''}
