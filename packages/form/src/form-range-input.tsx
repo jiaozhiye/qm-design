@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-02-23 21:56:33
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-02-24 20:04:20
+ * @Last Modified time: 2021-02-27 09:06:40
  */
 import { defineComponent } from 'vue';
 import { JSXNode } from '../../_utils/types';
@@ -23,6 +23,7 @@ export default defineComponent({
       fieldName,
       labelWidth,
       labelOptions,
+      descOptions,
       clearable,
       readonly,
       disabled,
@@ -39,25 +40,28 @@ export default defineComponent({
           label: (): JSXNode => labelOptions && this.$$form.createFormItemLabel(labelOptions),
         }}
       >
-        <el-input
-          v-model={form[fieldName][0]}
-          placeholder={!disabled ? t('qm.form.rangeInputNumberPlaceholder')[0] : ''}
-          clearable={clearable}
-          readonly={readonly}
-          disabled={disabled}
-          style={{ width: `calc(50% - 7px)` }}
-          onChange={() => onChange(form[fieldName])}
-        />
-        <span style="display: inline-block; text-align: center; width: 14px;">-</span>
-        <el-input
-          v-model={form[fieldName][1]}
-          placeholder={!disabled ? t('qm.form.rangeInputNumberPlaceholder')[1] : ''}
-          clearable={clearable}
-          readonly={readonly}
-          disabled={disabled}
-          style={{ width: `calc(50% - 7px)` }}
-          onChange={() => onChange(form[fieldName])}
-        />
+        <div>
+          <el-input
+            v-model={form[fieldName][0]}
+            placeholder={!disabled ? t('qm.form.rangeInputNumberPlaceholder')[0] : ''}
+            clearable={clearable}
+            readonly={readonly}
+            disabled={disabled}
+            style={{ width: `calc(50% - 7px)` }}
+            onChange={() => onChange(form[fieldName])}
+          />
+          <span style="display: inline-block; text-align: center; width: 14px;">-</span>
+          <el-input
+            v-model={form[fieldName][1]}
+            placeholder={!disabled ? t('qm.form.rangeInputNumberPlaceholder')[1] : ''}
+            clearable={clearable}
+            readonly={readonly}
+            disabled={disabled}
+            style={{ width: `calc(50% - 7px)` }}
+            onChange={() => onChange(form[fieldName])}
+          />
+        </div>
+        {descOptions && this.$$form.createFormItemDesc({ fieldName, ...descOptions })}
       </el-form-item>
     );
   },

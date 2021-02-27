@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-02-09 09:03:59
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-02-27 08:53:31
+ * @Last Modified time: 2021-02-27 09:10:56
  */
 import { ComponentPublicInstance, defineComponent } from 'vue';
 import scrollIntoView from 'scroll-into-view-if-needed';
@@ -282,14 +282,14 @@ export default defineComponent({
               content: (): JSXNode => <div>{content}</div>,
             }}
           >
-            <i class="desc-icon el-icon-info" />
+            <i class="el-icon-info desc-icon" />
           </el-tooltip>
         );
       }
       return (
         <span
           title={content as string}
-          class="desc-text text_overflow_cut"
+          class="desc-text"
           style={{ display: 'inline-block', paddingLeft: '10px', ...style }}
         >
           {content}

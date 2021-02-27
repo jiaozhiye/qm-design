@@ -45,7 +45,7 @@ export default defineComponent({
           },
         },
         {
-          type: 'RANGE_INPUT',
+          type: 'RANGE_TIME_SELECT',
           fieldName: 'c',
           label: '表单项3',
         },
