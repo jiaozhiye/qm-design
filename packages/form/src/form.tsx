@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-02-09 09:03:59
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-02-27 08:49:58
+ * @Last Modified time: 2021-02-27 08:53:31
  */
 import { ComponentPublicInstance, defineComponent } from 'vue';
 import scrollIntoView from 'scroll-into-view-if-needed';
@@ -44,6 +44,7 @@ import FormSearchHelper from './form-search-helper';
 import FormTime from './form-time';
 import FormRangeTime from './form-range-time';
 import FormTimeSelect from './form-time-select';
+import FormRangeTimeSelect from './form-range-time-select';
 
 const EMITS = ['collapse', 'valuesChange', 'change', 'finish', 'finishFailed', 'reset'];
 
@@ -371,6 +372,9 @@ export default defineComponent({
     },
     TIME_SELECT(option: IFormItem): JSXNode {
       return <FormTimeSelect ref={option.fieldName} option={option} />;
+    },
+    RANGE_TIME_SELECT(option: IFormItem): JSXNode {
+      return <FormRangeTimeSelect ref={option.fieldName} option={option} />;
     },
     // ============================================
     // 锚点定位没有通过校验的表单项
