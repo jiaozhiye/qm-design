@@ -103,7 +103,11 @@ export default defineComponent({
     const wrapProps = {
       modelValue: toDate(form[fieldName]),
       'onUpdate:modelValue': (val) => {
-        form[fieldName] = dateFormat(val ?? undefined, DATE_CONF[dateType].valueFormat);
+        let value: string = dateFormat(val ?? undefined, DATE_CONF[dateType].valueFormat) as string;
+        if (value && dateType === 'date') {
+          value = value.replace(/\d{2}:\d{2}:\d{2}$/, '00:00:00');
+        }
+        form[fieldName] = value;
       },
       ...(dateType === 'week' ? { format: 'gggg 第 ww 周' } : null),
     };
@@ -149,12 +153,12 @@ export default defineComponent({
                 .replace(dateTimeReg, '$1-$2-$3 $4:$5:$6')
                 .slice(0, 19);
             }
-            const passed: boolean = !this.setDisabledDate(dayjs(val).toDate(), [
-              minDateTime,
-              maxDateTime,
-            ]);
+            const oDate: Date = dayjs(val).toDate();
+            const passed: boolean = !this.setDisabledDate(oDate, [minDateTime, maxDateTime]);
             if (!passed) return;
-            form[fieldName] = val;
+            val = dateFormat(oDate, DATE_CONF[dateType].valueFormat) as string;
+            form[fieldName] =
+              dateType === 'date' ? val.replace(/\d{2}:\d{2}:\d{2}$/, '00:00:00') : val;
           }}
         />
         {descOptions && this.$$form.createFormItemDesc({ fieldName, ...descOptions })}

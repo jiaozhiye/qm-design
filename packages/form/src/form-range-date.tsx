@@ -121,26 +121,38 @@ export default defineComponent({
 
     const shortcutClickHandle = (ev: Event): void => {
       if ((ev.target as HTMLElement).nodeName !== 'BUTTON') return;
-      !endDisabled && (form[fieldName][1] = `${dayjs().format('YYYY-MM-DD')} 23:59:59`);
+      if (endDisabled) return;
+      const val: string = dayjs()
+        .format(DATE_RANGE_CONF[dateType].valueFormat)
+        .replace(/\d{2}:\d{2}:\d{2}$/, '23:59:59');
+      form[fieldName][1] = val;
     };
 
     const startWrapProps = {
       modelValue: toDate(form[fieldName][0]),
       'onUpdate:modelValue': (val) => {
-        form[fieldName] = [
-          dateFormat(val ?? undefined, DATE_RANGE_CONF[dateType].valueFormat),
-          form[fieldName][1],
-        ];
+        let value: string = dateFormat(
+          val ?? undefined,
+          DATE_RANGE_CONF[dateType].valueFormat
+        ) as string;
+        if (value && dateType === 'daterange') {
+          value = value.replace(/\d{2}:\d{2}:\d{2}$/, '00:00:00');
+        }
+        form[fieldName] = [value, form[fieldName][1]];
       },
     };
 
     const endWrapProps = {
       modelValue: toDate(form[fieldName][1]),
       'onUpdate:modelValue': (val) => {
-        form[fieldName] = [
-          form[fieldName][0],
-          dateFormat(val ?? undefined, DATE_RANGE_CONF[dateType].valueFormat),
-        ];
+        let value: string = dateFormat(
+          val ?? undefined,
+          DATE_RANGE_CONF[dateType].valueFormat
+        ) as string;
+        if (value && dateType === 'daterange') {
+          value = value.replace(/\d{2}:\d{2}:\d{2}$/, '23:59:59');
+        }
+        form[fieldName] = [form[fieldName][0], value];
       },
     };
 
@@ -200,12 +212,15 @@ export default defineComponent({
                   .replace(dateTimeReg, '$1-$2-$3 $4:$5:$6')
                   .slice(0, 19);
               }
-              const passed: boolean = !this.setDisabledDate(dayjs(val).toDate(), [
+              const oDate: Date = dayjs(val).toDate();
+              const passed: boolean = !this.setDisabledDate(oDate, [
                 minDateTime,
                 form[fieldName][1],
               ]);
               if (!passed) return;
-              form[fieldName][0] = val;
+              val = dateFormat(oDate, DATE_RANGE_CONF[dateType].valueFormat) as string;
+              form[fieldName][0] =
+                dateType === 'daterange' ? val.replace(/\d{2}:\d{2}:\d{2}$/, '00:00:00') : val;
             }}
           />
           <span
@@ -244,12 +259,15 @@ export default defineComponent({
                   .replace(dateTimeReg, '$1-$2-$3 $4:$5:$6')
                   .slice(0, 19);
               }
-              const passed: boolean = !this.setDisabledDate(dayjs(val).toDate(), [
+              const oDate: Date = dayjs(val).toDate();
+              const passed: boolean = !this.setDisabledDate(oDate, [
                 form[fieldName][0],
                 maxDateTime,
               ]);
               if (!passed) return;
-              form[fieldName][1] = val;
+              val = dateFormat(oDate, DATE_RANGE_CONF[dateType].valueFormat) as string;
+              form[fieldName][1] =
+                dateType === 'daterange' ? val.replace(/\d{2}:\d{2}:\d{2}$/, '23:59:59') : val;
             }}
           />
         </div>

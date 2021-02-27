@@ -101,7 +101,18 @@ export default defineComponent({
     const wrapProps = {
       modelValue: toDate(form[fieldName]),
       'onUpdate:modelValue': (val) => {
-        form[fieldName] = dateFormat(val ?? [], DATE_RANGE_CONF[dateType].valueFormat);
+        let value: string[] = dateFormat(
+          val ?? [],
+          DATE_RANGE_CONF[dateType].valueFormat
+        ) as string[];
+        if (value.length && dateType === 'daterange') {
+          value.map((x, i) => {
+            return i === 0
+              ? x.replace(/\d{2}:\d{2}:\d{2}$/, '00:00:00')
+              : x.replace(/\d{2}:\d{2}:\d{2}$/, '23:59:59');
+          });
+        }
+        form[fieldName] = value;
       },
     };
 
