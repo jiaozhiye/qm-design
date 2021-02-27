@@ -50,6 +50,8 @@ export default defineComponent({
       },
       'onUpdate:modelValue': (val): void => {
         this.fieldsChange(val);
+        // 自动展开
+        this.$$form.collapse = true;
       },
     };
 
@@ -68,6 +70,7 @@ export default defineComponent({
         trigger="click"
         placement="bottom-end"
         transition="el-zoom-in-top"
+        popper-options={{ gpuAcceleration: false }}
         append-to-body={true}
         stop-popper-mouse-event={false}
         gpu-acceleration={false}

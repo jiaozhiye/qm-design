@@ -27,6 +27,7 @@ import { setConfig } from './_utils/config';
 // import ElementPlus
 import ElementPlus from 'element-plus';
 import lang from 'element-plus/lib/locale/lang/zh-cn';
+import 'dayjs/locale/zh-cn';
 // import './style/element-variables.scss';
 
 // 默认参数

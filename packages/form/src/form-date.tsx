@@ -5,6 +5,7 @@
  * @Last Modified time: 2021-02-27 14:44:16
  */
 import { defineComponent } from 'vue';
+import addEventListener from 'add-dom-event-listener';
 import dayjs from 'dayjs';
 import { JSXNode } from '../../_utils/types';
 
@@ -18,6 +19,17 @@ export default defineComponent({
   inheritAttrs: false,
   inject: ['$$form'],
   props: ['option'],
+  mounted() {
+    const $input: HTMLInputElement = this.$refs[`DATE`].$el.nextElementSibling.querySelector(
+      '.el-input__inner'
+    );
+    this._event = addEventListener($input, 'input', (ev: Event): void => {
+      this.inputText = (ev.target as HTMLInputElement).value;
+    });
+  },
+  beforeUnmount() {
+    this._event?.remove();
+  },
   methods: {
     // 设置日期控件的禁用状态
     setDisabledDate(oDate: Date, [minDateTime, maxDateTime]): boolean {
@@ -122,34 +134,27 @@ export default defineComponent({
           shortcuts={shortCuts ? pickers : null}
           onChange={(): void => onChange(form[fieldName])}
           onBlur={() => {
-            const types = ['date', 'exactdate', 'datetime'];
-            if (!types.includes(dateType)) return;
-            const target: HTMLInputElement = this.$refs[type].$el.nextElementSibling?.querySelector(
-              '.el-input__inner'
-            );
-            if (!target) return;
-            this.$nextTick(() => {
-              let val: string = target.value;
-              // 检测格式是否合法
-              if (!/^[\d-\s\:]+$/.test(val)) return;
-              const dateReg: RegExp = /^(\d{4})-?(\d{2})-?(\d{2})/;
-              const dateTimeReg: RegExp = /^(\d{4})-?(\d{2})-?(\d{2}) (\d{2}):?(\d{2}):?(\d{2})/;
-              if (dateType === 'date' || dateType === 'exactdate') {
-                val = val.replace(dateReg, '$1-$2-$3').slice(0, 10);
-              }
-              if (dateType === 'datetime') {
-                val = val
-                  .replace(dateReg, '$1-$2-$3')
-                  .replace(dateTimeReg, '$1-$2-$3 $4:$5:$6')
-                  .slice(0, 19);
-              }
-              const passed: boolean = !this.setDisabledDate(dayjs(val).toDate(), [
-                minDateTime,
-                maxDateTime,
-              ]);
-              if (!passed) return;
-              form[fieldName] = val;
-            });
+            if (!['date', 'exactdate', 'datetime'].includes(dateType)) return;
+            let val: string = this.inputText || '';
+            // 检测格式是否合法
+            if (!/^[\d-\s\:]+$/.test(val)) return;
+            const dateReg: RegExp = /^(\d{4})-?(\d{2})-?(\d{2})/;
+            const dateTimeReg: RegExp = /^(\d{4})-?(\d{2})-?(\d{2}) (\d{2}):?(\d{2}):?(\d{2})/;
+            if (dateType === 'date' || dateType === 'exactdate') {
+              val = val.replace(dateReg, '$1-$2-$3').slice(0, 10);
+            }
+            if (dateType === 'datetime') {
+              val = val
+                .replace(dateReg, '$1-$2-$3')
+                .replace(dateTimeReg, '$1-$2-$3 $4:$5:$6')
+                .slice(0, 19);
+            }
+            const passed: boolean = !this.setDisabledDate(dayjs(val).toDate(), [
+              minDateTime,
+              maxDateTime,
+            ]);
+            if (!passed) return;
+            form[fieldName] = val;
           }}
         />
         {descOptions && this.$$form.createFormItemDesc({ fieldName, ...descOptions })}
