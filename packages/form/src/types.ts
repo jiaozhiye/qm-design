@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-02-24 13:02:36
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-02-27 09:53:47
+ * @Last Modified time: 2021-02-27 11:55:47
  */
 import { CSSProperties, PropType } from 'vue';
 import PropTypes from '../../_utils/vue-types';
@@ -32,6 +32,7 @@ export type IFormItemType =
   | 'MULTIPLE_CHECKBOX'
   | 'TEXT_AREA'
   | 'SEARCH_HELPER'
+  | 'DATE'
   | 'RANGE_DATE_EL'
   | 'TIME'
   | 'RANGE_TIME'
@@ -110,6 +111,33 @@ export type IDict = {
 
 export type IDictDeep = IDict & {
   children?: Array<IDict> | Nullable<undefined>;
+};
+
+export const DATE_CONF = {
+  date: {
+    placeholder: t('qm.form.datePlaceholder'),
+    valueFormat: 'YYYY-MM-DD HH:mm:ss',
+  },
+  datetime: {
+    placeholder: t('qm.form.timePlaceholder'),
+    valueFormat: 'YYYY-MM-DD HH:mm:ss',
+  },
+  exactdate: {
+    placeholder: t('qm.form.datePlaceholder'),
+    valueFormat: 'YYYY-MM-DD',
+  },
+  week: {
+    placeholder: t('qm.form.weekPlaceholder'),
+    valueFormat: 'YYYY-MM-DD',
+  },
+  month: {
+    placeholder: t('qm.form.monthPlaceholder'),
+    valueFormat: 'YYYY-MM',
+  },
+  year: {
+    placeholder: t('qm.form.yearPlaceholder'),
+    valueFormat: 'YYYY',
+  },
 };
 
 export const DATE_RANGE_CONF = {

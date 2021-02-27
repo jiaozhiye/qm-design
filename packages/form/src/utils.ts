@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-02-24 10:24:37
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-02-27 11:21:00
+ * @Last Modified time: 2021-02-27 12:36:02
  */
 import { transform, isEqual, isObject } from 'lodash-es';
 import dayjs from 'dayjs';
@@ -14,7 +14,7 @@ export const noop = (): void => {};
 export const toDate = (val: string | string[]): Date | Date[] => {
   const vals: string[] = Array.isArray(val) ? val : [val];
   const result: Date[] = vals.map((x) => {
-    return dayjs(x).toDate();
+    return x ? dayjs(x).toDate() : undefined;
   });
   return Array.isArray(val) ? result : result[0];
 };
@@ -23,7 +23,7 @@ export const toDate = (val: string | string[]): Date | Date[] => {
 export const dateFormat = (val: Date | Date[], vf: string): string | string[] => {
   const vals: Date[] = Array.isArray(val) ? val : [val];
   const result: string[] = vals.map((x) => {
-    return dayjs(x).format(vf);
+    return x ? dayjs(x).format(vf) : undefined;
   });
   return Array.isArray(val) ? result : result[0];
 };
