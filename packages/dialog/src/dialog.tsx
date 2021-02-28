@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-02-09 09:03:59
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-02-26 13:58:26
+ * @Last Modified time: 2021-02-28 10:53:11
  */
 import { defineComponent, PropType, CSSProperties } from 'vue';
 import classnames from 'classnames';
@@ -198,7 +198,7 @@ export default defineComponent({
     };
     return (
       <el-dialog ref="dialog" {...wrapProps} v-slots={{ title: () => this.renderHeader() }}>
-        {/* @ts-ignore: 无法被执行的代码的错误 */}
+        {/* @ts-ignore */}
         <Spin spinning={this.spinning} tip="Loading..." containerStyle={{ height: '100%' }}>
           <div class="dialog-container" style={{ ...containerStyle }}>
             {this.$slots.default?.()}

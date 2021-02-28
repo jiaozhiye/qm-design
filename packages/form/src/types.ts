@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-02-24 13:02:36
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-02-27 23:35:48
+ * @Last Modified time: 2021-02-28 10:43:52
  */
 import { CSSProperties, PropType } from 'vue';
 import PropTypes from '../../_utils/vue-types';
@@ -39,6 +39,7 @@ export type IFormItemType =
   | 'RANGE_TIME'
   | 'TIME_SELECT'
   | 'RANGE_TIME_SELECT'
+  | 'UPLOAD_FILE'
   | 'TINYMCE';
 
 export const ARRAY_TYPE: IFormItemType[] = [
@@ -52,6 +53,7 @@ export const ARRAY_TYPE: IFormItemType[] = [
   'RANGE_DATE_EL',
   'RANGE_TIME',
   'RANGE_TIME_SELECT',
+  'UPLOAD_FILE',
 ];
 export const FORMAT_TYPE: IFormItemType[] = [
   'RANGE_INPUT',
@@ -61,7 +63,12 @@ export const FORMAT_TYPE: IFormItemType[] = [
   'RANGE_TIME',
   'RANGE_TIME_SELECT',
 ];
-export const UNFIX_TYPE: IFormItemType[] = ['TEXT_AREA', 'MULTIPLE_CHECKBOX', 'TINYMCE'];
+export const UNFIX_TYPE: IFormItemType[] = [
+  'TEXT_AREA',
+  'MULTIPLE_CHECKBOX',
+  'UPLOAD_FILE',
+  'TINYMCE',
+];
 
 export type IFormData = Record<string, string | number | Array<string | number> | undefined>;
 
