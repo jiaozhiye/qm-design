@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-02-09 09:03:59
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-02-26 13:57:58
+ * @Last Modified time: 2021-02-28 13:08:40
  */
 import { defineComponent, VNode, ComponentInternalInstance, PropType } from 'vue';
 import addEventListener from 'add-dom-event-listener';
@@ -38,7 +38,7 @@ export default defineComponent({
     },
   },
   data() {
-    (this as any).distances = [] as Array<number>;
+    Object.assign(this, { distances: [], state: 'ready' });
     return {
       activeKey: 0,
       anchorItemInstances: [],
@@ -81,11 +81,14 @@ export default defineComponent({
       return index;
     },
     scrollHandle(ev: Event): void {
+      if (this.state !== 'ready') return;
       const index: number = this.findCurrentIndex((ev.target as any).scrollTop);
       if (index === -1) return;
       this.activeKey = index;
     },
     tabClickHandle(index: number): void {
+      this.state = 'stop';
+      this.timer && clearTimeout(this.timer);
       this.activeKey = index;
       scrollIntoView(this.anchorItemInstances[index].ctx.$el, {
         scrollMode: 'always',
@@ -93,6 +96,7 @@ export default defineComponent({
         behavior: 'smooth',
         boundary: this.$refs[`scroll`],
       });
+      this.timer = setTimeout(() => (this.state = 'ready'), 400);
     },
   },
   render(): JSXNode {
