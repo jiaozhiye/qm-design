@@ -43,5 +43,12 @@ export default {
     download: {
       error: '文件下载失败！',
     },
+    upload: {
+      tooltip: '只能上传 {type} 格式',
+      sizeLimit: '大小不能超过 {size}M',
+      uploadError: '文件上传失败！',
+      downError: '文件下载失败！',
+      text: '点击上传',
+    },
   },
 };

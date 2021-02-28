@@ -120,6 +120,7 @@ export default defineComponent({
           <qm-download actionUrl="https://ss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=1591144334,3360219414&fm=26&gp=0.jpg">
             下载
           </qm-download>
+          <qm-upload actionUrl="https://jsonplaceholder.typicode.com/posts/">上传</qm-upload>
         </qm-space>
         <qm-form
           list={this.formList}

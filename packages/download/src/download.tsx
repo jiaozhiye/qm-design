@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-02-09 09:03:59
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-02-28 09:34:35
+ * @Last Modified time: 2021-02-28 10:33:06
  */
 import { defineComponent, PropType } from 'vue';
 import { ElMessage } from 'element-plus';
@@ -71,9 +71,9 @@ export default defineComponent({
     },
     // 执行下载动作
     async downloadFile(url, params): Promise<void> {
-      const { headers, data: blob } = await this.downLoadByUrl(url, params);
-      const contentDisposition = headers['content-disposition'];
-      // 获取文件名
+      const res = await this.downLoadByUrl(url, params);
+      const blob: Blob = res.data;
+      const contentDisposition = res.headers['content-disposition'];
       const fileName = this.fileName
         ? this.fileName
         : contentDisposition
