@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-02-23 21:56:33
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-02-27 16:49:34
+ * @Last Modified time: 2021-02-28 07:59:41
  */
 import { defineComponent } from 'vue';
 import addEventListener from 'add-dom-event-listener';
@@ -182,6 +182,7 @@ export default defineComponent({
               setTimeout(() => this._event?.remove(), 300);
               if (!['daterange', 'exactdaterange', 'datetimerange'].includes(dateType)) return;
               let val: string = this.startInputText || '';
+              this.startInputText = '';
               // 检测格式是否合法
               if (!/^[\d-\s\:]+$/.test(val)) return;
               const dateReg: RegExp = /^(\d{4})-?(\d{2})-?(\d{2})/;
@@ -226,6 +227,7 @@ export default defineComponent({
             onBlur={() => {
               if (!['daterange', 'exactdaterange', 'datetimerange'].includes(dateType)) return;
               let val: string = this.endInputText || '';
+              this.endInputText = '';
               // 检测格式是否合法
               if (!/^[\d-\s\:]+$/.test(val)) return;
               const dateReg: RegExp = /^(\d{4})-?(\d{2})-?(\d{2})/;
