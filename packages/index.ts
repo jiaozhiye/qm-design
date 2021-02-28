@@ -18,6 +18,7 @@ import QmDialog from './dialog';
 import QmTabs from './tabs';
 import QmTabPane from './tab-pane';
 import QmForm from './form';
+import QmDownload from './download';
 
 import { use as locale, i18n } from './locale';
 import { version } from './version';
@@ -49,6 +50,7 @@ const components = [
   QmTabs,
   QmTabPane,
   QmForm,
+  QmDownload,
 ];
 
 const install = (
@@ -84,6 +86,7 @@ export {
   QmTabs,
   QmTabPane,
   QmForm,
+  QmDownload,
   version,
   install,
   locale,
