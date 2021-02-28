@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-02-23 21:56:33
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-02-27 15:25:52
+ * @Last Modified time: 2021-02-28 19:52:06
  */
 import { defineComponent } from 'vue';
 import { AnyObject, JSXNode, Nullable } from '../../_utils/types';
@@ -10,6 +10,7 @@ import { AnyObject, JSXNode, Nullable } from '../../_utils/types';
 import { get } from 'lodash-es';
 import { t } from '../../locale';
 import { noop, deepFind, deepMapList } from './utils';
+import { getPrefixCls } from '../../_utils/prefix';
 import { getParserWidth } from '../../_utils/util';
 import ClickOutside from '../../directives/click-outside';
 
@@ -93,6 +94,7 @@ export default defineComponent({
       paddingRight: '10px',
       overflowY: 'auto',
     };
+    const prefixCls = getPrefixCls('tree-select');
     const selectText: string = deepFind(this.itemList, form[fieldName])?.text || '';
     this.$$form.setViewValue(fieldName, selectText);
     return (
@@ -107,7 +109,7 @@ export default defineComponent({
       >
         <div class="tree-select">
           <el-popover
-            popper-class={`tree-select__${fieldName}`}
+            popper-class={`${prefixCls}__popper tree-select__${fieldName}`}
             v-model={[this.visible, 'visible']}
             width={'auto'}
             trigger="manual"
@@ -123,6 +125,7 @@ export default defineComponent({
             v-slots={{
               reference: (): JSXNode => (
                 <el-select
+                  ref="select"
                   popper-class="select-option"
                   modelValue={selectText}
                   placeholder={!disabled ? placeholder : ''}
@@ -136,6 +139,16 @@ export default defineComponent({
                     () => (this.visible = !1),
                     document.querySelector(`.tree-select__${fieldName}`),
                   ]}
+                  onVisibleChange={(visible: boolean): void => {
+                    if (!visible) return;
+                    const $treeSelectPopper: HTMLElement = document.querySelector(
+                      `.tree-select__${fieldName}`
+                    );
+                    const width: number = this.$refs[`select`].$el.getBoundingClientRect().width;
+                    this.$nextTick(() => {
+                      $treeSelectPopper.style.width = width + 'px';
+                    });
+                  }}
                   onClick={(): void => {
                     if (!(disabled || readonly)) {
                       this.visible = !this.visible;
@@ -153,13 +166,13 @@ export default defineComponent({
               <el-input
                 v-model={this.filterText}
                 placeholder={t('qm.form.treePlaceholder')}
-                style={{ maxWidth: '175px' }}
                 onInput={(val: string): void => {
                   this.treeFilterTextHandle(val);
                 }}
               />
               <el-tree
                 ref="tree"
+                class="tree-select__tree"
                 data={this.itemList}
                 props={{ children: 'children', label: 'text' }}
                 style={{ marginTop: '5px' }}
