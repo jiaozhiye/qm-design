@@ -45,7 +45,7 @@ export default defineComponent({
           },
         },
         {
-          type: 'DATE',
+          type: 'UPLOAD_IMG',
           fieldName: 'c',
           label: '表单项3',
         },

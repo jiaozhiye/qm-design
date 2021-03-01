@@ -50,5 +50,13 @@ export default {
       downError: '文件下载失败！',
       text: '点击上传',
     },
+    uploadCropper: {
+      dragableText: '拖放文件，或',
+      tooltip: '只能上传 {type} 格式的图片',
+      preview: '图片预览',
+      cropper: '图片裁剪',
+      uploadError: '图片上传失败！',
+      downError: '图片下载失败！',
+    },
   },
 };

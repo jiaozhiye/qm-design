@@ -20,6 +20,7 @@ import QmTabPane from './tab-pane';
 import QmForm from './form';
 import QmDownload from './download';
 import QmUpload from './upload';
+import QmUploadCropper from './upload-cropper';
 
 import { use as locale, i18n } from './locale';
 import { version } from './version';
@@ -53,6 +54,7 @@ const components = [
   QmForm,
   QmDownload,
   QmUpload,
+  QmUploadCropper,
 ];
 
 const install = (
@@ -90,6 +92,7 @@ export {
   QmForm,
   QmDownload,
   QmUpload,
+  QmUploadCropper,
   version,
   install,
   locale,

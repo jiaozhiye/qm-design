@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-02-09 09:03:59
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-02-28 10:45:28
+ * @Last Modified time: 2021-03-01 11:12:33
  */
 import { ComponentPublicInstance, defineComponent } from 'vue';
 import scrollIntoView from 'scroll-into-view-if-needed';
@@ -48,6 +48,7 @@ import FormRangeTimeSelect from './form-range-time-select';
 import FormDate from './form-date';
 import FormRangeDateEl from './form-range-date-el';
 import FormRangeDate from './form-range-date';
+import FormUploadImg from './form-upload-img';
 import FormUploadFile from './form-upload-file';
 
 const EMITS = ['collapse', 'valuesChange', 'change', 'finish', 'finishFailed', 'reset'];
@@ -388,6 +389,9 @@ export default defineComponent({
     },
     RANGE_DATE_EL(option: IFormItem): JSXNode {
       return <FormRangeDateEl ref={option.fieldName} option={option} />;
+    },
+    UPLOAD_IMG(option: IFormItem): JSXNode {
+      return <FormUploadImg ref={option.fieldName} option={option} />;
     },
     UPLOAD_FILE(option: IFormItem): JSXNode {
       return <FormUploadFile ref={option.fieldName} option={option} />;

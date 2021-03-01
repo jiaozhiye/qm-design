@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-02-09 09:03:59
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-02-28 10:33:06
+ * @Last Modified time: 2021-03-01 10:32:03
  */
 import { defineComponent, PropType } from 'vue';
 import { ElMessage } from 'element-plus';
@@ -66,7 +66,7 @@ export default defineComponent({
       this.loading = false;
     },
     // 获取服务端文件 to blob
-    async downLoadByUrl(url, params): Promise<unknown> {
+    async downLoadByUrl(url, params = {}): Promise<unknown> {
       return await axios({ url, params, headers: this.headers, responseType: 'blob' });
     },
     // 执行下载动作
