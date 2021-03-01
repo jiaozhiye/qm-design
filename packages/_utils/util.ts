@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-02-08 19:28:31
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-02-26 08:37:18
+ * @Last Modified time: 2021-03-01 15:15:09
  */
 import { Ref, Fragment, Comment, Text } from 'vue';
 import { isObject, isArray, hasOwn, camelize } from '@vue/shared';
@@ -41,6 +41,8 @@ export const isValidElement = (c): boolean => {
 };
 
 export { hasOwn, camelize };
+
+export const noop = (): void => {};
 
 // 函数的 防抖 和 节流，使用 lodash 工具函数
 export { debounce, throttle };

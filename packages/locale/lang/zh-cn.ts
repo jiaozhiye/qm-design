@@ -58,5 +58,13 @@ export default {
       uploadError: '图片上传失败！',
       downError: '图片下载失败！',
     },
+    print: {
+      preview: '打印预览',
+      pageSetting: '页面设置',
+      printError: '打印失败！',
+      exportError: '导出失败！',
+      close: '关 闭',
+      confirm: '确 定',
+    },
   },
 };

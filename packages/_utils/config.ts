@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-02-08 16:16:41
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-02-22 12:40:41
+ * @Last Modified time: 2021-03-01 17:00:16
  */
 import { ComponentSize, AnyObject } from './types';
 
@@ -11,7 +11,7 @@ export interface InstallOptions {
   zIndex: number;
   locale?: any;
   i18n?: (...args: any[]) => string;
-  global?: AnyObject<string | number | boolean>;
+  global?: AnyObject<any>;
 }
 
 let $DESIGN = {} as InstallOptions;
