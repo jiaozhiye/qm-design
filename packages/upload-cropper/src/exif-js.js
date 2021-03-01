@@ -1,15 +1,15 @@
 const Exif = {};
 
-Exif.getData = img =>
+Exif.getData = (img) =>
   new Promise((reslove, reject) => {
     let obj = {};
     getImageData(img)
-      .then(data => {
+      .then((data) => {
         obj.arrayBuffer = data;
         obj.orientation = getOrientation(data);
         reslove(obj);
       })
-      .catch(error => {
+      .catch((error) => {
         reject(error);
       });
   });
@@ -21,23 +21,23 @@ function getImageData(img) {
   let data = null;
   return new Promise((reslove, reject) => {
     if (img.src) {
-      if (/^data\:/i.test(img.src)) {
+      if (/^data:/i.test(img.src)) {
         // Data URI
         data = base64ToArrayBuffer(img.src);
         reslove(data);
-      } else if (/^blob\:/i.test(img.src)) {
+      } else if (/^blob:/i.test(img.src)) {
         // Object URL
-        var fileReader = new FileReader();
-        fileReader.onload = function(e) {
+        let fileReader = new FileReader();
+        fileReader.onload = function (e) {
           data = e.target.result;
           reslove(data);
         };
-        objectURLToBlob(img.src, function(blob) {
+        objectURLToBlob(img.src, function (blob) {
           fileReader.readAsArrayBuffer(blob);
         });
       } else {
-        var http = new XMLHttpRequest();
-        http.onload = function() {
+        let http = new XMLHttpRequest();
+        http.onload = function () {
           if (this.status == 200 || this.status === 0) {
             data = http.response;
             reslove(data);
@@ -57,10 +57,10 @@ function getImageData(img) {
 }
 
 function objectURLToBlob(url, callback) {
-  var http = new XMLHttpRequest();
+  let http = new XMLHttpRequest();
   http.open('GET', url, true);
   http.responseType = 'blob';
-  http.onload = function(e) {
+  http.onload = function () {
     if (this.status == 200 || this.status === 0) {
       callback(this.response);
     }
@@ -69,12 +69,12 @@ function objectURLToBlob(url, callback) {
 }
 
 function base64ToArrayBuffer(base64) {
-  base64 = base64.replace(/^data\:([^\;]+)\;base64,/gim, '');
-  var binary = atob(base64);
-  var len = binary.length;
-  var buffer = new ArrayBuffer(len);
-  var view = new Uint8Array(buffer);
-  for (var i = 0; i < len; i++) {
+  base64 = base64.replace(/^data:([^;]+);base64,/gim, '');
+  let binary = atob(base64);
+  let len = binary.length;
+  let buffer = new ArrayBuffer(len);
+  let view = new Uint8Array(buffer);
+  for (let i = 0; i < len; i++) {
     view[i] = binary.charCodeAt(i);
   }
   return buffer;
@@ -82,8 +82,8 @@ function base64ToArrayBuffer(base64) {
 // 步骤二，Unicode码转字符串
 // ArrayBuffer对象 Unicode码转字符串
 function getStringFromCharCode(dataView, start, length) {
-  var str = '';
-  var i;
+  let str = '';
+  let i;
   for (i = start, length += start; i < length; i++) {
     str += String.fromCharCode(dataView.getUint8(i));
   }
@@ -92,18 +92,18 @@ function getStringFromCharCode(dataView, start, length) {
 
 // 步骤三，获取jpg图片的exif的角度（在ios体现最明显）
 function getOrientation(arrayBuffer) {
-  var dataView = new DataView(arrayBuffer);
-  var length = dataView.byteLength;
-  var orientation;
-  var exifIDCode;
-  var tiffOffset;
-  var firstIFDOffset;
-  var littleEndian;
-  var endianness;
-  var app1Start;
-  var ifdStart;
-  var offset;
-  var i;
+  let dataView = new DataView(arrayBuffer);
+  let length = dataView.byteLength;
+  let orientation;
+  let exifIDCode;
+  let tiffOffset;
+  let firstIFDOffset;
+  let littleEndian;
+  let endianness;
+  let app1Start;
+  let ifdStart;
+  let offset;
+  let i;
   // Only handle JPEG image (start by 0xFFD8)
   if (dataView.getUint8(0) === 0xff && dataView.getUint8(1) === 0xd8) {
     offset = 2;

@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-02-09 09:03:59
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-01 11:55:04
+ * @Last Modified time: 2021-03-01 12:46:48
  */
 import { defineComponent, PropType } from 'vue';
 import { ElMessage, ElMessageBox } from 'element-plus';
@@ -14,6 +14,7 @@ import { useSize } from '../../hooks/useSize';
 import { download } from '../../_utils/download';
 import { getPrefixCls } from '../../_utils/prefix';
 import { isValidComponentSize } from '../../_utils/validators';
+import { warn } from '../../_utils/error';
 import { t } from '../../locale';
 
 import canvasCompress from './compress';
@@ -93,13 +94,13 @@ export default defineComponent({
       }
     },
   },
-  // mounted() {
-  //   this.uploadWrap = this.$refs[`upload`].$el.querySelector('.el-upload');
-  //   this.setUploadWrapHeight();
-  // },
-  // updated() {
-  //   this.$refs[`uploadCropper`]?.Update();
-  // },
+  mounted() {
+    this.uploadWrap = this.$refs[`upload`].$el.querySelector('.el-upload');
+    this.setUploadWrapHeight();
+  },
+  updated() {
+    this.$refs[`uploadCropper`]?.Update();
+  },
   methods: {
     handlePreview(index: number): void {
       this.dialogImageUrl = this.fileList[index].url;
@@ -174,6 +175,9 @@ export default defineComponent({
       // 处理请求的额外参数
       for (let key in params) {
         formData.append(key, params[key]);
+      }
+      if (!this.actionUrl) {
+        return warn('qm-upload-cropper', `配置项 actionUrl 是必要参数`);
       }
       try {
         const { data: res } = await axios.post(this.actionUrl, formData, { headers });
@@ -326,11 +330,11 @@ export default defineComponent({
           class={cls}
           {...uploadProps}
           v-slots={{
-            trigger: (): JSXNode => (
+            default: (): JSXNode => (
               <>
                 <i class="el-icon-upload" />
                 <div class="el-upload__text">
-                  {t('qm.uploadFile.dragableText')} <em>{t('qm.uploadFile.text')}</em>
+                  {t('qm.uploadCropper.dragableText')} <em>{t('qm.upload.text')}</em>
                 </div>
               </>
             ),

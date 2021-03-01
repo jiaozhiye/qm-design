@@ -2,11 +2,11 @@
  * @Author: 焦质晔
  * @Date: 2021-02-24 13:02:36
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-01 11:10:02
+ * @Last Modified time: 2021-03-01 13:04:25
  */
 import { CSSProperties, PropType } from 'vue';
 import PropTypes from '../../_utils/vue-types';
-import { JSXNode, AnyFunction, Nullable, ComponentSize } from '../../_utils/types';
+import { JSXNode, AnyFunction, Nullable, ComponentSize, AnyObject } from '../../_utils/types';
 
 import { isNumber } from 'lodash-es';
 import { isValidWidthUnit, isValidComponentSize } from '../../_utils/validators';
@@ -106,6 +106,11 @@ export type IFormItem = {
     datakey?: string;
     valueKey?: string;
     textKey?: string;
+  };
+  upload: {
+    actionUrl: string;
+    headers?: AnyObject<string>;
+    params?: AnyObject<any>;
   };
   labelOptions: IFormItem;
   readonly?: boolean;
@@ -213,6 +218,11 @@ export const props = {
         valueKey: PropTypes.string.def('value'),
         textKey: PropTypes.string.def('text'),
       }),
+      upload: {
+        actionUrl: PropTypes.string.isRequired,
+        headers: PropTypes.object,
+        params: PropTypes.object,
+      },
       labelOptions: PropTypes.object,
       render: PropTypes.func,
     }).loose

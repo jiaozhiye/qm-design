@@ -33,25 +33,25 @@ function pictureCompress(options) {
     }
     let image = new Image();
     image.src = imgSrc;
-    image.onload = function() {
+    image.onload = function () {
       let distSize = getDistSize(
         {
           width: this.naturalWidth,
-          height: this.naturalHeight
+          height: this.naturalHeight,
         },
         {
           width: width,
-          height: height
+          height: height,
         },
         fit
       );
       let imgData = compress(this, distSize.width, distSize.height, type, fillColor, quality);
       resolve({
         ...distSize,
-        img: imgData
+        img: imgData,
       });
     };
-    image.onerror = function(err) {
+    image.onerror = function (err) {
       reject(err);
     };
   });
@@ -71,7 +71,7 @@ function compress(img, width, height, type, fillColor, quality) {
   let types = {
     jpg: 'image/jpeg',
     jpeg: 'image/jpeg',
-    png: 'image/png'
+    png: 'image/png',
   };
   canvas.width = width;
   canvas.height = height;
@@ -94,7 +94,7 @@ function getDistSize(source, dist, fit) {
   let scale = Math.min(dist.width / source.width, dist.height / source.height, 1);
   return {
     width: Math.round(source.width * scale),
-    height: Math.round(source.height * scale)
+    height: Math.round(source.height * scale),
   };
 }
 

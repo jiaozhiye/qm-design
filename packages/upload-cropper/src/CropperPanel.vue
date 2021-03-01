@@ -23,7 +23,16 @@
         />
       </div>
       <!-- 预览框 -->
-      <div class="show-preview" :style="{ width: '400px', height: '350px', overflow: 'hidden', display: 'flex', 'align-items': 'center' }">
+      <div
+        class="show-preview"
+        :style="{
+          width: '400px',
+          height: '350px',
+          overflow: 'hidden',
+          display: 'flex',
+          'align-items': 'center',
+        }"
+      >
         <div :style="previews.div" class="preview">
           <img :src="previews.url" :style="previews.img" />
         </div>
@@ -34,12 +43,20 @@
       <div class="scope-btn">
         <el-button type="primary" icon="el-icon-zoom-in" @click="changeScale(1)">放大</el-button>
         <el-button type="primary" icon="el-icon-zoom-out" @click="changeScale(-1)">缩小</el-button>
-        <el-button type="primary" icon="el-icon-refresh-right" @click="rotateRight">顺时针</el-button>
+        <el-button type="primary" icon="el-icon-refresh-right" @click="rotateRight"
+          >顺时针</el-button
+        >
         <el-button type="primary" icon="el-icon-refresh-left" @click="rotateLeft">逆时针</el-button>
       </div>
       <!-- 确认上传按钮 -->
       <div class="upload-btn">
-        <el-button type="primary" icon="el-icon-upload" :loading="loading" @click="uploadImg('base64')">上传</el-button>
+        <el-button
+          type="primary"
+          icon="el-icon-upload"
+          :loading="loading"
+          @click="uploadImg('base64')"
+          >上传</el-button
+        >
       </div>
     </div>
   </div>
@@ -51,7 +68,7 @@ import Cropper from './Cropper.vue';
 export default {
   name: 'CropperPanel',
   components: {
-    Cropper
+    Cropper,
   },
   props: ['imgFile', 'fixedNumber', 'loading'],
   data() {
@@ -71,8 +88,8 @@ export default {
         autoCropHeight: 300, // 默认生成截图框高度  (默认:80%)
         fixedBox: false, // 固定截图框大小 不允许改变  (默认:false)
         fixed: !!this.fixedNumber.length, // 是否开启截图框宽高固定比例  (默认:true)
-        fixedNumber: this.fixedNumber.length ? this.fixedNumber : [1.5, 1] // 截图框比例  (默认:[1:1])
-      }
+        fixedNumber: this.fixedNumber.length ? this.fixedNumber : [1.5, 1], // 截图框比例  (默认:[1:1])
+      },
     };
   },
   methods: {
@@ -99,14 +116,13 @@ export default {
       // 显示 loading
       this.$emit('update:loading', true);
       // 将剪裁好的图片回传给父组件
-      event.preventDefault();
       if (type === 'blob') {
-        this.$refs.cropper.getCropBlob(data => this.$emit('upload', data));
+        this.$refs.cropper.getCropBlob((data) => this.$emit('upload', data));
       } else {
-        this.$refs.cropper.getCropData(data => this.$emit('upload', data));
+        this.$refs.cropper.getCropData((data) => this.$emit('upload', data));
       }
-    }
-  }
+    },
+  },
 };
 </script>
 

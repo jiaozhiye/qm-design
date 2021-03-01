@@ -48,6 +48,13 @@ export default defineComponent({
           type: 'UPLOAD_IMG',
           fieldName: 'c',
           label: '表单项3',
+          upload: {
+            actionUrl: '/api/file/oss/upload',
+            fixedSize: [5, 3],
+            isCalcHeight: true,
+            limit: 1,
+            params: {},
+          },
         },
         {
           type: 'INPUT',
