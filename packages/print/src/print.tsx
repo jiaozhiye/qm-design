@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-02-09 09:03:59
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-01 16:37:04
+ * @Last Modified time: 2021-03-01 17:52:29
  */
 import { defineComponent, PropType } from 'vue';
 import PropTypes from '../../_utils/vue-types';
@@ -14,6 +14,7 @@ import { t } from '../../locale';
 import { isValidComponentSize } from '../../_utils/validators';
 
 import config from './config';
+import Preview from './preview';
 import Dialog from '../../dialog';
 
 export default defineComponent({
@@ -36,12 +37,12 @@ export default defineComponent({
     round: PropTypes.bool,
     circle: PropTypes.bool,
     icon: PropTypes.string,
-    click: PropTypes.func.def(noop)
+    click: PropTypes.func.def(noop),
   },
   data() {
     return {
       visible: !1,
-      loading: !1
+      loading: !1,
     };
   },
   methods: {
@@ -65,14 +66,13 @@ export default defineComponent({
     createRender(): JSXNode {
       const { $props } = this;
       const dialogProps = {
-          visible: this.visible,
-          title: t('qm.print.preview'),
-          width: `${config.previewWidth}px`,
-          destroyOnClose: true,
-          'update:visible': val => (this.visible = val),
-          onOpen: () => this.$emit('open'),
-          onClosed: () => this.$emit('close')
-
+        visible: this.visible,
+        title: t('qm.print.preview'),
+        width: `${config.previewWidth}px`,
+        destroyOnClose: true,
+        'update:visible': (val) => (this.visible = val),
+        onOpen: (): void => this.$emit('open'),
+        onClosed: (): void => this.$emit('close'),
       };
       const previewProps = {
         ref: 'preview',
@@ -82,23 +82,21 @@ export default defineComponent({
         defaultConfig: $props.defaultConfig,
         preview: $props.preview,
         closeOnPrinted: $props.closeOnPrinted,
-        onClose: () => (this.visible = !1)
+        onClose: (): void => {
+          this.visible = !1;
+        },
       };
       return this.preview ? (
         <Dialog {...dialogProps}>
-          {/* <Preview {...previewProps} /> */}
+          <Preview {...previewProps} />
         </Dialog>
       ) : this.visible ? (
-        // <Preview {...previewProps} />
+        <Preview {...previewProps} />
       ) : null;
-    }
+    },
   },
   render(): JSXNode {
-    const { loading, type = 'primary',
-    round,
-    circle,
-    icon = 'el-icon-printer',
-    disabled, } = this;
+    const { loading, type = 'primary', round, circle, icon = 'el-icon-printer', disabled } = this;
     const { $size } = useSize(this.$props);
     const btnProps = {
       size: $size,
@@ -108,7 +106,7 @@ export default defineComponent({
       icon,
       loading,
       disabled,
-      onClick: this.clickHandle
+      onClick: this.clickHandle,
     };
     return isValidElement(this.$slots.default?.()) ? (
       <el-button {...btnProps}>

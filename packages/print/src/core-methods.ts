@@ -2,11 +2,13 @@
  * @Author: 焦质晔
  * @Date: 2020-08-02 15:37:32
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-01 16:27:40
+ * @Last Modified time: 2021-03-01 17:49:29
  */
+import { ElMessage } from 'element-plus';
 import { getLodop } from './LodopFuncs';
 import dayjs from 'dayjs';
 import config from './config';
+import { t } from '../../locale';
 
 export default {
   methods: {
@@ -141,7 +143,7 @@ export default {
         if (Value) {
           closeOnPrinted && this.doClose();
         } else {
-          this.$message.error(this.t('clientPrint.printError'));
+          ElMessage.error(t('qm.print.printError'));
         }
       };
 
@@ -188,7 +190,7 @@ export default {
         if (Value) {
           closeOnPrinted && this.doClose();
         } else {
-          this.$message.error(this.t('clientPrint.exportError'));
+          ElMessage.error(t('qm.print.exportError'));
         }
       };
 

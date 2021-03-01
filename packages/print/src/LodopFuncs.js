@@ -1,4 +1,10 @@
-﻿import { ElNotification, ElMessage } from 'element-ui';
+﻿/*
+ * @Author: 焦质晔
+ * @Date: 2021-03-01 17:49:11
+ * @Last Modified by:   焦质晔
+ * @Last Modified time: 2021-03-01 17:49:11
+ */
+import { ElNotification, ElMessage } from 'element-plus';
 
 var CreatedOKLodop7766 = null,
   CLodopIsLocal;

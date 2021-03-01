@@ -2,29 +2,30 @@
  * @Author: 焦质晔
  * @Date: 2021-02-09 09:03:59
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-01 17:02:00
+ * @Last Modified time: 2021-03-01 17:59:37
  */
 import { defineComponent, PropType } from 'vue';
-import PropTypes from '../../_utils/vue-types';
-import { JSXNode, ComponentSize } from '../../_utils/types';
+import localforage from 'localforage';
+import { JSXNode, AnyObject } from '../../_utils/types';
 
 import { isObject, merge } from 'lodash-es';
 import { getLodop } from './LodopFuncs';
-import { useSize } from '../../hooks/useSize';
-import { sleep, noop, isValidElement } from '../../_utils/util';
-import { t } from '../../locale';
-import { isValidComponentSize } from '../../_utils/validators';
+import { getPrefixCls } from '../../_utils/prefix';
 import { useGlobalConfig } from '../../hooks/useGlobalConfig';
+import { t } from '../../locale';
 
 import config from './config';
+import PrintMixin from './core-methods';
+import Container from './container';
+import Setting from './setting';
 import Dialog from '../../dialog';
 
-const $DESIGN = useGlobalConfig();
-
 export default defineComponent({
-  name: 'QmPrint',
-  componentName: 'QmPrint',
+  name: 'Preview',
+  componentName: 'Preview',
   inheritAttrs: false,
+  mixins: [PrintMixin],
+  emits: ['close'],
   props: [
     'dataSource',
     'templateRender',
@@ -107,7 +108,7 @@ export default defineComponent({
   async created() {
     if (!this.printerKey) return;
     try {
-      let res = await localforage.getItem(this.printerKey);
+      let res: AnyObject<any> = await localforage.getItem(this.printerKey);
       if (!res) {
         res = await this.getPrintConfig(this.printerKey);
         if (isObject(res)) {
@@ -150,7 +151,8 @@ export default defineComponent({
     },
     async getPrintConfig(key) {
       if (process.env.MOCK_DATA === 'true') return;
-      const fetchFn = $DESIGN.global['getComponentConfigApi'];
+      const { global } = useGlobalConfig();
+      const fetchFn = global['getComponentConfigApi'];
       if (!fetchFn) return;
       try {
         const res = await fetchFn({ key });
@@ -162,7 +164,8 @@ export default defineComponent({
     },
     async savePrintConfig(key, value) {
       if (process.env.MOCK_DATA === 'true') return;
-      const fetchFn = $DESIGN.global['saveComponentConfigApi'];
+      const { global } = useGlobalConfig();
+      const fetchFn = global['saveComponentConfigApi'];
       if (!fetchFn) return;
       try {
         await fetchFn({ [key]: value });
@@ -185,11 +188,11 @@ export default defineComponent({
       dataSource,
       templateRender,
     } = this;
-    const prefixCls = this.getPrefixCls('cpreview--wrapper');
+    const prefixCls = getPrefixCls('print-preview');
     const dialogProps = {
       props: {
         visible,
-        title: this.t('clientPrint.pageSetting'),
+        title: t('qm.print.pageSetting'),
         width: '50%',
         showFullScreen: false,
         destroyOnClose: true,
@@ -308,13 +311,14 @@ export default defineComponent({
             </span>
           </div>
         </div>
-        <BaseDialog {...dialogProps}>
-          <PageSetting
+        <Dialog {...dialogProps}>
+          {/* @ts-ignore */}
+          <Setting
             setting={form.setting}
             onChange={this.settingChange}
             onClose={(val) => (this.visible = val)}
           />
-        </BaseDialog>
+        </Dialog>
       </div>
     ) : (
       <Container
