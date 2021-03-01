@@ -1,6 +1,8 @@
 <script lang="ts">
 import { defineComponent, VNode } from 'vue';
 
+import PrintTemplate from './demo2';
+
 const sleep = async (delay: number): Promise<any> => {
   return new Promise((resolve) => setTimeout(resolve, delay));
 };
@@ -57,7 +59,7 @@ export default defineComponent({
           },
         },
         {
-          type: 'INPUT',
+          type: 'BREAK_SPACE',
           fieldName: 'd',
           label: '表单项4',
         },
@@ -67,6 +69,8 @@ export default defineComponent({
           label: '表单项5',
         },
       ],
+      printDataList: [],
+      templateRender: null,
     };
   },
   methods: {
@@ -76,6 +80,15 @@ export default defineComponent({
       // this.loading = false;
       // this.visible = true;
       // this.visible2 = true;
+    },
+    async printHandle3() {
+      await sleep(1000);
+      let res = [];
+      for (let i = 0; i < 100; i++) {
+        res[i] = i;
+      }
+      this.templateRender = PrintTemplate;
+      this.printDataList = res;
     },
     async beforeLeave() {
       await sleep(1000);
@@ -124,10 +137,14 @@ export default defineComponent({
               按钮
             </qm-button>
           ))}
-          <qm-download actionUrl="https://ss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=1591144334,3360219414&fm=26&gp=0.jpg">
-            下载
-          </qm-download>
-          <qm-upload actionUrl="https://jsonplaceholder.typicode.com/posts/">上传</qm-upload>
+          <qm-print
+            uniqueKey="cprint_jzy"
+            dataSource={this.printDataList}
+            templateRender={this.templateRender}
+            click={this.printHandle3}
+          >
+            客户端打印
+          </qm-print>
         </qm-space>
         <qm-form
           list={this.formList}

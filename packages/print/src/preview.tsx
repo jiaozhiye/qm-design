@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-02-09 09:03:59
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-01 17:59:37
+ * @Last Modified time: 2021-03-01 19:25:04
  */
 import { defineComponent, PropType } from 'vue';
 import localforage from 'localforage';
@@ -190,22 +190,24 @@ export default defineComponent({
     } = this;
     const prefixCls = getPrefixCls('print-preview');
     const dialogProps = {
-      props: {
-        visible,
-        title: t('qm.print.pageSetting'),
-        width: '50%',
-        showFullScreen: false,
-        destroyOnClose: true,
-        containerStyle: { height: 'calc(100% - 52px)', paddingBottom: '52px' },
-      },
-      on: {
-        'update:visible': (val) => (this.visible = val),
-      },
+      visible,
+      title: t('qm.print.pageSetting'),
+      width: '50%',
+      showFullScreen: false,
+      destroyOnClose: true,
+      containerStyle: { paddingBottom: '52px' },
+      'onUpdate:visible': (val) => (this.visible = val),
+    };
+    const paginationProps = {
+      currentPage,
+      pageCount: totalPage,
+      pagerCount: 5,
+      layout: 'prev, pager, next',
+      style: { paddingLeft: 0, paddingRight: 0 },
+      onCurrentChange: this.pageChangeHandle,
     };
     const cls = {
       [prefixCls]: true,
-      [`${prefixCls}-sm`]: this.currentSize === 'small',
-      [`${prefixCls}-lg`]: this.currentSize === 'large',
     };
     return preview ? (
       <div class={cls}>
@@ -254,20 +256,7 @@ export default defineComponent({
               页
             </span>
             <span>
-              <el-pagination
-                {...{
-                  props: {
-                    currentPage,
-                    pageCount: totalPage,
-                    pagerCount: 5,
-                    layout: 'prev, pager, next',
-                  },
-                  on: {
-                    [`current-change`]: this.pageChangeHandle,
-                  },
-                }}
-                style={{ paddingLeft: 0, paddingRight: 0 }}
-              />
+              <el-pagination {...paginationProps} />
             </span>
             <span>
               <el-button type="text" icon="el-icon-setting" onClick={() => (this.visible = !0)}>
@@ -275,11 +264,7 @@ export default defineComponent({
               </el-button>
             </span>
             <span>
-              <el-button
-                type="text"
-                icon="iconfont icon-export-excel"
-                onClick={this.exportClickHandle}
-              >
+              <el-button type="text" icon="iconfont icon-export" onClick={this.exportClickHandle}>
                 导出
               </el-button>
             </span>

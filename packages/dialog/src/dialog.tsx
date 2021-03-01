@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-02-09 09:03:59
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-02-28 10:53:11
+ * @Last Modified time: 2021-03-01 18:32:08
  */
 import { defineComponent, PropType, CSSProperties } from 'vue';
 import classnames from 'classnames';
@@ -181,6 +181,7 @@ export default defineComponent({
     const wrapProps = {
       customClass: classnames(cls),
       modelValue: $props.visible,
+      width: $props.width,
       top: disTop,
       // withHeader: $props.showHeader,
       showClose: $props.showClose,

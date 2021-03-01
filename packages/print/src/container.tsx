@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-02-09 09:03:59
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-01 17:59:44
+ * @Last Modified time: 2021-03-01 18:27:53
  */
 import { defineComponent, PropType } from 'vue';
 import { JSXNode } from '../../_utils/types';
@@ -144,7 +144,7 @@ export default defineComponent({
       document.body.appendChild(this.$el);
     }
   },
-  destroyed() {
+  beforeUnmount() {
     if (this.directPrint && this.$el && this.$el.parentNode) {
       this.$el.parentNode.removeChild(this.$el);
     }

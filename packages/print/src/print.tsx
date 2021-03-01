@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-02-09 09:03:59
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-01 17:52:29
+ * @Last Modified time: 2021-03-01 19:50:30
  */
 import { defineComponent, PropType } from 'vue';
 import PropTypes from '../../_utils/vue-types';
@@ -69,8 +69,9 @@ export default defineComponent({
         visible: this.visible,
         title: t('qm.print.preview'),
         width: `${config.previewWidth}px`,
+        loading: false,
         destroyOnClose: true,
-        'update:visible': (val) => (this.visible = val),
+        'onUpdate:visible': (val) => (this.visible = val),
         onOpen: (): void => this.$emit('open'),
         onClosed: (): void => this.$emit('close'),
       };
@@ -108,13 +109,11 @@ export default defineComponent({
       disabled,
       onClick: this.clickHandle,
     };
-    return isValidElement(this.$slots.default?.()) ? (
-      <el-button {...btnProps}>
-        {this.$slots.default()}
+    return (
+      <>
+        {this.$slots.default?.() && <el-button {...btnProps}>{this.$slots.default()}</el-button>}
         {this.createRender()}
-      </el-button>
-    ) : (
-      this.createRender()
+      </>
     );
   },
 });

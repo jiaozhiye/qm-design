@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-02-09 09:03:59
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-01 18:10:23
+ * @Last Modified time: 2021-03-01 19:36:32
  */
 import { ComponentPublicInstance, defineComponent } from 'vue';
 import scrollIntoView from 'scroll-into-view-if-needed';
@@ -583,7 +583,7 @@ export default defineComponent({
               }
             }
           >
-            {fieldName ? this.createFormItem(x) : null}
+            {this.createFormItem(x)}
           </el-col>
         );
       });
