@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-02-09 09:03:59
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-01 11:12:33
+ * @Last Modified time: 2021-03-01 18:10:23
  */
 import { ComponentPublicInstance, defineComponent } from 'vue';
 import scrollIntoView from 'scroll-into-view-if-needed';
@@ -592,7 +592,7 @@ export default defineComponent({
     },
     // 搜索类型按钮布局
     createSearchButtonLayout(lastCols = 0): Nullable<JSXNode> {
-      const { flexCols: cols, collapse, showFilterCollapse, isFilterType, isSubmitBtn } = this;
+      const { flexCols: cols, collapse, showFilterCollapse, isFilterType, isSearchBtn } = this;
       const { $size } = useSize(this.$props);
 
       // 不是搜索类型
@@ -604,7 +604,7 @@ export default defineComponent({
       // 左侧偏移量
       const offset = cols - (lastCols % cols) - 1;
 
-      return isSubmitBtn ? (
+      return isSearchBtn ? (
         <el-col key="-" span={colSpan} offset={offset * colSpan} style={{ textAlign: 'right' }}>
           <el-button
             type="primary"

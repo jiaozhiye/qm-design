@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-02-24 13:02:36
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-01 13:04:25
+ * @Last Modified time: 2021-03-01 18:09:53
  */
 import { CSSProperties, PropType } from 'vue';
 import PropTypes from '../../_utils/vue-types';
@@ -257,9 +257,13 @@ export const props = {
     type: Boolean,
     default: true,
   },
-  isSubmitBtn: {
+  isSearchBtn: {
     type: Boolean,
     default: true,
+  },
+  isSubmitBtn: {
+    type: Boolean,
+    default: false,
   },
   fieldsChange: {
     type: Function as AnyFunction<void>,
