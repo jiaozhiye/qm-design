@@ -2,16 +2,15 @@
  * @Author: 焦质晔
  * @Date: 2021-02-09 09:03:59
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-01 19:25:04
+ * @Last Modified time: 2021-03-02 14:46:23
  */
-import { defineComponent, PropType } from 'vue';
+import { defineComponent, PropType, reactive } from 'vue';
 import localforage from 'localforage';
 import { JSXNode, AnyObject } from '../../_utils/types';
 
-import { isObject, merge } from 'lodash-es';
+import { isObject, merge, cloneDeep } from 'lodash-es';
 import { getLodop } from './LodopFuncs';
 import { getPrefixCls } from '../../_utils/prefix';
-import { useGlobalConfig } from '../../hooks/useGlobalConfig';
 import { t } from '../../locale';
 
 import config from './config';
@@ -115,10 +114,12 @@ export default defineComponent({
         }
       }
       if (isObject(res) && Object.keys(res).length) {
-        this.form = merge({}, this.form, {
-          ...res,
-          printerName: this.printerItems.find((x) => x.text === res.printerName)?.value ?? -1,
-        });
+        this.form = reactive(
+          merge({}, this.form, {
+            ...res,
+            printerName: this.printerItems.find((x) => x.text === res.printerName)?.value ?? -1,
+          })
+        );
       }
     } catch (err) {}
   },
@@ -144,13 +145,13 @@ export default defineComponent({
           ...this.form,
           printerName: this.printerItems.find((x) => x.value === this.form.printerName).text,
         };
-        await localforage.setItem(this.printerKey, printConfig);
+        await localforage.setItem(this.printerKey, cloneDeep(printConfig));
         await this.savePrintConfig(this.printerKey, printConfig);
       } catch (err) {}
     },
     async getPrintConfig(key) {
       if (process.env.MOCK_DATA === 'true') return;
-      const { global } = useGlobalConfig();
+      const { global } = this.$DESIGN;
       const fetchFn = global['getComponentConfigApi'];
       if (!fetchFn) return;
       try {
@@ -163,7 +164,7 @@ export default defineComponent({
     },
     async savePrintConfig(key, value) {
       if (process.env.MOCK_DATA === 'true') return;
-      const { global } = useGlobalConfig();
+      const { global } = this.$DESIGN;
       const fetchFn = global['saveComponentConfigApi'];
       if (!fetchFn) return;
       try {
