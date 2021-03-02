@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-02-24 13:02:36
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-02 14:45:09
+ * @Last Modified time: 2021-03-02 15:23:34
  */
 import { CSSProperties, PropType } from 'vue';
 import PropTypes from '../../_utils/vue-types';
@@ -90,15 +90,46 @@ export type IFormItem = {
   style?: CSSProperties;
   options?: {
     itemList?: Record<string, string | number>[];
+    secretType?: string;
     trueValue?: number | string;
     falseValue?: number | string;
     dateType?: string;
-    secretType?: string;
+    minDateTime?: string;
+    maxDateTime?: string;
+    defaultTime?: string;
+    shortCuts?: boolean;
+    unlinkPanels?: boolean;
+    startDisabled?: boolean;
+    endDisabled?: boolean;
     columns?: Record<string, string>[];
-    fieldAliasMap?: AnyFunction<any>;
+    fieldAliasMap?: AnyFunction<Record<string, string>>;
+    onlySelect?: boolean;
+    limit?: number;
+    min?: number;
+    max?: number;
+    step?: number;
+    precision?: number;
+    controls?: boolean;
+    minlength?: number;
+    maxlength?: number;
+    rows?: number;
+    maxrows?: number;
+    showLimit?: boolean;
+    password?: boolean;
+    noInput?: boolean;
+    toUpper?: boolean;
+    filterable?: boolean;
+    showTags?: boolean;
+    openPyt?: boolean;
     onInput?: AnyFunction<any>;
     onClick?: AnyFunction<any>;
     onDblClick?: AnyFunction<any>;
+    onEnter?: AnyFunction<any>;
+    onFocus?: AnyFunction<any>;
+    onBlur?: AnyFunction<any>;
+  };
+  searchHelper?: {
+    // ...
   };
   request?: {
     fetchApi: AnyFunction<any>;
@@ -111,11 +142,20 @@ export type IFormItem = {
     actionUrl: string;
     headers?: AnyObject<string>;
     params?: AnyObject<any>;
+    limit?: number;
+    fixedSize?: Array<number>;
+    isCalcHeight?: boolean;
   };
   labelOptions: IFormItem;
+  descOptions?: {
+    content?: string | JSXNode;
+    style?: CSSProperties;
+    isTooltip?: boolean;
+  };
+  placeholder?: string;
+  clearable?: boolean;
   readonly?: boolean;
   noResetable?: boolean;
-  fieldsChange?: AnyFunction<void>;
   render?: AnyFunction<JSXNode>;
 };
 
@@ -192,24 +232,53 @@ export const props = {
       invisible: PropTypes.bool,
       disabled: PropTypes.bool,
       rules: PropTypes.array,
-      readonly: PropTypes.bool,
-      noResetable: PropTypes.bool,
       selfCols: PropTypes.number.def(1),
       offsetLeft: PropTypes.number.def(0),
       offsetRight: PropTypes.number.def(0),
       style: PropTypes.object,
       options: PropTypes.shape({
         itemList: PropTypes.array,
+        secretType: PropTypes.string,
         trueValue: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
         falseValue: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
         dateType: PropTypes.string,
-        secretType: PropTypes.string,
-        columns: PropTypes.array,
+        minDateTime: PropTypes.string,
+        maxDateTime: PropTypes.string,
+        defaultTime: PropTypes.string,
+        shortCuts: PropTypes.bool,
+        unlinkPanels: PropTypes.bool,
+        startDisabled: PropTypes.bool,
+        endDisabled: PropTypes.bool,
+        columns: PropTypes.Array,
         fieldAliasMap: PropTypes.func,
+        onlySelect: PropTypes.bool,
+        limit: PropTypes.number,
+        min: PropTypes.number,
+        max: PropTypes.number,
+        step: PropTypes.number,
+        precision: PropTypes.number,
+        controls: PropTypes.bool,
+        minlength: PropTypes.number,
+        maxlength: PropTypes.number,
+        rows: PropTypes.number,
+        maxrows: PropTypes.number,
+        showLimit: PropTypes.bool,
+        password: PropTypes.bool,
+        noInput: PropTypes.bool,
+        toUpper: PropTypes.bool,
+        filterable: PropTypes.bool,
+        showTags: PropTypes.bool,
+        openPyt: PropTypes.bool,
         onInput: PropTypes.func,
         onClick: PropTypes.func,
         onDblClick: PropTypes.func,
-      }).loose,
+        onEnter: PropTypes.func,
+        onFocus: PropTypes.func,
+        onBlur: PropTypes.func,
+      }),
+      searchHelper: PropTypes.shape({
+        // ...
+      }),
       request: PropTypes.shape({
         fetchApi: PropTypes.func.isRequired,
         params: PropTypes.object,
@@ -217,12 +286,24 @@ export const props = {
         valueKey: PropTypes.string.def('value'),
         textKey: PropTypes.string.def('text'),
       }),
-      upload: {
+      upload: PropTypes.shape({
         actionUrl: PropTypes.string.isRequired,
         headers: PropTypes.object,
         params: PropTypes.object,
-      },
+        limit: PropTypes.number,
+        fixedSize: PropTypes.array,
+        isCalcHeight: PropTypes.bool,
+      }),
       labelOptions: PropTypes.object,
+      descOptions: PropTypes.shape({
+        content: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
+        style: PropTypes.object,
+        isTooltip: PropTypes.bool,
+      }),
+      placeholder: PropTypes.string,
+      readonly: PropTypes.bool,
+      clearable: PropTypes.bool,
+      noResetable: PropTypes.bool,
       render: PropTypes.func,
     }).loose
   ).def([]),
