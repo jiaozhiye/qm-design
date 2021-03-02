@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-02-09 09:03:59
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-02 11:20:35
+ * @Last Modified time: 2021-03-02 13:22:21
  */
 import { ComponentPublicInstance, defineComponent } from 'vue';
 import scrollIntoView from 'scroll-into-view-if-needed';
@@ -549,11 +549,12 @@ export default defineComponent({
         });
 
       const colSpan = 24 / cols;
+      const fieldCols: number[] = [];
       // 栅格所占的总列数
       const total = colsArr.reduce((prev, cur) => {
         const { selfCols = 1 } = cur;
         const sum: number = prev + selfCols;
-        cur.__cols__ = sum; // 当前栅格及之前所跨的列数
+        fieldCols.push(sum); // 当前栅格及之前所跨的列数
         return sum;
       }, 0);
 
@@ -561,15 +562,15 @@ export default defineComponent({
       const defaultPlayRows: number =
         defaultRows > Math.ceil(total / cols) ? Math.ceil(total / cols) : defaultRows;
 
-      const tmpArr: number[] = []; // 用于获取最后一个展示栅格的 __cols__
+      const tmpArr: number[] = []; // 用于获取最后一个展示栅格的 cols
       const colFormItems = colsArr.map((x, i) => {
-        let { fieldName, selfCols = 1, __cols__, type } = x;
+        let { fieldName, selfCols = 1, type } = x;
         // 调整 selfCols 的大小
         selfCols = selfCols >= 24 || type === 'BREAK_SPACE' || type === 'TINYMCE' ? cols : selfCols;
         // 判断改栅格是否显示
-        const isBlock: boolean = collapse ? true : __cols__ < defaultPlayRows * cols;
+        const isBlock: boolean = collapse ? true : fieldCols[i] < defaultPlayRows * cols;
         if (isBlock) {
-          tmpArr.push(__cols__);
+          tmpArr.push(fieldCols[i]);
         }
         return (
           <el-col

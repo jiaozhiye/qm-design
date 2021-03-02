@@ -2,9 +2,9 @@
  * @Author: 焦质晔
  * @Date: 2021-02-26 14:53:54
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-02 12:55:03
+ * @Last Modified time: 2021-03-02 13:34:10
  */
-import { defineComponent, PropType } from 'vue';
+import { defineComponent, PropType, reactive } from 'vue';
 import { JSXNode } from '../../_utils/types';
 
 import { LocalStorageMixin } from './local-storage-mixin';
@@ -53,9 +53,9 @@ export default defineComponent({
         tag: 'ul',
         type: 'transition-group',
       },
-      'onUpdate:modelValue': (val): void => {
-        this.fieldsChange(val);
+      'onUpdate:modelValue': (val: unknown[]): void => {
         this.setLocalFields(val);
+        this.fieldsChange(reactive(val));
         // 自动展开
         this.$$form.collapse = true;
       },

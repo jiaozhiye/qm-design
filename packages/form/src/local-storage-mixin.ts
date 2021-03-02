@@ -2,19 +2,19 @@
  * @Author: 焦质晔
  * @Date: 2021-03-02 11:10:34
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-02 12:59:17
+ * @Last Modified time: 2021-03-02 13:46:21
  */
+import { reactive } from 'vue';
 import { xor, isEqual, isUndefined } from 'lodash-es';
-import { useGlobalConfig } from '../../hooks/useGlobalConfig';
 import { IFormItem } from './types';
 import { Nullable } from '../../_utils/types';
-import { noop } from './utils';
 
 export const LocalStorageMixin = {
   methods: {
     async getTableFieldsConfig(key: string): Promise<Nullable<any[]>> {
       if (process.env.MOCK_DATA === 'true') return;
-      const fetchFn = this.global['getComponentConfigApi'];
+      const { global } = this.$DESIGN;
+      const fetchFn = global['getComponentConfigApi'];
       if (!fetchFn) return;
       try {
         const res = await fetchFn({ key });
@@ -28,7 +28,8 @@ export const LocalStorageMixin = {
     },
     async saveTableColumnsConfig(key: string, value: IFormItem[]): Promise<void> {
       if (process.env.MOCK_DATA === 'true') return;
-      const fetchFn = this.global['saveComponentConfigApi'];
+      const { global } = this.$DESIGN;
+      const fetchFn = global['saveComponentConfigApi'];
       if (!fetchFn) return;
       try {
         await fetchFn({ [key]: value });
@@ -94,15 +95,13 @@ export const LocalStorageMixin = {
       this.saveTableColumnsConfig(this.uniqueKey, result);
     },
     initLocalfields(): void {
-      const { fieldsChange = noop } = this;
       // 获取本地 list
       const localFields = this.getLocalFields();
       if (!localFields) return;
-      fieldsChange(localFields);
+      this.$nextTick(() => this.fieldsChange?.(reactive(localFields)));
     },
   },
   created() {
     this.initLocalfields();
-    this.global = useGlobalConfig().global;
   },
 };

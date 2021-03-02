@@ -59,7 +59,7 @@ export default defineComponent({
           },
         },
         {
-          type: 'INPUT',
+          type: 'BREAK_SPACE',
           fieldName: 'd',
           label: '表单项4',
         },
@@ -75,7 +75,6 @@ export default defineComponent({
   },
   methods: {
     clickHandle(k) {
-      console.log(1111, k);
       // this.$message.success('asdasd');
       // this.loading = false;
       // this.visible = true;
