@@ -59,7 +59,7 @@ export default defineComponent({
           },
         },
         {
-          type: 'BREAK_SPACE',
+          type: 'INPUT',
           fieldName: 'd',
           label: '表单项4',
         },
@@ -147,6 +147,7 @@ export default defineComponent({
           </qm-print>
         </qm-space>
         <qm-form
+          uniqueKey="jzy_filter"
           list={this.formList}
           initialValue={{}}
           formType="search"

@@ -2,11 +2,12 @@
  * @Author: 焦质晔
  * @Date: 2021-02-26 14:53:54
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-02-26 21:52:35
+ * @Last Modified time: 2021-03-02 12:55:03
  */
 import { defineComponent, PropType } from 'vue';
 import { JSXNode } from '../../_utils/types';
 
+import { LocalStorageMixin } from './local-storage-mixin';
 import Draggable from 'vuedraggable';
 
 import { getPrefixCls } from '../../_utils/prefix';
@@ -17,6 +18,7 @@ export default defineComponent({
   name: 'FieldsFilter',
   componentName: 'FieldsFilter',
   inject: ['$$form'],
+  mixins: [LocalStorageMixin],
   props: {
     size: {
       type: String,
@@ -24,6 +26,9 @@ export default defineComponent({
     },
     list: {
       type: Array,
+    },
+    uniqueKey: {
+      type: String,
     },
     fieldsChange: {
       type: Function,
@@ -50,6 +55,7 @@ export default defineComponent({
       },
       'onUpdate:modelValue': (val): void => {
         this.fieldsChange(val);
+        this.setLocalFields(val);
         // 自动展开
         this.$$form.collapse = true;
       },

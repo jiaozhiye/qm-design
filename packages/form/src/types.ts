@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-02-24 13:02:36
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-01 18:09:53
+ * @Last Modified time: 2021-03-02 11:08:31
  */
 import { CSSProperties, PropType } from 'vue';
 import PropTypes from '../../_utils/vue-types';
@@ -241,6 +241,9 @@ export const props = {
   size: {
     type: String as PropType<ComponentSize>,
     validator: isValidComponentSize,
+  },
+  uniqueKey: {
+    type: String,
   },
   cols: {
     type: Number,
