@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-03-02 11:10:34
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-02 13:46:21
+ * @Last Modified time: 2021-03-02 15:25:52
  */
 import { reactive } from 'vue';
 import { xor, isEqual, isUndefined } from 'lodash-es';
@@ -12,7 +12,6 @@ import { Nullable } from '../../_utils/types';
 export const LocalStorageMixin = {
   methods: {
     async getTableFieldsConfig(key: string): Promise<Nullable<any[]>> {
-      if (process.env.MOCK_DATA === 'true') return;
       const { global } = this.$DESIGN;
       const fetchFn = global['getComponentConfigApi'];
       if (!fetchFn) return;
@@ -27,7 +26,6 @@ export const LocalStorageMixin = {
       return null;
     },
     async saveTableColumnsConfig(key: string, value: IFormItem[]): Promise<void> {
-      if (process.env.MOCK_DATA === 'true') return;
       const { global } = this.$DESIGN;
       const fetchFn = global['saveComponentConfigApi'];
       if (!fetchFn) return;

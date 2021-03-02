@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-02-09 09:03:59
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-02 14:46:23
+ * @Last Modified time: 2021-03-02 15:27:50
  */
 import { defineComponent, PropType, reactive } from 'vue';
 import localforage from 'localforage';
@@ -150,7 +150,6 @@ export default defineComponent({
       } catch (err) {}
     },
     async getPrintConfig(key) {
-      if (process.env.MOCK_DATA === 'true') return;
       const { global } = this.$DESIGN;
       const fetchFn = global['getComponentConfigApi'];
       if (!fetchFn) return;
@@ -163,7 +162,6 @@ export default defineComponent({
       return null;
     },
     async savePrintConfig(key, value) {
-      if (process.env.MOCK_DATA === 'true') return;
       const { global } = this.$DESIGN;
       const fetchFn = global['saveComponentConfigApi'];
       if (!fetchFn) return;

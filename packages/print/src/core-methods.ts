@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-08-02 15:37:32
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-01 17:49:29
+ * @Last Modified time: 2021-03-02 15:27:09
  */
 import { ElMessage } from 'element-plus';
 import { getLodop } from './LodopFuncs';
@@ -148,7 +148,7 @@ export default {
       };
 
       // 打印
-      if (process.env.MOCK_DATA === 'true') {
+      if (process.env.NODE_ENV === 'development') {
         LODOP.PREVIEW();
       } else {
         LODOP.PRINT();

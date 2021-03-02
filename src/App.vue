@@ -59,7 +59,7 @@ export default defineComponent({
           },
         },
         {
-          type: 'BREAK_SPACE',
+          type: 'INPUT',
           fieldName: 'd',
           label: '表单项4',
         },
