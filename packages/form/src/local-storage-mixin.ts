@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-03-02 11:10:34
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-02 15:25:52
+ * @Last Modified time: 2021-03-02 15:43:53
  */
 import { reactive } from 'vue';
 import { xor, isEqual, isUndefined } from 'lodash-es';
@@ -68,7 +68,7 @@ export const LocalStorageMixin = {
         });
       }
       return localFields.map((x) => {
-        const target = this.list.find((k) => k.fieldName === x.fieldName);
+        const target: IFormItem = this.list.find((k) => k.fieldName === x.fieldName);
         return { ...target, ...x };
       });
     },

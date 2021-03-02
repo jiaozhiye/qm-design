@@ -2,14 +2,14 @@
  * @Author: 焦质晔
  * @Date: 2021-02-09 09:03:59
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-02 10:47:43
+ * @Last Modified time: 2021-03-02 15:44:58
  */
-import { defineComponent, PropType, Component, Text } from 'vue';
+import { defineComponent, PropType, Component } from 'vue';
 import PropTypes from '../../_utils/vue-types';
 import { JSXNode, ComponentSize } from '../../_utils/types';
 
 import { useSize } from '../../hooks/useSize';
-import { sleep, noop, isVNode, isValidElement } from '../../_utils/util';
+import { sleep, noop, isVNode } from '../../_utils/util';
 import { t } from '../../locale';
 import { isValidComponentSize } from '../../_utils/validators';
 

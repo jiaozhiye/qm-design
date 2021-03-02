@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-02-09 09:27:46
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-02-26 12:42:48
+ * @Last Modified time: 2021-03-02 15:49:50
  */
 @import '../../style/src/common';
 
@@ -15,6 +15,7 @@ $prefix: '#{$qm-prefix}-divider';
   padding: 0 $padding-base;
   height: 40px;
   border: 1px solid $border-color-base;
+  border-radius: $border-radius-base;
   background-color: $background-color-cecondary;
   position: relative;
   &::before {

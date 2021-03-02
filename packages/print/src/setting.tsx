@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-02-09 09:03:59
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-02 10:51:04
+ * @Last Modified time: 2021-03-02 15:52:17
  */
 import { defineComponent, PropType } from 'vue';
 import { JSXNode } from '../../_utils/types';
@@ -14,7 +14,6 @@ import Form from '../../form';
 export default defineComponent({
   name: 'Setting',
   componentName: 'Setting',
-  inheritAttrs: false,
   emits: ['change', 'close'],
   props: ['setting', 'onChange', 'onClose'],
   data() {
@@ -176,7 +175,7 @@ export default defineComponent({
       ];
     },
     async confirmHandle() {
-      const [err, data] = await this.$refs.formPanel.GET_FORM_DATA();
+      const [err, data] = await this.$refs[`form`].GET_FORM_DATA();
       if (err) return;
       this.$emit('change', {
         distance: {
@@ -202,7 +201,7 @@ export default defineComponent({
     return (
       <div>
         <Form
-          ref="formPanel"
+          ref="form"
           // @ts-ignore
           initialValue={initialValue}
           list={formList}

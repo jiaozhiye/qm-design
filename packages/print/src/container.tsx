@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-02-09 09:03:59
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-01 18:27:53
+ * @Last Modified time: 2021-03-02 16:01:33
  */
 import { defineComponent, PropType } from 'vue';
 import { JSXNode } from '../../_utils/types';
@@ -10,6 +10,7 @@ import { JSXNode } from '../../_utils/types';
 import { sleep } from '../../_utils/util';
 import { mmToPx, pxToMm, insertBefore, isPageBreak } from './utils';
 import { getPrefixCls } from '../../_utils/prefix';
+import { warn } from '../../_utils/error';
 import config from './config';
 
 import Spin from '../../spin';
@@ -17,7 +18,6 @@ import Spin from '../../spin';
 export default defineComponent({
   name: 'Container',
   componentName: 'Container',
-  inheritAttrs: false,
   props: ['dataSource', 'templateRender', 'directPrint'],
   inject: ['$$preview'],
   data() {
@@ -344,7 +344,7 @@ export default defineComponent({
       this.$$preview.doClose();
     },
     throwError() {
-      console.error('[PrintTemplate] 打印模板组件的根元素必须是 `table` 节点');
+      warn('qm-print', '[PrintTemplate] 打印模板组件的根元素必须是 `table` 节点');
     },
   },
   render(): JSXNode {

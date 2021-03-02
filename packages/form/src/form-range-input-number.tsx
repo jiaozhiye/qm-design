@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-02-23 21:56:33
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-02 14:59:53
+ * @Last Modified time: 2021-03-02 15:53:20
  */
 import { defineComponent } from 'vue';
 import { JSXNode } from '../../_utils/types';
@@ -32,7 +32,7 @@ export default defineComponent({
       disabled,
       onChange = noop,
     } = this.option;
-    const { min = 0, max, step = 1, precision, controls = !0 } = options;
+    const { min = 0, max, step = 1, precision } = options;
     const [startVal = min, endVal = max] = form[fieldName];
     this.$$form.setViewValue(fieldName, form[fieldName].join('-'));
     return (

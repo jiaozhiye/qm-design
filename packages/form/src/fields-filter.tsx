@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-02-26 14:53:54
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-02 13:34:10
+ * @Last Modified time: 2021-03-02 15:40:56
  */
 import { defineComponent, PropType, reactive } from 'vue';
 import { JSXNode } from '../../_utils/types';
@@ -10,9 +10,9 @@ import { JSXNode } from '../../_utils/types';
 import { LocalStorageMixin } from './local-storage-mixin';
 import Draggable from 'vuedraggable';
 
+import { isValidComponentSize } from '../../_utils/validators';
 import { getPrefixCls } from '../../_utils/prefix';
 import { t } from '../../locale';
-import { isValidComponentSize } from '../../_utils/validators';
 
 export default defineComponent({
   name: 'FieldsFilter',

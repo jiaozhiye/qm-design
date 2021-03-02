@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-02-24 13:02:36
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-02 15:23:34
+ * @Last Modified time: 2021-03-02 15:37:21
  */
 import { CSSProperties, PropType } from 'vue';
 import PropTypes from '../../_utils/vue-types';
@@ -142,7 +142,10 @@ export type IFormItem = {
     actionUrl: string;
     headers?: AnyObject<string>;
     params?: AnyObject<any>;
+    fileTypes?: Array<string>;
+    fileSize?: number;
     limit?: number;
+    titles?: Array<string>;
     fixedSize?: Array<number>;
     isCalcHeight?: boolean;
   };
@@ -290,7 +293,10 @@ export const props = {
         actionUrl: PropTypes.string.isRequired,
         headers: PropTypes.object,
         params: PropTypes.object,
+        fileTypes: PropTypes.array,
+        fileSize: PropTypes.number,
         limit: PropTypes.number,
+        titles: PropTypes.array,
         fixedSize: PropTypes.array,
         isCalcHeight: PropTypes.bool,
       }),

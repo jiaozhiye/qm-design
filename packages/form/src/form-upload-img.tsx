@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-02-23 21:56:33
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-01 11:57:20
+ * @Last Modified time: 2021-03-02 15:35:32
  */
 import { defineComponent } from 'vue';
 import { JSXNode } from '../../_utils/types';
@@ -56,7 +56,6 @@ export default defineComponent({
           limit={upload.limit || 1}
           params={upload.params}
           titles={upload.titles}
-          tipText={upload.tipText}
           disabled={disabled}
           onChange={(val): void => {
             form[fieldName] = val;
