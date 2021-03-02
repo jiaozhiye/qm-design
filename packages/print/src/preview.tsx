@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-02-09 09:03:59
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-02 16:01:48
+ * @Last Modified time: 2021-03-02 17:54:47
  */
 import { defineComponent, PropType, reactive } from 'vue';
 import localforage from 'localforage';
@@ -101,7 +101,7 @@ export default defineComponent({
       return this.form.setting.pageSize.split('*').map((x) => Number(x));
     },
     printerKey() {
-      return this.uniqueKey ? `cprint_${this.uniqueKey}` : '';
+      return this.uniqueKey ? `print_${this.uniqueKey}` : '';
     },
   },
   async created() {
@@ -192,6 +192,7 @@ export default defineComponent({
       visible,
       title: t('qm.print.pageSetting'),
       width: '50%',
+      loading: false,
       showFullScreen: false,
       destroyOnClose: true,
       containerStyle: { paddingBottom: '52px' },

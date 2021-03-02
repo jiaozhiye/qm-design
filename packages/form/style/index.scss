@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-02-09 09:27:46
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-02-28 19:52:58
+ * @Last Modified time: 2021-03-02 17:32:26
  */
 @import '../../style/src/common';
 @import './fields-filter';
@@ -90,8 +90,9 @@ $prefix: '#{$qm-prefix}-form';
       }
       .el-radio-group,
       .el-checkbox-group {
-        display: inline-flex;
         flex-wrap: wrap;
+        font-size: inherit;
+        line-height: inherit;
       }
       .desc-icon {
         padding: 0 6px;

@@ -10,6 +10,7 @@ const sleep = async (delay: number): Promise<any> => {
 export default defineComponent({
   name: 'App',
   data() {
+    this.templateRender = null;
     return {
       expand: true,
       loading: false,
@@ -62,6 +63,10 @@ export default defineComponent({
           type: 'INPUT',
           fieldName: 'd',
           label: '表单项4',
+          render: (opt, ctx) => {
+            const { fieldName } = opt;
+            return <el-input v-model={ctx.form[fieldName]} />;
+          },
         },
         {
           type: 'INPUT',
@@ -70,7 +75,6 @@ export default defineComponent({
         },
       ],
       printDataList: [],
-      templateRender: null,
     };
   },
   methods: {

@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-03-02 11:10:34
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-02 15:43:53
+ * @Last Modified time: 2021-03-02 17:54:12
  */
 import { reactive } from 'vue';
 import { xor, isEqual, isUndefined } from 'lodash-es';
@@ -10,6 +10,14 @@ import { IFormItem } from './types';
 import { Nullable } from '../../_utils/types';
 
 export const LocalStorageMixin = {
+  computed: {
+    formUniqueKey() {
+      return this.uniqueKey ? `form_${this.uniqueKey}` : '';
+    },
+  },
+  created() {
+    this.initLocalfields();
+  },
   methods: {
     async getTableFieldsConfig(key: string): Promise<Nullable<any[]>> {
       const { global } = this.$DESIGN;
@@ -36,15 +44,15 @@ export const LocalStorageMixin = {
       }
     },
     getLocalFields(): Array<IFormItem> {
-      if (!this.uniqueKey) return;
+      if (!this.formUniqueKey) return;
       // 本地存储
-      const localFields: IFormItem[] = JSON.parse(localStorage.getItem(this.uniqueKey));
+      const localFields: IFormItem[] = JSON.parse(localStorage.getItem(this.formUniqueKey));
       // 服务端获取
       if (!localFields) {
-        this.getTableFieldsConfig(this.uniqueKey)
+        this.getTableFieldsConfig(this.formUniqueKey)
           .then((result) => {
             if (!result) return;
-            localStorage.setItem(this.uniqueKey, JSON.stringify(result));
+            localStorage.setItem(this.formUniqueKey, JSON.stringify(result));
             this.initLocalfields();
           })
           .catch(() => {});
@@ -73,7 +81,7 @@ export const LocalStorageMixin = {
       });
     },
     setLocalFields(list: IFormItem[]): void {
-      if (!this.uniqueKey) return;
+      if (!this.formUniqueKey) return;
       const result = list.map((x) => {
         const target: Partial<IFormItem> = {};
         if (!isUndefined(x.hidden)) {
@@ -85,12 +93,12 @@ export const LocalStorageMixin = {
           ...target,
         };
       });
-      const localFields = JSON.parse(localStorage.getItem(this.uniqueKey));
+      const localFields = JSON.parse(localStorage.getItem(this.formUniqueKey));
       if (isEqual(result, localFields)) return;
       // 本地存储
-      localStorage.setItem(this.uniqueKey, JSON.stringify(result));
+      localStorage.setItem(this.formUniqueKey, JSON.stringify(result));
       // 服务端存储
-      this.saveTableColumnsConfig(this.uniqueKey, result);
+      this.saveTableColumnsConfig(this.formUniqueKey, result);
     },
     initLocalfields(): void {
       // 获取本地 list
@@ -98,8 +106,5 @@ export const LocalStorageMixin = {
       if (!localFields) return;
       this.$nextTick(() => this.fieldsChange?.(reactive(localFields)));
     },
-  },
-  created() {
-    this.initLocalfields();
   },
 };

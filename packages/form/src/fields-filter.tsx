@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-02-26 14:53:54
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-02 15:40:56
+ * @Last Modified time: 2021-03-02 18:34:06
  */
 import { defineComponent, PropType, reactive } from 'vue';
 import { JSXNode } from '../../_utils/types';
@@ -92,14 +92,24 @@ export default defineComponent({
           <Draggable
             {...wrapProps}
             v-slots={{
-              item: ({ element }): JSXNode => {
-                const isDisabled: boolean = element.rules?.findIndex((x) => x.required) > -1;
+              item: ({ element: item }): JSXNode => {
+                const isDisabled: boolean = item.rules?.findIndex((x) => x.required) > -1;
+                const checkboxProps = {
+                  modelValue: !item.hidden,
+                  disabled: isDisabled,
+                  'onUpdate:modelValue': (val: boolean): void => {
+                    item.hidden = !val;
+                  },
+                  onChange: (): void => {
+                    this.setLocalFields(list);
+                  },
+                };
                 return (
                   <li class="filter-item">
-                    <el-checkbox v-model={element.hidden} disabled={isDisabled} />
+                    <el-checkbox {...checkboxProps} />
                     <i class="iconfont icon-menu v-handle" title={t('qm.form.draggable')} />
-                    <span class="title" title={element.label}>
-                      {element.label}
+                    <span class="title" title={item.label}>
+                      {item.label}
                     </span>
                   </li>
                 );
