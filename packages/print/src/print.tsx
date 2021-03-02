@@ -2,14 +2,14 @@
  * @Author: 焦质晔
  * @Date: 2021-02-09 09:03:59
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-01 19:50:30
+ * @Last Modified time: 2021-03-02 10:47:43
  */
-import { defineComponent, PropType } from 'vue';
+import { defineComponent, PropType, Component, Text } from 'vue';
 import PropTypes from '../../_utils/vue-types';
 import { JSXNode, ComponentSize } from '../../_utils/types';
 
 import { useSize } from '../../hooks/useSize';
-import { sleep, noop, isValidElement } from '../../_utils/util';
+import { sleep, noop, isVNode, isValidElement } from '../../_utils/util';
 import { t } from '../../locale';
 import { isValidComponentSize } from '../../_utils/validators';
 
@@ -23,7 +23,10 @@ export default defineComponent({
   inheritAttrs: false,
   props: {
     dataSource: PropTypes.oneOfType([PropTypes.array, PropTypes.object]).isRequired,
-    templateRender: PropTypes.any.isRequired,
+    templateRender: {
+      type: Object as PropType<Component>,
+      default: null,
+    },
     size: {
       type: String as PropType<ComponentSize>,
       validator: isValidComponentSize,
@@ -31,7 +34,7 @@ export default defineComponent({
     uniqueKey: PropTypes.string,
     defaultConfig: PropTypes.object,
     preview: PropTypes.bool.def(true),
-    closeOnPrinted: PropTypes.bool.def(false),
+    closeOnPrinted: PropTypes.bool,
     type: PropTypes.string,
     disabled: PropTypes.bool,
     round: PropTypes.bool,
@@ -71,7 +74,9 @@ export default defineComponent({
         width: `${config.previewWidth}px`,
         loading: false,
         destroyOnClose: true,
-        'onUpdate:visible': (val) => (this.visible = val),
+        'onUpdate:visible': (val: boolean): void => {
+          this.visible = val;
+        },
         onOpen: (): void => this.$emit('open'),
         onClosed: (): void => this.$emit('close'),
       };
@@ -109,9 +114,10 @@ export default defineComponent({
       disabled,
       onClick: this.clickHandle,
     };
+    const isDefaultSlot: boolean = this.$slots.default?.().every((x) => isVNode(x));
     return (
       <>
-        {this.$slots.default?.() && <el-button {...btnProps}>{this.$slots.default()}</el-button>}
+        {isDefaultSlot && <el-button {...btnProps}>{this.$slots.default()}</el-button>}
         {this.createRender()}
       </>
     );

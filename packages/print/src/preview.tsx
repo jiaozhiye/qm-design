@@ -23,9 +23,13 @@ import Dialog from '../../dialog';
 export default defineComponent({
   name: 'Preview',
   componentName: 'Preview',
-  inheritAttrs: false,
   mixins: [PrintMixin],
   emits: ['close'],
+  provide() {
+    return {
+      $$preview: this,
+    };
+  },
   props: [
     'dataSource',
     'templateRender',
@@ -34,11 +38,6 @@ export default defineComponent({
     'defaultConfig',
     'closeOnPrinted',
   ],
-  provide() {
-    return {
-      $$preview: this,
-    };
-  },
   data() {
     return {
       form: {
@@ -196,7 +195,9 @@ export default defineComponent({
       showFullScreen: false,
       destroyOnClose: true,
       containerStyle: { paddingBottom: '52px' },
-      'onUpdate:visible': (val) => (this.visible = val),
+      'onUpdate:visible': (val) => {
+        this.visible = val;
+      },
     };
     const paginationProps = {
       currentPage,
@@ -301,7 +302,9 @@ export default defineComponent({
           <Setting
             setting={form.setting}
             onChange={this.settingChange}
-            onClose={(val) => (this.visible = val)}
+            onClose={(val) => {
+              this.visible = val;
+            }}
           />
         </Dialog>
       </div>

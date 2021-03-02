@@ -20,8 +20,10 @@
 </template>
 
 <script>
-export default {
-  name: '',
-  props: ['dataSource']
-};
+import { defineComponent } from 'vue';
+
+export default defineComponent({
+  name: 'Template',
+  props: ['dataSource'],
+});
 </script>

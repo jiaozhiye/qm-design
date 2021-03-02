@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-02-09 09:03:59
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-01 18:12:25
+ * @Last Modified time: 2021-03-02 10:51:04
  */
 import { defineComponent, PropType } from 'vue';
 import { JSXNode } from '../../_utils/types';
@@ -16,7 +16,7 @@ export default defineComponent({
   componentName: 'Setting',
   inheritAttrs: false,
   emits: ['change', 'close'],
-  props: ['setting'],
+  props: ['setting', 'onChange', 'onClose'],
   data() {
     return {
       initialValue: this.getInitialvalue(),
@@ -201,9 +201,9 @@ export default defineComponent({
     const { initialValue, formList } = this;
     return (
       <div>
-        {/* @ts-ignore */}
         <Form
           ref="formPanel"
+          // @ts-ignore
           initialValue={initialValue}
           list={formList}
           cols={2}
