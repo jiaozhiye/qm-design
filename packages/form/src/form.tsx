@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-02-09 09:03:59
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-03 08:35:00
+ * @Last Modified time: 2021-03-03 15:56:31
  */
 import { ComponentPublicInstance, defineComponent } from 'vue';
 import scrollIntoView from 'scroll-into-view-if-needed';
@@ -50,6 +50,7 @@ import FormRangeDateEl from './form-range-date-el';
 import FormRangeDate from './form-range-date';
 import FormUploadImg from './form-upload-img';
 import FormUploadFile from './form-upload-file';
+import FormTinymce from './form-tinymce';
 
 const EMITS = ['collapse', 'valuesChange', 'change', 'finish', 'finishFailed', 'reset'];
 
@@ -402,6 +403,9 @@ export default defineComponent({
     },
     UPLOAD_FILE(option: IFormItem): JSXNode {
       return <FormUploadFile ref={option.fieldName} option={option} />;
+    },
+    TINYMCE(option: IFormItem): JSXNode {
+      return <FormTinymce ref={option.fieldName} option={option} />;
     },
     // ============================================
     // 锚点定位没有通过校验的表单项
