@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-02-08 16:39:21
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-01 17:04:01
+ * @Last Modified time: 2021-03-03 08:22:55
  */
 import type { App } from 'vue';
 import { ComponentSize, AnyObject } from './_utils/types';
@@ -22,6 +22,8 @@ import QmDownload from './download';
 import QmUpload from './upload';
 import QmUploadCropper from './upload-cropper';
 import QmPrint from './print';
+import QmPrintGroup from './print-group';
+import QmPrintItem from './print-item';
 
 import { use as locale, i18n } from './locale';
 import { version } from './version';
@@ -57,6 +59,8 @@ const components = [
   QmUpload,
   QmUploadCropper,
   QmPrint,
+  QmPrintGroup,
+  QmPrintItem,
 ];
 
 const install = (app: App, opt: InstallOptions, global: AnyObject<any> = {}): void => {
@@ -92,6 +96,8 @@ export {
   QmUpload,
   QmUploadCropper,
   QmPrint,
+  QmPrintGroup,
+  QmPrintItem,
   version,
   install,
   locale,

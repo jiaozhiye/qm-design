@@ -79,6 +79,7 @@ export default defineComponent({
   },
   methods: {
     clickHandle(k) {
+      this.$refs[`gprint`].DO_PRINT();
       // this.$message.success('asdasd');
       // this.loading = false;
       // this.visible = true;
@@ -213,6 +214,10 @@ export default defineComponent({
           <div style="height: 1000px">asd</div>
           <div style="position: absolute; left: 0; bottom: 0; right: 0;">footer</div>
         </qm-dialog>
+        <qm-print-group ref="gprint">
+          <qm-print-item label="打印1" dataSource={[]} templateRender={null} />
+          <qm-print-item label="打印2" dataSource={[]} templateRender={null} />
+        </qm-print-group>
       </>
     );
   },

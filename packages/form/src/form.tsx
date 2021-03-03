@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-02-09 09:03:59
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-02 13:22:21
+ * @Last Modified time: 2021-03-03 08:35:00
  */
 import { ComponentPublicInstance, defineComponent } from 'vue';
 import scrollIntoView from 'scroll-into-view-if-needed';
@@ -53,6 +53,13 @@ import FormUploadFile from './form-upload-file';
 
 const EMITS = ['collapse', 'valuesChange', 'change', 'finish', 'finishFailed', 'reset'];
 
+type IComponentData = {
+  form: IFormData;
+  desc: IFormDesc;
+  view: Record<string, string>;
+  collapse: boolean;
+};
+
 export default defineComponent({
   name: 'QmForm',
   componentName: 'QmForm',
@@ -71,7 +78,7 @@ export default defineComponent({
       desc: {}, // 描述信息
       view: {}, // 视图数据
       collapse: false, // 展开/收起状态
-    };
+    } as IComponentData;
   },
   computed: {
     formItemList(): IFormItem[] {

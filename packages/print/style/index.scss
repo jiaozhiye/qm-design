@@ -173,7 +173,7 @@ $prefix-container: '#{$qm-prefix}-print-container';
     margin-bottom: 0 !important;
   }
   .#{$prefix-preview} {
-    min-height: calc(80vh - 48px - 32px);
+    min-height: calc(80vh - 48px - 36px);
   }
 }
 
