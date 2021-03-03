@@ -57,6 +57,7 @@ export default {
       cropper: '图片裁剪',
       uploadError: '图片上传失败！',
       downError: '图片下载失败！',
+      text: '上传图片',
     },
     print: {
       preview: '打印预览',

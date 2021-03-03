@@ -75,6 +75,7 @@ export default defineComponent({
         },
       ],
       printDataList: [],
+      content: '',
     };
   },
   methods: {
@@ -183,6 +184,7 @@ export default defineComponent({
           label="标题名称"
           extra="asdasdasdasdasd"
         ></qm-divider>
+        <qm-tinymce v-model={this.content} />
         <qm-spin spinning={this.loading} tip="Loading...">
           <qm-anchor style="height: 400px">
             <qm-anchor-item label="标题名称">

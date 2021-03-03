@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-02-08 16:39:21
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-03 08:22:55
+ * @Last Modified time: 2021-03-03 14:17:56
  */
 import type { App } from 'vue';
 import { ComponentSize, AnyObject } from './_utils/types';
@@ -24,6 +24,7 @@ import QmUploadCropper from './upload-cropper';
 import QmPrint from './print';
 import QmPrintGroup from './print-group';
 import QmPrintItem from './print-item';
+import QmTinymce from './tinymce';
 
 import { use as locale, i18n } from './locale';
 import { version } from './version';
@@ -61,6 +62,7 @@ const components = [
   QmPrint,
   QmPrintGroup,
   QmPrintItem,
+  QmTinymce,
 ];
 
 const install = (app: App, opt: InstallOptions, global: AnyObject<any> = {}): void => {
@@ -98,6 +100,7 @@ export {
   QmPrint,
   QmPrintGroup,
   QmPrintItem,
+  QmTinymce,
   version,
   install,
   locale,
