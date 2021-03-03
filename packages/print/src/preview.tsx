@@ -2,15 +2,16 @@
  * @Author: 焦质晔
  * @Date: 2021-02-09 09:03:59
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-02 17:54:47
+ * @Last Modified time: 2021-03-03 18:21:57
  */
 import { defineComponent, PropType, reactive } from 'vue';
 import localforage from 'localforage';
 import { JSXNode, AnyObject } from '../../_utils/types';
 
-import { isObject, merge, cloneDeep } from 'lodash-es';
+import { isObject, merge } from 'lodash-es';
 import { getLodop } from './LodopFuncs';
 import { getPrefixCls } from '../../_utils/prefix';
+import { deepToRaw } from '../../_utils/util';
 import { warn } from '../../_utils/error';
 import { t } from '../../locale';
 
@@ -142,7 +143,7 @@ export default defineComponent({
       this.doPrint(this.$$container.createPrintHtml(this.printPage));
       // 存储配置信息
       try {
-        const printConfig = cloneDeep({
+        const printConfig = deepToRaw({
           ...this.form,
           printerName: this.printerItems.find((x) => x.value === this.form.printerName).text,
         });

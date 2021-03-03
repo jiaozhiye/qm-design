@@ -1,4 +1,4 @@
-<script lang="ts">
+<script lang="tsx">
 import { defineComponent, VNode } from 'vue';
 
 import PrintTemplate from './demo2';

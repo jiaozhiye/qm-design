@@ -2,11 +2,11 @@
  * @Author: 焦质晔
  * @Date: 2021-02-24 10:24:37
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-02-27 12:36:02
+ * @Last Modified time: 2021-03-03 18:51:02
  */
 import { transform, isEqual, isObject } from 'lodash-es';
 import dayjs from 'dayjs';
-import { AnyObject, Nullable } from '../../_utils/types';
+import { Nullable } from '../../_utils/types';
 
 export const noop = (): void => {};
 
@@ -79,7 +79,7 @@ export const secretFormat = (value = '', type: string): string => {
   return value;
 };
 
-export const difference = (object: unknown, base: unknown): any => {
+export const difference = <T>(object: T, base: T): T => {
   return transform(object, (result, value, key) => {
     if (!isEqual(value ?? '', base[key] ?? '')) {
       result[key] = isObject(value) && isObject(base[key]) ? difference(value, base[key]) : value;
@@ -87,25 +87,25 @@ export const difference = (object: unknown, base: unknown): any => {
   });
 };
 
-export const deepFind = (arr: any[], mark: unknown): Nullable<any> => {
-  let res = null;
+export const deepFind = <T>(arr: T[], mark: string): Nullable<T> => {
+  let res: T = null;
   for (let i = 0; i < arr.length; i++) {
-    if (Array.isArray(arr[i].children)) {
-      res = deepFind(arr[i].children, mark);
+    if (Array.isArray((arr[i] as any).children)) {
+      res = deepFind((arr[i] as any).children, mark);
     }
     if (res) {
       return res;
     }
-    if (arr[i].value === mark) {
+    if ((arr[i] as any).value === mark) {
       return arr[i];
     }
   }
   return res;
 };
 
-export const deepMapList = (list: any[], valueKey: string, textKey: string): any[] => {
-  return list.map((x) => {
-    const item: AnyObject<any> = { value: x[valueKey], text: x[textKey] };
+export const deepMapList = <T>(list: T[], valueKey: string, textKey: string): T[] => {
+  return list.map((x: any) => {
+    const item = { value: x[valueKey], text: x[textKey] } as any;
     x.disabled && (item.disabled = true);
     if (Array.isArray(x.children)) {
       item.children = deepMapList(x.children, valueKey, textKey);
@@ -114,9 +114,9 @@ export const deepMapList = (list: any[], valueKey: string, textKey: string): any
   });
 };
 
-export const deepFindValues = (arr: any[], str: string, depth = 0): any[] => {
+export const deepFindValues = <T>(arr: T[], str: string, depth = 0): T[] => {
   const result = [];
-  arr.forEach((x) => {
+  arr.forEach((x: any) => {
     if (x.value == str.split(',')[depth]) {
       result.push(x);
     }
@@ -127,7 +127,7 @@ export const deepFindValues = (arr: any[], str: string, depth = 0): any[] => {
   return result;
 };
 
-export const deepGetPath = (arr: any[], value): any[] | undefined => {
+export const deepGetPath = (arr: any[], value: string): string[] | undefined => {
   for (let i = 0; i < arr.length; i++) {
     if (arr[i].value == value) {
       return [value];

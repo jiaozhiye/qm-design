@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-02-26 14:53:54
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-02 18:34:06
+ * @Last Modified time: 2021-03-03 18:24:24
  */
 import { defineComponent, PropType, reactive } from 'vue';
 import { JSXNode } from '../../_utils/types';
@@ -12,7 +12,9 @@ import Draggable from 'vuedraggable';
 
 import { isValidComponentSize } from '../../_utils/validators';
 import { getPrefixCls } from '../../_utils/prefix';
+import { deepToRaw } from '../../_utils/util';
 import { t } from '../../locale';
+import { IFormItem } from './types';
 
 export default defineComponent({
   name: 'FieldsFilter',
@@ -53,8 +55,8 @@ export default defineComponent({
         tag: 'ul',
         type: 'transition-group',
       },
-      'onUpdate:modelValue': (val: unknown[]): void => {
-        this.setLocalFields(val);
+      'onUpdate:modelValue': (val: IFormItem[]): void => {
+        this.setLocalFields(deepToRaw(val));
         this.fieldsChange(reactive(val));
         // 自动展开
         this.$$form.collapse = true;

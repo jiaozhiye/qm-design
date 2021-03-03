@@ -2,9 +2,9 @@
  * @Author: 焦质晔
  * @Date: 2021-02-08 19:28:31
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-01 15:15:09
+ * @Last Modified time: 2021-03-03 18:28:33
  */
-import { Ref, Fragment, Comment, Text } from 'vue';
+import { Ref, toRaw, Fragment, Comment, Text } from 'vue';
 import { isObject, isArray, hasOwn, camelize } from '@vue/shared';
 import { isNumber, debounce, throttle } from 'lodash-es';
 import isServer from './isServer';
@@ -83,6 +83,24 @@ export const getParserWidth = (val: number | string): string => {
  */
 export const $ = <T>(ref: Ref<T>): unknown => {
   return ref.value;
+};
+
+/**
+ * 深拷贝
+ * @param target 目标值
+ * @returns 拷贝值
+ */
+export const deepToRaw = <T>(target: T): T => {
+  if (typeof target !== 'object' || target == null) {
+    return target;
+  }
+  const clone: any = Array.isArray(target) ? [] : {};
+  for (const [key, value] of Object.entries(target)) {
+    if (Reflect.hasOwnProperty.call(target, key)) {
+      clone[key] = deepToRaw(toRaw(value));
+    }
+  }
+  return clone;
 };
 
 /**
