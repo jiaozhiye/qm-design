@@ -2,9 +2,9 @@
  * @Author: 焦质晔
  * @Date: 2021-02-09 09:03:59
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-03 08:30:17
+ * @Last Modified time: 2021-03-03 11:27:13
  */
-import { defineComponent, PropType } from 'vue';
+import { defineComponent, PropType, Component } from 'vue';
 import PropTypes from '../../_utils/vue-types';
 import { JSXNode } from '../../_utils/types';
 
@@ -15,7 +15,10 @@ export default defineComponent({
   componentName: 'QmPrintItem',
   props: {
     dataSource: PropTypes.oneOfType([PropTypes.array, PropTypes.object]).isRequired,
-    templateRender: PropTypes.any.isRequired,
+    templateRender: {
+      type: Object as PropType<Component>,
+      default: null,
+    },
     uniqueKey: PropTypes.string,
     defaultConfig: PropTypes.object,
     closeOnPrinted: PropTypes.bool.def(false),

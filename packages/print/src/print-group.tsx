@@ -2,13 +2,14 @@
  * @Author: 焦质晔
  * @Date: 2021-02-09 09:03:59
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-03 09:02:19
+ * @Last Modified time: 2021-03-03 11:31:23
  */
 import { defineComponent, PropType } from 'vue';
 import PropTypes from '../../_utils/vue-types';
 import { JSXNode, ComponentSize } from '../../_utils/types';
 
 import { sleep } from '../../_utils/util';
+import { useSize } from '../../hooks/useSize';
 import { getPrefixCls } from '../../_utils/prefix';
 import { getValidSlot } from '../../_utils/instance-children';
 import { isValidComponentSize } from '../../_utils/validators';
@@ -42,15 +43,16 @@ export default defineComponent({
     async DO_PRINT(): Promise<void> {
       this.visible = !0;
       await sleep(500);
-      this.tabChangeHandle('0');
+      this.tabChangeHandle(this.tabName);
     },
     tabChangeHandle(key: string): void {
-      console.log(11, `print-item-${key}`, this.$refs[`print-item-${key}`]);
+      this.$refs[`print-item-${key}`].$refs[`preview`].$refs[`container`].SHOW_PREVIEW();
     },
   },
   render(): JSXNode {
     const { visible, uniqueKey } = this;
     const prefixCls = getPrefixCls('print-preview');
+    const { $size } = useSize(this.$props);
     const dialogProps = {
       visible,
       title: t('qm.print.preview'),
@@ -71,23 +73,26 @@ export default defineComponent({
             v-model={this.tabName}
             // @ts-ignore
             tabCustomClass={`${prefixCls}__tab`}
+            size={$size}
             lazyLoad={false}
             onChange={this.tabChangeHandle}
           >
-            {$slots.map(({ props }, i) => {
-              return (
-                // @ts-ignore
-                <TabPane key={i} label={props.label} name={i.toString()}>
-                  <PrintItem
-                    ref={`print-item-${i}`}
-                    uniqueKey={`${uniqueKey}_tab_${i}`}
-                    dataSource={props.dataSource}
-                    templateRender={props.templateRender}
-                    style={{ margin: 0 }}
-                  />
-                </TabPane>
-              );
-            })}
+            {$slots.map(
+              ({ props }, i): JSXNode => {
+                return (
+                  // @ts-ignore
+                  <TabPane key={i} label={props.label} name={i.toString()}>
+                    <PrintItem
+                      ref={`print-item-${i}`}
+                      uniqueKey={`${uniqueKey}_tab_${i}`}
+                      dataSource={props.dataSource}
+                      templateRender={props.templateRender}
+                      style={{ margin: 0 }}
+                    />
+                  </TabPane>
+                );
+              }
+            )}
           </Tabs>
         </div>
       </Dialog>

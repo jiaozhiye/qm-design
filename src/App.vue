@@ -215,8 +215,8 @@ export default defineComponent({
           <div style="position: absolute; left: 0; bottom: 0; right: 0;">footer</div>
         </qm-dialog>
         <qm-print-group ref="gprint">
-          <qm-print-item label="打印1" dataSource={[]} templateRender={null} />
-          <qm-print-item label="打印2" dataSource={[]} templateRender={null} />
+          <qm-print-item label="打印1" dataSource={[1]} templateRender={PrintTemplate} />
+          <qm-print-item label="打印2" dataSource={[]} templateRender={PrintTemplate} />
         </qm-print-group>
       </>
     );
