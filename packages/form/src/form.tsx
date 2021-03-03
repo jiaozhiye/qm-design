@@ -2,13 +2,13 @@
  * @Author: 焦质晔
  * @Date: 2021-02-09 09:03:59
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-03 15:56:31
+ * @Last Modified time: 2021-03-03 20:03:48
  */
 import { ComponentPublicInstance, defineComponent } from 'vue';
 import scrollIntoView from 'scroll-into-view-if-needed';
 import { isObject, isFunction, cloneDeep, xor } from 'lodash-es';
 import { AnyObject, JSXNode, Nullable, ValueOf } from '../../_utils/types';
-import { getParserWidth } from '../../_utils/util';
+import { sleep, getParserWidth } from '../../_utils/util';
 import { getPrefixCls } from '../../_utils/prefix';
 import { useSize } from '../../hooks/useSize';
 import { t } from '../../locale';
@@ -58,6 +58,7 @@ type IComponentData = {
   form: IFormData;
   desc: IFormDesc;
   view: Record<string, string>;
+  expand: Record<string, boolean>;
   collapse: boolean;
 };
 
@@ -78,7 +79,8 @@ export default defineComponent({
       form: {}, // 表单
       desc: {}, // 描述信息
       view: {}, // 视图数据
-      collapse: false, // 展开/收起状态
+      expand: {}, // 分隔符的 展开/收起
+      collapse: false, // 筛选器 展开/收起 状态
     } as IComponentData;
   },
   computed: {
@@ -115,6 +117,18 @@ export default defineComponent({
     },
     dividers(): Array<IFormItem> {
       return this.list.filter((x) => x.type === 'BREAK_SPACE');
+    },
+    blockFieldNames(): Array<Pick<IFormItem, 'fieldName' | 'label'>>[] {
+      const result = [];
+      for (let i = 0, len = this.dividers.length; i < len; i++) {
+        let index: number = this.list.findIndex((x) => x === this.dividers[i]);
+        let nextIndex: number = this.list.findIndex((x) => x === this.dividers[i + 1]);
+        nextIndex = nextIndex > -1 ? nextIndex : undefined;
+        result.push(
+          this.list.slice(index, nextIndex).map((x) => ({ label: x.label, fieldName: x.fieldName }))
+        );
+      }
+      return result;
     },
     isDividerCollapse(): boolean {
       return this.dividers.some((x) => !!x.collapse);
@@ -188,6 +202,9 @@ export default defineComponent({
   created() {
     this.initialHandle();
   },
+  mounted() {
+    this.createInputFocus();
+  },
   methods: {
     // 组件初始化方法
     initialHandle(): void {
@@ -197,6 +214,7 @@ export default defineComponent({
       this.initialExtras = Object.assign({}, _desc); // 用于重置描述 - 浅拷贝
       this.form = _form;
       this.desc = _desc;
+      this.expand = this.createDividerExpand();
     },
     // 创建表单数据
     createFormValue(): IFormData {
@@ -216,6 +234,12 @@ export default defineComponent({
         });
       return Object.assign({}, target);
     },
+    // 创建分隔符 展开/收起
+    createDividerExpand(): IComponentData['expand'] {
+      const target = {};
+      this.dividers.forEach((x) => (target[x.fieldName] = !!x.collapse?.defaultExpand));
+      return Object.assign({}, this.expand, target);
+    },
     // 获取表单数据的初始值
     getInitialValue(item: IFormItem, val: any): ValueOf<IFormData> {
       const { type, options = {}, readonly } = item;
@@ -234,10 +258,17 @@ export default defineComponent({
       }
       return val;
     },
-    setViewValue(fieldName: string, val: unknown): void {
+    setViewValue(fieldName: string, val: string): void {
       if (!this.isDividerCollapse) return;
       if (val !== this.view[fieldName]) {
         this.view = Object.assign({}, this.view, { [fieldName]: val });
+      }
+    },
+    async createInputFocus(): Promise<void> {
+      await sleep(10);
+      const { type, fieldName } = this.list.filter((x) => x.fieldName && !x.hidden)[0] || {};
+      if ((type === 'INPUT' || type === 'INPUT_NUMBER') && fieldName) {
+        this.$$(`${fieldName}-${type}`).focus();
       }
     },
     createFormItemLabel(option): JSXNode {
