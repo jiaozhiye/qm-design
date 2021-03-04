@@ -20,6 +20,15 @@ export default defineComponent({
       btnList: [1, 2],
       formList: [
         {
+          type: 'BREAK_SPACE',
+          label: '条件6',
+          fieldName: 'z',
+          collapse: {
+            showLimit: 2,
+            remarkItems: [{ fieldName: 'e' }],
+          },
+        },
+        {
           type: 'TREE_SELECT',
           label: '条件6',
           fieldName: 'a',
@@ -72,6 +81,9 @@ export default defineComponent({
           type: 'INPUT',
           fieldName: 'e',
           label: '表单项5',
+          descOptions: {
+            content: '描述',
+          },
         },
       ],
       printDataList: [],
@@ -155,7 +167,6 @@ export default defineComponent({
           uniqueKey="jzy_filter"
           list={this.formList}
           initialValue={{}}
-          formType="search"
           onFinish={this.finish}
           fieldsChange={(list) => {
             this.formList = list;

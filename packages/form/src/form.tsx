@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-02-09 09:03:59
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-03 20:03:48
+ * @Last Modified time: 2021-03-04 10:43:00
  */
 import { ComponentPublicInstance, defineComponent } from 'vue';
 import scrollIntoView from 'scroll-into-view-if-needed';
@@ -237,7 +237,9 @@ export default defineComponent({
     // 创建分隔符 展开/收起
     createDividerExpand(): IComponentData['expand'] {
       const target = {};
-      this.dividers.forEach((x) => (target[x.fieldName] = !!x.collapse?.defaultExpand));
+      this.dividers
+        .filter((x) => x.collapse)
+        .forEach((x) => (target[x.fieldName] = !!x.collapse.defaultExpand));
       return Object.assign({}, this.expand, target);
     },
     // 获取表单数据的初始值
@@ -559,6 +561,24 @@ export default defineComponent({
         this.form[key] = Array.isArray(this.form[key]) ? [] : undefined;
       }
     },
+    // 获取元素的显示状态
+    getElementDisplay({ type, fieldName }): boolean {
+      if (type === 'BREAK_SPACE') {
+        return !0;
+      }
+      for (let i = 0, len = this.blockFieldNames.length; i < len; i++) {
+        let arr = this.blockFieldNames[i];
+        let divider = this.dividers.find((x) => x.fieldName === arr[0].fieldName);
+        let limit = divider.collapse?.showLimit ?? arr.length - 1;
+        for (let k = 1; k < arr.length; k++) {
+          let x = arr[k];
+          if (x.fieldName === fieldName && k > limit) {
+            return this.expand[arr[0].fieldName];
+          }
+        }
+      }
+      return !0;
+    },
     // 表单元素
     createFormItem(item: IFormItem): Nullable<JSXNode> {
       if (!isFunction(this[item.type])) {
@@ -573,7 +593,14 @@ export default defineComponent({
     },
     // 表单布局
     createFormLayout(): Array<JSXNode> {
-      const { flexCols: cols, defaultRows, isFilterType, collapse, showFilterCollapse } = this;
+      const {
+        flexCols: cols,
+        defaultRows,
+        isFilterType,
+        collapse,
+        isDividerCollapse,
+        showFilterCollapse,
+      } = this;
 
       // 栅格列的数组
       const colsArr: Partial<IFormItem>[] = [];
@@ -611,6 +638,7 @@ export default defineComponent({
         selfCols = selfCols >= 24 || type === 'BREAK_SPACE' || type === 'TINYMCE' ? cols : selfCols;
         // 判断改栅格是否显示
         const isBlock: boolean = collapse ? true : fieldCols[i] < defaultPlayRows * cols;
+        const isDisplay: boolean = isDividerCollapse ? this.getElementDisplay(x) : !0;
         if (isBlock) {
           tmpArr.push(fieldCols[i]);
         }
@@ -621,9 +649,9 @@ export default defineComponent({
             id={fieldName}
             span={selfCols * colSpan}
             style={
-              isFilterType && {
-                display: !showFilterCollapse || isBlock ? 'block' : 'none',
-              }
+              isFilterType
+                ? { display: !showFilterCollapse || isBlock ? 'block' : 'none' }
+                : { display: isDisplay ? 'block' : 'none' }
             }
           >
             {this.createFormItem(x)}

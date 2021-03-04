@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-02-24 13:02:36
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-02 15:37:21
+ * @Last Modified time: 2021-03-04 10:49:30
  */
 import { CSSProperties, PropType } from 'vue';
 import PropTypes from '../../_utils/vue-types';
@@ -138,7 +138,7 @@ export type IFormItem = {
     valueKey?: string;
     textKey?: string;
   };
-  upload: {
+  upload?: {
     actionUrl: string;
     headers?: AnyObject<string>;
     params?: AnyObject<any>;
@@ -148,6 +148,12 @@ export type IFormItem = {
     titles?: Array<string>;
     fixedSize?: Array<number>;
     isCalcHeight?: boolean;
+  };
+  collapse?: {
+    defaultExpand?: boolean;
+    showLimit?: number;
+    remarkItems?: Array<{ fieldName: string; isLabel?: boolean }>;
+    onCollapse?: AnyFunction<any>;
   };
   labelOptions: IFormItem;
   descOptions?: {
@@ -299,6 +305,12 @@ export const props = {
         titles: PropTypes.array,
         fixedSize: PropTypes.array,
         isCalcHeight: PropTypes.bool,
+      }),
+      collapse: PropTypes.shape({
+        defaultExpand: PropTypes.bool,
+        showLimit: PropTypes.number,
+        remarkItems: PropTypes.array,
+        onCollapse: PropTypes.func,
       }),
       labelOptions: PropTypes.object,
       descOptions: PropTypes.shape({

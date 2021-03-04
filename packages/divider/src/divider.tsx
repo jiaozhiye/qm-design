@@ -41,11 +41,12 @@ export default defineComponent({
       default: null,
     },
   },
-  emits: ['update:collapse'],
+  emits: ['update:collapse', 'change'],
   methods: {
     doToggle(val: boolean): void {
       // template -> v-model:collapse="this.expand"   JSX -> v-model={[this.expand, 'collapse']}
       this.$emit('update:collapse', val);
+      this.$emit('change', val);
     },
   },
   render(): JSXNode {
@@ -61,7 +62,7 @@ export default defineComponent({
     return (
       <div class={cls}>
         <span class={`${prefixCls}__title`}>{label}</span>
-        {extra && <div class={`${prefixCls}__extra`}>{extra}</div>}
+        <div class={`${prefixCls}__extra`}>{extra}</div>
         {!isNull(collapse) && (
           <span class={`${prefixCls}__collapse`}>
             {/* 受控组件 */}
