@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-02-23 21:56:33
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-04 13:36:19
+ * @Last Modified time: 2021-03-04 13:50:25
  */
 import { defineComponent } from 'vue';
 import { AnyObject, JSXNode, Nullable } from '../../_utils/types';
@@ -172,14 +172,15 @@ export default defineComponent({
                     const val = this.deepFindValue(this.itemList, tag).value;
                     form[fieldName] = form[fieldName].filter((x) => x !== val);
                     this.$refs[`tree`].setCheckedKeys(form[fieldName]);
+                    onChange(form[fieldName], null);
                   }}
                   onClick={(): void => {
                     if (!(disabled || readonly)) {
                       this.visible = !this.visible;
                     }
                   }}
-                  onClear={() => {
-                    form[fieldName] = undefined;
+                  onClear={(): void => {
+                    form[fieldName] = !multiple ? undefined : [];
                     onChange(form[fieldName], null);
                   }}
                 />
