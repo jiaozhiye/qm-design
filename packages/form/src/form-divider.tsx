@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-02-23 21:56:33
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-04 10:55:01
+ * @Last Modified time: 2021-03-04 18:10:36
  */
 import { defineComponent } from 'vue';
 import { JSXNode } from '../../_utils/types';
@@ -17,7 +17,7 @@ export default defineComponent({
   props: ['option'],
   render(): JSXNode {
     const { blockFieldNames, view, desc, expand } = this.$$form;
-    const { type, label, fieldName, style = {}, options = {}, collapse } = this.option;
+    const { type, label, fieldName, id, style = {}, options = {}, collapse } = this.option;
     const { showLimit, remarkItems = [], onCollapse = noop } = collapse || {};
     const result = [];
     if (remarkItems.length) {
@@ -37,6 +37,7 @@ export default defineComponent({
       collapse: expand[fieldName],
       label,
       extra: result.map((x) => x.text).join(' | '),
+      id,
       style: { ...style },
       'onUpdate:collapse': (val: boolean): void => {
         expand[fieldName] = val;

@@ -2,11 +2,10 @@
  * @Author: 焦质晔
  * @Date: 2021-02-21 10:41:35
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-02-21 14:13:29
+ * @Last Modified time: 2021-03-04 18:07:31
  */
 import { defineComponent, ComponentInternalInstance, PropType } from 'vue';
 import { JSXNode } from '../../_utils/types';
-
 import { getPrefixCls } from '../../_utils/prefix';
 
 const prefixCls = getPrefixCls('anchor-nav');
@@ -24,6 +23,10 @@ export default defineComponent({
       type: Array as PropType<ComponentInternalInstance[]>,
       default: () => [],
     },
+    labelList: {
+      type: Array,
+      default: () => [],
+    },
     onTabClick: {
       type: Function as PropType<(index: number, ev: Event) => void>,
       default: NOOP,
@@ -32,9 +35,9 @@ export default defineComponent({
   emits: ['tab-click'],
   methods: {
     renderLabel(): Array<JSXNode> {
-      const labels: string[] = this.anchorItems.map(
-        ({ props }, index) => props.label || index.toString()
-      );
+      const labels: string[] = !this.labelList.length
+        ? this.anchorItems.map(({ props }, index) => props.label || index.toString())
+        : this.labelList.map((x, index) => x.label || index.toString());
       return labels.map((x, i) => {
         const cls = {
           [`${prefixCls}__item`]: true,

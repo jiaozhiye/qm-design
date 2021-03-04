@@ -213,6 +213,20 @@ export default defineComponent({
             this.formList = list;
           }}
         ></qm-form>
+        <qm-anchor
+          style="height: 100px"
+          labelList={[
+            { id: 'aaa', label: '标题1' },
+            { id: 'bbb', label: '标题2' },
+          ]}
+        >
+          <div id="aaa" style="height: 200px">
+            1
+          </div>
+          <div id="bbb" style="height: 200px">
+            2
+          </div>
+        </qm-anchor>
         <qm-tabs
           v-model={this.tabName}
           extraNode="asdasd"

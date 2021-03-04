@@ -2,17 +2,19 @@
  * @Author: 焦质晔
  * @Date: 2021-02-09 09:03:59
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-02-28 13:08:40
+ * @Last Modified time: 2021-03-04 18:04:12
  */
 import { defineComponent, VNode, ComponentInternalInstance, PropType } from 'vue';
 import addEventListener from 'add-dom-event-listener';
 import scrollIntoView from 'scroll-into-view-if-needed';
+import PropTypes from '../../_utils/vue-types';
 import { ComponentSize, JSXNode } from '../../_utils/types';
 import { isNumber } from 'lodash-es';
 import { isValidComponentSize, isValidWidthUnit } from '../../_utils/validators';
 
 import { useSize } from '../../hooks/useSize';
 import { getParserWidth, throttle } from '../../_utils/util';
+import { getOffsetTopDistance } from '../../_utils/dom';
 import { getValidSlot, getInstanceFromSlot } from '../../_utils/instance-children';
 import { getPrefixCls } from '../../_utils/prefix';
 
@@ -25,6 +27,12 @@ export default defineComponent({
   name: 'QmAnchor',
   componentName: 'QmAnchor',
   props: {
+    labelList: PropTypes.arrayOf(
+      PropTypes.shape({
+        id: PropTypes.string,
+        label: PropTypes.string,
+      })
+    ),
     labelWidth: {
       type: [Number, String] as PropType<number | string>,
       default: 80,
@@ -66,7 +74,11 @@ export default defineComponent({
       return getInstanceFromSlot(content, ANCHOR_ITEM_NAME);
     },
     createDistances(): Array<number> {
-      return this.anchorItemInstances.map((x) => x.ctx.$el.offsetTop);
+      return !this.labelList?.length
+        ? this.anchorItemInstances.map((x) => getOffsetTopDistance(x.ctx.$el, this.$refs[`scroll`]))
+        : this.labelList.map((x) =>
+            getOffsetTopDistance(document.getElementById(x.id), this.$refs[`scroll`])
+          );
     },
     findCurrentIndex(t: number): number {
       const top: number = Math.abs(t);
@@ -90,7 +102,10 @@ export default defineComponent({
       this.state = 'stop';
       this.timer && clearTimeout(this.timer);
       this.activeKey = index;
-      scrollIntoView(this.anchorItemInstances[index].ctx.$el, {
+      const $el: HTMLElement = !this.labelList?.length
+        ? this.anchorItemInstances[index].ctx.$el
+        : document.getElementById(this.labelList[index].id);
+      scrollIntoView($el, {
         scrollMode: 'always',
         block: 'start',
         behavior: 'smooth',
@@ -100,7 +115,7 @@ export default defineComponent({
     },
   },
   render(): JSXNode {
-    const { activeKey, labelWidth, anchorItemInstances } = this;
+    const { activeKey, labelList, labelWidth, anchorItemInstances } = this;
     const { $size } = useSize(this.$props);
     const cls = {
       [prefixCls]: true,
@@ -114,11 +129,14 @@ export default defineComponent({
           <AnchorNav
             activeKey={activeKey}
             anchor-items={anchorItemInstances}
+            label-list={labelList}
             onTabClick={this.tabClickHandle}
           />
         </div>
         <div ref="scroll" class={`${prefixCls}__container`}>
-          {getValidSlot(this.$slots.default?.(), ANCHOR_ITEM_NAME)}
+          {!labelList?.length
+            ? getValidSlot(this.$slots.default?.(), ANCHOR_ITEM_NAME)
+            : this.$slots.default?.()}
         </div>
       </div>
     );

@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-02-24 13:02:36
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-04 14:13:04
+ * @Last Modified time: 2021-03-04 18:09:31
  */
 import { CSSProperties, PropType } from 'vue';
 import PropTypes from '../../_utils/vue-types';
@@ -89,6 +89,7 @@ export type IFormItem = {
   offsetLeft?: number;
   offsetRight?: number;
   style?: CSSProperties;
+  id?: string;
   options?: {
     itemList?: Record<string, string | number>[];
     secretType?: string;
@@ -246,6 +247,7 @@ export const props = {
       offsetLeft: PropTypes.number.def(0),
       offsetRight: PropTypes.number.def(0),
       style: PropTypes.object,
+      id: PropTypes.string,
       options: PropTypes.shape({
         itemList: PropTypes.array,
         secretType: PropTypes.string,
