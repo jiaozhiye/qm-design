@@ -2,14 +2,14 @@
  * @Author: 焦质晔
  * @Date: 2021-02-23 21:56:33
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-04 11:19:08
+ * @Last Modified time: 2021-03-04 13:11:50
  */
 import { defineComponent } from 'vue';
 import { AnyObject, JSXNode, Nullable } from '../../_utils/types';
 
 import { get } from 'lodash-es';
 import { t } from '../../locale';
-import { IDict } from './types';
+import { IDictDeep } from './types';
 import { noop, deepFindValues, deepMapList } from './utils';
 import { getParserWidth } from '../../_utils/util';
 
@@ -57,13 +57,13 @@ export default defineComponent({
     },
     createViewText(val: string | string[] = ''): string {
       if (!this.multiple) {
-        return deepFindValues<IDict>(this.itemList, val as string)
+        return deepFindValues<IDictDeep>(this.itemList, val as string)
           .map((option) => option.text)
           .join('/');
       }
       return (val as string[])
         .map((x) => {
-          return deepFindValues<IDict>(this.itemList, x)
+          return deepFindValues<IDictDeep>(this.itemList, x)
             .map((option) => option.text)
             .join('/');
         })

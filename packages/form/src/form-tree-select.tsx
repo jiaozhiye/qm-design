@@ -2,14 +2,14 @@
  * @Author: 焦质晔
  * @Date: 2021-02-23 21:56:33
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-04 11:19:01
+ * @Last Modified time: 2021-03-04 13:36:19
  */
 import { defineComponent } from 'vue';
 import { AnyObject, JSXNode, Nullable } from '../../_utils/types';
 
 import { get } from 'lodash-es';
 import { t } from '../../locale';
-import { IDict } from './types';
+import { IDictDeep } from './types';
 import { noop, deepFind, deepMapList } from './utils';
 import { getPrefixCls } from '../../_utils/prefix';
 import { getParserWidth } from '../../_utils/util';
@@ -26,6 +26,7 @@ export default defineComponent({
       filterText: '',
       itemList: [],
       visible: false,
+      width: '200px',
     };
   },
   computed: {
@@ -45,9 +46,11 @@ export default defineComponent({
     this.isFetch && this.getItemList();
   },
   methods: {
-    // 输入框筛选，调用树组件 filter 方法
     treeFilterTextHandle(input: string): void {
-      this.$refs[`tree`]?.filter(input);
+      this.$refs[`tree`].filter(input);
+    },
+    getItemText(val: string): string {
+      return deepFind<IDictDeep>(this.itemList, val)?.text || '';
     },
     async getItemList(): Promise<void> {
       const {
@@ -63,9 +66,25 @@ export default defineComponent({
         this.itemList = deepMapList(dataList, valueKey, textKey);
       }
     },
+    // 工具方法
+    deepFindValue(arr: IDictDeep[], mark: string): Nullable<IDictDeep> {
+      let res = null;
+      for (let i = 0; i < arr.length; i++) {
+        if (Array.isArray(arr[i].children)) {
+          res = this.deepFindValue(arr[i].children, mark);
+        }
+        if (res) {
+          return res;
+        }
+        if (arr[i].text === mark) {
+          return arr[i];
+        }
+      }
+      return res;
+    },
   },
   render(): JSXNode {
-    const { isFetch } = this;
+    const { isFetch, multiple, width } = this;
     const { form } = this.$$form;
     const {
       label,
@@ -96,8 +115,11 @@ export default defineComponent({
       overflowY: 'auto',
     };
     const prefixCls = getPrefixCls('tree-select');
-    const selectText: string = deepFind<IDict>(this.itemList, form[fieldName])?.text || '';
-    this.$$form.setViewValue(fieldName, selectText);
+    // select 组件的值
+    const labels = !multiple
+      ? this.getItemText(form[fieldName])
+      : form[fieldName].map((val) => this.getItemText(val));
+    this.$$form.setViewValue(fieldName, !multiple ? labels : labels.join(','));
     return (
       <el-form-item
         key={fieldName}
@@ -112,7 +134,7 @@ export default defineComponent({
           <el-popover
             popper-class={`${prefixCls}__popper tree-select__${fieldName}`}
             v-model={[this.visible, 'visible']}
-            width={'auto'}
+            width={width}
             trigger="manual"
             placement="bottom-start"
             transition="el-zoom-in-top"
@@ -128,7 +150,8 @@ export default defineComponent({
                 <el-select
                   ref="select"
                   popper-class="select-option"
-                  modelValue={selectText}
+                  modelValue={labels}
+                  multiple={multiple}
                   placeholder={!disabled ? placeholder : ''}
                   clearable={clearable}
                   disabled={disabled}
@@ -142,13 +165,13 @@ export default defineComponent({
                   ]}
                   onVisibleChange={(visible: boolean): void => {
                     if (!visible) return;
-                    const $treeSelectPopper: HTMLElement = document.querySelector(
-                      `.tree-select__${fieldName}`
-                    );
-                    const width: number = this.$refs[`select`].$el.getBoundingClientRect().width;
-                    this.$nextTick(() => {
-                      $treeSelectPopper.style.width = width + 'px';
-                    });
+                    this.width = this.$refs[`select`].$el.getBoundingClientRect().width + 'px';
+                  }}
+                  onRemoveTag={(tag) => {
+                    if (!multiple) return;
+                    const val = this.deepFindValue(this.itemList, tag).value;
+                    form[fieldName] = form[fieldName].filter((x) => x !== val);
+                    this.$refs[`tree`].setCheckedKeys(form[fieldName]);
                   }}
                   onClick={(): void => {
                     if (!(disabled || readonly)) {
@@ -175,19 +198,29 @@ export default defineComponent({
                 ref="tree"
                 class="tree-select__tree"
                 data={this.itemList}
+                nodeKey={'value'}
                 props={{ children: 'children', label: 'text' }}
+                defaultCheckedKeys={multiple ? form[fieldName] : undefined}
                 style={{ marginTop: '5px' }}
+                checkStrictly={true}
                 defaultExpandAll={true}
                 expandOnClickNode={false}
+                showCheckbox={multiple}
+                checkOnClickNode={multiple}
                 // 节点过滤，配合输入框筛选使用
                 filterNodeMethod={(val, data): boolean => {
                   if (!val) return true;
                   return data.text.indexOf(val) !== -1;
                 }}
                 onNodeClick={(item): void => {
-                  if (item.disabled) return;
+                  if (multiple || item.disabled) return;
                   form[fieldName] = item.value;
                   this.visible = false;
+                  onChange(form[fieldName], item);
+                }}
+                onCheck={(data, item): void => {
+                  if (!multiple) return;
+                  form[fieldName] = item.checkedKeys;
                   onChange(form[fieldName], item);
                 }}
               />

@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-02-24 13:02:36
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-04 10:49:30
+ * @Last Modified time: 2021-03-04 11:56:02
  */
 import { CSSProperties, PropType } from 'vue';
 import PropTypes from '../../_utils/vue-types';
@@ -353,6 +353,9 @@ export const props = {
   formType: {
     type: String as PropType<IFormType>,
     default: 'default',
+    validator: (val: string): boolean => {
+      return ['default', 'search', 'onlyShow'].includes(val);
+    },
   },
   isCollapse: {
     type: Boolean,
