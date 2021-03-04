@@ -121,7 +121,7 @@ export default defineComponent({
           },
         },
         {
-          type: 'INPUT',
+          type: 'SWITCH',
           fieldName: 'e',
           label: '表单项5',
         },

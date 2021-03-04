@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-02-23 21:56:33
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-04 14:17:48
+ * @Last Modified time: 2021-03-04 14:24:23
  */
 import { defineComponent } from 'vue';
 import { JSXNode } from '../../_utils/types';
@@ -12,7 +12,7 @@ import { noop } from './utils';
 import { getParserWidth } from '../../_utils/util';
 
 export default defineComponent({
-  name: 'FormCheckbox',
+  name: 'FormSwitch',
   inheritAttrs: false,
   inject: ['$$form'],
   props: ['option'],
@@ -45,12 +45,12 @@ export default defineComponent({
           label: (): JSXNode => labelOptions && this.$$form.createFormItemLabel(labelOptions),
         }}
       >
-        <div style={{ display: 'inline-flex', ...style }}>
-          <el-checkbox
+        <div style={{ position: 'relative', top: '-1px', ...style }}>
+          <el-switch
             v-model={form[fieldName]}
             disabled={disabled}
-            trueLabel={trueValue}
-            falseLabel={falseValue}
+            activeValue={trueValue}
+            inactiveValue={falseValue}
             onChange={onChange}
           />
         </div>
