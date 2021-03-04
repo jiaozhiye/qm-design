@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-02-09 09:03:59
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-04 10:43:00
+ * @Last Modified time: 2021-03-04 11:19:42
  */
 import { ComponentPublicInstance, defineComponent } from 'vue';
 import scrollIntoView from 'scroll-into-view-if-needed';
@@ -172,7 +172,7 @@ export default defineComponent({
     },
     form: {
       handler(val: IFormData): void {
-        const diff: IFormData = difference(val, this.initialValues) as IFormData;
+        const diff = difference<IFormData>(val, this.initialValues);
         if (!Object.keys(diff).length) return;
         this.$emit('valuesChange', diff);
       },

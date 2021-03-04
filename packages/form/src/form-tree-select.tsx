@@ -2,13 +2,14 @@
  * @Author: 焦质晔
  * @Date: 2021-02-23 21:56:33
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-02-28 19:52:06
+ * @Last Modified time: 2021-03-04 11:19:01
  */
 import { defineComponent } from 'vue';
 import { AnyObject, JSXNode, Nullable } from '../../_utils/types';
 
 import { get } from 'lodash-es';
 import { t } from '../../locale';
+import { IDict } from './types';
 import { noop, deepFind, deepMapList } from './utils';
 import { getPrefixCls } from '../../_utils/prefix';
 import { getParserWidth } from '../../_utils/util';
@@ -95,7 +96,7 @@ export default defineComponent({
       overflowY: 'auto',
     };
     const prefixCls = getPrefixCls('tree-select');
-    const selectText: string = deepFind(this.itemList, form[fieldName])?.text || '';
+    const selectText: string = deepFind<IDict>(this.itemList, form[fieldName])?.text || '';
     this.$$form.setViewValue(fieldName, selectText);
     return (
       <el-form-item
