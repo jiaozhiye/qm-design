@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-02-08 14:35:05
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-02-16 11:02:14
+ * @Last Modified time: 2021-03-05 13:55:44
  */
 'use strict';
 
@@ -40,7 +40,7 @@ module.exports = {
     // 配置解析规则
     extensions: ['.ts', '.tsx', '.js', '.jsx', '.vue', '.json'],
     alias: {
-      vue$: 'vue/dist/vue.runtime.esm-bundler.js',
+      vue$: 'vue/dist/vue.esm-bundler.js',
       '@': utils.resolve('src'),
     },
     fallback: {
@@ -160,6 +160,8 @@ module.exports = {
       'process.env': {
         NODE_ENV: JSON.stringify(process.env.NODE_ENV),
       },
+      __VUE_OPTIONS_API__: true,
+      __VUE_PROD_DEVTOOLS__: false,
     }),
     new webpack.HotModuleReplacementPlugin(),
     new VueLoaderPlugin(),
