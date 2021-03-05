@@ -182,6 +182,10 @@ export default defineComponent({
   render(): VNode {
     return (
       <>
+        <qm-split direction="vertical" style="height: 300px">
+          <qm-split-pane>asdasd</qm-split-pane>
+          <qm-split-pane>zxczxc</qm-split-pane>
+        </qm-split>
         <qm-space spacer={'|'} size={20}>
           {this.btnList.map((x) => (
             <qm-button

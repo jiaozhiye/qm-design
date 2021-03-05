@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-02-08 19:28:20
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-02-21 09:19:38
+ * @Last Modified time: 2021-03-05 10:28:14
  */
 import { camelize, isObject } from '@vue/shared';
 import isServer from './isServer';
@@ -124,6 +124,17 @@ export const getOffsetTop = (el: HTMLElement): number => {
 
 export const getOffsetTopDistance = (el: HTMLElement, containerEl: HTMLElement): number => {
   return Math.abs(getOffsetTop(el) - getOffsetTop(containerEl));
+};
+
+export const getPosition = (el: HTMLElement): Record<'x' | 'y', number> => {
+  let xPosition = 0;
+  let yPosition = 0;
+  while (el) {
+    xPosition += el.offsetLeft - el.scrollLeft + el.clientLeft;
+    yPosition += el.offsetTop - el.scrollTop + el.clientTop;
+    el = el.offsetParent as HTMLElement;
+  }
+  return { x: xPosition, y: yPosition };
 };
 
 /**

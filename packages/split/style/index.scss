@@ -1,0 +1,61 @@
+/*
+ * @Author: 焦质晔
+ * @Date: 2021-02-09 09:27:46
+ * @Last Modified by: 焦质晔
+ * @Last Modified time: 2021-03-05 12:33:51
+ */
+@import '../../style/src/common';
+
+$prefix: '#{$qm-prefix}-split';
+$prefix-pane: '#{$qm-prefix}-split-pane';
+
+.#{$prefix} {
+  @include reset-component();
+  position: relative;
+  display: flex;
+  width: 100%;
+  height: 100%;
+  &.vertical {
+    flex-direction: column;
+  }
+  &__resize-bar {
+    user-select: none;
+    box-sizing: border-box;
+    transition: all 0.3s ease;
+    z-index: 1;
+    background: padding-box $border-color-base;
+    &.horizontal {
+      width: 11px;
+      border-left: 5px solid transparent;
+      border-right: 5px solid transparent;
+      margin: 0 -5px;
+      cursor: col-resize;
+    }
+    &.vertical {
+      height: 11px;
+      border-top: 5px solid transparent;
+      border-bottom: 5px solid transparent;
+      margin: -5px 0;
+      cursor: row-resize;
+    }
+    &:hover,
+    &:active {
+      border-color: $background-color;
+    }
+    &:active {
+      border-width: 5px;
+    }
+  }
+  .#{$prefix-pane} {
+    overflow: auto;
+    &.horizontal {
+      min-width: 5px;
+    }
+    &.vertical {
+      min-height: 5px;
+    }
+    &.isLocked {
+      pointer-events: none;
+    }
+  }
+}

@@ -67,5 +67,8 @@ export default {
       close: '关 闭',
       confirm: '确 定',
     },
+    split: {
+      resize: '拖动改变大小',
+    },
   },
 };
