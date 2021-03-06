@@ -8,9 +8,12 @@ import isServer from './isServer';
 
 let scrollBarWidth: number;
 
-export default function (): number {
+export const getScrollBarWidth = (): number => {
   if (isServer) return 0;
-  if (scrollBarWidth !== undefined) return scrollBarWidth;
+
+  if (scrollBarWidth !== undefined) {
+    return scrollBarWidth;
+  }
 
   const outer = document.createElement('div');
   outer.className = 'el-scrollbar__wrap';
@@ -32,4 +35,4 @@ export default function (): number {
   scrollBarWidth = widthNoScroll - widthWithScroll;
 
   return scrollBarWidth;
-}
+};

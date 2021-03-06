@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-02-08 19:28:31
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-03 18:28:33
+ * @Last Modified time: 2021-03-06 08:18:47
  */
 import { Ref, toRaw, Fragment, Comment, Text } from 'vue';
 import { isObject, isArray, hasOwn, camelize } from '@vue/shared';
@@ -29,11 +29,7 @@ export const isFirefox = (): boolean => {
 export { isVNode } from 'vue';
 
 export const isEmptyElement = (c): boolean => {
-  return (
-    c.type === Comment ||
-    (c.type === Fragment && c.children.length === 0) ||
-    (c.type === Text && c.children.trim() === '')
-  );
+  return c.type === Comment || (c.type === Fragment && c.children.length === 0) || (c.type === Text && c.children.trim() === '');
 };
 
 export const isValidElement = (c): boolean => {
@@ -48,11 +44,7 @@ export const noop = (): void => {};
 export { debounce, throttle };
 
 export const isEmpty = (val: unknown): boolean => {
-  if (
-    (!val && val !== 0) ||
-    (isArray(val) && !val.length) ||
-    (isObject(val) && !Object.keys(val).length)
-  ) {
+  if ((!val && val !== 0) || (isArray(val) && !val.length) || (isObject(val) && !Object.keys(val).length)) {
     return true;
   }
   return false;
@@ -77,18 +69,14 @@ export const getParserWidth = (val: number | string): string => {
   return val.toString();
 };
 
-/**
- * Unwraps refed value
- * @param ref Refed value
- */
 export const $ = <T>(ref: Ref<T>): unknown => {
   return ref.value;
 };
 
 /**
- * 深拷贝
- * @param target 目标值
- * @returns 拷贝值
+ * @description 深拷贝目标对象，同时把 Proxy 转成 普通对象
+ * @param {object | array}} target 目标对象
+ * @returns 转换后的对象
  */
 export const deepToRaw = <T>(target: T): T => {
   if (typeof target !== 'object' || target == null) {
@@ -127,15 +115,21 @@ export const errorCapture = async (asyncFn: AnyFunction<any>, ...params: any[]):
   }
 };
 
-export const initDefaultProps = <T extends AnyObject<any>>(
+/**
+ * @description 合并组件参数的默认值
+ * @param {object} propTypes 已声明的 propType
+ * @param {object} defaultProps 默认值
+ * @returns
+ */
+export const initDefaultProps = <T>(
   propTypes: T,
   defaultProps: {
-    [P in keyof T]: T[P];
+    [P in keyof T]?: unknown;
   }
 ): T => {
   Object.keys(defaultProps).forEach((k) => {
     if (propTypes[k]) {
-      propTypes[k].def && ((propTypes[k] as any) = propTypes[k].def(defaultProps[k]));
+      propTypes[k].def(defaultProps[k]);
     } else {
       throw new Error(`not have ${k} prop`);
     }

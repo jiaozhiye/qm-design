@@ -24,6 +24,7 @@ export default defineComponent({
       $$split: this,
     };
   },
+  emits: ['change'],
   props: {
     direction: {
       type: String as PropType<'horizontal' | 'vertical'>,
@@ -49,15 +50,13 @@ export default defineComponent({
   methods: {
     dragHandle(val: number): void {
       this.offset = val;
+      this.$emit('change');
     },
   },
   render(): JSXNode {
     const { direction, offset } = this;
     const prefixCls = getPrefixCls('split');
-    const [FirstComponent, LastComponent] = getValidSlot(
-      this.$slots.default?.(),
-      SPLIT_PANE_NAME
-    ) as any[];
+    const [FirstComponent, LastComponent] = getValidSlot(this.$slots.default?.(), SPLIT_PANE_NAME) as any[];
     const cls = {
       [prefixCls]: true,
       vertical: direction === 'vertical',
@@ -65,11 +64,7 @@ export default defineComponent({
     return (
       <div ref="split" class={cls}>
         <FirstComponent offset={offset} />
-        <ResizeBar
-          v-model={[this.isDragging, 'dragging']}
-          direction={direction}
-          onDrag={this.dragHandle}
-        />
+        <ResizeBar v-model={[this.isDragging, 'dragging']} direction={direction} onDrag={this.dragHandle} />
         <LastComponent />
       </div>
     );
