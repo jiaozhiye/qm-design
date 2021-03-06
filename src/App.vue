@@ -198,12 +198,7 @@ export default defineComponent({
               按钮
             </qm-button>
           ))}
-          <qm-print
-            uniqueKey="cprint_jzy"
-            dataSource={this.printDataList}
-            templateRender={this.templateRender}
-            click={this.printHandle3}
-          >
+          <qm-print uniqueKey="cprint_jzy" dataSource={this.printDataList} templateRender={this.templateRender} click={this.printHandle3}>
             客户端打印
           </qm-print>
         </qm-space>
@@ -249,12 +244,8 @@ export default defineComponent({
             角色管理3
           </qm-tab-pane>
         </qm-tabs>
-        <qm-divider
-          v-model={[this.expand, 'collapse']}
-          label="标题名称"
-          extra="asdasdasdasdasd"
-        ></qm-divider>
-        {/* <qm-tinymce v-model={this.content} /> */}
+        <qm-divider v-model={[this.expand, 'collapse']} label="标题名称" extra="asdasdasdasdasd"></qm-divider>
+        <qm-tinymce v-model={this.content} />
         <qm-spin spinning={this.loading} tip="Loading...">
           <qm-anchor style="height: 400px">
             <qm-anchor-item label="标题名称">
@@ -268,21 +259,11 @@ export default defineComponent({
             </qm-anchor-item>
           </qm-anchor>
         </qm-spin>
-        <qm-drawer
-          v-model={[this.visible, 'visible']}
-          title="抽屉标题"
-          destroyOnClose
-          containerStyle={{ paddingBottom: '30px' }}
-        >
+        <qm-drawer v-model={[this.visible, 'visible']} title="抽屉标题" destroyOnClose containerStyle={{ paddingBottom: '30px' }}>
           <div style="height: 1000px">asd</div>
           <div style="position: absolute; left: 0; bottom: 0; right: 0;">footer</div>
         </qm-drawer>
-        <qm-dialog
-          v-model={[this.visible2, 'visible']}
-          title="抽屉标题"
-          destroyOnClose
-          containerStyle={{ paddingBottom: '30px' }}
-        >
+        <qm-dialog v-model={[this.visible2, 'visible']} title="抽屉标题" destroyOnClose containerStyle={{ paddingBottom: '30px' }}>
           <div style="height: 1000px">asd</div>
           <div style="position: absolute; left: 0; bottom: 0; right: 0;">footer</div>
         </qm-dialog>

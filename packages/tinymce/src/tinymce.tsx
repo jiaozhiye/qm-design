@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-02-09 09:03:59
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-03 15:15:58
+ * @Last Modified time: 2021-03-06 08:40:38
  */
 import { defineComponent, PropType } from 'vue';
 import PropTypes from '../../_utils/vue-types';
@@ -32,10 +32,9 @@ export default defineComponent({
       headers: PropTypes.object.def({}),
       fixedSize: PropTypes.array.def([5, 4]),
     }),
+    tinymceScriptSrc: PropTypes.string,
     disabled: PropTypes.bool,
-    plugins: PropTypes.oneOfType([PropTypes.string, PropTypes.array]).def(
-      'lists image link media table textcolor wordcount contextmenu fullscreen'
-    ),
+    plugins: PropTypes.oneOfType([PropTypes.string, PropTypes.array]).def('lists image link media table textcolor wordcount contextmenu fullscreen'),
     toolbar: PropTypes.oneOfType([PropTypes.string, PropTypes.array]).def(
       'undo redo |  formatselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | lists link unlink image media table | removeformat | fullscreen'
     ),
@@ -72,7 +71,7 @@ export default defineComponent({
     },
   },
   render(): JSXNode {
-    const { initial, content, disabled, upload = {} } = this;
+    const { initial, content, disabled, tinymceScriptSrc, upload = {} } = this;
     const prefixCls = getPrefixCls('tinymce');
     const { $size } = useSize(this.$props);
     const cls = {
@@ -85,6 +84,7 @@ export default defineComponent({
       init: initial,
       modelValue: content,
       disabled,
+      tinymceScriptSrc,
       'onUpdate:modelValue': (val: string): void => {
         this.content = val;
         this.$emit('update:modelValue', val);
@@ -96,13 +96,8 @@ export default defineComponent({
     return (
       <div class={cls}>
         <Editor {...wrapProps} />
-        {!!upload.actionUrl && (
-          <UploadImg
-            action-url={upload.actionUrl}
-            headers={upload.headers}
-            fixed-size={upload.fixedSize}
-            onSuccess={this.successHandle}
-          />
+        {upload.actionUrl && (
+          <UploadImg action-url={upload.actionUrl} headers={upload.headers} fixed-size={upload.fixedSize} onSuccess={this.successHandle} />
         )}
       </div>
     );
