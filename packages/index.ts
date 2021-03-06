@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-02-08 16:39:21
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-05 11:26:22
+ * @Last Modified time: 2021-03-06 09:05:22
  */
 import type { App } from 'vue';
 import { ComponentSize, AnyObject } from './_utils/types';
@@ -27,6 +27,7 @@ import QmPrintItem from './print-item';
 import QmTinymce from './tinymce';
 import QmSplit from './split';
 import QmSplitPane from './split-pane';
+import QmCountup from './countup';
 
 import { use as locale, i18n } from './locale';
 import { version } from './version';
@@ -67,6 +68,7 @@ const components = [
   QmTinymce,
   QmSplit,
   QmSplitPane,
+  QmCountup,
 ];
 
 const install = (app: App, opt: InstallOptions, global: AnyObject<any> = {}): void => {
@@ -107,6 +109,7 @@ export {
   QmTinymce,
   QmSplit,
   QmSplitPane,
+  QmCountup,
   version,
   install,
   locale,

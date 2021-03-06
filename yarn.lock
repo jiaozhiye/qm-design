@@ -2478,6 +2478,11 @@ cosmiconfig@^7.0.0:
     path-type "^4.0.0"
     yaml "^1.10.0"
 
+countup.js@^2.0.7:
+  version "2.0.7"
+  resolved "https://registry.npm.taobao.org/countup.js/download/countup.js-2.0.7.tgz#56b72a87fc0ee3cadb38356c246ccac88fb0a8cc"
+  integrity sha1-Vrcqh/wO48rbODVsJGzKyI+wqMw=
+
 cp-cli@^2.0.0:
   version "2.0.0"
   resolved "https://registry.npm.taobao.org/cp-cli/download/cp-cli-2.0.0.tgz#0707ca60bcbf20884b16c2c110484263fa7f922d"
