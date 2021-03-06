@@ -2,9 +2,10 @@
  * @Author: 焦质晔
  * @Date: 2021-02-21 09:20:14
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-03 12:36:24
+ * @Last Modified time: 2021-03-06 11:15:25
  */
 import { VNode, Component, ComponentInternalInstance, Fragment } from 'vue';
+import { filterEmptyElement } from './util';
 
 export const getValidSlot = (vnodes: VNode[] = [], name: string): VNode[] => {
   const $slots: VNode[] = [];
@@ -24,14 +25,10 @@ export const getValidSlot = (vnodes: VNode[] = [], name: string): VNode[] => {
         $slots.push(node);
       }
     });
-  return $slots;
+  return filterEmptyElement($slots);
 };
 
-export const getInstanceFromSlot = (
-  vnode: VNode,
-  name: string,
-  instanceList: ComponentInternalInstance[] = []
-) => {
+export const getInstanceFromSlot = (vnode: VNode, name: string, instanceList: ComponentInternalInstance[] = []) => {
   Array.from((vnode.children || []) as ArrayLike<VNode>).forEach((node: VNode) => {
     let type = node.type;
     type = (type as Component).name || type;

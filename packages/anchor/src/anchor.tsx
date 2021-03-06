@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-02-09 09:03:59
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-04 18:04:12
+ * @Last Modified time: 2021-03-06 10:52:35
  */
 import { defineComponent, VNode, ComponentInternalInstance, PropType } from 'vue';
 import addEventListener from 'add-dom-event-listener';
@@ -55,17 +55,16 @@ export default defineComponent({
   mounted() {
     this.anchorItemInstances = this.getAnchorItems();
     this.distances = this.createDistances();
-    this.scrollEvent = addEventListener(
-      this.$refs[`scroll`],
-      'scroll',
-      throttle(this.scrollHandle, 20)
-    );
+    this.scrollEvent = addEventListener(this.$refs[`scroll`], 'scroll', throttle(this.scrollHandle, 20));
   },
   beforeUnmount() {
     this.scrollEvent?.remove();
   },
   methods: {
     getAnchorItems(): Array<ComponentInternalInstance> {
+      // this -> ctx 执行上下文
+      // instance -> 组件实例，有 uid, subTree 属性
+      // VNode -> 有 __v_isVNode 属性
       const { _: instance } = this;
       const { children } = instance.subTree;
       const content: VNode = Array.from(children as ArrayLike<VNode>).find(({ props }) => {
@@ -76,9 +75,7 @@ export default defineComponent({
     createDistances(): Array<number> {
       return !this.labelList?.length
         ? this.anchorItemInstances.map((x) => getOffsetTopDistance(x.ctx.$el, this.$refs[`scroll`]))
-        : this.labelList.map((x) =>
-            getOffsetTopDistance(document.getElementById(x.id), this.$refs[`scroll`])
-          );
+        : this.labelList.map((x) => getOffsetTopDistance(document.getElementById(x.id), this.$refs[`scroll`]));
     },
     findCurrentIndex(t: number): number {
       const top: number = Math.abs(t);
@@ -102,9 +99,7 @@ export default defineComponent({
       this.state = 'stop';
       this.timer && clearTimeout(this.timer);
       this.activeKey = index;
-      const $el: HTMLElement = !this.labelList?.length
-        ? this.anchorItemInstances[index].ctx.$el
-        : document.getElementById(this.labelList[index].id);
+      const $el: HTMLElement = !this.labelList?.length ? this.anchorItemInstances[index].ctx.$el : document.getElementById(this.labelList[index].id);
       scrollIntoView($el, {
         scrollMode: 'always',
         block: 'start',
@@ -126,17 +121,10 @@ export default defineComponent({
     return (
       <div class={cls}>
         <div class={`${prefixCls}__label`} style={{ width: getParserWidth(labelWidth) }}>
-          <AnchorNav
-            activeKey={activeKey}
-            anchor-items={anchorItemInstances}
-            label-list={labelList}
-            onTabClick={this.tabClickHandle}
-          />
+          <AnchorNav activeKey={activeKey} anchor-items={anchorItemInstances} label-list={labelList} onTabClick={this.tabClickHandle} />
         </div>
         <div ref="scroll" class={`${prefixCls}__container`}>
-          {!labelList?.length
-            ? getValidSlot(this.$slots.default?.(), ANCHOR_ITEM_NAME)
-            : this.$slots.default?.()}
+          {!labelList?.length ? getValidSlot(this.$slots.default?.(), ANCHOR_ITEM_NAME) : this.$slots.default?.()}
         </div>
       </div>
     );

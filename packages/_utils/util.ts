@@ -2,9 +2,9 @@
  * @Author: 焦质晔
  * @Date: 2021-02-08 19:28:31
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-06 08:18:47
+ * @Last Modified time: 2021-03-06 10:09:17
  */
-import { Ref, toRaw, Fragment, Comment, Text } from 'vue';
+import { Ref, toRaw, Fragment, Comment, Text, VNode } from 'vue';
 import { isObject, isArray, hasOwn, camelize } from '@vue/shared';
 import { isNumber, debounce, throttle } from 'lodash-es';
 import isServer from './isServer';
@@ -28,12 +28,16 @@ export const isFirefox = (): boolean => {
 
 export { isVNode } from 'vue';
 
-export const isEmptyElement = (c): boolean => {
-  return c.type === Comment || (c.type === Fragment && c.children.length === 0) || (c.type === Text && c.children.trim() === '');
+export const isEmptyElement = (c: VNode): boolean => {
+  return c.type === Comment || (c.type === Fragment && !c.children?.length) || (c.type === Text && (c.children as string).trim() === '');
 };
 
-export const isValidElement = (c): boolean => {
-  return c && c.__v_isVNode && typeof c.type !== 'symbol'; // remove text node
+export const isValidElement = (c: VNode): boolean => {
+  return c && (c as any).__v_isVNode && typeof c.type !== 'symbol'; // remove text node
+};
+
+export const filterEmptyElement = (children: Array<VNode> = []): Array<VNode> => {
+  return children.filter((c) => !isEmptyElement(c));
 };
 
 export { hasOwn, camelize };

@@ -182,6 +182,7 @@ export default defineComponent({
   render(): VNode {
     return (
       <>
+        <qm-countup endValue={2020} />
         <qm-split direction="vertical" style="height: 300px">
           <qm-split-pane>asdasd</qm-split-pane>
           <qm-split-pane>zxczxc</qm-split-pane>
