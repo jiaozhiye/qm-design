@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-02-08 19:28:20
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-06 08:19:36
+ * @Last Modified time: 2021-03-08 12:35:40
  */
 import { camelize, isObject } from '@vue/shared';
 import isServer from './isServer';
@@ -186,7 +186,7 @@ export const getParentNode = (el: HTMLElement, selector: string): Nullable<HTMLE
  * @param {HTMLNode} container 目标节点
  * @returns boolean
  */
-export const contains = (container: HTMLElement, el: HTMLElement): boolean => {
+export const contains = (el: HTMLElement, container: HTMLElement): boolean => {
   if (isServer || !el || !container) return false;
   let parent = el;
 

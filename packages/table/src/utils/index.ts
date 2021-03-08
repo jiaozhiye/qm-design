@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-03-08 08:28:55
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-08 09:23:32
+ * @Last Modified time: 2021-03-08 13:01:58
  */
 import { get, set, transform, intersection, isEqual, isObject } from 'lodash-es';
 import { stringify, array_format } from '../filter-sql';
@@ -130,7 +130,7 @@ export const deepFindRowKey = (rowKeys, mark) => {
 };
 
 // 所有 rowKey
-export const getAllRowKeys = (data, getRowKey, disabled: AnyFunction<boolean>) => {
+export const getAllRowKeys = (data, getRowKey, disabled?: AnyFunction<boolean>) => {
   const result = [];
   data.forEach((record) => {
     if (disabled?.(record)) return;
@@ -207,6 +207,23 @@ export const convertToRows = (originColumns) => {
   return rows;
 };
 
+// 获取元素相对于 目标祖先元素 的位置
+export const getNodeOffset = (el, container, rest = { left: 0, top: 0 }) => {
+  if (el) {
+    const parentElem = el.parentNode;
+    rest.top += el.offsetTop;
+    rest.left += el.offsetLeft;
+    if (parentElem && parentElem !== document.documentElement && parentElem !== document.body) {
+      rest.top -= parentElem.scrollTop;
+      rest.left -= parentElem.scrollLeft;
+    }
+    if (container && (el === container || el.offsetParent === container) ? 0 : el.offsetParent) {
+      return getNodeOffset(el.offsetParent, container, rest);
+    }
+  }
+  return rest;
+};
+
 // 格式化 DOM 元素高度
 export const parseHeight = (height) => {
   if (typeof height === 'number') {
@@ -216,7 +233,7 @@ export const parseHeight = (height) => {
     if (/^\d+(?:px)?$/.test(height)) {
       return Number.parseInt(height, 10);
     }
-    return height;
+    return Number(height);
   }
   return null;
 };
@@ -241,7 +258,7 @@ export const getCellValue = (record, dataIndex) => {
 };
 
 // 设置单元格的数据
-export const setCellValue = (record, dataIndex, val = '', precision) => {
+export const setCellValue = (record, dataIndex, val, precision?: number) => {
   val = val ?? '';
   if (precision >= 0 && val !== '') {
     val = Number(val).toFixed(precision);

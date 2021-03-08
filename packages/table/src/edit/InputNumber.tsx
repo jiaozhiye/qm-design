@@ -2,21 +2,18 @@
  * @Author: 焦质晔
  * @Date: 2020-08-11 08:19:36
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-08 10:26:07
+ * @Last Modified time: 2021-03-08 10:27:42
  */
 import { defineComponent } from 'vue';
-import { JSXNode } from '../../_utils/types';
+import { JSXNode } from '../../../_utils/types';
+import PropTypes from '../../../_utils/vue-types';
 
-import PropTypes from '../../_utils/vue-types';
-import { useSize } from '../../hooks/useSize';
+import { useSize } from '../../../hooks/useSize';
 
 export default defineComponent({
   name: 'InputNumber',
-  componentName: 'InputNumber',
-  inject: ['elFormItem'],
-  emits: ['update:modelValue', 'change'],
   props: {
-    modelValue: PropTypes.number,
+    modelValue: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
     size: PropTypes.string,
     min: PropTypes.number.def(0),
     max: PropTypes.number,
@@ -25,11 +22,7 @@ export default defineComponent({
     precision: PropTypes.number,
     controls: PropTypes.bool.def(false),
     placeholder: PropTypes.string,
-    clearable: PropTypes.bool.def(false),
-    readonly: PropTypes.bool.def(false),
     disabled: PropTypes.bool.def(false),
-    onChange: PropTypes.func,
-    onKeydown: PropTypes.func,
   },
   data() {
     return {
@@ -37,61 +30,60 @@ export default defineComponent({
     };
   },
   computed: {
-    minDisabled(): boolean {
+    minDisabled() {
       return this.currentValue <= this.min;
     },
-    maxDisabled(): boolean {
+    maxDisabled() {
       return this.currentValue >= this.max;
     },
   },
   watch: {
     modelValue: {
-      handler(next: number): void {
-        this.setValueHandle(next);
+      handler(val) {
+        this.setValueHandle(val);
       },
       immediate: true,
     },
   },
   methods: {
-    setValueHandle(val: number | string): void {
+    setValueHandle(val) {
       val = val ?? '';
       if (this.precision >= 0 && val !== '') {
         val = Number(val).toFixed(this.precision);
       }
-      this.currentValue = val.toString();
+      this.currentValue = val;
     },
-    emitEventHandle(val: number | string): void {
+    emitEventHandle(val) {
       val = val !== '' ? Number(val) : undefined;
-      this.$emit('update:modelValue', val);
+      this.$emit('input', val);
       this.$emit('change', val);
-      this.elFormItem.formItemMitt?.emit('el.form.change', [val]);
     },
-    increaseHandle(): void {
+    increaseHandle() {
       if (this.maxDisabled) return;
-      let val: number = Number(this.currentValue) + this.step;
+      let val = Number(this.currentValue) + this.step;
       val = val > this.max ? this.max : val;
       this.setValueHandle(val);
       this.emitEventHandle(val);
     },
-    decreaseHanle(): void {
+    decreaseHanle() {
       if (this.minDisabled) return;
-      let val: number = Number(this.currentValue) - this.step;
+      let val = Number(this.currentValue) - this.step;
       val = val < this.min ? this.min : val;
       this.setValueHandle(val);
       this.emitEventHandle(val);
     },
-    blur(): void {
-      this.elFormItem.formItemMitt?.emit('el.form.blur', [this.currentValue]);
-    },
-    focus(): void {
+    focus() {
       this.$refs['input']?.focus();
     },
-    select(): void {
+    blur() {
+      this.$refs['input']?.blur();
+    },
+    select() {
       this.$refs['input']?.select();
     },
   },
   render(): JSXNode {
-    const { currentValue, min, max, maxlength, precision, controls, placeholder, clearable, readonly, disabled, minDisabled, maxDisabled } = this;
+    const { currentValue, min, max, maxlength, precision, controls, placeholder, disabled, minDisabled, maxDisabled } = this;
     const { $size } = useSize(this.$props);
     const regExp = /^-?(0|[1-9][0-9]*)(\.[0-9]*)?$/;
     const cls = [
@@ -107,10 +99,11 @@ export default defineComponent({
       modelValue: currentValue,
       'onUpdate:modelValue': (val) => {
         let isPassed = (!Number.isNaN(val) && regExp.test(val)) || val === '' || val === '-';
+        // 数值类型校验
         if (!isPassed) return;
         // 不允许是负数
         if (min === 0 && val === '-') return;
-        let chunks: string[] = val.split('.');
+        let chunks = val.split('.');
         // 判断最大长度
         if (chunks[0].length > maxlength) return;
         // 判断整型
@@ -136,10 +129,7 @@ export default defineComponent({
         <el-input
           ref="input"
           {...wrapProps}
-          validateEvent={false}
           placeholder={placeholder}
-          clearable={clearable}
-          readonly={readonly}
           disabled={disabled}
           onChange={(val) => {
             // 处理 val 值得特殊情况
@@ -153,10 +143,6 @@ export default defineComponent({
             }
             this.setValueHandle(val);
             this.emitEventHandle(val);
-          }}
-          onBlur={this.blur}
-          onKeydown={(ev: KeyboardEvent): void => {
-            this.$emit('keydown', ev);
           }}
         />
       </div>
