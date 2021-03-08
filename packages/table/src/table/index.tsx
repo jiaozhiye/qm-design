@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-02-09 09:03:59
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-08 12:31:00
+ * @Last Modified time: 2021-03-08 13:39:02
  */
 import { defineComponent } from 'vue';
 import { JSXNode } from '../../../_utils/types';
@@ -28,6 +28,21 @@ import localStorageMixin from '../local-storage';
 import layoutMethods from './layout-methods';
 import coreMethods from './core-methods';
 import interfaceMethods from './interface-methods';
+
+import TableHeader from '../header';
+import TableBody from '../body';
+import TableFooter from '../footer';
+import Pager from '../pager';
+import SpinLoading from '../../../Spin';
+import EmptyContent from '../empty';
+import Alert from '../alert';
+import ColumnFilter from '../column-filter';
+import GroupSummary from '../group-summary';
+import HighSearch from '../high-search';
+import FullScreen from '../full-screen';
+import Export from '../export';
+import PrintTable from '../print';
+import Reload from '../reload';
 
 export default defineComponent({
   name: 'QmTable',
@@ -462,60 +477,48 @@ export default defineComponent({
     };
     const tableHeaderProps = {
       ref: 'tableHeader',
-      props: {
-        tableColumns,
-        flattenColumns,
-        sortDirections,
-      },
+      tableColumns,
+      flattenColumns,
+      sortDirections,
     };
     const tableBodyProps = {
       ref: 'tableBody',
-      props: {
-        tableData,
-        flattenColumns,
-        rowStyle,
-        cellStyle,
-      },
+      tableData,
+      flattenColumns,
+      rowStyle,
+      cellStyle,
     };
     const tableFooterProps = {
       ref: 'tableFooter',
-      props: {
-        flattenColumns,
-      },
+      flattenColumns,
     };
     const alertProps = {
-      props: {
-        total,
-        selectionKeys,
-      },
+      total,
+      selectionKeys,
     };
     const printProps = tablePrint
       ? {
-          props: {
-            tableColumns,
-            flattenColumns,
-            showHeader,
-            showFooter,
-            showLogo: tablePrint.showLogo ?? !0,
-            showSign: tablePrint.showSign ?? !1,
-          },
+          tableColumns,
+          flattenColumns,
+          showHeader,
+          showFooter,
+          showLogo: tablePrint.showLogo ?? !0,
+          showSign: tablePrint.showSign ?? !1,
         }
       : null;
     const exportProps = exportExcel
       ? {
-          props: {
-            tableColumns,
-            flattenColumns,
-            fileName: exportExcel.fileName,
-            fetch: !!fetch
-              ? {
-                  api: fetch.api,
-                  params: fetchParams,
-                  dataKey: fetch.dataKey,
-                  total,
-                }
-              : null,
-          },
+          tableColumns,
+          flattenColumns,
+          fileName: exportExcel.fileName,
+          fetch: !!fetch
+            ? {
+                api: fetch.api,
+                params: fetchParams,
+                dataKey: fetch.dataKey,
+                total,
+              }
+            : null,
         }
       : null;
     const pagerProps = {
@@ -552,9 +555,9 @@ export default defineComponent({
             {/* 导出 */}
             {exportExcel && <Export {...exportProps} />}
             {/* 高级检索 */}
-            {isSuperSearch && <HighSearch columns={flattenColumns} />}
+            {/* {isSuperSearch && <HighSearch columns={flattenColumns} />} */}
             {/* 分组汇总 */}
-            {isGroupSummary && <GroupSummary columns={flattenColumns} />}
+            {/* {isGroupSummary && <GroupSummary columns={flattenColumns} />} */}
             {/* 列定义 */}
             {showColumnDefine && <ColumnFilter columns={columns} />}
           </div>

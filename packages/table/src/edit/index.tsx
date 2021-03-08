@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-03-22 14:34:21
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-08 12:43:12
+ * @Last Modified time: 2021-03-08 14:02:15
  */
 import { isEqual, isFunction, isObject, get, merge, cloneDeep } from 'lodash';
 import dayjs from 'dayjs';
@@ -11,8 +11,8 @@ import { getCellValue, setCellValue, deepFindColumn, sleep } from '../utils';
 import Checkbox from '../checkbox';
 import InputText from './InputText';
 import InputNumber from './InputNumber';
-import SearchHelper from '../../../SearchHelper';
-import BaseDialog from '../../../BaseDialog';
+// import SearchHelper from '../../../SearchHelper';
+// import BaseDialog from '../../../BaseDialog';
 
 const noop = () => {};
 const trueNoop = () => true;
@@ -322,27 +322,23 @@ export default {
         const { table, initialValue = {}, beforeFetch = (k) => k } = helper;
         return new Promise(async (resolve, reject) => {
           this.shMatching = !0;
-          if (process.env.MOCK_DATA === 'true') {
-            await sleep(500);
-            const { data } = cloneDeep(require('@/mock/tableData').default);
-            resolve(data.items);
-          } else {
-            const params = merge({}, table.fetch?.params, beforeFetch({ ...initialValue, ...setHelperFilterValues(val) }), {
-              currentPage: 1,
-              pageSize: 500,
-            });
-            try {
-              const res = await table.fetch.api(params);
-              if (res.code === 200) {
-                const list = get(res.data, table.fetch.dataKey) ?? (Array.isArray(res.data) ? res.data : []);
-                resolve(list);
-              } else {
-                reject();
-              }
-            } catch (err) {
+
+          const params = merge({}, table.fetch?.params, beforeFetch({ ...initialValue, ...setHelperFilterValues(val) }), {
+            currentPage: 1,
+            pageSize: 500,
+          });
+          try {
+            const res = await table.fetch.api(params);
+            if (res.code === 200) {
+              const list = get(res.data, table.fetch.dataKey) ?? (Array.isArray(res.data) ? res.data : []);
+              resolve(list);
+            } else {
               reject();
             }
+          } catch (err) {
+            reject();
           }
+
           this.shMatching = !1;
         });
       };

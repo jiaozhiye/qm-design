@@ -2,11 +2,11 @@
  * @Author: 焦质晔
  * @Date: 2020-03-26 11:44:24
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-08 13:20:32
+ * @Last Modified time: 2021-03-08 13:59:57
  */
 import { defineComponent } from 'vue';
 import { _ } from 'lodash-es';
-import Cookies from 'js-cookie';
+// import Cookies from 'js-cookie';
 import { convertToRows, deepFindColumn, filterTableColumns, getCellValue } from '../utils';
 import config from '../config';
 import { t } from '../../../locale';

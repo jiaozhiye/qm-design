@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-02-28 23:01:43
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-08 12:44:15
+ * @Last Modified time: 2021-03-08 13:53:23
  */
 import { defineComponent } from 'vue';
 import addEventListener from 'add-dom-event-listener';
@@ -14,7 +14,7 @@ import { isEqual, isFunction, isObject } from 'lodash';
 import formatMixin from './format';
 import keyboardMixin from './keyboard';
 
-import Draggable from '../draggable';
+import Draggable from 'vuedraggable';
 import Expandable from '../expandable';
 import Selection from '../selection';
 import CellEdit from '../edit';
