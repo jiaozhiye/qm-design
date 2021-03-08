@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-02-28 23:01:43
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-08 15:05:49
+ * @Last Modified time: 2021-03-08 19:03:38
  */
 import { defineComponent } from 'vue';
 import addEventListener from 'add-dom-event-listener';
@@ -408,7 +408,7 @@ export default defineComponent({
         {this.renderBodyXSpace()}
         <table class="v-table--body" cellspacing="0" cellpadding="0" border="0" style={{ width: bodyWidth }}>
           {this.renderColgroup()}
-          {!isDraggable ? <tbody>{this.renderRows(tableData)}</tbody> : <Draggable {...dragProps}>{this.renderRows(tableData)}</Draggable>}
+          {!isDraggable ? <tbody>{this.renderRows(tableData)}</tbody> : null}
         </table>
       </div>
     );

@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-03-09 13:18:43
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-08 15:12:28
+ * @Last Modified time: 2021-03-08 19:21:10
  */
 import { isEmpty } from '../../../_utils/util';
 import { validateNumber, stringToNumber } from '../utils';
@@ -384,7 +384,7 @@ export default {
       <div class="v-cell--filter" title={t('qm.table.filter.text')}>
         <el-popover
           v-model={[this.visible, 'visible']}
-          trigger="manual"
+          trigger="click"
           placement="bottom-start"
           transition="el-zoom-in-top"
           show-arrow={false}

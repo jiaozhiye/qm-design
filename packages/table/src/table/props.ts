@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-02-28 23:04:58
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-08 08:09:44
+ * @Last Modified time: 2021-03-08 16:59:20
  */
 import { PropType } from 'vue';
 import PropTypes from '../../../_utils/vue-types';
@@ -207,7 +207,7 @@ export default {
   webPagination: PropTypes.bool.def(false),
   // 分页配置参数
   paginationConfig: PropTypes.shape({
-    layouts: PropTypes.array, // 分页组件布局
+    layout: PropTypes.string, // 分页组件布局
     currentPage: PropTypes.number, // 当前页数
     pageSize: PropTypes.number, // 每页显示条目个数
     pagerCount: PropTypes.number, // 页码按钮的数量
@@ -215,8 +215,6 @@ export default {
   }),
   // 是否显示表格顶部信息
   showAlert: PropTypes.bool.def(true),
-  // 表格顶部信息放置的位置
-  alertPosition: PropTypes.oneOf(['top', 'bottom']).def('top'),
   // 顶部按钮插槽的对其方式
   topSpaceAlign: PropTypes.oneOf(['left', 'right']).def('right'),
   // 是否显示全屏按钮

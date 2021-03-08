@@ -2,14 +2,13 @@
  * @Author: 焦质晔
  * @Date: 2021-02-09 09:03:59
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-08 15:07:49
+ * @Last Modified time: 2021-03-08 18:51:00
  */
 import { defineComponent } from 'vue';
 import { JSXNode } from '../../../_utils/types';
 
 import Store from '../store';
 import { isChrome, isIE, noop } from '../../../_utils/util';
-import { getPrefixCls } from '../../../_utils/prefix';
 import { useSize } from '../../../hooks/useSize';
 import baseProps from './props';
 import config from '../config';
@@ -28,21 +27,7 @@ import localStorageMixin from '../local-storage';
 import layoutMethods from './layout-methods';
 import coreMethods from './core-methods';
 import interfaceMethods from './interface-methods';
-
-import TableHeader from '../header';
-import TableBody from '../body';
-import TableFooter from '../footer';
-import Pager from '../pager';
-import SpinLoading from '../../../Spin';
-import EmptyContent from '../empty';
-import Alert from '../alert';
-import ColumnFilter from '../column-filter';
-import GroupSummary from '../group-summary';
-import HighSearch from '../high-search';
-import FullScreen from '../full-screen';
-import Export from '../export';
-import PrintTable from '../print';
-import Reload from '../reload';
+import renderMethods from './render-table';
 
 export default defineComponent({
   name: 'QmTable',
@@ -68,7 +53,7 @@ export default defineComponent({
       // 高级检索的条件
       superFilters: [],
       // 列汇总条件
-      columnSummaryQuery: this.createColumnSummary(),
+      columnSummaryQuery: '',
     });
     return {
       // 组件 store 仓库
@@ -262,7 +247,7 @@ export default defineComponent({
         return { ...result, height: `${fullHeight}px` };
       }
       if (height) {
-        return { ...result, height: height !== 'auto' ? `${height}px` : `${autoHeight}px` };
+        return { ...result, height: this.height !== 'auto' ? `${height}px` : `${autoHeight}px` };
       }
       return result;
     },
@@ -373,6 +358,7 @@ export default defineComponent({
     },
   },
   created() {
+    this.columnSummaryQuery = this.createColumnSummary();
     if (!this.isFetch) {
       this.createTableData(this.dataSource);
     } else {
@@ -399,197 +385,18 @@ export default defineComponent({
     ...coreMethods,
     ...layoutMethods,
     ...interfaceMethods,
-    getRowKey(row, index) {
+    ...renderMethods,
+    getRowKey(row: Record<string, any>, index: number): string {
       const { rowKey } = this;
-      const key = typeof rowKey === 'function' ? rowKey(row, index) : row[rowKey];
+      const key: string = typeof rowKey === 'function' ? rowKey(row, index) : row[rowKey];
       if (key === undefined) {
         warn('Table', 'Each record in table should have a unique `key` prop, or set `rowKey` to an unique primary key.');
-        return index;
+        return index.toString();
       }
       return key;
     },
-    renderBorderLine() {
-      return this.bordered && <div class="v-table--border-line" />;
-    },
-    renderResizableLine() {
-      return this.resizable && <div ref="resizable-bar" class="v-table--resizable-bar" />;
-    },
   },
   render(): JSXNode {
-    const {
-      isFullScreen,
-      tableData,
-      columns,
-      tableColumns,
-      flattenColumns,
-      tableSize,
-      showLoading,
-      bordered,
-      tableStyles,
-      rowStyle,
-      cellStyle,
-      showHeader,
-      showFooter,
-      showPagination,
-      isGroup,
-      isHeadSorter,
-      isHeadFilter,
-      isTableEmpty,
-      sortDirections,
-      scrollX,
-      scrollY,
-      scrollYLoad,
-      isPingLeft,
-      isPingRight,
-      leftFixedColumns,
-      rightFixedColumns,
-      fetch,
-      fetchParams,
-      pagination,
-      paginationConfig,
-      total,
-      selectionKeys,
-      showAlert,
-      alertPosition,
-      topSpaceAlign,
-      showFullScreen,
-      showRefresh,
-      tablePrint,
-      exportExcel,
-      isSuperSearch,
-      isGroupSummary,
-      showColumnDefine,
-    } = this;
-    const prefixCls = 'v-table';
-    const vWrapperCls = { [`${prefixCls}--maximize`]: isFullScreen };
-    const vTableCls = {
-      [prefixCls]: true,
-      [`${prefixCls}--medium`]: tableSize === 'medium',
-      [`${prefixCls}--small`]: tableSize === 'small',
-      [`${prefixCls}--mini`]: tableSize === 'mini',
-      [`is--border`]: bordered,
-      [`is--fixed`]: leftFixedColumns.length || rightFixedColumns.length,
-      [`is--group`]: isGroup,
-      [`is--sortable`]: isHeadSorter,
-      [`is--filterable`]: isHeadFilter,
-      [`is--empty`]: isTableEmpty,
-      [`show--head`]: showHeader,
-      [`show--foot`]: showFooter,
-      [`ping--left`]: isPingLeft,
-      [`ping--right`]: isPingRight,
-      [`scroll--x`]: scrollX,
-      [`scroll--y`]: scrollY,
-      [`virtual--y`]: scrollYLoad,
-    };
-    const tableHeaderProps = {
-      ref: 'tableHeader',
-      tableColumns,
-      flattenColumns,
-      sortDirections,
-    };
-    const tableBodyProps = {
-      ref: 'tableBody',
-      tableData,
-      flattenColumns,
-      rowStyle,
-      cellStyle,
-    };
-    const tableFooterProps = {
-      ref: 'tableFooter',
-      flattenColumns,
-    };
-    const alertProps = {
-      total,
-      selectionKeys,
-    };
-    const printProps = tablePrint
-      ? {
-          tableColumns,
-          flattenColumns,
-          showHeader,
-          showFooter,
-          showLogo: tablePrint.showLogo ?? !0,
-          showSign: tablePrint.showSign ?? !1,
-        }
-      : null;
-    const exportProps = exportExcel
-      ? {
-          tableColumns,
-          flattenColumns,
-          fileName: exportExcel.fileName,
-          fetch: !!fetch
-            ? {
-                api: fetch.api,
-                params: fetchParams,
-                dataKey: fetch.dataKey,
-                total,
-              }
-            : null,
-        }
-      : null;
-    const pagerProps = {
-      ref: 'pager',
-      props: Object.assign({}, paginationConfig, {
-        size: tableSize,
-        total,
-        currentPage: pagination.currentPage,
-        pageSize: pagination.pageSize,
-        extraRender: () => (showAlert && alertPosition === 'bottom' ? <Alert {...alertProps} /> : null),
-      }),
-      on: {
-        change: this.pagerChangeHandle,
-      },
-    };
-    return (
-      <div class={vWrapperCls}>
-        <div ref="v-top-info" class="v-top-info">
-          <div class="v-space">
-            {/* 顶部信息 */}
-            {showAlert && alertPosition === 'top' && <Alert {...alertProps} />}
-            <div class="v-slot" style={{ textAlign: topSpaceAlign }}>
-              {/* 默认槽口 */}
-              {this.$slots[`default`]}
-            </div>
-          </div>
-          <div class="v-actions">
-            {/* 全屏 */}
-            {showFullScreen && <FullScreen />}
-            {/* 刷新 */}
-            {showRefresh && !!fetch && <Reload />}
-            {/* 打印 */}
-            {tablePrint && <PrintTable {...printProps} />}
-            {/* 导出 */}
-            {exportExcel && <Export {...exportProps} />}
-            {/* 高级检索 */}
-            {/* {isSuperSearch && <HighSearch columns={flattenColumns} />} */}
-            {/* 分组汇总 */}
-            {/* {isGroupSummary && <GroupSummary columns={flattenColumns} />} */}
-            {/* 列定义 */}
-            {showColumnDefine && <ColumnFilter columns={columns} />}
-          </div>
-        </div>
-        <SpinLoading spinning={showLoading} tip="Loading...">
-          <div ref="v-table" class={vTableCls} style={tableStyles}>
-            {/* 主要内容 */}
-            <div class="v-table--main-wrapper">
-              {/* 头部 */}
-              {showHeader && <TableHeader {...tableHeaderProps} />}
-              {/* 表格体 */}
-              <TableBody {...tableBodyProps} />
-              {/* 底部 */}
-              {showFooter && <TableFooter {...tableFooterProps} />}
-            </div>
-            {/* 边框线 */}
-            {this.renderBorderLine()}
-            {/* 空数据 */}
-            {isTableEmpty && <EmptyContent />}
-            {/* 列宽线 */}
-            {this.renderResizableLine()}
-          </div>
-        </SpinLoading>
-        {/* 分页 */}
-        {showPagination && <Pager {...pagerProps} />}
-      </div>
-    );
+    return this.renderTable();
   },
 });

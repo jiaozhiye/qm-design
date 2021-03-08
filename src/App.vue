@@ -206,17 +206,12 @@ export default defineComponent({
   render(): VNode {
     return (
       <>
-        <qm-table columns={this.columns} dataSource={this.list} rowKey="id" columnsChange={(columns) => (this.columns = columns)}></qm-table>
-        <qm-form
-          uniqueKey="jzy_filter"
-          formType="search"
-          list={this.formList}
-          initialValue={{}}
-          onFinish={this.finish}
-          fieldsChange={(list) => {
-            this.formList = list;
-          }}
-        ></qm-form>
+        <qm-table
+          columns={this.columns}
+          dataSource={this.list}
+          rowKey={(row) => row.id}
+          columnsChange={(columns) => (this.columns = columns)}
+        ></qm-table>
         {/* <qm-countup endValue={2020} />
         <qm-split direction="vertical" style="height: 300px">
           <qm-split-pane>asdasd</qm-split-pane>

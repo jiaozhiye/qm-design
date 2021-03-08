@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-03-18 10:22:01
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-08 13:11:17
+ * @Last Modified time: 2021-03-08 16:58:44
  */
 import { defineComponent } from 'vue';
 import { t } from '../../../locale';
@@ -26,8 +26,8 @@ export default defineComponent({
     },
   },
   render() {
-    const { tableSize, alertPosition, total, rowSelection, selectionKeys } = this.$$table;
-    const cls = [`v-alert`, `size--${tableSize}`, `position--${alertPosition}`];
+    const { tableSize, total, rowSelection, selectionKeys } = this.$$table;
+    const cls = [`v-alert`, `size--${tableSize}`];
     return (
       <div class={cls}>
         <i class="iconfont icon-info-circle-fill" />

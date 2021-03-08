@@ -20,7 +20,7 @@ const config = {
   pagination: {
     currentPage: 1,
     pageSize: 20,
-    sizes: [10, 20, 30, 40, 50],
+    pageSizeOptions: [10, 20, 30, 40, 50],
   },
   // 汇总
   groupSummary: {

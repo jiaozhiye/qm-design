@@ -2,9 +2,9 @@
  * @Author: 焦质晔
  * @Date: 2020-03-17 10:29:47
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-08 14:01:34
+ * @Last Modified time: 2021-03-08 19:19:16
  */
-import { defineComponent } from 'vue';
+import { defineComponent, reactive } from 'vue';
 import Draggable from 'vuedraggable';
 import Checkbox from '../checkbox';
 
@@ -94,63 +94,103 @@ export default defineComponent({
       );
     },
     renderColumnFilter() {
-      const { leftFixedColumns, mainColumns, rightFixedColumns, dragOptions } = this;
+      const { leftFixedColumns, mainColumns, rightFixedColumns } = this;
       const cls = [`v-column-filter--wrap`, `size--${this.$$table.tableSize}`];
+
+      const leftDragProps = {
+        modelValue: leftFixedColumns,
+        itemKey: 'dataIndex',
+        animation: 200,
+        handle: '.left-handle',
+        tag: 'transition-group',
+        componentData: {
+          tag: 'ul',
+          type: 'transition-group',
+        },
+        'onUpdate:modelValue': (val) => {
+          this.leftFixedColumns = reactive(val);
+        },
+        onChange: this.changeHandle,
+      };
+
+      const mainDragProps = {
+        modelValue: mainColumns,
+        itemKey: 'dataIndex',
+        animation: 200,
+        handle: '.main-handle',
+        tag: 'transition-group',
+        componentData: {
+          tag: 'ul',
+          type: 'transition-group',
+        },
+        'onUpdate:modelValue': (val) => {
+          this.mainColumns = reactive(val);
+        },
+        onChange: this.changeHandle,
+      };
+
+      const rightDragProps = {
+        modelValue: rightFixedColumns,
+        itemKey: 'dataIndex',
+        animation: 200,
+        handle: '.right-handle',
+        tag: 'transition-group',
+        componentData: {
+          tag: 'ul',
+          type: 'transition-group',
+        },
+        'onUpdate:modelValue': (val) => {
+          this.rightFixedColumns = reactive(val);
+        },
+        onChange: this.changeHandle,
+      };
+
       return (
         <div class={cls}>
           <div class="left">
             <Draggable
-              value={leftFixedColumns}
-              handle=".left-handle"
-              options={dragOptions}
-              onInput={(list) => {
-                this.leftFixedColumns = list;
+              {...leftDragProps}
+              v-slots={{
+                item: ({ element: column }): JSXNode => {
+                  return this.renderListItem(column, 'left');
+                },
               }}
-              onChange={this.changeHandle}
-            >
-              <transition-group type="transition">{leftFixedColumns.map((column) => this.renderListItem(column, 'left'))}</transition-group>
-            </Draggable>
+            />
           </div>
           <div class="divider"></div>
           <div class="main">
             <Draggable
-              value={mainColumns}
-              handle=".main-handle"
-              options={dragOptions}
-              onInput={(list) => {
-                this.mainColumns = list;
+              {...mainDragProps}
+              v-slots={{
+                item: ({ element: column }): JSXNode => {
+                  return this.renderListItem(column, 'main');
+                },
               }}
-              onChange={this.changeHandle}
-            >
-              <transition-group type="transition">{mainColumns.map((column) => this.renderListItem(column, 'main'))}</transition-group>
-            </Draggable>
+            />
           </div>
           <div class="divider"></div>
           <div class="right">
             <Draggable
-              value={rightFixedColumns}
-              handle=".right-handle"
-              options={dragOptions}
-              onInput={(list) => {
-                this.rightFixedColumns = list;
+              {...rightDragProps}
+              v-slots={{
+                item: ({ element: column }): JSXNode => {
+                  return this.renderListItem(column, 'right');
+                },
               }}
-              onChange={this.changeHandle}
-            >
-              <transition-group type="transition">{rightFixedColumns.map((column) => this.renderListItem(column, 'right'))}</transition-group>
-            </Draggable>
+            />
           </div>
         </div>
       );
     },
   },
-  render() {
+  render(): JSXNode {
     const { visible, showButtonText } = this;
     const cls = [`v-column-filter`, `size--${this.$$table.tableSize}`];
     return (
       <div class={cls}>
         <el-popover
           v-model={[this.visible, 'visible']}
-          trigger="manual"
+          trigger="click"
           placement="bottom-start"
           transition="el-zoom-in-top"
           append-to-body={true}

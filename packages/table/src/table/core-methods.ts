@@ -2,10 +2,10 @@
  * @Author: 焦质晔
  * @Date: 2020-03-01 15:20:02
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-08 14:48:07
+ * @Last Modified time: 2021-03-08 17:57:17
  */
 import { get } from 'lodash-es';
-import { columnsFlatMap, difference, hasOwn, getCellValue, setCellValue } from '../utils';
+import { difference, hasOwn, getCellValue, setCellValue } from '../utils';
 import { throttle, errorCapture, isChrome, isIE, noop } from '../../../_utils/util';
 import config from '../config';
 
@@ -276,7 +276,7 @@ export default {
   },
   // 设置列汇总条件
   createColumnSummary() {
-    return columnsFlatMap(this.columns)
+    return this.flattenColumns
       .filter((x) => x.summation?.dataKey)
       .map((x) => `sum|${x.dataIndex}`)
       .join(',');
