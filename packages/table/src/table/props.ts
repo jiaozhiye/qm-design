@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-02-28 23:04:58
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-06 17:09:56
+ * @Last Modified time: 2021-03-08 08:09:44
  */
 import { PropType } from 'vue';
 import PropTypes from '../../../_utils/vue-types';
@@ -57,7 +57,7 @@ const columnItem = {
       dataKey: PropTypes.string, // 服务端合计的数据字段名(路径)
       unit: PropTypes.string, // 合计字段的单位
       render: PropTypes.func, // 自定义渲染方法
-    }),
+    }).loose,
   ]).def(false), // 分组汇总
   render: PropTypes.func, // 列渲染方法，参数: text, row, column, rowIndex, cellIndex; 返回值类型: JSX
   extraRender: PropTypes.func, // 额外的渲染方法，用于处理导出或打印单元格的值，参数: text, row, column, rowIndex, cellIndex; 返回值类型: string/number

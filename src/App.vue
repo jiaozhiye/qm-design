@@ -182,8 +182,8 @@ export default defineComponent({
   render(): VNode {
     return (
       <>
-        <qm-countup endValue={2020} />
         <qm-table></qm-table>
+        {/* <qm-countup endValue={2020} />
         <qm-split direction="vertical" style="height: 300px">
           <qm-split-pane>asdasd</qm-split-pane>
           <qm-split-pane>zxczxc</qm-split-pane>
@@ -272,7 +272,7 @@ export default defineComponent({
         <qm-print-group ref="gprint">
           <qm-print-item label="打印1" dataSource={[1]} templateRender={PrintTemplate} />
           <qm-print-item label="打印2" dataSource={[]} templateRender={PrintTemplate} />
-        </qm-print-group>
+        </qm-print-group> */}
       </>
     );
   },
