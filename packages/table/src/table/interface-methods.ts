@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-04-14 16:03:27
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-08 10:53:58
+ * @Last Modified time: 2021-03-08 14:48:07
  */
 import { intersection, isObject, isFunction } from 'lodash-es';
 import { getCellValue, setCellValue, tableDataFlatMap } from '../utils';
@@ -102,7 +102,8 @@ export default {
         setCellValue(row, dataIndex, getCellValue(row, dataIndex));
       });
       // 数据索引
-      this.$set(row, 'index', curIndex);
+      // this.$set(row, 'index', curIndex);
+      row.index = curIndex;
       // 分页索引
       row.pageIndex = this.createPageIndex(curIndex);
       // 添加表格操作记录

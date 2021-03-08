@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-03-01 15:20:02
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-08 11:13:14
+ * @Last Modified time: 2021-03-08 14:48:07
  */
 import { get } from 'lodash-es';
 import { columnsFlatMap, difference, hasOwn, getCellValue, setCellValue } from '../utils';
@@ -21,7 +21,8 @@ export default {
           record.children = resetRowData(record.children);
         }
         // 数据索引
-        this.$set(record, 'index', index);
+        // this.$set(record, 'index', index);
+        record.index = index;
         // 分页索引
         record.pageIndex = this.createPageIndex(index);
         return record;

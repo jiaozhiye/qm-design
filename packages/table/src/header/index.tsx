@@ -2,13 +2,15 @@
  * @Author: 焦质晔
  * @Date: 2020-02-28 23:01:43
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-08 12:43:56
+ * @Last Modified time: 2021-03-08 15:13:10
  */
 import { defineComponent } from 'vue';
 import { pickBy, intersection, isFunction } from 'lodash-es';
 import config from '../config';
 import { where } from '../filter-sql';
-import { hasOwn, convertToRows, deepFindColumn, getCellValue, createWhereSQL, isEmpty } from '../utils';
+import { hasOwn, convertToRows, deepFindColumn, getCellValue, createWhereSQL } from '../utils';
+import { isEmpty } from '../../../_utils/util';
+import { t } from '../../../locale';
 
 import Resizable from './resizable';
 import AllSelection from '../selection/all';
@@ -181,7 +183,7 @@ export default defineComponent({
         },
       ];
       return (
-        <div class="v-cell--sorter" title={this.t('table.sorter.text')}>
+        <div class="v-cell--sorter" title={t('qm.table.sorter.text')}>
           <SvgIcon class={ascCls} icon-class="caret-up" />
           <SvgIcon class={descCls} icon-class="caret-down" />
         </div>

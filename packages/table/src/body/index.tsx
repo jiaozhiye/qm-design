@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-02-28 23:01:43
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-08 13:53:23
+ * @Last Modified time: 2021-03-08 15:05:49
  */
 import { defineComponent } from 'vue';
 import addEventListener from 'add-dom-event-listener';
@@ -79,7 +79,7 @@ export default defineComponent({
     this.event2 = addEventListener(document.body, 'click', this.cancelEvent);
     this.event3 = addEventListener(document, 'keydown', this.keyboardEvent);
   },
-  destroyed() {
+  unmounted() {
     this.event1.remove();
     this.event2.remove();
     this.event3.remove();

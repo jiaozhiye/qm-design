@@ -128,6 +128,30 @@ export default defineComponent({
       ],
       printDataList: [],
       content: '',
+      columns: [
+        {
+          title: '序号',
+          dataIndex: 'pageIndex',
+          width: 80,
+          sorter: true,
+          render: (text) => {
+            return text + 1;
+          },
+        },
+        {
+          title: '创建时间',
+          dataIndex: 'date',
+          width: 220,
+          sorter: true,
+          filter: {
+            type: 'date',
+          },
+        },
+      ],
+      list: [
+        { id: 1, date: '2012-12-12' },
+        { id: 2, date: '2012-12-13' },
+      ],
     };
   },
   methods: {
@@ -182,7 +206,17 @@ export default defineComponent({
   render(): VNode {
     return (
       <>
-        <qm-table></qm-table>
+        <qm-table columns={this.columns} dataSource={this.list} rowKey="id" columnsChange={(columns) => (this.columns = columns)}></qm-table>
+        <qm-form
+          uniqueKey="jzy_filter"
+          formType="search"
+          list={this.formList}
+          initialValue={{}}
+          onFinish={this.finish}
+          fieldsChange={(list) => {
+            this.formList = list;
+          }}
+        ></qm-form>
         {/* <qm-countup endValue={2020} />
         <qm-split direction="vertical" style="height: 300px">
           <qm-split-pane>asdasd</qm-split-pane>

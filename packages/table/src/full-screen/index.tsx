@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-03-20 10:18:05
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-08 13:17:01
+ * @Last Modified time: 2021-03-08 14:49:09
  */
 import { defineComponent } from 'vue';
 import addEventListener from 'add-dom-event-listener';
@@ -36,7 +36,7 @@ export default defineComponent({
   mounted() {
     this.event = addEventListener(document, 'keydown', this.keyboardHandle);
   },
-  destroyed() {
+  unmounted() {
     this.event.remove();
   },
   render() {

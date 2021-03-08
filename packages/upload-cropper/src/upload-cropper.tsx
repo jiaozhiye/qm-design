@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-02-09 09:03:59
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-01 12:46:48
+ * @Last Modified time: 2021-03-08 15:15:52
  */
 import { defineComponent, PropType } from 'vue';
 import { ElMessage, ElMessageBox } from 'element-plus';
@@ -77,9 +77,7 @@ export default defineComponent({
   computed: {
     calcHeight(): number {
       const calcWidth: number = (this.width * this.fixedSize[1]) / this.fixedSize[0];
-      return this.isCalcHeight && this.fixedSize.length === 2
-        ? Number.parseInt(calcWidth.toString())
-        : this.width;
+      return this.isCalcHeight && this.fixedSize.length === 2 ? Number.parseInt(calcWidth.toString()) : this.width;
     },
   },
   watch: {
@@ -114,8 +112,7 @@ export default defineComponent({
           if (res.code === 200) {
             this.fileList.splice(index, 1);
             this.clearFiles();
-            this.remove?.callback && this.remove.callback();
-            ElMessage.success(this.t('confirm.success'));
+            this.remove.callback?.();
           }
         } catch (err) {}
       } else {
@@ -215,7 +212,7 @@ export default defineComponent({
       try {
         await this.downloadFile(this.fileList[index]);
       } catch (err) {
-        ElMessage.error(this.t('uploadCropper.downError'));
+        ElMessage.error(t('qm.uploadCropper.downError'));
       }
     },
     // 获取服务端文件 to blob
@@ -229,10 +226,7 @@ export default defineComponent({
       let fileName = url.slice(url.lastIndexOf('/') + 1);
       if (name) {
         let extendName = url.slice(url.lastIndexOf('.') + 1);
-        fileName = `${name.slice(
-          0,
-          name.lastIndexOf('.') !== -1 ? name.lastIndexOf('.') : undefined
-        )}.${extendName}`;
+        fileName = `${name.slice(0, name.lastIndexOf('.') !== -1 ? name.lastIndexOf('.') : undefined)}.${extendName}`;
       }
       download(blob, fileName);
     },
@@ -338,11 +332,7 @@ export default defineComponent({
                 </div>
               </>
             ),
-            tip: (): JSXNode => (
-              <div class="el-upload__tip">
-                {t('qm.uploadCropper.tooltip', { type: fileTypes.join(',') })}
-              </div>
-            ),
+            tip: (): JSXNode => <div class="el-upload__tip">{t('qm.uploadCropper.tooltip', { type: fileTypes.join(',') })}</div>,
           }}
         />
         <Dialog {...previewDialogProps}>

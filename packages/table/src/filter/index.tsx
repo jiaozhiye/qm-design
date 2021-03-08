@@ -2,11 +2,12 @@
  * @Author: 焦质晔
  * @Date: 2020-03-09 13:18:43
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-08 13:52:52
+ * @Last Modified time: 2021-03-08 15:12:28
  */
 import { isEmpty } from '../../../_utils/util';
 import { validateNumber, stringToNumber } from '../utils';
-import { cloneDeep } from 'lodash';
+import { cloneDeep } from 'lodash-es';
+import { t } from '../../../locale';
 
 import Radio from '../radio';
 import Checkbox from '../checkbox';
@@ -124,10 +125,10 @@ export default {
       return (
         <div style="padding: 10px 0 6px">
           <el-button type="primary" size="mini" onClick={this.doFinish}>
-            {this.t('table.filter.search')}
+            {t('qm.table.filter.search')}
           </el-button>
           <el-button size="mini" onClick={this.doReset}>
-            {this.t('table.filter.reset')}
+            {t('qm.table.filter.reset')}
           </el-button>
         </div>
       );
@@ -144,7 +145,7 @@ export default {
             onInput={(val) => {
               this.filterValues[dataKey] = Object.assign({}, this.filterValues[dataKey], { [`like`]: val });
             }}
-            placeholder={this.t('table.filter.searchText', { text: title })}
+            placeholder={t('qm.table.filter.searchText', { text: title })}
             style={{ width: '180px' }}
             nativeOnKeydown={(ev) => {
               if (ev.keyCode === 13) {
@@ -170,7 +171,7 @@ export default {
                   if (!validateNumber(val)) return;
                   this.filterValues[dataKey] = Object.assign({}, this.filterValues[dataKey], { [`>`]: val });
                 }}
-                placeholder={this.t('table.filter.gtPlaceholder')}
+                placeholder={t('qm.table.filter.gtPlaceholder')}
                 style={{ width: '120px' }}
                 onChange={(val) => {
                   this.filterValues[dataKey]['>'] = stringToNumber(val);
@@ -192,7 +193,7 @@ export default {
                   if (!validateNumber(val)) return;
                   this.filterValues[dataKey] = Object.assign({}, this.filterValues[dataKey], { [`<`]: val });
                 }}
-                placeholder={this.t('table.filter.ltPlaceholder')}
+                placeholder={t('qm.table.filter.ltPlaceholder')}
                 style={{ width: '120px' }}
                 onChange={(val) => {
                   this.filterValues[dataKey]['<'] = stringToNumber(val);
@@ -214,7 +215,7 @@ export default {
                   if (!validateNumber(val)) return;
                   this.filterValues[dataKey] = Object.assign({}, this.filterValues[dataKey], { [`==`]: val });
                 }}
-                placeholder={this.t('table.filter.eqPlaceholder')}
+                placeholder={t('qm.table.filter.eqPlaceholder')}
                 style={{ width: '120px' }}
                 onChange={(val) => {
                   this.filterValues[dataKey]['=='] = stringToNumber(val);
@@ -236,7 +237,7 @@ export default {
                   if (!validateNumber(val)) return;
                   this.filterValues[dataKey] = Object.assign({}, this.filterValues[dataKey], { [`!=`]: val });
                 }}
-                placeholder={this.t('table.filter.neqPlaceholder')}
+                placeholder={t('qm.table.filter.neqPlaceholder')}
                 style={{ width: '120px' }}
                 onChange={(val) => {
                   this.filterValues[dataKey]['!='] = stringToNumber(val);
@@ -319,7 +320,7 @@ export default {
                 onInput={(val) => {
                   this.filterValues[dataKey] = Object.assign({}, this.filterValues[dataKey], { [`>`]: val ?? '' });
                 }}
-                placeholder={this.t('table.filter.gtPlaceholder')}
+                placeholder={t('qm.table.filter.gtPlaceholder')}
                 style={{ width: '150px' }}
               />
             </li>
@@ -333,7 +334,7 @@ export default {
                 onInput={(val) => {
                   this.filterValues[dataKey] = Object.assign({}, this.filterValues[dataKey], { [`<`]: val ?? '' });
                 }}
-                placeholder={this.t('table.filter.ltPlaceholder')}
+                placeholder={t('qm.table.filter.ltPlaceholder')}
                 style={{ width: '150px' }}
               />
             </li>
@@ -347,7 +348,7 @@ export default {
                 onInput={(val) => {
                   this.filterValues[dataKey] = Object.assign({}, this.filterValues[dataKey], { [`==`]: val ?? '' });
                 }}
-                placeholder={this.t('table.filter.eqPlaceholder')}
+                placeholder={t('qm.table.filter.eqPlaceholder')}
                 style={{ width: '150px' }}
               />
             </li>
@@ -361,7 +362,7 @@ export default {
                 onInput={(val) => {
                   this.filterValues[dataKey] = Object.assign({}, this.filterValues[dataKey], { [`!=`]: val ?? '' });
                 }}
-                placeholder={this.t('table.filter.neqPlaceholder')}
+                placeholder={t('qm.table.filter.neqPlaceholder')}
                 style={{ width: '150px' }}
               />
             </li>
@@ -380,7 +381,7 @@ export default {
       },
     ];
     return (
-      <div class="v-cell--filter" title={this.t('table.filter.text')}>
+      <div class="v-cell--filter" title={t('qm.table.filter.text')}>
         <el-popover
           v-model={[this.visible, 'visible']}
           trigger="manual"

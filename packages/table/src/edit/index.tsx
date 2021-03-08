@@ -2,11 +2,12 @@
  * @Author: 焦质晔
  * @Date: 2020-03-22 14:34:21
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-08 14:02:15
+ * @Last Modified time: 2021-03-08 15:10:33
  */
 import { isEqual, isFunction, isObject, get, merge, cloneDeep } from 'lodash';
 import dayjs from 'dayjs';
 import { getCellValue, setCellValue, deepFindColumn, sleep } from '../utils';
+import { t } from '../../../locale';
 
 import Checkbox from '../checkbox';
 import InputText from './InputText';
@@ -155,7 +156,7 @@ export default {
           }}
           multiple={isMultiple}
           collapseTags={isMultiple}
-          placeholder={this.t('table.editable.selectPlaceholder')}
+          placeholder={t('qm.table.editable.selectPlaceholder')}
           clearable={extra.clearable ?? !0}
           onChange={(val) => {
             this.createFieldValidate(rules, val);
@@ -196,7 +197,7 @@ export default {
             },
           }}
           clearable={extra.clearable ?? !0}
-          placeholder={!isDateTime ? this.t('table.editable.datePlaceholder') : this.t('table.editable.datetimePlaceholder')}
+          placeholder={!isDateTime ? t('qm.table.editable.datePlaceholder') : t('qm.table.editable.datetimePlaceholder')}
           onChange={(val) => {
             this.createFieldValidate(rules, val);
             this.store.addToUpdated(row);
@@ -229,7 +230,7 @@ export default {
           value-format={timeFormat}
           style={{ width: '100%' }}
           clearable={extra.clearable ?? !0}
-          placeholder={this.t('table.editable.datetimePlaceholder')}
+          placeholder={t('qm.table.editable.datetimePlaceholder')}
           onChange={(val) => {
             this.createFieldValidate(rules, val);
             this.store.addToUpdated(row);
@@ -365,7 +366,7 @@ export default {
       const dialogProps = {
         props: {
           visible: this.shVisible,
-          title: this.t('table.editable.searchHelper'),
+          title: t('qm.table.editable.searchHelper'),
           width: helper?.width ?? '60%',
           height: helper?.height,
           showFullScreen: false,

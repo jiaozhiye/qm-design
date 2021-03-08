@@ -2,18 +2,12 @@
  * @Author: 焦质晔
  * @Date: 2020-02-29 22:17:28
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-08 10:56:24
+ * @Last Modified time: 2021-03-08 14:06:11
  */
 import addEventListener from 'add-dom-event-listener';
 import { addResizeListener, removeResizeListener } from '../../../_utils/resize-event';
 
 export default {
-  renderBorderLine() {
-    return this.bordered && <div class="v-table--border-line" />;
-  },
-  renderResizableLine() {
-    return this.resizable && <div ref="resizable-bar" class="v-table--resizable-bar" />;
-  },
   createResizeState() {
     const { offsetWidth, offsetHeight } = this.$vTable;
     this.resizeState = Object.assign({}, { width: offsetWidth, height: offsetHeight });
