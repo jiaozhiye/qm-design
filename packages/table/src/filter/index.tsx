@@ -2,8 +2,9 @@
  * @Author: 焦质晔
  * @Date: 2020-03-09 13:18:43
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-08 19:21:10
+ * @Last Modified time: 2021-03-08 19:30:34
  */
+import { defineComponent } from 'vue';
 import { isEmpty } from '../../../_utils/util';
 import { validateNumber, stringToNumber } from '../utils';
 import { cloneDeep } from 'lodash-es';
@@ -13,7 +14,7 @@ import Radio from '../radio';
 import Checkbox from '../checkbox';
 import { JSXNode } from '../../../_utils/types';
 
-export default {
+export default defineComponent({
   name: 'THeadFilter',
   props: ['column', 'filters'],
   inject: ['$$table', '$$header'],
@@ -407,4 +408,4 @@ export default {
       </div>
     );
   },
-};
+});

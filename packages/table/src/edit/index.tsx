@@ -2,8 +2,9 @@
  * @Author: 焦质晔
  * @Date: 2020-03-22 14:34:21
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-08 15:10:33
+ * @Last Modified time: 2021-03-08 19:37:07
  */
+import { defineComponent } from 'vue';
 import { isEqual, isFunction, isObject, get, merge, cloneDeep } from 'lodash';
 import dayjs from 'dayjs';
 import { getCellValue, setCellValue, deepFindColumn, sleep } from '../utils';
@@ -12,13 +13,14 @@ import { t } from '../../../locale';
 import Checkbox from '../checkbox';
 import InputText from './InputText';
 import InputNumber from './InputNumber';
+import { JSXNode } from '../../../_utils/types';
 // import SearchHelper from '../../../SearchHelper';
 // import BaseDialog from '../../../BaseDialog';
 
 const noop = () => {};
 const trueNoop = () => true;
 
-export default {
+export default defineComponent({
   name: 'CellEdit',
   props: ['column', 'record', 'rowKey', 'columnKey', 'clicked'],
   inject: ['$$table', '$$body'],
@@ -483,7 +485,7 @@ export default {
       return <span class="v-cell--text">{this.$$body.renderText(text, column, record)}</span>;
     },
   },
-  render() {
+  render(): JSXNode {
     return this.isEditing ? this.renderEditCell() : this.renderCell();
   },
-};
+});
