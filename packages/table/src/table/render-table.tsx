@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-02-29 22:17:28
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-08 17:00:54
+ * @Last Modified time: 2021-03-09 08:19:20
  */
 import { getPrefixCls } from '../../../_utils/prefix';
 
@@ -142,7 +142,6 @@ export default {
         }
       : null;
     const pagerProps = {
-      ref: 'pager',
       ...Object.assign({}, paginationConfig, {
         size: tableSize,
         total,

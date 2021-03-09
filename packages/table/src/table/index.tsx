@@ -2,22 +2,22 @@
  * @Author: 焦质晔
  * @Date: 2021-02-09 09:03:59
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-08 18:51:00
+ * @Last Modified time: 2021-03-09 08:11:50
  */
 import { defineComponent } from 'vue';
 import { JSXNode } from '../../../_utils/types';
 
+import baseProps from './props';
 import Store from '../store';
+import { isEqual } from 'lodash-es';
 import { isChrome, isIE, noop } from '../../../_utils/util';
 import { useSize } from '../../../hooks/useSize';
-import baseProps from './props';
-import config from '../config';
 
-import { isEqual } from 'lodash-es';
 import { debounce, isEmpty } from '../../../_utils/util';
 import { getScrollBarWidth } from '../../../_utils/scrollbar-width';
 import { warn } from '../../../_utils/error';
 import { columnsFlatMap, getAllColumns, getAllRowKeys, tableDataFlatMap, createOrderBy, createWhereSQL, parseHeight } from '../utils';
+import config from '../config';
 
 import columnsMixin from '../columns';
 import expandableMixin from '../expandable/mixin';

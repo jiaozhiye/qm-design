@@ -2,9 +2,9 @@
  * @Author: 焦质晔
  * @Date: 2020-02-28 23:01:43
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-08 19:27:43
+ * @Last Modified time: 2021-03-09 11:03:42
  */
-import { defineComponent } from 'vue';
+import { defineComponent, reactive } from 'vue';
 import addEventListener from 'add-dom-event-listener';
 import { parseHeight, getCellValue, deepFindRowKey, isArrayContain } from '../utils';
 import { contains } from '../../../_utils/dom';
@@ -128,25 +128,15 @@ export default defineComponent({
       );
     },
     renderRows(list, depth = 0) {
-      const { getRowKey, selectionKeys, highlightKey, rowSelection, expandable, rowExpandedKeys } = this.$$table;
+      const { getRowKey, rowSelection, expandable, rowExpandedKeys } = this.$$table;
       const rows = [];
       list.forEach((row) => {
         // 行记录 索引
         const rowIndex = row.index;
         // 行记录 rowKey
         const rowKey = getRowKey(row, rowIndex);
-        const cls = [
-          `v-body--row`,
-          {
-            [`v-body--row-selected`]: selectionKeys.includes(rowKey),
-            [`v-body--row-current`]: highlightKey === rowKey,
-          },
-        ];
-        rows.push(
-          <tr key={rowKey} data-row-key={rowKey} class={cls}>
-            {this.flattenColumns.map((column, columnIndex) => this.renderColumn(column, columnIndex, row, rowIndex, rowKey, depth))}
-          </tr>
-        );
+        // 普通行
+        rows.push(this.renderRow(row, depth));
         // 展开行
         if (expandable) {
           const { rowExpandable = noop } = expandable;
@@ -171,6 +161,25 @@ export default defineComponent({
         }
       });
       return rows;
+    },
+    renderRow(row, depth = 0) {
+      const { getRowKey, selectionKeys, highlightKey } = this.$$table;
+      // 行记录 索引
+      const rowIndex = row.index;
+      // 行记录 rowKey
+      const rowKey = getRowKey(row, rowIndex);
+      const cls = [
+        `v-body--row`,
+        {
+          [`v-body--row-selected`]: selectionKeys.includes(rowKey),
+          [`v-body--row-current`]: highlightKey === rowKey,
+        },
+      ];
+      return (
+        <tr key={rowKey} data-row-key={rowKey} class={cls}>
+          {this.flattenColumns.map((column, columnIndex) => this.renderColumn(column, columnIndex, row, rowIndex, rowKey, depth))}
+        </tr>
+      );
     },
     renderColumn(column, columnIndex, row, rowIndex, rowKey, depth) {
       const { leftFixedColumns, rightFixedColumns, getStickyLeft, getStickyRight, ellipsis, sorter, isIE } = this.$$table;
@@ -389,17 +398,27 @@ export default defineComponent({
     },
   },
   render(): JSXNode {
+    const { tableFullData, rowKey } = this.$$table;
     const { bodyWidth, wrapStyle, tableData, isDraggable } = this;
     const dragProps = {
-      props: {
+      modelValue: tableData,
+      itemKey: rowKey,
+      animation: 200,
+      tag: 'transition-group',
+      componentData: {
         tag: 'tbody',
-        value: this.$$table.tableFullData,
-        options: { animation: 200 },
+        type: 'transition-group',
       },
-      on: {
-        input: (list) => {
-          this.$$table.tableFullData = list;
-        },
+      'onUpdate:modelValue': (list) => {
+        const records = [];
+        tableFullData.forEach((row) => {
+          if (tableData.includes(row)) {
+            records.push(list.shift());
+          } else {
+            records.push(row);
+          }
+        });
+        this.$$table.tableFullData = reactive(records);
       },
     };
     return (
@@ -408,7 +427,11 @@ export default defineComponent({
         {this.renderBodyXSpace()}
         <table class="v-table--body" cellspacing="0" cellpadding="0" border="0" style={{ width: bodyWidth }}>
           {this.renderColgroup()}
-          {!isDraggable ? <tbody>{this.renderRows(tableData)}</tbody> : <Draggable {...dragProps}>{this.renderRows(tableData)}</Draggable>}
+          {!isDraggable ? (
+            <tbody>{this.renderRows(tableData)}</tbody>
+          ) : (
+            <Draggable {...dragProps} v-slots={{ item: ({ element: row }): JSXNode => this.renderRow(row) }} />
+          )}
         </table>
       </div>
     );

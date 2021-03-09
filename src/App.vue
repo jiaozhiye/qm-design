@@ -151,6 +151,16 @@ export default defineComponent({
       list: [
         { id: 1, date: '2012-12-12' },
         { id: 2, date: '2012-12-13' },
+        { id: 3, date: '2012-12-13' },
+        { id: 4, date: '2012-12-13' },
+        { id: 5, date: '2012-12-13' },
+        { id: 6, date: '2012-12-13' },
+        { id: 7, date: '2012-12-13' },
+        { id: 8, date: '2012-12-13' },
+        { id: 9, date: '2012-12-13' },
+        { id: 10, date: '2012-12-13' },
+        { id: 11, date: '2012-12-13' },
+        { id: 12, date: '2012-12-13' },
       ],
     };
   },
@@ -210,6 +220,7 @@ export default defineComponent({
           columns={this.columns}
           dataSource={this.list}
           rowKey={(row) => row.id}
+          webPagination
           columnsChange={(columns) => (this.columns = columns)}
         ></qm-table>
         {/* <qm-countup endValue={2020} />
