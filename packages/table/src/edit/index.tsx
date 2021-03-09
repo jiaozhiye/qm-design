@@ -2,13 +2,15 @@
  * @Author: 焦质晔
  * @Date: 2020-03-22 14:34:21
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-08 19:37:07
+ * @Last Modified time: 2021-03-09 12:54:10
  */
 import { defineComponent } from 'vue';
 import { isEqual, isFunction, isObject, get, merge, cloneDeep } from 'lodash';
 import dayjs from 'dayjs';
 import { getCellValue, setCellValue, deepFindColumn, sleep } from '../utils';
+import { noop } from '../../../_utils/util';
 import { t } from '../../../locale';
+import { warn } from '../../../_utils/error';
 
 import Checkbox from '../checkbox';
 import InputText from './InputText';
@@ -17,7 +19,6 @@ import { JSXNode } from '../../../_utils/types';
 // import SearchHelper from '../../../SearchHelper';
 // import BaseDialog from '../../../BaseDialog';
 
-const noop = () => {};
 const trueNoop = () => true;
 
 export default defineComponent({
@@ -271,7 +272,7 @@ export default defineComponent({
       const { extra = {}, helper, rules = [], onClick = noop, onChange = noop } = this.options;
       const createFieldAliasMap = () => {
         if (!isFunction(helper.fieldAliasMap)) {
-          console.error('[Table]: 单元格的搜索帮助 `fieldAliasMap` 配置不正确');
+          warn('Table', '单元格的搜索帮助 `fieldAliasMap` 配置不正确');
         }
         const { fieldAliasMap = noop } = helper;
         return Object.assign({}, fieldAliasMap());
@@ -462,7 +463,7 @@ export default defineComponent({
       const { type } = this.options;
       const render = this[`${type}Handle`];
       if (!render) {
-        console.error('[Table]: 单元格编辑的类型 `type` 配置不正确');
+        warn('Table', '单元格编辑的类型 `type` 配置不正确');
         return null;
       }
       const { passValidate, requiredText, validateText } = this;

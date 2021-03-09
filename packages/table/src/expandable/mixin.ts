@@ -2,8 +2,10 @@
  * @Author: 焦质晔
  * @Date: 2020-03-05 10:27:24
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-08 09:29:20
+ * @Last Modified time: 2021-03-09 12:12:10
  */
+import { warn } from '../../../_utils/error';
+
 const expandableMixin = {
   methods: {
     // 创建展开列
@@ -23,7 +25,7 @@ const expandableMixin = {
     createRowExpandedKeys() {
       const { expandable, selectionKeys, allRowKeys, treeStructure, isTreeTable } = this;
       if (isTreeTable && expandable) {
-        console.error('[Table]: 树结构表格不能再设置展开行 `expandable` 参数');
+        warn('Table', '树结构表格不能再设置展开行 `expandable` 参数');
       }
       // 树结构
       if (isTreeTable) {

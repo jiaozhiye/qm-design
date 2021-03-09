@@ -2,11 +2,12 @@
  * @Author: 焦质晔
  * @Date: 2020-03-01 15:20:02
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-09 08:16:05
+ * @Last Modified time: 2021-03-09 12:12:48
  */
 import { get } from 'lodash-es';
 import { difference, hasOwn, getCellValue, setCellValue } from '../utils';
 import { throttle, errorCapture, isChrome, isIE, noop } from '../../../_utils/util';
+import { warn } from '../../../_utils/error';
 import config from '../config';
 
 const isWebkit = isChrome();
@@ -94,10 +95,10 @@ export default {
 
     if (this.scrollYLoad) {
       if (!(height || maxHeight)) {
-        console.error('[Table]: 必须设置组件参数 `height` 或 `maxHeight`');
+        warn('Table', '必须设置组件参数 `height` 或 `maxHeight`');
       }
       if (!ellipsis) {
-        console.error('[Table]: 必须设置组件参数 `ellipsis`');
+        warn('Table', '必须设置组件参数 `ellipsis`');
       }
     }
 

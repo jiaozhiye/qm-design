@@ -2,12 +2,13 @@
  * @Author: 焦质晔
  * @Date: 2020-02-28 23:01:43
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-09 11:03:42
+ * @Last Modified time: 2021-03-09 12:10:24
  */
 import { defineComponent, reactive } from 'vue';
 import addEventListener from 'add-dom-event-listener';
 import { parseHeight, getCellValue, deepFindRowKey, isArrayContain } from '../utils';
 import { contains } from '../../../_utils/dom';
+import { warn } from '../../../_utils/error';
 import config from '../config';
 import { isEqual, isFunction, isObject } from 'lodash';
 
@@ -279,7 +280,7 @@ export default defineComponent({
       if (formatType) {
         const render = this[`${formatType}Format`];
         if (!render) {
-          console.error('[Table]: 字段的格式化类型 `formatType` 配置不正确');
+          warn('Table', '字段的格式化类型 `formatType` 配置不正确');
         } else {
           result = render(text);
         }

@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-02-29 22:17:28
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-09 08:19:20
+ * @Last Modified time: 2021-03-09 12:33:59
  */
 import { getPrefixCls } from '../../../_utils/prefix';
 
@@ -10,7 +10,7 @@ import TableHeader from '../header';
 import TableBody from '../body';
 import TableFooter from '../footer';
 import Pager from '../pager';
-import Spin from '../../../Spin';
+import Spin from '../../../spin';
 import EmptyContent from '../empty';
 import Alert from '../alert';
 import ColumnFilter from '../column-filter';
@@ -123,7 +123,6 @@ export default {
           showHeader,
           showFooter,
           showLogo: tablePrint.showLogo ?? !0,
-          showSign: tablePrint.showSign ?? !1,
         }
       : null;
     const exportProps = exportExcel

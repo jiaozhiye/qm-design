@@ -144,7 +144,7 @@ export default defineComponent({
           width: 220,
           sorter: true,
           filter: {
-            type: 'date',
+            type: 'text',
           },
         },
       ],

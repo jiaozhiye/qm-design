@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-03-26 11:44:24
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-09 08:09:26
+ * @Last Modified time: 2021-03-09 12:03:45
  */
 import { defineComponent } from 'vue';
 import { flatten, groupBy, spread, mergeWith } from 'lodash-es';
@@ -50,7 +50,7 @@ const defaultHtmlStyle = `
 
 export default defineComponent({
   name: 'PrintTable',
-  props: ['tableColumns', 'flattenColumns', 'showHeader', 'showFooter', 'showLogo', 'showSign'],
+  props: ['tableColumns', 'flattenColumns', 'showHeader', 'showFooter', 'showLogo'],
   inject: ['$$table'],
   data() {
     return {};
@@ -240,7 +240,7 @@ export default defineComponent({
           )
           .join('')}</tbody>`;
       }
-      if (this.showFooter || this.showSign) {
+      if (this.showFooter) {
         html += [
           `<tfoot>`,
           summationRows
@@ -254,7 +254,6 @@ export default defineComponent({
                   .join('')}</tr>`
             )
             .join(''),
-          this.showSign ? `<tr><td colspan="${flatColumns.length}" style="border: 0; text-align: right;">操作员: </td></tr>` : '',
           `</tfoot>`,
         ].join('');
       }

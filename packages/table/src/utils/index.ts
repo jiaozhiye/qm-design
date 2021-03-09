@@ -2,9 +2,10 @@
  * @Author: 焦质晔
  * @Date: 2021-03-08 08:28:55
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-08 13:01:58
+ * @Last Modified time: 2021-03-09 12:47:55
  */
 import { get, set, transform, intersection, isEqual, isObject } from 'lodash-es';
+import dayjs from 'dayjs';
 import { stringify, array_format } from '../filter-sql';
 import { hasOwn } from '../../../_utils/util';
 import { AnyFunction } from '../../../_utils/types';
@@ -294,6 +295,16 @@ export const stringToNumber = (input) => {
   if (!validateNumber(input)) return '';
   input = input === '-' ? '' : input;
   return input ? Number(input) : '';
+};
+
+// 转日期对象
+export const toDate = (val: string): Date => {
+  return val ? dayjs(val).toDate() : undefined;
+};
+
+// 转日期格式
+export const dateFormat = (val: Date, vf: string): string => {
+  return val ? dayjs(val).format(vf) : '';
 };
 
 // 生成 uuid key

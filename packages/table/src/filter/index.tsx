@@ -2,18 +2,19 @@
  * @Author: 焦质晔
  * @Date: 2020-03-09 13:18:43
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-09 11:51:56
+ * @Last Modified time: 2021-03-09 13:08:03
  */
 import { defineComponent } from 'vue';
-import { isEmpty } from '../../../_utils/util';
-import { validateNumber, stringToNumber } from '../utils';
 import { cloneDeep } from 'lodash-es';
+import { JSXNode } from '../../../_utils/types';
+import { isEmpty } from '../../../_utils/util';
+import { validateNumber, stringToNumber, toDate, dateFormat } from '../utils';
 import { t } from '../../../locale';
+import { warn } from '../../../_utils/error';
 
 import Radio from '../radio';
 import Checkbox from '../checkbox';
 import FilterIcon from '../icon/filter';
-import { JSXNode } from '../../../_utils/types';
 
 export default defineComponent({
   name: 'THeadFilter',
@@ -99,11 +100,11 @@ export default defineComponent({
       this.$$table.clearSuperSearch();
       // 设置父组件 filters 值
       this.$$header.filters = Object.assign({}, cloneDeep(this.filters), cloneDeep(this.filterValues));
-      this.$refs[`vPopper`].doClose();
+      this.visible = false;
     },
     doReset() {
       if (this.isFilterEmpty && !this.isActived) {
-        return this.$refs[`vPopper`].doClose();
+        return (this.visible = false);
       }
       // 恢复初始值
       this.filterValues = this.initialFilterValue();
@@ -113,7 +114,7 @@ export default defineComponent({
       const { type } = this.column.filter;
       const renderFormItem = this[`${type}Handle`];
       if (!renderFormItem) {
-        console.error('[Table]: 表头筛选的类型 `type` 配置不正确');
+        warn('Table', '表头筛选的类型 `type` 配置不正确');
         return null;
       }
       return (
@@ -138,18 +139,21 @@ export default defineComponent({
     textHandle(column) {
       const { title } = column;
       const { dataKey } = this;
+      const inputProps = {
+        modelValue: this.filterValues[dataKey]?.[`like`],
+        'onUpdate:modelValue': (val) => {
+          this.filterValues[dataKey] = Object.assign({}, this.filterValues[dataKey], { [`like`]: val });
+        },
+      };
       return (
         <div style="padding-top: 6px">
           <el-input
             ref={`text-${dataKey}`}
             size={this.size}
-            value={this.filterValues[dataKey]?.[`like`]}
-            onInput={(val) => {
-              this.filterValues[dataKey] = Object.assign({}, this.filterValues[dataKey], { [`like`]: val });
-            }}
+            {...inputProps}
             placeholder={t('qm.table.filter.searchText', { text: title })}
             style={{ width: '180px' }}
-            nativeOnKeydown={(ev) => {
+            onKeydown={(ev) => {
               if (ev.keyCode === 13) {
                 this.doFinish();
               }
@@ -160,6 +164,22 @@ export default defineComponent({
     },
     numberHandle(column) {
       const { dataKey } = this;
+      const inputPropsFn = (mark: string) => ({
+        modelValue: this.filterValues[dataKey]?.[mark],
+        'onUpdate:modelValue': (val) => {
+          if (!validateNumber(val)) return;
+          this.filterValues[dataKey] = Object.assign({}, this.filterValues[dataKey], { [mark]: val });
+        },
+        onChange: (val) => {
+          this.filterValues[dataKey][mark] = stringToNumber(val);
+        },
+        onKeydown: (ev) => {
+          if (ev.keyCode === 13) {
+            this.filterValues[dataKey][mark] = stringToNumber(ev.target.value);
+            this.doFinish();
+          }
+        },
+      });
       return (
         <div>
           <ul class="v-filter-list">
@@ -168,89 +188,22 @@ export default defineComponent({
               <el-input
                 ref={`number-${dataKey}`}
                 size={this.size}
-                value={this.filterValues[dataKey]?.[`>`]}
-                onInput={(val) => {
-                  if (!validateNumber(val)) return;
-                  this.filterValues[dataKey] = Object.assign({}, this.filterValues[dataKey], { [`>`]: val });
-                }}
+                {...inputPropsFn('>')}
                 placeholder={t('qm.table.filter.gtPlaceholder')}
                 style={{ width: '120px' }}
-                onChange={(val) => {
-                  this.filterValues[dataKey]['>'] = stringToNumber(val);
-                }}
-                nativeOnKeydown={(ev) => {
-                  if (ev.keyCode === 13) {
-                    this.filterValues[dataKey]['>'] = stringToNumber(ev.target.value);
-                    this.doFinish();
-                  }
-                }}
               />
             </li>
             <li>
               <span>&lt;&nbsp;</span>
-              <el-input
-                size={this.size}
-                value={this.filterValues[dataKey]?.[`<`]}
-                onInput={(val) => {
-                  if (!validateNumber(val)) return;
-                  this.filterValues[dataKey] = Object.assign({}, this.filterValues[dataKey], { [`<`]: val });
-                }}
-                placeholder={t('qm.table.filter.ltPlaceholder')}
-                style={{ width: '120px' }}
-                onChange={(val) => {
-                  this.filterValues[dataKey]['<'] = stringToNumber(val);
-                }}
-                nativeOnKeydown={(ev) => {
-                  if (ev.keyCode === 13) {
-                    this.filterValues[dataKey]['<'] = stringToNumber(ev.target.value);
-                    this.doFinish();
-                  }
-                }}
-              />
+              <el-input size={this.size} {...inputPropsFn('<')} placeholder={t('qm.table.filter.ltPlaceholder')} style={{ width: '120px' }} />
             </li>
             <li>
               <span>=&nbsp;</span>
-              <el-input
-                size={this.size}
-                value={this.filterValues[dataKey]?.[`==`]}
-                onInput={(val) => {
-                  if (!validateNumber(val)) return;
-                  this.filterValues[dataKey] = Object.assign({}, this.filterValues[dataKey], { [`==`]: val });
-                }}
-                placeholder={t('qm.table.filter.eqPlaceholder')}
-                style={{ width: '120px' }}
-                onChange={(val) => {
-                  this.filterValues[dataKey]['=='] = stringToNumber(val);
-                }}
-                nativeOnKeydown={(ev) => {
-                  if (ev.keyCode === 13) {
-                    this.filterValues[dataKey]['=='] = stringToNumber(ev.target.value);
-                    this.doFinish();
-                  }
-                }}
-              />
+              <el-input size={this.size} {...inputPropsFn('==')} placeholder={t('qm.table.filter.eqPlaceholder')} style={{ width: '120px' }} />
             </li>
             <li>
               <span>!=</span>
-              <el-input
-                size={this.size}
-                value={this.filterValues[dataKey]?.[`!=`]}
-                onInput={(val) => {
-                  if (!validateNumber(val)) return;
-                  this.filterValues[dataKey] = Object.assign({}, this.filterValues[dataKey], { [`!=`]: val });
-                }}
-                placeholder={t('qm.table.filter.neqPlaceholder')}
-                style={{ width: '120px' }}
-                onChange={(val) => {
-                  this.filterValues[dataKey]['!='] = stringToNumber(val);
-                }}
-                nativeOnKeydown={(ev) => {
-                  if (ev.keyCode === 13) {
-                    this.filterValues[dataKey]['!='] = stringToNumber(ev.target.value);
-                    this.doFinish();
-                  }
-                }}
-              />
+              <el-input size={this.size} {...inputPropsFn('!=')} placeholder={t('qm.table.filter.neqPlaceholder')} style={{ width: '120px' }} />
             </li>
           </ul>
         </div>
@@ -309,6 +262,12 @@ export default defineComponent({
     },
     dateHandle(column) {
       const { dataKey } = this;
+      const datePropsFn = (mark: string) => ({
+        modelValue: toDate(this.filterValues[dataKey]?.[mark]),
+        'onUpdate:modelValue': (val) => {
+          this.filterValues[dataKey] = Object.assign({}, this.filterValues[dataKey], { [mark]: dateFormat(val, 'YYYY-MM-DD') });
+        },
+      });
       return (
         <div>
           <ul class="v-filter-list">
@@ -317,11 +276,7 @@ export default defineComponent({
               <el-date-picker
                 size={this.size}
                 type="date"
-                value={this.filterValues[dataKey]?.[`>`]}
-                valueFormat="yyyy-MM-dd"
-                onInput={(val) => {
-                  this.filterValues[dataKey] = Object.assign({}, this.filterValues[dataKey], { [`>`]: val ?? '' });
-                }}
+                {...datePropsFn('>')}
                 placeholder={t('qm.table.filter.gtPlaceholder')}
                 style={{ width: '150px' }}
               />
@@ -331,11 +286,7 @@ export default defineComponent({
               <el-date-picker
                 size={this.size}
                 type="date"
-                value={this.filterValues[dataKey]?.[`<`]}
-                valueFormat="yyyy-MM-dd"
-                onInput={(val) => {
-                  this.filterValues[dataKey] = Object.assign({}, this.filterValues[dataKey], { [`<`]: val ?? '' });
-                }}
+                {...datePropsFn('<')}
                 placeholder={t('qm.table.filter.ltPlaceholder')}
                 style={{ width: '150px' }}
               />
@@ -345,11 +296,7 @@ export default defineComponent({
               <el-date-picker
                 size={this.size}
                 type="date"
-                value={this.filterValues[dataKey]?.[`==`]}
-                valueFormat="yyyy-MM-dd"
-                onInput={(val) => {
-                  this.filterValues[dataKey] = Object.assign({}, this.filterValues[dataKey], { [`==`]: val ?? '' });
-                }}
+                {...datePropsFn('==')}
                 placeholder={t('qm.table.filter.eqPlaceholder')}
                 style={{ width: '150px' }}
               />
@@ -359,11 +306,7 @@ export default defineComponent({
               <el-date-picker
                 size={this.size}
                 type="date"
-                value={this.filterValues[dataKey]?.[`!=`]}
-                valueFormat="yyyy-MM-dd"
-                onInput={(val) => {
-                  this.filterValues[dataKey] = Object.assign({}, this.filterValues[dataKey], { [`!=`]: val ?? '' });
-                }}
+                {...datePropsFn('!=')}
                 placeholder={t('qm.table.filter.neqPlaceholder')}
                 style={{ width: '150px' }}
               />

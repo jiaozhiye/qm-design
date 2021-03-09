@@ -2,17 +2,18 @@
  * @Author: 焦质晔
  * @Date: 2020-03-05 10:27:24
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-08 10:06:22
+ * @Last Modified time: 2021-03-09 12:11:47
  */
 import { isEmpty } from '../../../_utils/util';
 import { isFunction } from 'lodash-es';
+import { warn } from '../../../_utils/error';
 
 const validateMixin = {
   methods: {
     // 表格中的表单校验
     createFieldValidate(rules, val, rowKey, columnKey) {
       if (!Array.isArray(rules)) {
-        return console.error('[Table]: 可编辑单元格的校验规则 `rules` 配置不正确');
+        return warn('Table', '可编辑单元格的校验规则 `rules` 配置不正确');
       }
       if (!rules.length) return;
       this.store.removeFromRequired({ x: rowKey, y: columnKey });

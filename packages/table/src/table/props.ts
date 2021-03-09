@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-02-28 23:04:58
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-08 16:59:20
+ * @Last Modified time: 2021-03-09 12:03:57
  */
 import { PropType } from 'vue';
 import PropTypes from '../../../_utils/vue-types';
@@ -232,10 +232,11 @@ export default {
   // 表格打印
   tablePrint: PropTypes.shape({
     showLogo: PropTypes.bool, // 是否显示 Logo
-    showSign: PropTypes.bool, // 是否显示签名
   }),
   // 是否显示高级检索
   showSuperSearch: PropTypes.bool.def(true),
+  // 是否显示分组汇总
+  showGroupSummary: PropTypes.bool.def(true),
   // 是否显示列定义
   showColumnDefine: PropTypes.bool.def(true),
   // 只显示图标，不显示文字
