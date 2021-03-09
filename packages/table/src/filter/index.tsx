@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-03-09 13:18:43
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-08 19:30:34
+ * @Last Modified time: 2021-03-09 11:51:56
  */
 import { defineComponent } from 'vue';
 import { isEmpty } from '../../../_utils/util';
@@ -12,6 +12,7 @@ import { t } from '../../../locale';
 
 import Radio from '../radio';
 import Checkbox from '../checkbox';
+import FilterIcon from '../icon/filter';
 import { JSXNode } from '../../../_utils/types';
 
 export default defineComponent({
@@ -398,7 +399,9 @@ export default defineComponent({
           v-slots={{
             reference: (): JSXNode => (
               <div class={filterBtnCls}>
-                <SvgIcon class="icon-filter" icon-class="filter" />
+                <span>
+                  <FilterIcon />
+                </span>
               </div>
             ),
           }}

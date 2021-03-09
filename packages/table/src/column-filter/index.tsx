@@ -2,12 +2,13 @@
  * @Author: 焦质晔
  * @Date: 2020-03-17 10:29:47
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-08 19:19:16
+ * @Last Modified time: 2021-03-09 11:56:16
  */
 import { defineComponent, reactive } from 'vue';
 import Draggable from 'vuedraggable';
 import { JSXNode } from '../../../_utils/types';
 import Checkbox from '../checkbox';
+import SorterIcon from '../icon/sorter';
 
 import { noop } from '../../../_utils/util';
 import { t } from '../../../locale';
@@ -201,7 +202,9 @@ export default defineComponent({
           v-slots={{
             reference: (): JSXNode => (
               <span class={{ [`text`]: !0, [`selected`]: visible }} title={!showButtonText ? t('qm.table.columnFilter.text') : ''}>
-                <i class="iconfont icon-unorderedlist" />
+                <span>
+                  <SorterIcon />
+                </span>
                 {showButtonText && t('qm.table.columnFilter.text')}
               </span>
             ),

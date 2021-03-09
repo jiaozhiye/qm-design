@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-02-28 23:01:43
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-08 15:13:10
+ * @Last Modified time: 2021-03-09 11:47:50
  */
 import { defineComponent } from 'vue';
 import { pickBy, intersection, isFunction } from 'lodash-es';
@@ -16,6 +16,9 @@ import Resizable from './resizable';
 import AllSelection from '../selection/all';
 import THeadFilter from '../filter';
 import { JSXNode } from '../../../_utils/types';
+
+import CaretUpIcon from '../icon/caretup';
+import CaretDownIcon from '../icon/caretdown';
 
 export default defineComponent({
   name: 'TableHeader',
@@ -184,8 +187,12 @@ export default defineComponent({
       ];
       return (
         <div class="v-cell--sorter" title={t('qm.table.sorter.text')}>
-          <SvgIcon class={ascCls} icon-class="caret-up" />
-          <SvgIcon class={descCls} icon-class="caret-down" />
+          <span class={ascCls}>
+            <CaretUpIcon />
+          </span>
+          <span class={descCls}>
+            <CaretDownIcon />
+          </span>
         </div>
       );
     },
