@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-08-11 08:19:36
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-08 10:24:54
+ * @Last Modified time: 2021-03-09 13:46:52
  */
 import { defineComponent } from 'vue';
 import { JSXNode } from '../../../_utils/types';
@@ -12,7 +12,7 @@ import { useSize } from '../../../hooks/useSize';
 
 export default defineComponent({
   name: 'InputText',
-  emits: ['update:modelValue', 'change', 'nativeInput'],
+  emits: ['update:modelValue', 'change', 'input', 'keyDown'],
   props: {
     modelValue: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
     size: PropTypes.string,
@@ -61,7 +61,7 @@ export default defineComponent({
       'onUpdate:modelValue': (val) => {
         if (readonly) return;
         this.currentValue = val;
-        this.$emit('nativeInput', val);
+        this.$emit('input', val);
       },
     };
     return (
@@ -77,10 +77,13 @@ export default defineComponent({
           this.setValueHandle(val);
           this.emitEventHandle(val);
         }}
-        nativeOnClick={(ev) => {
+        onClick={(ev) => {
           if (Array.from(ev.target.classList).includes('el-input__clear')) {
             ev.stopPropagation();
           }
+        }}
+        onKeyDown={(ev) => {
+          this.$emit('keyDown', ev);
         }}
         v-slots={{
           append: (): JSXNode => this.$slots[`append`]?.() ?? null,

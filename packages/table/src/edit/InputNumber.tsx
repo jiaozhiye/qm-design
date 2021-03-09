@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-08-11 08:19:36
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-08 10:27:42
+ * @Last Modified time: 2021-03-09 13:51:54
  */
 import { defineComponent } from 'vue';
 import { JSXNode } from '../../../_utils/types';
@@ -12,6 +12,7 @@ import { useSize } from '../../../hooks/useSize';
 
 export default defineComponent({
   name: 'InputNumber',
+  emits: ['input', 'change', 'keyDown'],
   props: {
     modelValue: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
     size: PropTypes.string,
@@ -143,6 +144,9 @@ export default defineComponent({
             }
             this.setValueHandle(val);
             this.emitEventHandle(val);
+          }}
+          onKeyDown={(ev) => {
+            this.$emit('keyDown', ev);
           }}
         />
       </div>

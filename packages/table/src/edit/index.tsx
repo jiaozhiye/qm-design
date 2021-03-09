@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-03-22 14:34:21
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-09 12:54:10
+ * @Last Modified time: 2021-03-09 13:54:15
  */
 import { defineComponent } from 'vue';
 import { isEqual, isFunction, isObject, get, merge, cloneDeep } from 'lodash';
@@ -85,16 +85,20 @@ export default defineComponent({
       const { dataIndex } = column;
       const { extra = {}, rules = [], onInput = noop, onChange = noop, onEnter = noop } = this.options;
       const prevValue = getCellValue(row, dataIndex);
+      const inputProps = {
+        modelValue: prevValue,
+        'onUpdate:modelValue': (val) => {
+          setCellValue(row, dataIndex, val);
+        },
+      };
       return (
         <InputText
           ref={`text-${this.dataKey}`}
           size={this.size}
-          value={prevValue}
+          {...inputProps}
           maxlength={extra.maxlength}
+          // @ts-ignore
           onInput={(val) => {
-            setCellValue(row, dataIndex, val);
-          }}
-          onNativeInput={(val) => {
             onInput({ [this.dataKey]: val }, row);
           }}
           onChange={(val) => {
@@ -103,7 +107,7 @@ export default defineComponent({
             onChange({ [this.dataKey]: val }, row);
             this.$$table.dataChangeHandle();
           }}
-          nativeOnKeydown={(ev) => {
+          onKeydown={(ev) => {
             if (ev.keyCode === 13) {
               this.$refs[`text-${this.dataKey}`].blur();
               setTimeout(() => onEnter({ [this.dataKey]: ev.target.value }, row));
@@ -117,26 +121,30 @@ export default defineComponent({
       const { dataIndex, precision } = column;
       const { extra = {}, rules = [], onInput = noop, onChange = noop, onEnter = noop } = this.options;
       const prevValue = getCellValue(row, dataIndex);
+      const inputProps = {
+        modelValue: prevValue,
+        'onUpdate:modelValue': (val) => {
+          setCellValue(row, dataIndex, val);
+        },
+      };
       return (
         <InputNumber
           ref={`number-${this.dataKey}`}
           size={this.size}
-          value={prevValue}
-          onInput={(val) => {
-            setCellValue(row, dataIndex, val);
-          }}
+          {...inputProps}
           precision={precision}
           min={extra.min}
           max={extra.max}
           maxlength={extra.maxlength}
           style={{ width: '100%' }}
+          // @ts-ignore
           onChange={(val) => {
             this.createFieldValidate(rules, val);
             this.store.addToUpdated(row);
             onChange({ [this.dataKey]: val }, row);
             this.$$table.dataChangeHandle();
           }}
-          nativeOnKeydown={(ev) => {
+          onKeydown={(ev) => {
             if (ev.keyCode === 13) {
               this.$refs[`number-${this.dataKey}`].blur();
               setTimeout(() => onEnter({ [this.dataKey]: ev.target.value }, row));
@@ -150,13 +158,16 @@ export default defineComponent({
       const { dataIndex } = column;
       const { extra = {}, rules = [], items = [], onChange = noop } = this.options;
       const prevValue = getCellValue(row, dataIndex);
+      const selectProps = {
+        modelValue: prevValue,
+        'onUpdate:modelValue': (val) => {
+          setCellValue(row, dataIndex, val);
+        },
+      };
       return (
         <el-select
           size={this.size}
-          value={prevValue}
-          onInput={(val) => {
-            setCellValue(row, dataIndex, val);
-          }}
+          {...selectProps}
           multiple={isMultiple}
           collapseTags={isMultiple}
           placeholder={t('qm.table.editable.selectPlaceholder')}
@@ -249,12 +260,15 @@ export default defineComponent({
       const { extra = {}, onChange = noop } = this.options;
       const { trueValue = '1', falseValue = '0', text = '', disabled } = extra;
       const prevValue = getCellValue(row, dataIndex);
+      const checkboxProps = {
+        modelValue: prevValue,
+        'onUpdate:modelValue': (val) => {
+          setCellValue(row, dataIndex, val);
+        },
+      };
       return (
         <Checkbox
-          value={prevValue}
-          onInput={(val) => {
-            setCellValue(row, dataIndex, val);
-          }}
+          {...checkboxProps}
           onChange={(val) => {
             this.store.addToUpdated(row);
             onChange({ [this.dataKey]: val }, row);
