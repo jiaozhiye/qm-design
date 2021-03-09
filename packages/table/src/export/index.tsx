@@ -148,7 +148,7 @@ export default defineComponent({
                 `<tr>${flatColumns
                   .map((column, index) => {
                     let text = getCellValue(row, column.dataIndex);
-                    return `<td>${index === 0 && text === '' ? config.summaryText() : text}</td>`;
+                    return `<td>${index === 0 && text === '' ? t('qm.table.config.summaryText') : text}</td>`;
                   })
                   .join('')}</tr>`
             )

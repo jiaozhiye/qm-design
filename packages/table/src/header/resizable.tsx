@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-03-07 19:04:14
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-08 12:45:02
+ * @Last Modified time: 2021-03-09 08:06:03
  */
 import { defineComponent } from 'vue';
 import { getNodeOffset } from '../utils';
@@ -55,7 +55,8 @@ export default defineComponent({
         target.style.display = 'none';
 
         _this.column.renderWidth = res;
-        _this.$set(_this.column, 'width', res);
+        // _this.$set(_this.column, 'width', res);
+        _this.column.width = res;
 
         doLayout();
         setLocalColumns(columns);

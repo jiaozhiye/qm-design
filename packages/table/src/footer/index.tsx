@@ -7,7 +7,7 @@
 import { defineComponent } from 'vue';
 import { formatNumber, setCellValue, getCellValue } from '../utils';
 import { noop } from '../../../_utils/util';
-import config from '../config';
+import { t } from '../../../locale';
 import { JSXNode } from '../../../_utils/types';
 
 export default defineComponent({
@@ -117,7 +117,7 @@ export default defineComponent({
       const text = summation?.render ? summation.render(tableFullData) : getCellValue(row, dataIndex);
       return (
         <td key={dataIndex} class={cls} style={{ ...stys }}>
-          <div class="v-cell">{index === 0 && text === '' ? config.summaryText() : text}</div>
+          <div class="v-cell">{index === 0 && text === '' ? t('qm.table.config.summaryText') : text}</div>
         </td>
       );
     },

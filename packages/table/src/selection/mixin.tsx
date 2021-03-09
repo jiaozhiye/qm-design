@@ -6,7 +6,7 @@
  */
 import { uniqWith } from 'lodash-es';
 import { deepFindRowKey, tableDataFlatMap, isArrayContain } from '../utils';
-import config from '../config';
+import { t } from '../../../locale';
 
 const selectionMixin = {
   methods: {
@@ -18,7 +18,7 @@ const selectionMixin = {
       const { type } = options;
       return {
         dataIndex: '__selection__',
-        title: type === 'radio' ? config.selectionText() : '',
+        title: type === 'radio' ? t('qm.table.config.selectionText') : '',
         width: 50,
         fixed: 'left',
         type,

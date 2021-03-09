@@ -51,14 +51,8 @@ const config = {
   showFilterType: false,
   // 打印纸的宽度 A4 -> 1040px
   printWidth: 1040,
-  // 可选择列
-  selectionText: () => t('qm.table.config.selectionText'),
   // 操作列 dataIndex
   operationColumn: '__action__',
-  // 合计行第一列的文本
-  summaryText: () => t('qm.table.config.summaryText'),
-  // 暂无数据
-  emptyText: () => t('qm.table.config.emptyText'),
 };
 
 export default config;

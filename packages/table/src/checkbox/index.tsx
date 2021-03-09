@@ -8,7 +8,6 @@ import { defineComponent } from 'vue';
 import PropTypes from '../../../_utils/vue-types';
 
 import { getPrefixCls } from '../../../_utils/prefix';
-import { useSize } from '../../../hooks/useSize';
 import { JSXNode } from '../../../_utils/types';
 
 export default defineComponent({

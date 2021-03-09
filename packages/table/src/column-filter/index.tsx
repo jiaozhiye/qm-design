@@ -6,11 +6,11 @@
  */
 import { defineComponent, reactive } from 'vue';
 import Draggable from 'vuedraggable';
+import { JSXNode } from '../../../_utils/types';
 import Checkbox from '../checkbox';
 
 import { noop } from '../../../_utils/util';
 import { t } from '../../../locale';
-import { JSXNode } from '../../../_utils/types';
 
 export default defineComponent({
   name: 'ColumnFilter',
@@ -65,7 +65,9 @@ export default defineComponent({
       const cls = [`iconfont`, `icon-menu`, `v-handle`, [`${type}-handle`]];
       const checkboxProps = {
         modelValue: !column.hidden,
-        'onUpdate:modelValue': (val) => (column.hidden = !val),
+        'onUpdate:modelValue': (val) => {
+          column.hidden = !val;
+        },
       };
       return (
         <li key={column.dataIndex} class="item">

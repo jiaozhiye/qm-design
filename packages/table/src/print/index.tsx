@@ -2,10 +2,10 @@
  * @Author: 焦质晔
  * @Date: 2020-03-26 11:44:24
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-08 13:59:57
+ * @Last Modified time: 2021-03-09 08:09:26
  */
 import { defineComponent } from 'vue';
-import { _ } from 'lodash-es';
+import { flatten, groupBy, spread, mergeWith } from 'lodash-es';
 // import Cookies from 'js-cookie';
 import { convertToRows, deepFindColumn, filterTableColumns, getCellValue } from '../utils';
 import config from '../config';
@@ -102,11 +102,11 @@ export default defineComponent({
       });
     },
     doMerge(columns, mark) {
-      return _(_.flatten(columns))
+      return flatten(columns)
         .groupBy(mark)
         .map(
-          _.spread((...values) => {
-            return _.mergeWith(...values, (objValue, srcValue) => {
+          spread((...values) => {
+            return mergeWith(...values, (objValue, srcValue) => {
               if (Array.isArray(objValue)) {
                 return this.doMerge(objValue.concat(srcValue), mark);
               }
@@ -114,6 +114,18 @@ export default defineComponent({
           })
         )
         .value();
+      // return _(_.flatten(columns))
+      // .groupBy(mark)
+      // .map(
+      //   _.spread((...values) => {
+      //     return _.mergeWith(...values, (objValue, srcValue) => {
+      //       if (Array.isArray(objValue)) {
+      //         return this.doMerge(objValue.concat(srcValue), mark);
+      //       }
+      //     });
+      //   })
+      // )
+      // .value();
     },
     createChunkColumns(columns) {
       let res = [];
@@ -237,14 +249,12 @@ export default defineComponent({
                 `<tr>${flatColumns
                   .map((column, index) => {
                     let text = getCellValue(row, column.dataIndex);
-                    return `<td>${index === 0 && text === '' ? config.summaryText() : text}</td>`;
+                    return `<td>${index === 0 && text === '' ? t('qm.table.config.summaryText') : text}</td>`;
                   })
                   .join('')}</tr>`
             )
             .join(''),
-          this.showSign
-            ? `<tr><td colspan="${flatColumns.length}" style="border: 0; text-align: right;">操作员: ${Cookies.get('username') ?? ''}</td></tr>`
-            : '',
+          this.showSign ? `<tr><td colspan="${flatColumns.length}" style="border: 0; text-align: right;">操作员: </td></tr>` : '',
           `</tfoot>`,
         ].join('');
       }

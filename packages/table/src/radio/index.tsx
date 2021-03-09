@@ -2,12 +2,11 @@
  * @Author: 焦质晔
  * @Date: 2020-03-05 22:48:49
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-08 09:57:06
+ * @Last Modified time: 2021-03-09 08:09:36
  */
 import { defineComponent } from 'vue';
 import PropTypes from '../../../_utils/vue-types';
 import { getPrefixCls } from '../../../_utils/prefix';
-import { useSize } from '../../../hooks/useSize';
 import { JSXNode } from '../../../_utils/types';
 
 export default defineComponent({

@@ -2,11 +2,12 @@
  * @Author: 焦质晔
  * @Date: 2020-03-20 10:18:05
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-08 14:49:09
+ * @Last Modified time: 2021-03-09 08:05:06
  */
 import { defineComponent } from 'vue';
 import addEventListener from 'add-dom-event-listener';
 import { t } from '../../../locale';
+import { JSXNode } from '../../../_utils/types';
 
 export default defineComponent({
   name: 'FullScreen',
@@ -39,7 +40,7 @@ export default defineComponent({
   unmounted() {
     this.event.remove();
   },
-  render() {
+  render(): JSXNode {
     const { isFull, title } = this;
     const iconCls = [
       `iconfont`,
