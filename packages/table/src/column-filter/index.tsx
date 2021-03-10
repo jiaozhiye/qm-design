@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-03-17 10:29:47
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-09 11:56:16
+ * @Last Modified time: 2021-03-10 12:16:39
  */
 import { defineComponent, reactive } from 'vue';
 import Draggable from 'vuedraggable';
@@ -63,7 +63,7 @@ export default defineComponent({
       columnsChange(this.realColumns);
     },
     renderListItem(column, type) {
-      const cls = [`iconfont`, `icon-menu`, `v-handle`, [`${type}-handle`]];
+      const cls = [`iconfont`, `icon-menu`, `handle`, [`${type}-handle`]];
       const checkboxProps = {
         modelValue: !column.hidden,
         'onUpdate:modelValue': (val) => {
@@ -98,7 +98,7 @@ export default defineComponent({
     },
     renderColumnFilter() {
       const { leftFixedColumns, mainColumns, rightFixedColumns } = this;
-      const cls = [`v-column-filter--wrap`, `size--${this.$$table.tableSize}`];
+      const cls = [`column-filter--wrap`, `size--${this.$$table.tableSize}`];
 
       const leftDragProps = {
         modelValue: leftFixedColumns,
@@ -188,7 +188,7 @@ export default defineComponent({
   },
   render(): JSXNode {
     const { visible, showButtonText } = this;
-    const cls = [`v-column-filter`, `size--${this.$$table.tableSize}`];
+    const cls = [`column-filter`, `size--${this.$$table.tableSize}`];
     return (
       <div class={cls}>
         <el-popover

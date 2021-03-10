@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-05-19 16:19:58
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-12-15 17:25:54
+ * @Last Modified time: 2021-03-10 11:20:39
  */
 import localforage from 'localforage';
 import { createUidKey } from '../utils';
@@ -22,16 +22,19 @@ export default {
   inject: ['$$table'],
   data() {
     // 分组项 字典
-    this.groupItems = this.columns.filter(x => !x.groupSummary).map(x => ({ text: x.title, value: x.dataIndex }));
+    this.groupItems = this.columns.filter((x) => !x.groupSummary).map((x) => ({ text: x.title, value: x.dataIndex }));
     // 汇总列 字典
-    this.summaryItems = [config.groupSummary.total, ...this.columns.filter(x => !!x.groupSummary).map(x => ({ text: x.title, value: x.dataIndex }))];
+    this.summaryItems = [
+      config.groupSummary.total,
+      ...this.columns.filter((x) => !!x.groupSummary).map((x) => ({ text: x.title, value: x.dataIndex })),
+    ];
     // 计算公式 字典
     this.formulaItems = [
       { text: this.t('table.groupSummary.sumText'), value: 'sum' },
       { text: this.t('table.groupSummary.maxText'), value: 'max' },
       { text: this.t('table.groupSummary.minText'), value: 'min' },
       { text: this.t('table.groupSummary.avgText'), value: 'avg' },
-      { text: this.t('table.groupSummary.countText'), value: 'count' }
+      { text: this.t('table.groupSummary.countText'), value: 'count' },
     ];
     return {
       savedItems: [],
@@ -43,7 +46,7 @@ export default {
       summaryColumns: this.createSummaryColumns(),
       groupTableData: [], // 分组项表格数据
       summaryTableData: [], // 汇总表格数据
-      visible: false
+      visible: false,
     };
   },
   computed: {
@@ -58,22 +61,22 @@ export default {
     },
     confirmDisabled() {
       const { groupTableData, summaryTableData } = this;
-      const isGroup = groupTableData.length && groupTableData.every(x => Object.values(x).every(k => k !== ''));
-      const isSummary = summaryTableData.length && summaryTableData.every(x => Object.values(x).every(k => k !== ''));
+      const isGroup = groupTableData.length && groupTableData.every((x) => Object.values(x).every((k) => k !== ''));
+      const isSummary = summaryTableData.length && summaryTableData.every((x) => Object.values(x).every((k) => k !== ''));
       return !(isGroup && isSummary);
-    }
+    },
   },
   watch: {
     currentKey(next) {
       if (next) {
-        const { group, summary } = this.savedItems.find(x => x.value === next).list;
+        const { group, summary } = this.savedItems.find((x) => x.value === next).list;
         this.groupList = group;
         this.summaryList = summary;
       } else {
         this.groupList = [];
         this.summaryList = [];
       }
-    }
+    },
   },
   async created() {
     if (!this.groupSummaryKey) return;
@@ -91,7 +94,7 @@ export default {
   },
   methods: {
     findColumn(columns, dataIndex) {
-      return columns.find(x => x.dataIndex === dataIndex);
+      return columns.find((x) => x.dataIndex === dataIndex);
     },
     createGroupColumns() {
       return [
@@ -113,23 +116,23 @@ export default {
                 </el-button>
               </div>
             );
-          }
+          },
         },
         {
           dataIndex: 'group',
           title: '分组项',
           width: 200,
-          editRender: row => {
+          editRender: (row) => {
             return {
               type: 'select',
               editable: true,
               items: this.setGroupDisabled(),
               extra: {
-                clearable: false
-              }
+                clearable: false,
+              },
             };
-          }
-        }
+          },
+        },
       ];
     },
     createSummaryColumns() {
@@ -152,53 +155,53 @@ export default {
                 </el-button>
               </div>
             );
-          }
+          },
         },
         {
           dataIndex: 'summary',
           title: '汇总列',
           width: 200,
-          editRender: row => {
+          editRender: (row) => {
             return {
               type: 'select',
               editable: true,
               items: this.setSummaryDisabled(),
               extra: {
-                clearable: false
+                clearable: false,
               },
               onChange: (cell, row) => {
                 row[`formula`] = '';
-              }
+              },
             };
-          }
+          },
         },
         {
           dataIndex: 'formula',
           title: '计算公式',
           width: 150,
-          editRender: row => {
+          editRender: (row) => {
             return {
               type: 'select',
               editable: true,
               items: row.summary === config.groupSummary.total.value ? this.formulaItems.slice(this.formulaItems.length - 1) : this.formulaItems,
               extra: {
-                clearable: false
-              }
+                clearable: false,
+              },
             };
-          }
-        }
+          },
+        },
       ];
     },
     setGroupDisabled() {
-      return this.groupItems.map(x => ({
+      return this.groupItems.map((x) => ({
         ...x,
-        disabled: this.groupTableData.findIndex(k => k.group === x.value) > -1
+        disabled: this.groupTableData.findIndex((k) => k.group === x.value) > -1,
       }));
     },
     setSummaryDisabled() {
-      return this.summaryItems.map(x => ({
+      return this.summaryItems.map((x) => ({
         ...x,
-        disabled: this.summaryTableData.findIndex(k => k.summary === x.value) > -1
+        disabled: this.summaryTableData.findIndex((k) => k.summary === x.value) > -1,
       }));
     },
     // 切换配置信息
@@ -217,8 +220,8 @@ export default {
         value: uuid,
         list: {
           group: this.groupTableData,
-          summary: this.summaryTableData
-        }
+          summary: this.summaryTableData,
+        },
       });
       this.currentKey = uuid;
       await localforage.setItem(this.groupSummaryKey, this.savedItems);
@@ -248,7 +251,7 @@ export default {
     async removeSavedHandle(ev, key) {
       ev.stopPropagation();
       if (!key) return;
-      const index = this.savedItems.findIndex(x => x.value === key);
+      const index = this.savedItems.findIndex((x) => x.value === key);
       this.savedItems.splice(index, 1);
       if (key === this.currentKey) {
         this.currentKey = '';
@@ -263,24 +266,37 @@ export default {
     // 显示汇总
     confirmHandle() {
       this.visible = true;
-    }
+    },
   },
   render() {
-    const { columns, groupList, groupColumns, summaryList, summaryColumns, form, savedItems, currentKey, confirmDisabled, visible, groupTableData, summaryTableData } = this;
+    const {
+      columns,
+      groupList,
+      groupColumns,
+      summaryList,
+      summaryColumns,
+      form,
+      savedItems,
+      currentKey,
+      confirmDisabled,
+      visible,
+      groupTableData,
+      summaryTableData,
+    } = this;
     const wrapProps = {
       props: {
         visible,
         title: this.t('table.groupSummary.resultText'),
         showFullScreen: false,
         width: '1000px',
-        destroyOnClose: true
+        destroyOnClose: true,
       },
       on: {
-        'update:visible': val => (this.visible = val)
-      }
+        'update:visible': (val) => (this.visible = val),
+      },
     };
     return (
-      <div class="v-group-summary--setting">
+      <div class="group-summary--setting">
         <div class="main">
           <div class="container" style={{ width: '280px' }}>
             <VTable
@@ -290,14 +306,19 @@ export default {
               columns={groupColumns}
               showFullScreen={false}
               showColumnDefine={false}
-              rowKey={record => record.index}
-              columnsChange={columns => (this.groupColumns = columns)}
-              onDataChange={tableData => {
+              rowKey={(record) => record.index}
+              columnsChange={(columns) => (this.groupColumns = columns)}
+              onDataChange={(tableData) => {
                 this.groupTableData = tableData;
               }}
             >
               <template slot="default">
-                <el-button type="primary" icon="el-icon-plus" onClick={() => this.$tableGroup.INSERT_RECORDS({})} style={{ marginLeft: '10px', marginRight: '-10px' }} />
+                <el-button
+                  type="primary"
+                  icon="el-icon-plus"
+                  onClick={() => this.$tableGroup.INSERT_RECORDS({})}
+                  style={{ marginLeft: '10px', marginRight: '-10px' }}
+                />
               </template>
             </VTable>
           </div>
@@ -309,20 +330,31 @@ export default {
               columns={summaryColumns}
               showFullScreen={false}
               showColumnDefine={false}
-              rowKey={record => record.index}
-              columnsChange={columns => (this.summaryColumns = columns)}
-              onDataChange={tableData => {
+              rowKey={(record) => record.index}
+              columnsChange={(columns) => (this.summaryColumns = columns)}
+              onDataChange={(tableData) => {
                 this.summaryTableData = tableData;
               }}
             >
               <template slot="default">
-                <el-button type="primary" icon="el-icon-plus" style={{ marginRight: '-10px' }} onClick={() => this.$tableSummary.INSERT_RECORDS({})} />
+                <el-button
+                  type="primary"
+                  icon="el-icon-plus"
+                  style={{ marginRight: '-10px' }}
+                  onClick={() => this.$tableSummary.INSERT_RECORDS({})}
+                />
               </template>
             </VTable>
           </div>
           <div class="saved line">
             <div class="form-wrap">
-              <el-input class="form-item" placeholder={this.t('table.groupSummary.configText')} value={form.name} disabled={confirmDisabled} onInput={val => (this.form.name = val)} />
+              <el-input
+                class="form-item"
+                placeholder={this.t('table.groupSummary.configText')}
+                value={form.name}
+                disabled={confirmDisabled}
+                onInput={(val) => (this.form.name = val)}
+              />
               <el-button type="primary" disabled={!form.name} style={{ marginLeft: '10px' }} onClick={() => this.saveConfigHandle()}>
                 {this.t('table.groupSummary.saveButton')}
               </el-button>
@@ -332,13 +364,17 @@ export default {
                 <span>{this.t('table.groupSummary.savedSetting')}</span>
               </h5>
               <ul>
-                {savedItems.map(x => (
+                {savedItems.map((x) => (
                   <li class={x.value === currentKey && 'selected'} onClick={() => this.toggleHandle(x.value)}>
                     <span class="title">
                       <i class={['iconfont', x.value === currentKey ? 'icon-check' : 'icon-file']} />
                       <span>{x.text}</span>
                     </span>
-                    <i class="iconfont icon-close-circle close" title={this.t('table.groupSummary.removeText')} onClick={ev => this.removeSavedHandle(ev, x.value)} />
+                    <i
+                      class="iconfont icon-close-circle close"
+                      title={this.t('table.groupSummary.removeText')}
+                      onClick={(ev) => this.removeSavedHandle(ev, x.value)}
+                    />
                   </li>
                 ))}
                 {!savedItems.length && (
@@ -360,7 +396,7 @@ export default {
             borderTop: '1px solid #d9d9d9',
             padding: '10px 15px',
             background: '#fff',
-            textAlign: 'right'
+            textAlign: 'right',
           }}
         >
           <el-button onClick={() => this.cancelHandle()}>{this.t('table.groupSummary.closeButton')}</el-button>
@@ -373,5 +409,5 @@ export default {
         </BaseDialog>
       </div>
     );
-  }
+  },
 };

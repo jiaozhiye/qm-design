@@ -2,13 +2,14 @@
  * @Author: 焦质晔
  * @Date: 2020-02-28 23:01:43
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-09 11:47:50
+ * @Last Modified time: 2021-03-10 10:32:39
  */
 import { defineComponent } from 'vue';
 import { pickBy, intersection, isFunction } from 'lodash-es';
 import config from '../config';
 import { where } from '../filter-sql';
 import { hasOwn, convertToRows, deepFindColumn, getCellValue, createWhereSQL } from '../utils';
+import { getPrefixCls } from '../../../_utils/prefix';
 import { isEmpty } from '../../../_utils/util';
 import { t } from '../../../locale';
 
@@ -78,7 +79,7 @@ export default defineComponent({
       const cls = [
         `gutter`,
         {
-          [`v-cell-fix-right`]: !!rightFixedColumns.length,
+          [`cell-fix-right`]: !!rightFixedColumns.length,
         },
       ];
       const stys = !isIE
@@ -87,7 +88,7 @@ export default defineComponent({
           }
         : null;
       return columnRows.map((columns, rowIndex) => (
-        <tr key={rowIndex} class="v-header--row">
+        <tr key={rowIndex} class="header--row">
           {columns.map((column, cellIndex) => this.renderColumn(column, columns, rowIndex, cellIndex))}
           {scrollY && <th class={cls} style={stys}></th>}
         </tr>
@@ -119,19 +120,19 @@ export default defineComponent({
       // 表头对齐方式
       const align = theadAlign || tbodyAlign;
       const cls = [
-        `v-header--column`,
+        `header--column`,
         `col--ellipsis`,
         {
           [`col--center`]: align === 'center',
           [`col--right`]: align === 'right',
-          [`v-column--required`]: !!required,
-          [`v-column-has-sorter`]: isSorter,
-          [`v-column-has-filter`]: filter,
-          [`v-column--sort`]: Object.keys(sorter).includes(dataIndex),
-          [`v-cell-fix-left`]: fixed === 'left',
-          [`v-cell-fix-right`]: fixed === 'right',
-          [`v-cell-fix-left-last`]: !isIE && fixed === 'left' && lastFixedLeft,
-          [`v-cell-fix-right-first`]: !isIE && fixed === 'right' && firstFixedRight,
+          [`column--required`]: !!required,
+          [`column-has-sorter`]: isSorter,
+          [`column-has-filter`]: filter,
+          [`column--sort`]: Object.keys(sorter).includes(dataIndex),
+          [`cell-fix-left`]: fixed === 'left',
+          [`cell-fix-right`]: fixed === 'right',
+          [`cell-fix-left-last`]: !isIE && fixed === 'left' && lastFixedLeft,
+          [`cell-fix-right-first`]: !isIE && fixed === 'right' && firstFixedRight,
         },
       ];
       const stys = !isIE
@@ -143,8 +144,8 @@ export default defineComponent({
       const isResizable = resizable && !['__expandable__', '__selection__'].includes(dataIndex);
       return (
         <th key={dataIndex} class={cls} style={{ ...stys }} colspan={colSpan} rowspan={rowSpan} onClick={(ev) => this.thClickHandle(ev, column)}>
-          <div class="v-cell--wrapper">
-            <div class="v-cell--text">{this.renderCell(column)}</div>
+          <div class="cell--wrapper">
+            <div class="cell--text">{this.renderCell(column)}</div>
             {filter ? this.renderFilter(column) : null}
           </div>
           {isResizable && <Resizable column={column} />}
@@ -156,14 +157,14 @@ export default defineComponent({
       const { selectionKeys } = this.$$table;
       if (dataIndex === '__selection__' && type === 'checkbox') {
         return (
-          <div class="v-cell">
+          <div class="cell">
             <AllSelection selectionKeys={selectionKeys} />
           </div>
         );
       }
       const vNodes = [];
       vNodes.push(
-        <div class="v-cell" title={title}>
+        <div class="cell" title={title}>
           {title}
         </div>
       );
@@ -174,19 +175,19 @@ export default defineComponent({
     },
     renderSorter(order) {
       const ascCls = [
-        `v-sort--asc-btn`,
+        `sort--asc-btn`,
         {
           [`sort--active`]: order === this.ascend,
         },
       ];
       const descCls = [
-        `v-sort--desc-btn`,
+        `sort--desc-btn`,
         {
           [`sort--active`]: order === this.descend,
         },
       ];
       return (
-        <div class="v-cell--sorter" title={t('qm.table.sorter.text')}>
+        <div class="cell--sorter" title={t('qm.table.sorter.text')}>
           <span class={ascCls}>
             <CaretUpIcon />
           </span>
@@ -325,14 +326,21 @@ export default defineComponent({
     const {
       layout: { tableBodyWidth },
     } = this.$$table;
+    const prefixCls = getPrefixCls('table');
     const columnRows = convertToRows(tableColumns);
     // 是否拥有多级表头
     this.$$table.isGroup = columnRows.length > 1;
     // 处理左右的固定列
     this.setFixedColumns(columnRows);
     return (
-      <div class="v-table--header-wrapper">
-        <table class="v-table--header" cellspacing="0" cellpadding="0" border="0" style={{ width: tableBodyWidth ? `${tableBodyWidth}px` : null }}>
+      <div class={`${prefixCls}--header-wrapper`}>
+        <table
+          class={`${prefixCls}--header`}
+          cellspacing="0"
+          cellpadding="0"
+          border="0"
+          style={{ width: tableBodyWidth ? `${tableBodyWidth}px` : null }}
+        >
           {this.renderColgroup()}
           <thead>{this.renderRows(columnRows)}</thead>
         </table>

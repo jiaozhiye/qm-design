@@ -2,10 +2,11 @@
  * @Author: 焦质晔
  * @Date: 2020-03-01 23:54:20
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-08 13:03:27
+ * @Last Modified time: 2021-03-10 11:20:23
  */
 import { defineComponent } from 'vue';
 import { formatNumber, setCellValue, getCellValue } from '../utils';
+import { getPrefixCls } from '../../../_utils/prefix';
 import { noop } from '../../../_utils/util';
 import { t } from '../../../locale';
 import { JSXNode } from '../../../_utils/types';
@@ -69,7 +70,7 @@ export default defineComponent({
       const cls = [
         `gutter`,
         {
-          [`v-cell-fix-right`]: !!rightFixedColumns.length,
+          [`cell-fix-right`]: !!rightFixedColumns.length,
         },
       ];
       const stys = !isIE
@@ -78,7 +79,7 @@ export default defineComponent({
           }
         : null;
       return this.summationRows.map((row) => (
-        <tr class="v-footer--row">
+        <tr class="footer--row">
           {this.flattenColumns.map((column, index) => this.renderCell(column, row, index))}
           {scrollY && <td class={cls} style={stys}></td>}
         </tr>
@@ -97,15 +98,15 @@ export default defineComponent({
       } = this.$$table;
       const { dataIndex, fixed, align, summation } = column;
       const cls = [
-        `v-footer--column`,
+        `footer--column`,
         `col--ellipsis`,
         {
           [`col--center`]: align === 'center',
           [`col--right`]: align === 'right',
-          [`v-cell-fix-left`]: fixed === 'left',
-          [`v-cell-fix-right`]: fixed === 'right',
-          [`v-cell-fix-left-last`]: !isIE && fixed === 'left' && leftFixedColumns[leftFixedColumns.length - 1].dataIndex === dataIndex,
-          [`v-cell-fix-right-first`]: !isIE && fixed === 'right' && rightFixedColumns[0].dataIndex === dataIndex,
+          [`cell-fix-left`]: fixed === 'left',
+          [`cell-fix-right`]: fixed === 'right',
+          [`cell-fix-left-last`]: !isIE && fixed === 'left' && leftFixedColumns[leftFixedColumns.length - 1].dataIndex === dataIndex,
+          [`cell-fix-right-first`]: !isIE && fixed === 'right' && rightFixedColumns[0].dataIndex === dataIndex,
         },
       ];
       const stys = !isIE
@@ -117,7 +118,7 @@ export default defineComponent({
       const text = summation?.render ? summation.render(tableFullData) : getCellValue(row, dataIndex);
       return (
         <td key={dataIndex} class={cls} style={{ ...stys }}>
-          <div class="v-cell">{index === 0 && text === '' ? t('qm.table.config.summaryText') : text}</div>
+          <div class="cell">{index === 0 && text === '' ? t('qm.table.config.summaryText') : text}</div>
         </td>
       );
     },
@@ -126,9 +127,10 @@ export default defineComponent({
     const {
       layout: { tableBodyWidth },
     } = this.$$table;
+    const prefixCls = getPrefixCls('table');
     return (
-      <div class="v-table--footer-wrapper body--wrapper">
-        <table class="v-table--footer" cellspacing="0" cellpadding="0" border="0" style={{ width: tableBodyWidth ? `${tableBodyWidth}px` : null }}>
+      <div class={`${prefixCls}--footer-wrapper body--wrapper`}>
+        <table class="table--footer" cellspacing="0" cellpadding="0" border="0" style={{ width: tableBodyWidth ? `${tableBodyWidth}px` : null }}>
           {this.renderColgroup()}
           <tfoot>{this.renderRows()}</tfoot>
         </table>

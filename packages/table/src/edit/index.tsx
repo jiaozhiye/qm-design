@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-03-22 14:34:21
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-09 13:54:15
+ * @Last Modified time: 2021-03-10 11:16:11
  */
 import { defineComponent } from 'vue';
 import { isEqual, isFunction, isObject, get, merge } from 'lodash';
@@ -479,7 +479,7 @@ export default defineComponent({
       }
       const { passValidate, requiredText, validateText } = this;
       const cls = [
-        `v-cell--edit`,
+        `cell--edit`,
         {
           [`is-error`]: !passValidate,
         },
@@ -494,7 +494,7 @@ export default defineComponent({
     renderCell() {
       const { record, column } = this;
       const text = getCellValue(record, column.dataIndex);
-      return <span class="v-cell--text">{this.$$body.renderText(text, column, record)}</span>;
+      return <span class="cell--text">{this.$$body.renderText(text, column, record)}</span>;
     },
   },
   render(): JSXNode {

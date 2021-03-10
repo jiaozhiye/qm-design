@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-02-26 16:41:10
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-02-26 21:42:44
+ * @Last Modified time: 2021-03-10 11:15:41
  */
 @import '../../style/src/common';
 
@@ -14,7 +14,7 @@ $prefix: '#{$qm-prefix}-fields-filter';
     .el-checkbox {
       transform: translateY(-1px);
     }
-    .v-handle {
+    .handle {
       margin: 0 5px;
       cursor: s-resize;
     }

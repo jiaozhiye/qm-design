@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-05-19 15:58:23
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-07-13 20:06:13
+ * @Last Modified time: 2021-03-10 11:20:47
  */
 import config from '../config';
 import Locale from '../locale/mixin';
@@ -17,7 +17,7 @@ export default {
   inject: ['$$table'],
   data() {
     return {
-      visible: false
+      visible: false,
     };
   },
   methods: {
@@ -26,7 +26,7 @@ export default {
     },
     closeHandle(val) {
       this.visible = val;
-    }
+    },
   },
   render() {
     const { visible } = this;
@@ -37,14 +37,16 @@ export default {
         showFullScreen: false,
         width: '1100px',
         destroyOnClose: true,
-        containerStyle: { height: 'calc(100% - 52px)', paddingBottom: '52px' }
+        containerStyle: { height: 'calc(100% - 52px)', paddingBottom: '52px' },
       },
       on: {
-        'update:visible': val => (this.visible = val)
-      }
+        'update:visible': (val) => (this.visible = val),
+      },
     };
-    const columns = this.columns.filter(x => !['__expandable__', '__selection__', 'index', 'pageIndex', config.operationColumn].includes(x.dataIndex));
-    const cls = [`v-high-search--wrapper`, `size--${this.$$table.tableSize}`];
+    const columns = this.columns.filter(
+      (x) => !['__expandable__', '__selection__', 'index', 'pageIndex', config.operationColumn].includes(x.dataIndex)
+    );
+    const cls = [`high-search--wrapper`, `size--${this.$$table.tableSize}`];
     return (
       <div class={cls}>
         <span class="search-button" title={this.t('table.highSearch.text')} onClick={this.clickHandle}>
@@ -55,5 +57,5 @@ export default {
         </BaseDialog>
       </div>
     );
-  }
+  },
 };

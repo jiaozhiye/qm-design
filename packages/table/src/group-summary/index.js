@@ -17,7 +17,7 @@ export default {
   inject: ['$$table'],
   data() {
     return {
-      visible: false
+      visible: false,
     };
   },
   methods: {
@@ -26,7 +26,7 @@ export default {
     },
     closeHandle(val) {
       this.visible = val;
-    }
+    },
   },
   render() {
     const { visible } = this;
@@ -37,14 +37,16 @@ export default {
         showFullScreen: false,
         width: '1000px',
         destroyOnClose: true,
-        containerStyle: { height: 'calc(100% - 52px)', paddingBottom: '52px' }
+        containerStyle: { height: 'calc(100% - 52px)', paddingBottom: '52px' },
       },
       on: {
-        'update:visible': val => (this.visible = val)
-      }
+        'update:visible': (val) => (this.visible = val),
+      },
     };
-    const columns = this.columns.filter(x => !['__expandable__', '__selection__', 'index', 'pageIndex', config.operationColumn].includes(x.dataIndex));
-    const cls = [`v-group-summary--wrapper`, `size--${this.$$table.tableSize}`];
+    const columns = this.columns.filter(
+      (x) => !['__expandable__', '__selection__', 'index', 'pageIndex', config.operationColumn].includes(x.dataIndex)
+    );
+    const cls = [`group-summary--wrapper`, `size--${this.$$table.tableSize}`];
     return (
       <div class={cls}>
         <span class="summary-button" title={this.t('table.groupSummary.text')} onClick={this.clickHandle}>
@@ -55,5 +57,5 @@ export default {
         </BaseDialog>
       </div>
     );
-  }
+  },
 };

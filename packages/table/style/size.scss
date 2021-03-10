@@ -2,15 +2,20 @@
  * @Author: 焦质晔
  * @Date: 2020-05-30 14:13:37
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-07-13 10:30:18
+ * @Last Modified time: 2021-03-10 12:14:17
  */
-.v-table {
-  &.size--medium {
+$prefix: '#{$qm-prefix}-table';
+
+.#{$prefix} {
+  &--medium {
     font-size: $v-font-size-medium;
-    .v-header--column,
-    .v-body--column,
-    .v-body--expanded-column,
-    .v-footer--column {
+    .#{$prefix}__alert {
+      height: 36px;
+    }
+    .header--column,
+    .body--column,
+    .body--expanded-column,
+    .footer--column {
       &.col--ellipsis {
         @extend %MediumColumnHeight;
       }
@@ -20,22 +25,25 @@
     }
     &.virtual--y {
       .col--ellipsis {
-        .v-cell {
+        .cell {
           max-height: $v-table-row-height-medium;
         }
       }
     }
   }
 
-  &.size--small {
+  &--small {
     font-size: $v-font-size-small;
-    .v-header--column,
-    .v-body--column,
-    .v-body--expanded-column,
-    .v-footer--column {
+    .#{$prefix}__alert {
+      height: 32px;
+    }
+    .header--column,
+    .body--column,
+    .body--expanded-column,
+    .footer--column {
       &.col--ellipsis {
         @extend %SmallColumnHeight;
-        .v-cell {
+        .cell {
           max-height: $v-table-row-height-small;
         }
       }
@@ -45,22 +53,25 @@
     }
     &.virtual--y {
       .col--ellipsis {
-        .v-cell {
+        .cell {
           max-height: $v-table-row-height-small;
         }
       }
     }
   }
 
-  &.size--mini {
+  &--mini {
     font-size: $v-font-size-mini;
-    .v-header--column,
-    .v-body--column,
-    .v-body--expanded-column,
-    .v-footer--column {
+    .#{$prefix}__alert {
+      height: 28px;
+    }
+    .header--column,
+    .body--column,
+    .body--expanded-column,
+    .footer--column {
       &.col--ellipsis {
         @extend %MiniColumnHeight;
-        .v-cell {
+        .cell {
           max-height: $v-table-row-height-mini;
         }
       }
@@ -70,7 +81,7 @@
     }
     &.virtual--y {
       .col--ellipsis {
-        .v-cell {
+        .cell {
           max-height: $v-table-row-height-mini;
         }
       }
@@ -80,7 +91,7 @@
   // =============
 
   &.size--medium {
-    .v-cell--edit {
+    .cell--edit {
       .el-input__inner {
         font-size: $v-font-size-medium;
         &.is-error {
@@ -93,7 +104,7 @@
   }
 
   &.size--small {
-    .v-cell--edit {
+    .cell--edit {
       .el-input__inner {
         font-size: $v-font-size-small;
         &.is-error {
@@ -106,7 +117,7 @@
   }
 
   &.size--mini {
-    .v-cell--edit {
+    .cell--edit {
       .el-input__inner {
         font-size: $v-font-size-mini;
       }

@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-02-09 09:03:59
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-09 08:11:50
+ * @Last Modified time: 2021-03-10 11:22:02
  */
 import { defineComponent } from 'vue';
 import { JSXNode } from '../../../_utils/types';
@@ -138,7 +138,7 @@ export default defineComponent({
   },
   computed: {
     $vTable() {
-      return this.$refs[`v-table`];
+      return this.$refs[`table`];
     },
     $$tableBody() {
       return this.$refs[`tableBody`];
@@ -227,7 +227,7 @@ export default defineComponent({
     fullHeight() {
       const pagerHeight = this.showPagination ? 40 : 0;
       if (this.isFullScreen && this.shouldUpdateHeight) {
-        return window.innerHeight - 30 - this.$refs[`v-top-info`].offsetHeight - pagerHeight;
+        return window.innerHeight - 30 - this.$refs[`top-info`].offsetHeight - pagerHeight;
       }
       return null;
     },

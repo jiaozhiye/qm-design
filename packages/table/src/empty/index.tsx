@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-03-08 14:47:28
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-08 13:40:45
+ * @Last Modified time: 2021-03-10 11:18:36
  */
 import { defineComponent } from 'vue';
 import { JSXNode } from '../../../_utils/types';
@@ -22,8 +22,8 @@ export default defineComponent({
   },
   render(): JSXNode {
     return (
-      <div class="v-table--empty-placeholder" style={this.styles}>
-        <div class="v-table--empty-content">
+      <div class="empty-placeholder" style={this.styles}>
+        <div class="empty-placeholder__content">
           <EmptyEle />
         </div>
       </div>

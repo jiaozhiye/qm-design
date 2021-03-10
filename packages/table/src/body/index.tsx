@@ -2,11 +2,12 @@
  * @Author: 焦质晔
  * @Date: 2020-02-28 23:01:43
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-09 12:10:24
+ * @Last Modified time: 2021-03-10 11:13:44
  */
 import { defineComponent, reactive } from 'vue';
 import addEventListener from 'add-dom-event-listener';
 import { parseHeight, getCellValue, deepFindRowKey, isArrayContain } from '../utils';
+import { getPrefixCls } from '../../../_utils/prefix';
 import { contains } from '../../../_utils/dom';
 import { warn } from '../../../_utils/error';
 import config from '../config';
@@ -42,7 +43,7 @@ export default defineComponent({
   },
   computed: {
     $vTableBody() {
-      return this.$el.querySelector('.v-table--body');
+      return this.$el.querySelector('.table--body');
     },
     bodyWidth() {
       const { layout, scrollY } = this.$$table;
@@ -109,14 +110,14 @@ export default defineComponent({
     cancelEvent(ev) {
       const { target, currentTarget } = ev;
       if (target === currentTarget) return;
-      if (target.className === 'v-cell--text' || contains(target, this.$vTableBody)) return;
+      if (target.className === 'cell--text' || contains(target, this.$vTableBody)) return;
       this.setClickedValues([]);
     },
     renderBodyXSpace() {
-      return <div class="v-body--x-space" style={{ width: this.bodyWidth }} />;
+      return <div class="body--x-space" style={{ width: this.bodyWidth }} />;
     },
     renderBodyYSpace() {
-      return <div class="v-body--y-space" />;
+      return <div class="body--y-space" />;
     },
     renderColgroup() {
       return (
@@ -141,13 +142,13 @@ export default defineComponent({
         // 展开行
         if (expandable) {
           const { rowExpandable = noop } = expandable;
-          const expandColumnCls = [`v-body--expanded-column`];
+          const expandColumnCls = [`body--expanded-column`];
           // 展开状态
           if (!rowExpandable(row) && rowExpandedKeys.includes(rowKey)) {
             rows.push(
-              <tr key={`expand_${rowKey}`} class="v-body--expanded-row">
+              <tr key={`expand_${rowKey}`} class="body--expanded-row">
                 <td colspan={this.flattenColumns.length} class={expandColumnCls} style={{ paddingLeft: !rowSelection ? `50px` : `100px` }}>
-                  <div class="v-cell">{expandable.expandedRowRender(row, rowIndex)}</div>
+                  <div class="cell">{expandable.expandedRowRender(row, rowIndex)}</div>
                 </td>
               </tr>
             );
@@ -170,10 +171,10 @@ export default defineComponent({
       // 行记录 rowKey
       const rowKey = getRowKey(row, rowIndex);
       const cls = [
-        `v-body--row`,
+        `body--row`,
         {
-          [`v-body--row-selected`]: selectionKeys.includes(rowKey),
-          [`v-body--row-current`]: highlightKey === rowKey,
+          [`body--row-selected`]: selectionKeys.includes(rowKey),
+          [`body--row-current`]: highlightKey === rowKey,
         },
       ];
       return (
@@ -191,16 +192,16 @@ export default defineComponent({
         return null;
       }
       const cls = [
-        `v-body--column`,
+        `body--column`,
         {
           [`col--ellipsis`]: isEllipsis,
           [`col--center`]: align === 'center',
           [`col--right`]: align === 'right',
-          [`v-column--sort`]: Object.keys(sorter).includes(dataIndex),
-          [`v-cell-fix-left`]: fixed === 'left',
-          [`v-cell-fix-right`]: fixed === 'right',
-          [`v-cell-fix-left-last`]: !isIE && fixed === 'left' && leftFixedColumns[leftFixedColumns.length - 1].dataIndex === dataIndex,
-          [`v-cell-fix-right-first`]: !isIE && fixed === 'right' && rightFixedColumns[0].dataIndex === dataIndex,
+          [`column--sort`]: Object.keys(sorter).includes(dataIndex),
+          [`cell-fix-left`]: fixed === 'left',
+          [`cell-fix-right`]: fixed === 'right',
+          [`cell-fix-left-last`]: !isIE && fixed === 'left' && leftFixedColumns[leftFixedColumns.length - 1].dataIndex === dataIndex,
+          [`cell-fix-right-first`]: !isIE && fixed === 'right' && rightFixedColumns[0].dataIndex === dataIndex,
           [className]: !!className,
         },
       ];
@@ -223,7 +224,7 @@ export default defineComponent({
           onClick={(ev) => this.cellClickHandle(ev, row, column)}
           onDblclick={(ev) => this.cellDbclickHandle(ev, row, column)}
         >
-          <div class="v-cell">{this.renderCell(column, row, rowIndex, columnIndex, rowKey, depth)}</div>
+          <div class="cell">{this.renderCell(column, row, rowIndex, columnIndex, rowKey, depth)}</div>
         </td>
       );
     },
@@ -288,9 +289,7 @@ export default defineComponent({
       return result;
     },
     renderIndent(level) {
-      return level ? (
-        <span class={`v-cell--indent indent-level-${level}`} style={{ paddingLeft: `${level * config.treeTable.textIndent}px` }} />
-      ) : null;
+      return level ? <span class={`cell--indent indent-level-${level}`} style={{ paddingLeft: `${level * config.treeTable.textIndent}px` }} /> : null;
     },
     getSpan(row, column, rowIndex, columnIndex) {
       let rowspan = 1;
@@ -401,6 +400,7 @@ export default defineComponent({
   render(): JSXNode {
     const { tableFullData, rowKey } = this.$$table;
     const { bodyWidth, wrapStyle, tableData, isDraggable } = this;
+    const prefixCls = getPrefixCls('table');
     const dragProps = {
       modelValue: tableData,
       itemKey: rowKey,
@@ -423,10 +423,10 @@ export default defineComponent({
       },
     };
     return (
-      <div class="v-table--body-wrapper body--wrapper" style={{ ...wrapStyle }}>
+      <div class={`${prefixCls}--body-wrapper body--wrapper`} style={{ ...wrapStyle }}>
         {this.renderBodyYSpace()}
         {this.renderBodyXSpace()}
-        <table class="v-table--body" cellspacing="0" cellpadding="0" border="0" style={{ width: bodyWidth }}>
+        <table class="table--body" cellspacing="0" cellpadding="0" border="0" style={{ width: bodyWidth }}>
           {this.renderColgroup()}
           {!isDraggable ? (
             <tbody>{this.renderRows(tableData)}</tbody>

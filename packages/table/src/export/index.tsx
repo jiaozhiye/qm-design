@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-02-02 15:58:17
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-08 13:15:51
+ * @Last Modified time: 2021-03-10 11:23:14
  */
 import { defineComponent } from 'vue';
 import dayjs from 'dayjs';
@@ -204,7 +204,7 @@ export default defineComponent({
       },
     };
     const cls = [
-      `v-export--wrapper`,
+      `export--wrapper`,
       `size--${this.$$table.tableSize}`,
       {
         disabled: disabledState,

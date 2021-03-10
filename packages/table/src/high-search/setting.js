@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-07-12 16:26:19
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-12-23 17:59:38
+ * @Last Modified time: 2021-03-10 11:20:52
  */
 import localforage from 'localforage';
 import { isBracketBalance } from '../filter-sql';
@@ -20,10 +20,10 @@ export default {
   props: ['columns'],
   inject: ['$$table'],
   data() {
-    this.fieldDicts = this.columns.filter(column => !!column.filter).map(x => ({ value: x.dataIndex, text: x.title }));
+    this.fieldDicts = this.columns.filter((column) => !!column.filter).map((x) => ({ value: x.dataIndex, text: x.title }));
     this.logicDicts = [
       { value: 'and', text: this.t('table.highSearch.andText') },
-      { value: 'or', text: this.t('table.highSearch.orText') }
+      { value: 'or', text: this.t('table.highSearch.orText') },
     ];
     return {
       loading: !1,
@@ -32,7 +32,7 @@ export default {
       currentData: [],
       savedItems: [],
       currentKey: '',
-      form: { name: '' }
+      form: { name: '' },
     };
   },
   computed: {
@@ -43,23 +43,23 @@ export default {
       return this.$$table.uniqueKey ? `search_${this.$$table.uniqueKey}` : '';
     },
     filterColumns() {
-      return this.columns.filter(column => !!column.filter);
+      return this.columns.filter((column) => !!column.filter);
     },
     query() {
       return createWhereSQL(this.currentData);
     },
     confirmDisabled() {
       return !(this.query && isBracketBalance(this.query));
-    }
+    },
   },
   watch: {
     currentKey(next) {
       if (next) {
-        this.list = this.savedItems.find(x => x.value === next).list;
+        this.list = this.savedItems.find((x) => x.value === next).list;
       } else {
         this.list = [];
       }
-    }
+    },
   },
   async created() {
     if (!this.highSearchKey) return;
@@ -77,7 +77,7 @@ export default {
   },
   methods: {
     findColumn(dataIndex) {
-      return this.searchColumns.find(x => x.dataIndex === dataIndex);
+      return this.searchColumns.find((x) => x.dataIndex === dataIndex);
     },
     createVTableColumns() {
       return [
@@ -99,7 +99,7 @@ export default {
                 </el-button>
               </div>
             );
-          }
+          },
         },
         {
           title: '括号',
@@ -108,13 +108,13 @@ export default {
           width: 80,
           render: (text, row) => {
             return <span style={{ fontSize: '20px' }}>{text}</span>;
-          }
+          },
         },
         {
           title: '字段名',
           dataIndex: 'fieldName',
           required: true,
-          editRender: row => {
+          editRender: (row) => {
             return {
               type: 'select',
               editable: true,
@@ -122,7 +122,7 @@ export default {
               rules: [{ required: true, message: '字段名不能为空' }],
               onChange: (cell, row) => {
                 let dataIndex = Object.values(cell)[0];
-                let filterType = this.filterColumns.find(x => x.dataIndex === dataIndex)?.filter.type;
+                let filterType = this.filterColumns.find((x) => x.dataIndex === dataIndex)?.filter.type;
                 let expressionItems = this.getExpressionHandle(filterType);
                 // 重置 字段类型
                 row[`fieldType`] = filterType;
@@ -134,44 +134,44 @@ export default {
                 if (!dataIndex) {
                   row[`bracket_left`] = row[`bracket_right`] = '';
                 }
-              }
+              },
             };
-          }
+          },
         },
         {
           title: '字段类型',
           dataIndex: 'fieldType',
           width: 100,
-          hidden: true
+          hidden: true,
         },
         {
           title: '运算',
           dataIndex: 'expression',
           width: 120,
           required: true,
-          editRender: row => {
-            let filterType = this.filterColumns.find(x => x.dataIndex === row[`fieldName`])?.filter.type;
+          editRender: (row) => {
+            let filterType = this.filterColumns.find((x) => x.dataIndex === row[`fieldName`])?.filter.type;
             return {
               type: 'select',
               editable: true,
               items: this.getExpressionHandle(filterType),
               extra: {
                 disabled: !row[`fieldName`],
-                clearable: false
+                clearable: false,
               },
               onChange: (cell, row) => {
                 // 重置 条件值
                 row[`condition`] = this.isMultipleSelect(row[`expression`]) ? [] : '';
-              }
+              },
             };
-          }
+          },
         },
         {
           title: '条件值',
           dataIndex: 'condition',
           width: 160,
-          editRender: row => {
-            let column = this.filterColumns.find(x => x.dataIndex === row[`fieldName`]);
+          editRender: (row) => {
+            let column = this.filterColumns.find((x) => x.dataIndex === row[`fieldName`]);
             let filterType = column?.filter.type;
             let dictItems = column?.filter?.items ?? column?.dictItems ?? [];
             return {
@@ -179,10 +179,10 @@ export default {
               editable: true,
               items: dictItems,
               extra: {
-                disabled: !row[`fieldName`]
-              }
+                disabled: !row[`fieldName`],
+              },
             };
-          }
+          },
         },
         {
           title: '括号',
@@ -190,25 +190,25 @@ export default {
           width: 80,
           render: (text, row) => {
             return <span style={{ fontSize: '20px' }}>{text}</span>;
-          }
+          },
         },
         {
           title: '逻辑',
           dataIndex: 'logic',
           width: 90,
           required: true,
-          editRender: row => {
+          editRender: (row) => {
             return {
               type: 'select',
               editable: true,
               items: this.logicDicts,
               extra: {
                 disabled: !row[`fieldName`],
-                clearable: false
-              }
+                clearable: false,
+              },
             };
-          }
-        }
+          },
+        },
       ];
     },
     isMultipleSelect(type) {
@@ -245,7 +245,7 @@ export default {
             { value: '>=', text: this.t('table.highSearch.gteText') },
             { value: '<=', text: this.t('table.highSearch.lteText') },
             { value: '==', text: this.t('table.highSearch.eqText') },
-            { value: '!=', text: this.t('table.highSearch.neqText') }
+            { value: '!=', text: this.t('table.highSearch.neqText') },
           ];
           break;
         case 'checkbox':
@@ -254,7 +254,7 @@ export default {
             { value: 'in', text: this.t('table.highSearch.inText') },
             { value: 'nin', text: this.t('table.highSearch.ninText') },
             { value: '==', text: this.t('table.highSearch.eqText') },
-            { value: '!=', text: this.t('table.highSearch.neqText') }
+            { value: '!=', text: this.t('table.highSearch.neqText') },
           ];
           break;
         case 'text':
@@ -262,7 +262,7 @@ export default {
           result = [
             { value: 'like', text: this.t('table.highSearch.likeText') },
             { value: '==', text: this.t('table.highSearch.eqText') },
-            { value: '!=', text: this.t('table.highSearch.neqText') }
+            { value: '!=', text: this.t('table.highSearch.neqText') },
           ];
           break;
       }
@@ -293,7 +293,7 @@ export default {
       this.savedItems.push({
         text: title,
         value: uuid,
-        list: this.currentData.filter(x => !!x.fieldName)
+        list: this.currentData.filter((x) => !!x.fieldName),
       });
       this.currentKey = uuid;
       await localforage.setItem(this.highSearchKey, this.savedItems);
@@ -322,7 +322,7 @@ export default {
     async removeSavedHandle(ev, key) {
       ev.stopPropagation();
       if (!key) return;
-      const index = this.savedItems.findIndex(x => x.value === key);
+      const index = this.savedItems.findIndex((x) => x.value === key);
       this.savedItems.splice(index, 1);
       if (key === this.currentKey) {
         this.currentKey = '';
@@ -344,12 +344,12 @@ export default {
     cancelHandle() {
       this.loading = !1;
       this.$emit('close', false);
-    }
+    },
   },
   render() {
     const { list, searchColumns, form, savedItems, currentKey, query, confirmDisabled, loading } = this;
     return (
-      <div class="v-high-search--setting">
+      <div class="high-search--setting">
         <div class="main">
           <div class="container">
             <VTable
@@ -359,10 +359,10 @@ export default {
               columns={searchColumns}
               showFullScreen={false}
               showColumnDefine={false}
-              rowKey={record => record.index}
-              columnsChange={columns => (this.searchColumns = columns)}
+              rowKey={(record) => record.index}
+              columnsChange={(columns) => (this.searchColumns = columns)}
               onRowClick={this.toggleBracket}
-              onDataChange={tableData => {
+              onDataChange={(tableData) => {
                 this.currentData = tableData;
               }}
             >
@@ -374,7 +374,13 @@ export default {
           </div>
           <div class="saved line">
             <div class="form-wrap">
-              <el-input class="form-item" placeholder={this.t('table.highSearch.configText')} disabled={confirmDisabled} value={form.name} onInput={val => (this.form.name = val)} />
+              <el-input
+                class="form-item"
+                placeholder={this.t('table.highSearch.configText')}
+                disabled={confirmDisabled}
+                value={form.name}
+                onInput={(val) => (this.form.name = val)}
+              />
               <el-button type="primary" disabled={!form.name} style={{ marginLeft: '10px' }} onClick={() => this.saveConfigHandle()}>
                 {this.t('table.highSearch.saveButton')}
               </el-button>
@@ -384,13 +390,17 @@ export default {
                 <span>{this.t('table.highSearch.savedSetting')}</span>
               </h5>
               <ul>
-                {savedItems.map(x => (
+                {savedItems.map((x) => (
                   <li class={x.value === currentKey && 'selected'} onClick={() => this.toggleHandle(x.value)}>
                     <span class="title">
                       <i class={['iconfont', x.value === currentKey ? 'icon-check' : 'icon-file']} />
                       <span>{x.text}</span>
                     </span>
-                    <i class="iconfont icon-close-circle close" title={this.t('table.highSearch.removeText')} onClick={ev => this.removeSavedHandle(ev, x.value)} />
+                    <i
+                      class="iconfont icon-close-circle close"
+                      title={this.t('table.highSearch.removeText')}
+                      onClick={(ev) => this.removeSavedHandle(ev, x.value)}
+                    />
                   </li>
                 ))}
                 {!savedItems.length && (
@@ -412,7 +422,7 @@ export default {
             borderTop: '1px solid #d9d9d9',
             padding: '10px 15px',
             background: '#fff',
-            textAlign: 'right'
+            textAlign: 'right',
           }}
         >
           <el-button onClick={() => this.cancelHandle()}>{this.t('table.highSearch.closeButton')}</el-button>
@@ -422,5 +432,5 @@ export default {
         </div>
       </div>
     );
-  }
+  },
 };

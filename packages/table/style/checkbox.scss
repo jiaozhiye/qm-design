@@ -2,20 +2,22 @@
  * @Author: 焦质晔
  * @Date: 2020-02-28 22:13:07
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-12-10 14:40:54
+ * @Last Modified time: 2021-03-10 09:17:12
  */
-.v-checkbox-wrapper {
+$prefix: '#{$qm-prefix}-checkbox';
+
+.#{$prefix}-wrapper {
   display: inline-block;
   line-height: 1;
   cursor: pointer;
 
   &:hover:not(&-disabled) {
-    .v-checkbox-inner {
+    .#{$prefix}-inner {
       border-color: $v-primary-color;
     }
   }
 
-  .v-checkbox {
+  .#{$prefix} {
     display: inline-block;
     position: relative;
     top: -0.09em;
@@ -67,21 +69,20 @@
       cursor: pointer;
     }
 
-    // &-focus {
-    //   box-shadow: 0 0 0 2px rgba(45, 140, 240, 0.2);
-    //   z-index: 1;
-    // }
+    &-focus {
+      box-shadow: 0 0 0 2px rgba($v-primary-color, 0.15);
+    }
 
     &-disabled {
       cursor: not-allowed;
-      .v-checkbox-input {
+      .#{$prefix}-input {
         cursor: not-allowed !important;
       }
     }
   }
 
   // 选中状态
-  .v-checkbox-checked {
+  .#{$prefix}-checked {
     &::after {
       content: ' ';
       position: absolute;
@@ -95,7 +96,7 @@
       animation-fill-mode: both;
     }
 
-    .v-checkbox-inner {
+    .#{$prefix}-inner {
       border-color: $v-primary-color;
       background-color: $v-primary-color;
       &::after {
@@ -107,8 +108,8 @@
   }
 
   // 半选状态
-  .v-checkbox-indeterminate {
-    .v-checkbox-inner {
+  .#{$prefix}-indeterminate {
+    .#{$prefix}-inner {
       border-color: #d9d9d9 !important;
       background-color: #fff !important;
 
@@ -126,8 +127,8 @@
       }
     }
 
-    &.v-checkbox-disabled {
-      .v-checkbox-inner {
+    &.#{$prefix}-disabled {
+      .#{$prefix}-inner {
         background-color: #f5f5f5;
         &::after {
           background-color: $v-font-disabled-color;
@@ -137,7 +138,7 @@
   }
 
   // 禁用状态
-  .v-checkbox-disabled {
+  .#{$prefix}-disabled {
     cursor: not-allowed;
 
     &::after {
@@ -145,7 +146,7 @@
       display: none;
     }
 
-    .v-checkbox-inner {
+    .#{$prefix}-inner {
       border-color: #d9d9d9 !important;
       background-color: #f5f5f5 !important;
       &::after {
@@ -159,7 +160,7 @@
     }
   }
 
-  .v-checkbox-text {
+  .#{$prefix}-text {
     margin-left: 6px;
   }
 }

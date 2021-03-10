@@ -2,23 +2,25 @@
  * @Author: 焦质晔
  * @Date: 2020-02-28 22:11:53
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-12-23 18:11:05
+ * @Last Modified time: 2021-03-10 12:19:23
  */
+$prefix: '#{$qm-prefix}-table';
+
 %TheadAlignCenter {
-  .v-cell--text {
+  .cell--text {
     justify-content: center !important;
   }
 }
 
 %TheadAlignRight {
-  .v-cell--text {
+  .cell--text {
     justify-content: flex-end !important;
   }
 }
 
-.v-table--header-wrapper {
+.#{$prefix}--header-wrapper {
   background-color: $v-table-header-background-color;
-  .v-table--header {
+  .#{$prefix}--header {
     tr > th[colspan]:not([colspan='1']) {
       @extend %TheadAlignCenter;
     }
@@ -28,18 +30,18 @@
   }
 }
 
-.v-header--column {
-  .v-cell--wrapper {
+.header--column {
+  .cell--wrapper {
     display: flex;
     height: 100%;
-    .v-cell--text {
+    .cell--text {
       display: flex;
       align-items: center;
       justify-content: flex-start;
       flex: 1;
       /* 重要 */
       width: 0;
-      .v-cell {
+      .cell {
         padding-right: 0;
       }
     }
@@ -51,12 +53,12 @@
     @extend %TheadAlignRight;
   }
   &:not(.v-column-has-sorter):not(.v-column-has-filter) {
-    .v-cell--text .v-cell {
+    .cell--text .cell {
       padding-right: $v-module-distance;
     }
   }
-  &.v-column--required {
-    .v-cell {
+  &.column--required {
+    .cell {
       &::before {
         content: '*';
         color: $v-danger-color;
@@ -66,7 +68,7 @@
   }
 
   /* 排序 */
-  .v-cell--sorter {
+  .cell--sorter {
     position: relative;
     flex-shrink: 0;
     width: 16px;
@@ -74,8 +76,8 @@
     transform: scale(0.9);
     -webkit-transform: scale(0.9);
     cursor: pointer;
-    .v-sort--asc-btn,
-    .v-sort--desc-btn {
+    .sort--asc-btn,
+    .sort--desc-btn {
       position: absolute;
       width: 100%;
       height: 12px;
@@ -84,19 +86,19 @@
         color: $v-primary-color;
       }
     }
-    .v-sort--asc-btn {
+    .sort--asc-btn {
       top: 0px;
     }
-    .v-sort--desc-btn {
+    .sort--desc-btn {
       bottom: 0px;
     }
   }
 
   /* 筛选 */
-  .v-cell--filter {
+  .cell--filter {
     width: 20px;
     flex-shrink: 0;
-    .v-filter-btn {
+    .filter-btn {
       display: flex;
       justify-content: center;
       align-items: center;
@@ -119,7 +121,7 @@
     }
   }
 
-  .v-resizable {
+  .resizable {
     position: absolute;
     top: 0;
     bottom: 0;
@@ -147,10 +149,10 @@
   }
 }
 
-.v-popper--wrapper {
-  .v-filter--wrap {
+.filter--wrapper {
+  .filter--wrap {
     padding: 0 $v-module-distance;
-    .v-filter-list {
+    .filter-list {
       li {
         display: flex;
         align-items: center;

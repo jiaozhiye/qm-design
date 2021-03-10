@@ -2,9 +2,9 @@
  * @Author: 焦质晔
  * @Date: 2020-02-28 22:13:50
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-07-25 10:26:34
+ * @Last Modified time: 2021-03-10 11:10:25
  */
-.v-column-filter {
+.column-filter {
   display: inline-block;
   margin-left: 3px;
   .text {
@@ -34,7 +34,7 @@
     }
   }
 }
-.v-column-filter--wrap {
+.column-filter--wrap {
   max-width: 175px;
   padding: 2px $v-module-distance;
   li.item {
@@ -44,7 +44,7 @@
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
-    .v-handle {
+    .handle {
       padding: 2px 4px;
       font-weight: 700;
       cursor: s-resize;

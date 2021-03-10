@@ -3,6 +3,8 @@ import { defineComponent, VNode } from 'vue';
 
 import PrintTemplate from './demo2';
 
+import tableData from './mock/tableData';
+
 const sleep = async (delay: number): Promise<any> => {
   return new Promise((resolve) => setTimeout(resolve, delay));
 };
@@ -126,6 +128,20 @@ export default defineComponent({
       content: '',
       columns: [
         {
+          title: '操作',
+          dataIndex: '__action__', // 操作列的 dataIndex 的值不能改
+          fixed: 'left',
+          width: 100,
+          render: (text, row) => {
+            return (
+              <div>
+                <el-button type="text">编辑</el-button>
+                <el-button type="text">查看</el-button>
+              </div>
+            );
+          },
+        },
+        {
           title: '序号',
           dataIndex: 'pageIndex',
           width: 80,
@@ -140,24 +156,316 @@ export default defineComponent({
           width: 220,
           sorter: true,
           filter: {
-            type: 'text',
+            type: 'date',
+          },
+          editRender: (row) => {
+            return {
+              type: 'datetime',
+            };
+          },
+        },
+        {
+          title: '个人信息',
+          dataIndex: 'person',
+          children: [
+            {
+              title: '姓名',
+              dataIndex: 'person.name',
+              width: 200,
+              required: true,
+              sorter: true,
+              filter: {
+                type: 'text',
+              },
+              // editRender: row => {
+              //   const obj = {
+              //     type: 'search-helper',
+              //     // editable: true,
+              //     extra: {
+              //       readonly: false,
+              //       maxlength: 10,
+              //       disabled: row.id === 3
+              //     },
+              //     helper: {
+              //       filters: [
+              //         {
+              //           type: 'INPUT',
+              //           label: '条件1',
+              //           fieldName: 'a'
+              //         }
+              //       ],
+              //       table: {
+              //         columns: [
+              //           {
+              //             title: '创建时间',
+              //             dataIndex: 'date',
+              //             filter: {
+              //               type: 'date'
+              //             }
+              //           },
+              //           {
+              //             title: '姓名',
+              //             dataIndex: 'person.name'
+              //           }
+              //         ],
+              //         rowKey: record => record.id,
+              //         fetch: {
+              //           api: () => {},
+              //           params: {},
+              //           dataKey: 'items'
+              //         }
+              //       },
+              //       fieldAliasMap: () => {
+              //         return { 'person.name': 'date', 'person.age': 'date' };
+              //       },
+              //       closed: () => {
+              //         obj.helper.initialValue = { a: '' };
+              //       }
+              //     },
+              //     rules: [{ required: true, message: '姓名不能为空' }],
+              //     onChange: (cellVal, row) => {
+              //       const keys = Object.keys(cellVal)[0].split('|');
+              //       obj.helper.initialValue = { a: '1234' };
+              //       this.$table.OPEN_SEARCH_HELPER(keys[0], keys[1]);
+              //     }
+              //     // onClick: (cell, row, column, cb, ev) => {
+              //     //   this.tableShProps = Object.assign({}, this.tableShProps, {
+              //     //     dataIndex: column.dataIndex,
+              //     //     fieldAliasMap: () => {
+              //     //       return { 'person.name': 'date', 'person.age': 'date' };
+              //     //     },
+              //     //     callback: cb
+              //     //   });
+              //     //   this.visible_table = true;
+              //     // }
+              //   };
+              //   return obj;
+              // }
+            },
+            {
+              title: '性别',
+              dataIndex: 'person.sex',
+              width: 100,
+              dictItems: [
+                { text: '男', value: '1' },
+                { text: '女', value: '0' },
+              ],
+            },
+            {
+              title: '年龄',
+              dataIndex: 'person.age',
+              width: 100,
+              sorter: true,
+              filter: {
+                type: 'number',
+              },
+              // editRender: row => {
+              //   return {
+              //     type: 'search-helper',
+              //     // editable: true,
+              //     helper: {
+              //       filters: [
+              //         {
+              //           type: 'INPUT',
+              //           label: '条件1',
+              //           fieldName: 'a'
+              //         }
+              //       ],
+              //       table: {
+              //         columns: [
+              //           {
+              //             title: '创建时间',
+              //             dataIndex: 'date',
+              //             filter: {
+              //               type: 'date'
+              //             }
+              //           },
+              //           {
+              //             title: '姓名',
+              //             dataIndex: 'person.name'
+              //           }
+              //         ],
+              //         rowKey: record => record.id,
+              //         fetch: {
+              //           api: () => {},
+              //           params: {},
+              //           dataKey: 'items'
+              //         }
+              //       },
+              //       fieldAliasMap: () => {
+              //         return { 'person.age': 'date', 'person.name': 'date' };
+              //       }
+              //     }
+              //   };
+              // }
+            },
+          ],
+        },
+        {
+          title: '价格',
+          dataIndex: 'price',
+          width: 150,
+          precision: 2,
+          required: true,
+          sorter: true,
+          groupSummary: true,
+          filter: {
+            type: 'number',
+          },
+          editRender: (row) => {
+            return {
+              type: 'number',
+              extra: {
+                max: 1000,
+              },
+              rules: [{ required: true, message: '价格不能为空' }],
+            };
+          },
+        },
+        {
+          title: '数量',
+          dataIndex: 'num',
+          width: 150,
+          required: true,
+          sorter: true,
+          groupSummary: true,
+          filter: {
+            type: 'number',
+          },
+          editRender: (row) => {
+            return {
+              type: 'number',
+              extra: {
+                max: 1000,
+              },
+              rules: [{ required: true, message: '数量不能为空' }],
+            };
+          },
+        },
+        {
+          title: '总价',
+          dataIndex: 'total',
+          width: 150,
+          precision: 2,
+          align: 'right',
+          sorter: true,
+          groupSummary: true,
+          filter: {
+            type: 'number',
+          },
+          summation: {
+            unit: '元',
+          },
+          render: (text, row) => {
+            row.total = row.price * row.num;
+            return <span>{row.total.toFixed(2)}</span>;
+          },
+          extraRender: (text, row) => {
+            return Number(row.price * row.num).toFixed(2);
+          },
+        },
+        {
+          title: '是否选择',
+          dataIndex: 'choice',
+          align: 'center',
+          width: 150,
+          editRender: (row) => {
+            return {
+              type: 'checkbox',
+              editable: true,
+              extra: {
+                trueValue: 1,
+                falseValue: 0,
+                disabled: true,
+              },
+            };
+          },
+          dictItems: [
+            { text: '选中', value: 1 },
+            { text: '非选中', value: 0 },
+          ],
+        },
+        {
+          title: '状态',
+          dataIndex: 'state',
+          width: 150,
+          filter: {
+            type: 'radio',
+            items: [
+              { text: '已完成', value: 1 },
+              { text: '进行中', value: 2 },
+              { text: '未完成', value: 3 },
+            ],
+          },
+          editRender: (row) => {
+            return {
+              type: 'select',
+              items: [
+                { text: '已完成', value: 1 },
+                { text: '进行中', value: 2 },
+                { text: '未完成', value: 3 },
+              ],
+            };
+          },
+          dictItems: [
+            { text: '已完成', value: 1 },
+            { text: '进行中', value: 2 },
+            { text: '未完成', value: 3 },
+          ],
+        },
+        {
+          title: '业余爱好',
+          dataIndex: 'hobby',
+          width: 150,
+          filter: {
+            type: 'checkbox',
+            items: [
+              { text: '篮球', value: 1 },
+              { text: '足球', value: 2 },
+              { text: '乒乓球', value: 3 },
+              { text: '游泳', value: 4 },
+            ],
+          },
+          editRender: (row) => {
+            return {
+              type: 'select-multiple',
+              items: [
+                { text: '篮球', value: 1 },
+                { text: '足球', value: 2 },
+                { text: '乒乓球', value: 3 },
+                { text: '游泳', value: 4 },
+              ],
+            };
+          },
+          dictItems: [
+            { text: '篮球', value: 1 },
+            { text: '足球', value: 2 },
+            { text: '乒乓球', value: 3 },
+            { text: '游泳', value: 4 },
+          ],
+        },
+        {
+          title: '地址',
+          dataIndex: 'address',
+          width: 200,
+          editRender: (row) => {
+            return {
+              type: 'text',
+            };
           },
         },
       ],
-      list: [
-        { id: 1, date: '2012-12-12' },
-        { id: 2, date: '2012-12-13' },
-        { id: 3, date: '2012-12-13' },
-        { id: 4, date: '2012-12-13' },
-        { id: 5, date: '2012-12-13' },
-        { id: 6, date: '2012-12-13' },
-        { id: 7, date: '2012-12-13' },
-        { id: 8, date: '2012-12-13' },
-        { id: 9, date: '2012-12-13' },
-        { id: 10, date: '2012-12-13' },
-        { id: 11, date: '2012-12-13' },
-        { id: 12, date: '2012-12-13' },
-      ],
+      list: tableData.data.items,
+      selection: {
+        type: 'checkbox',
+        selectedRowKeys: this.selectedKeys,
+        disabled: (row) => {
+          return row.id === 3;
+        },
+        onChange: (val, rows) => {
+          this.selectedKeys = val;
+        },
+      },
     };
   },
   methods: {
@@ -212,20 +520,12 @@ export default defineComponent({
   render(): VNode {
     return (
       <>
-        <qm-form
-          uniqueKey="jzy_filter"
-          formType="search"
-          list={this.formList}
-          initialValue={{}}
-          onFinish={this.finish}
-          fieldsChange={(list) => {
-            this.formList = list;
-          }}
-        ></qm-form>
         <qm-table
+          uniqueKey="jzyDemoTable"
           columns={this.columns}
           dataSource={this.list}
           rowKey={(row) => row.id}
+          rowSelection={this.selection}
           webPagination
           columnsChange={(columns) => (this.columns = columns)}
         ></qm-table>

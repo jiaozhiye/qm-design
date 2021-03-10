@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-03-20 10:18:05
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-09 08:05:06
+ * @Last Modified time: 2021-03-10 11:20:29
  */
 import { defineComponent } from 'vue';
 import addEventListener from 'add-dom-event-listener';
@@ -49,7 +49,7 @@ export default defineComponent({
         [`icon-fullscreen-exit`]: isFull,
       },
     ];
-    const cls = [`v-full-screen`, `size--${this.$$table.tableSize}`];
+    const cls = [`full-screen`, `size--${this.$$table.tableSize}`];
     return (
       <span class={cls} title={title} onClick={this.clickHandle}>
         <i class={iconCls} />

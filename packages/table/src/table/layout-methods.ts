@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-02-29 22:17:28
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-08 14:06:11
+ * @Last Modified time: 2021-03-10 11:14:27
  */
 import addEventListener from 'add-dom-event-listener';
 import { addResizeListener, removeResizeListener } from '../../../_utils/resize-event';
@@ -23,7 +23,7 @@ export default {
     }
     // body 可视区高度
     this.layout.viewportHeight = tableOuterHeight - this.layout.headerHeight - this.layout.footerHeight;
-    this.layout.tableBodyHeight = this.$$tableBody.$el.querySelector('.v-table--body').offsetHeight;
+    this.layout.tableBodyHeight = this.$$tableBody.$el.querySelector('.table--body').offsetHeight;
     this.scrollY = this.scrollYLoad || this.layout.tableBodyHeight > this.layout.viewportHeight;
   },
   resizeListener() {

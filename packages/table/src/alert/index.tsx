@@ -2,9 +2,10 @@
  * @Author: 焦质晔
  * @Date: 2020-03-18 10:22:01
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-08 16:58:44
+ * @Last Modified time: 2021-03-10 09:25:24
  */
 import { defineComponent } from 'vue';
+import { getPrefixCls } from '../../../_utils/prefix';
 import { t } from '../../../locale';
 
 export default defineComponent({
@@ -26,8 +27,11 @@ export default defineComponent({
     },
   },
   render() {
-    const { tableSize, total, rowSelection, selectionKeys } = this.$$table;
-    const cls = [`v-alert`, `size--${tableSize}`];
+    const { total, rowSelection, selectionKeys } = this.$$table;
+    const prefixCls = getPrefixCls('table');
+    const cls = {
+      [`${prefixCls}__alert`]: true,
+    };
     return (
       <div class={cls}>
         <i class="iconfont icon-info-circle-fill" />

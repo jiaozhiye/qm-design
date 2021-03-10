@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-02-26 14:53:54
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-03 18:24:24
+ * @Last Modified time: 2021-03-10 11:15:30
  */
 import { defineComponent, PropType, reactive } from 'vue';
 import { JSXNode } from '../../_utils/types';
@@ -49,7 +49,7 @@ export default defineComponent({
       modelValue: list,
       itemKey: 'fieldName',
       animation: 200,
-      handle: '.v-handle',
+      handle: '.handle',
       tag: 'transition-group',
       componentData: {
         tag: 'ul',
@@ -109,7 +109,7 @@ export default defineComponent({
                 return (
                   <li class="filter-item">
                     <el-checkbox {...checkboxProps} />
-                    <i class="iconfont icon-menu v-handle" title={t('qm.form.draggable')} />
+                    <i class="iconfont icon-menu handle" title={t('qm.form.draggable')} />
                     <span class="title" title={item.label}>
                       {item.label}
                     </span>

@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-03-09 13:18:43
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-09 13:48:27
+ * @Last Modified time: 2021-03-10 12:19:28
  */
 import { defineComponent } from 'vue';
 import { cloneDeep } from 'lodash-es';
@@ -118,7 +118,7 @@ export default defineComponent({
         return null;
       }
       return (
-        <div class="v-filter--wrap">
+        <div class="filter--wrap">
           {renderFormItem(this.column)}
           {this.renderFormButton()}
         </div>
@@ -182,7 +182,7 @@ export default defineComponent({
       });
       return (
         <div>
-          <ul class="v-filter-list">
+          <ul class="filter-list">
             <li>
               <span>&gt;&nbsp;</span>
               <el-input
@@ -214,7 +214,7 @@ export default defineComponent({
       const { dataKey } = this;
       return (
         <div>
-          <ul class="v-filter-list">
+          <ul class="filter-list">
             {filter.items.map((x) => {
               const radioProps = {
                 modelValue: this.filterValues[dataKey]?.[`==`] ?? null,
@@ -240,7 +240,7 @@ export default defineComponent({
       const results = this.filterValues[dataKey]?.[`in`] ?? [];
       return (
         <div>
-          <ul class="v-filter-list">
+          <ul class="filter-list">
             {items.map((x) => {
               const prevValue = results.includes(x.value) ? x.value : null;
               const checkboxProps = {
@@ -270,7 +270,7 @@ export default defineComponent({
       });
       return (
         <div>
-          <ul class="v-filter-list">
+          <ul class="filter-list">
             <li>
               <span>&gt;&nbsp;</span>
               <el-date-picker
@@ -319,16 +319,17 @@ export default defineComponent({
   render() {
     const { visible, isActived } = this;
     const filterBtnCls = [
-      `v-filter-btn`,
+      `filter-btn`,
       {
         [`selected`]: visible,
         [`actived`]: isActived,
       },
     ];
     return (
-      <div class="v-cell--filter" title={t('qm.table.filter.text')}>
+      <div class="cell--filter" title={t('qm.table.filter.text')}>
         <el-popover
           v-model={[this.visible, 'visible']}
+          width="auto"
           trigger="click"
           placement="bottom-start"
           transition="el-zoom-in-top"
@@ -349,7 +350,7 @@ export default defineComponent({
             ),
           }}
         >
-          <div>{this.renderContent()}</div>
+          <div class="filter--wrapper">{this.renderContent()}</div>
         </el-popover>
       </div>
     );

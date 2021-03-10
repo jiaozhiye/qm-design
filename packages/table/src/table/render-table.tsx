@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-02-29 22:17:28
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-09 12:33:59
+ * @Last Modified time: 2021-03-10 11:23:29
  */
 import { getPrefixCls } from '../../../_utils/prefix';
 
@@ -22,12 +22,14 @@ import PrintTable from '../print';
 import Reload from '../reload';
 import { JSXNode } from '../../../_utils/types';
 
+const prefixCls = getPrefixCls('table');
+
 export default {
   renderBorderLine(): JSXNode {
-    return this.bordered && <div class="v-table--border-line" />;
+    return this.bordered && <div class={`${prefixCls}--border-line`} />;
   },
   renderResizableLine(): JSXNode {
-    return this.resizable && <div ref="resizable-bar" class="v-table--resizable-bar" />;
+    return this.resizable && <div ref="resizable-bar" class={`${prefixCls}--resizable-bar`} />;
   },
   renderTable(): JSXNode {
     const {
@@ -73,14 +75,16 @@ export default {
       isGroupSummary,
       showColumnDefine,
     } = this;
-    // const prefixCls = getPrefixCls('table');
-    const prefixCls = 'v-table';
-    const vWrapperCls = { [`${prefixCls}--maximize`]: isFullScreen };
-    const vTableCls = {
-      [prefixCls]: true,
+
+    const wrapperCls = {
+      [`${prefixCls}--wrapper`]: true,
+      [`${prefixCls}--maximize`]: isFullScreen,
       [`${prefixCls}--medium`]: tableSize === 'medium',
       [`${prefixCls}--small`]: tableSize === 'small',
       [`${prefixCls}--mini`]: tableSize === 'mini',
+    };
+    const tableCls = {
+      [prefixCls]: true,
       [`is--border`]: bordered,
       [`is--fixed`]: leftFixedColumns.length || rightFixedColumns.length,
       [`is--group`]: isGroup,
@@ -151,17 +155,17 @@ export default {
       onSizeChange: this.pagerChangeHandle,
     };
     return (
-      <div class={vWrapperCls}>
-        <div ref="v-top-info" class="v-top-info">
-          <div class="v-space">
+      <div class={wrapperCls}>
+        <div ref="top-info" class={`${prefixCls}-top`}>
+          <div class={`${prefixCls}-top__space`}>
             {/* 顶部信息 */}
             {showAlert && <Alert {...alertProps} />}
-            <div class="v-slot" style={{ textAlign: topSpaceAlign }}>
+            <div class={`${prefixCls}-top__space-slot`} style={{ textAlign: topSpaceAlign }}>
               {/* 默认槽口 */}
               {this.$slots.default?.()}
             </div>
           </div>
-          <div class="v-actions">
+          <div class={`${prefixCls}-top__actions`}>
             {/* 全屏 */}
             {showFullScreen && <FullScreen />}
             {/* 刷新 */}
@@ -180,9 +184,9 @@ export default {
         </div>
         {/* @ts-ignore: loading 组件 */}
         <Spin spinning={showLoading} tip="Loading...">
-          <div ref="v-table" class={vTableCls} style={tableStyles}>
+          <div ref="table" class={tableCls} style={tableStyles}>
             {/* 主要内容 */}
-            <div class="v-table--main-wrapper">
+            <div class={`${prefixCls}--main-wrapper`}>
               {/* 头部 */}
               {showHeader && <TableHeader {...tableHeaderProps} />}
               {/* 表格体 */}

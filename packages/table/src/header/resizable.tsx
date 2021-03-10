@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-03-07 19:04:14
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-09 08:06:03
+ * @Last Modified time: 2021-03-10 11:20:43
  */
 import { defineComponent } from 'vue';
 import { getNodeOffset } from '../utils';
@@ -71,7 +71,7 @@ export default defineComponent({
   render(): JSXNode {
     const { resizable, bordered } = this.$$table;
     const resizableCls = [
-      `v-resizable`,
+      `resizable`,
       {
         [`is--line`]: resizable && !bordered,
       },

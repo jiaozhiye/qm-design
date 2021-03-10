@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-03-26 11:44:24
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-09 12:03:45
+ * @Last Modified time: 2021-03-10 11:21:35
  */
 import { defineComponent } from 'vue';
 import { flatten, groupBy, spread, mergeWith } from 'lodash-es';
@@ -27,12 +27,12 @@ const defaultHtmlStyle = `
     border-spacing: 0;
     border-collapse: collapse;
   }
-  .v-table--print {
+  table--print {
     font-size: 14px;
     text-align: left;
   }
-  .v-table--print th,
-  .v-table--print td {
+  .table--print th,
+  .table--print td {
     padding: 5px;
     border: 1px solid #000;
   }
@@ -40,10 +40,10 @@ const defaultHtmlStyle = `
   .no-border td {
     border: 0!important;
   }
-  .v-table--print th[colspan]:not([colspan='1']) {
+  .table--print th[colspan]:not([colspan='1']) {
     text-align: center;
   }
-  .v-page-break {
+  .page-break {
     page-break-after: always;
   }
 `;
@@ -200,14 +200,14 @@ export default defineComponent({
       ].join('');
       for (let i = 0; i < chunkFlatColumns.length; i++) {
         html += this._toTable(chunkColumnRows[i], chunkFlatColumns[i]);
-        html += `<div class="v-page-break"></div>`;
+        html += `<div class="page-break"></div>`;
       }
       return html + `</body></html>`;
     },
     _toTable(columnRows, flatColumns) {
       const { tableFullData, $refs } = this.$$table;
       const summationRows = flatColumns.some((x) => !!x.summation) ? $refs[`tableFooter`].summationRows : [];
-      let html = `<table class="v-table--print" width="100%" border="0" cellspacing="0" cellpadding="0">`;
+      let html = `<table class="table--print" width="100%" border="0" cellspacing="0" cellpadding="0">`;
       html += `<colgroup>${flatColumns
         .map(({ width, renderWidth }) => `<col style="width:${width || renderWidth || config.defaultColumnWidth}px">`)
         .join('')}</colgroup>`;
@@ -299,7 +299,7 @@ export default defineComponent({
     },
   },
   render(): JSXNode {
-    const cls = [`v-print--wrapper`, `size--${this.$$table.tableSize}`];
+    const cls = [`print--wrapper`, `size--${this.$$table.tableSize}`];
     return (
       <span class={cls} title={t('qm.table.print.text')} onClick={this.printHandle}>
         <i class="iconfont icon-printer" />
