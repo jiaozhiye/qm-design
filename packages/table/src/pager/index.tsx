@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-03-08 13:54:33
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-09 08:25:19
+ * @Last Modified time: 2021-03-10 18:49:35
  */
 import { defineComponent } from 'vue';
 import { JSXNode } from '../../../_utils/types';
@@ -17,7 +17,7 @@ export default defineComponent({
   render(): JSXNode {
     const { $props } = this;
     const { currentPage, pageSize, pageSizeOptions } = config.pagination;
-    const prefixCls = getPrefixCls('table-pager');
+    const prefixCls = getPrefixCls('table');
     const pageProps = {
       size: $props.size,
       total: $props.total || 0,
@@ -25,6 +25,7 @@ export default defineComponent({
       pageSize: $props.pageSize || pageSize,
       layout: $props.layout || 'prev, pager, next, jumper, sizes',
       pageSizes: $props.pageSizeOptions || pageSizeOptions,
+      background: true,
       onCurrentChange: (val) => {
         this.$emit('current-change', { currentPage: val, pageSize: $props.pageSize });
       },
@@ -33,7 +34,7 @@ export default defineComponent({
       },
     };
     const cls = {
-      [prefixCls]: true,
+      [`${prefixCls}-pager`]: true,
     };
     return (
       <div class={cls}>

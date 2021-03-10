@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-05-30 14:13:37
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-10 12:14:17
+ * @Last Modified time: 2021-03-10 19:08:41
  */
 $prefix: '#{$qm-prefix}-table';
 
@@ -27,6 +27,16 @@ $prefix: '#{$qm-prefix}-table';
       .col--ellipsis {
         .cell {
           max-height: $v-table-row-height-medium;
+        }
+      }
+    }
+    .cell--edit {
+      .el-input__inner {
+        font-size: $v-font-size-medium;
+        &.is-error {
+          .cell-error {
+            top: 9px;
+          }
         }
       }
     }
@@ -58,6 +68,16 @@ $prefix: '#{$qm-prefix}-table';
         }
       }
     }
+    .cell--edit {
+      .el-input__inner {
+        font-size: $v-font-size-small;
+        &.is-error {
+          .cell-error {
+            top: 9px;
+          }
+        }
+      }
+    }
   }
 
   &--mini {
@@ -86,37 +106,6 @@ $prefix: '#{$qm-prefix}-table';
         }
       }
     }
-  }
-
-  // =============
-
-  &.size--medium {
-    .cell--edit {
-      .el-input__inner {
-        font-size: $v-font-size-medium;
-        &.is-error {
-          .cell-error {
-            top: 9px;
-          }
-        }
-      }
-    }
-  }
-
-  &.size--small {
-    .cell--edit {
-      .el-input__inner {
-        font-size: $v-font-size-small;
-        &.is-error {
-          .cell-error {
-            top: 9px;
-          }
-        }
-      }
-    }
-  }
-
-  &.size--mini {
     .cell--edit {
       .el-input__inner {
         font-size: $v-font-size-mini;

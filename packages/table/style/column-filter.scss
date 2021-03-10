@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-02-28 22:13:50
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-10 14:55:12
+ * @Last Modified time: 2021-03-10 18:57:13
  */
 $prefix: '#{$qm-prefix}-table';
 
@@ -24,7 +24,6 @@ $prefix: '#{$qm-prefix}-table';
   li.item {
     position: relative;
     line-height: 1.75;
-    overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
     .handle {

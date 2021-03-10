@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-05-19 19:18:15
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-10 16:10:51
+ * @Last Modified time: 2021-03-10 19:04:41
  */
 .empty--wrapper {
   display: flex;
@@ -11,6 +11,6 @@
   align-items: center;
   .text {
     color: $v-font-disabled-color;
-    line-height: 20px;
+    line-height: 1.5;
   }
 }

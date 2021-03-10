@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-03-17 10:29:47
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-10 14:50:45
+ * @Last Modified time: 2021-03-10 18:46:25
  */
 import { defineComponent, reactive } from 'vue';
 import Draggable from 'vuedraggable';
@@ -206,6 +206,7 @@ export default defineComponent({
         trigger="click"
         placement="bottom-start"
         transition="el-zoom-in-top"
+        offset={5}
         append-to-body={true}
         stop-popper-mouse-event={false}
         gpu-acceleration={false}

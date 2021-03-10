@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-02-28 22:13:07
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-10 09:19:01
+ * @Last Modified time: 2021-03-10 18:40:06
  */
 $prefix: '#{$qm-prefix}-radio';
 
@@ -39,6 +39,7 @@ $prefix: '#{$qm-prefix}-radio';
       border-radius: 50%;
       background-color: #fff;
       transition: all 0.3s ease;
+      @extend %boxSizing;
       &::after {
         content: ' ';
         display: table;
@@ -94,6 +95,7 @@ $prefix: '#{$qm-prefix}-radio';
       border-radius: 50%;
       animation: antRadioEffect 0.36s ease-in-out;
       animation-fill-mode: both;
+      @extend %boxSizing;
     }
     .#{$prefix}-inner {
       border-color: $v-primary-color;

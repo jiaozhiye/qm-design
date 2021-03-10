@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-03-22 14:34:21
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-10 11:16:11
+ * @Last Modified time: 2021-03-10 19:13:12
  */
 import { defineComponent } from 'vue';
 import { isEqual, isFunction, isObject, get, merge } from 'lodash';
@@ -275,6 +275,32 @@ export default defineComponent({
           falseValue={falseValue}
           label={text}
           disabled={disabled}
+        />
+      );
+    },
+    switchHandle(row, column) {
+      const { dataIndex } = column;
+      const { extra = {}, onChange = noop } = this.options;
+      const { trueValue = '1', falseValue = '0', disabled } = extra;
+      const prevValue = getCellValue(row, dataIndex);
+      const switchProps = {
+        modelValue: prevValue,
+        'onUpdate:modelValue': (val) => {
+          setCellValue(row, dataIndex, val);
+        },
+      };
+      return (
+        <el-switch
+          size={this.size}
+          {...switchProps}
+          disabled={disabled}
+          activeValue={trueValue}
+          inactiveValue={falseValue}
+          onChange={(val) => {
+            this.store.addToUpdated(row);
+            onChange({ [this.dataKey]: val }, row);
+            this.$$table.dataChangeHandle();
+          }}
         />
       );
     },
