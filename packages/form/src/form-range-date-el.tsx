@@ -35,13 +35,7 @@ export default defineComponent({
       disabled,
       onChange = noop,
     } = this.option;
-    const {
-      dateType = 'daterange',
-      minDateTime,
-      maxDateTime,
-      shortCuts = !0,
-      unlinkPanels = !0,
-    } = options;
+    const { dateType = 'daterange', minDateTime, maxDateTime, shortCuts = !0, unlinkPanels = !0 } = options;
 
     this.$$form.setViewValue(fieldName, form[fieldName].join('-'));
 
@@ -83,16 +77,11 @@ export default defineComponent({
 
     const wrapProps = {
       modelValue: toDate(form[fieldName]),
-      'onUpdate:modelValue': (val) => {
-        let value: string[] = dateFormat(
-          val ?? [],
-          DATE_RANGE_CONF[dateType].valueFormat
-        ) as string[];
+      'onUpdate:modelValue': (val): void => {
+        let value: string[] = dateFormat(val ?? [], DATE_RANGE_CONF[dateType].valueFormat) as string[];
         if (value.length && dateType === 'daterange') {
           value.map((x, i) => {
-            return i === 0
-              ? x.replace(/\d{2}:\d{2}:\d{2}$/, '00:00:00')
-              : x.replace(/\d{2}:\d{2}:\d{2}$/, '23:59:59');
+            return i === 0 ? x.replace(/\d{2}:\d{2}:\d{2}$/, '00:00:00') : x.replace(/\d{2}:\d{2}:\d{2}$/, '23:59:59');
           });
         }
         form[fieldName] = value;

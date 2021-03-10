@@ -20,12 +20,8 @@ export default defineComponent({
   inject: ['$$form'],
   props: ['option'],
   mounted() {
-    const $startInput: HTMLInputElement = this.$refs[
-      `RANGE_DATE__start`
-    ].$el.nextElementSibling.querySelector('.el-input__inner');
-    const $endInput: HTMLInputElement = this.$refs[
-      `RANGE_DATE__end`
-    ].$el.nextElementSibling.querySelector('.el-input__inner');
+    const $startInput: HTMLInputElement = this.$refs[`RANGE_DATE__start`].$el.nextElementSibling.querySelector('.el-input__inner');
+    const $endInput: HTMLInputElement = this.$refs[`RANGE_DATE__end`].$el.nextElementSibling.querySelector('.el-input__inner');
     this._start = addEventListener($startInput, 'input', (ev: Event): void => {
       this.startInputText = (ev.target as HTMLInputElement).value;
     });
@@ -55,14 +51,7 @@ export default defineComponent({
       onChange = noop,
     } = this.option;
 
-    const {
-      dateType = 'daterange',
-      minDateTime,
-      maxDateTime,
-      startDisabled,
-      endDisabled,
-      shortCuts = !0,
-    } = options;
+    const { dateType = 'daterange', minDateTime, maxDateTime, startDisabled, endDisabled, shortCuts = !0 } = options;
 
     this.$$form.setViewValue(fieldName, form[fieldName].join('-'));
 
@@ -113,11 +102,8 @@ export default defineComponent({
 
     const startWrapProps = {
       modelValue: toDate(form[fieldName][0]),
-      'onUpdate:modelValue': (val) => {
-        let value: string = dateFormat(
-          val ?? undefined,
-          DATE_RANGE_CONF[dateType].valueFormat
-        ) as string;
+      'onUpdate:modelValue': (val): void => {
+        let value: string = dateFormat(val ?? undefined, DATE_RANGE_CONF[dateType].valueFormat) as string;
         if (value && dateType === 'daterange') {
           value = value.replace(/\d{2}:\d{2}:\d{2}$/, '00:00:00');
         }
@@ -127,11 +113,8 @@ export default defineComponent({
 
     const endWrapProps = {
       modelValue: toDate(form[fieldName][1]),
-      'onUpdate:modelValue': (val) => {
-        let value: string = dateFormat(
-          val ?? undefined,
-          DATE_RANGE_CONF[dateType].valueFormat
-        ) as string;
+      'onUpdate:modelValue': (val): void => {
+        let value: string = dateFormat(val ?? undefined, DATE_RANGE_CONF[dateType].valueFormat) as string;
         if (value && dateType === 'daterange') {
           value = value.replace(/\d{2}:\d{2}:\d{2}$/, '23:59:59');
         }
@@ -191,23 +174,16 @@ export default defineComponent({
                 val = val.replace(dateReg, '$1-$2-$3').slice(0, 10);
               }
               if (dateType === 'datetimerange') {
-                val = val
-                  .replace(dateReg, '$1-$2-$3')
-                  .replace(dateTimeReg, '$1-$2-$3 $4:$5:$6')
-                  .slice(0, 19);
+                val = val.replace(dateReg, '$1-$2-$3').replace(dateTimeReg, '$1-$2-$3 $4:$5:$6').slice(0, 19);
               }
               const oDate: Date = dayjs(val).toDate();
               const passed: boolean = !setDisabledDate(oDate, [minDateTime, form[fieldName][1]]);
               if (!passed) return;
               val = dateFormat(oDate, DATE_RANGE_CONF[dateType].valueFormat) as string;
-              form[fieldName][0] =
-                dateType === 'daterange' ? val.replace(/\d{2}:\d{2}:\d{2}$/, '00:00:00') : val;
+              form[fieldName][0] = dateType === 'daterange' ? val.replace(/\d{2}:\d{2}:\d{2}$/, '00:00:00') : val;
             }}
           />
-          <span
-            class={disabled ? 'is-disabled' : ''}
-            style="display: inline-block; text-align: center; width: 14px;"
-          >
+          <span class={disabled ? 'is-disabled' : ''} style="display: inline-block; text-align: center; width: 14px;">
             -
           </span>
           <el-date-picker
@@ -236,17 +212,13 @@ export default defineComponent({
                 val = val.replace(dateReg, '$1-$2-$3').slice(0, 10);
               }
               if (dateType === 'datetimerange') {
-                val = val
-                  .replace(dateReg, '$1-$2-$3')
-                  .replace(dateTimeReg, '$1-$2-$3 $4:$5:$6')
-                  .slice(0, 19);
+                val = val.replace(dateReg, '$1-$2-$3').replace(dateTimeReg, '$1-$2-$3 $4:$5:$6').slice(0, 19);
               }
               const oDate: Date = dayjs(val).toDate();
               const passed: boolean = !setDisabledDate(oDate, [form[fieldName][0], maxDateTime]);
               if (!passed) return;
               val = dateFormat(oDate, DATE_RANGE_CONF[dateType].valueFormat) as string;
-              form[fieldName][1] =
-                dateType === 'daterange' ? val.replace(/\d{2}:\d{2}:\d{2}$/, '23:59:59') : val;
+              form[fieldName][1] = dateType === 'daterange' ? val.replace(/\d{2}:\d{2}:\d{2}$/, '23:59:59') : val;
             }}
           />
         </div>

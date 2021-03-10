@@ -19,15 +19,11 @@ export default defineComponent({
       tabName: 'second',
       btnList: [1, 2],
       formList: [
-        // {
-        //   type: 'BREAK_SPACE',
-        //   label: '条件6',
-        //   fieldName: 'z',
-        //   collapse: {
-        //     showLimit: 2,
-        //     remarkItems: [{ fieldName: 'e' }],
-        //   },
-        // },
+        {
+          type: 'TIME',
+          label: '条件6',
+          fieldName: 'z',
+        },
         {
           type: 'MULTIPLE_TREE_SELECT',
           label: '条件6',
@@ -216,6 +212,16 @@ export default defineComponent({
   render(): VNode {
     return (
       <>
+        <qm-form
+          uniqueKey="jzy_filter"
+          formType="search"
+          list={this.formList}
+          initialValue={{}}
+          onFinish={this.finish}
+          fieldsChange={(list) => {
+            this.formList = list;
+          }}
+        ></qm-form>
         <qm-table
           columns={this.columns}
           dataSource={this.list}

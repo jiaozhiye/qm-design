@@ -66,7 +66,7 @@ const columnItem = {
 /**
  * editRender: 返回值
  * {
- *   type: PropTypes.oneOf(['text', 'number', 'select', 'select-multiple', 'checkbox', 'search-helper', 'date', 'datetime', 'time']).isRequired,
+ *   type: PropTypes.oneOf(['text', 'number', 'select', 'select-multiple', 'checkbox', 'switch', 'search-helper', 'date', 'datetime', 'time']).isRequired,
  *   items: PropTypes.arrayOf(PropTypes.shape({
  *     text: PropTypes.string,
  *     value: PropTypes.oneOfType([PropTypes.string, PropTypes.number])

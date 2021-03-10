@@ -12,7 +12,7 @@ export type IAlign = 'left' | 'center' | 'right';
 
 export type IFilterType = 'text' | 'checkbox' | 'radio' | 'number' | 'date';
 
-export type IEditerType = 'text' | 'number' | 'select' | 'select-multiple' | 'checkbox' | 'search-helper' | 'date' | 'datetime' | 'time';
+export type IEditerType = 'text' | 'number' | 'select' | 'select-multiple' | 'checkbox' | 'switch' | 'search-helper' | 'date' | 'datetime' | 'time';
 
 export type ISelectionType = 'checkbox' | 'radio';
 

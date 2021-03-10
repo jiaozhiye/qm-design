@@ -20,9 +20,7 @@ export default defineComponent({
   inject: ['$$form'],
   props: ['option'],
   mounted() {
-    const $input: HTMLInputElement = this.$refs[`DATE`].$el.nextElementSibling.querySelector(
-      '.el-input__inner'
-    );
+    const $input: HTMLInputElement = this.$refs[`DATE`].$el.nextElementSibling.querySelector('.el-input__inner');
     this._event = addEventListener($input, 'input', (ev: Event): void => {
       this.inputText = (ev.target as HTMLInputElement).value;
     });
@@ -85,7 +83,7 @@ export default defineComponent({
 
     const wrapProps = {
       modelValue: toDate(form[fieldName]),
-      'onUpdate:modelValue': (val) => {
+      'onUpdate:modelValue': (val): void => {
         let value: string = dateFormat(val ?? undefined, DATE_CONF[dateType].valueFormat) as string;
         if (value && dateType === 'date') {
           value = value.replace(/\d{2}:\d{2}:\d{2}$/, '00:00:00');
@@ -132,17 +130,13 @@ export default defineComponent({
               val = val.replace(dateReg, '$1-$2-$3').slice(0, 10);
             }
             if (dateType === 'datetime') {
-              val = val
-                .replace(dateReg, '$1-$2-$3')
-                .replace(dateTimeReg, '$1-$2-$3 $4:$5:$6')
-                .slice(0, 19);
+              val = val.replace(dateReg, '$1-$2-$3').replace(dateTimeReg, '$1-$2-$3 $4:$5:$6').slice(0, 19);
             }
             const oDate: Date = dayjs(val).toDate();
             const passed: boolean = !setDisabledDate(oDate, [minDateTime, maxDateTime]);
             if (!passed) return;
             val = dateFormat(oDate, DATE_CONF[dateType].valueFormat) as string;
-            form[fieldName] =
-              dateType === 'date' ? val.replace(/\d{2}:\d{2}:\d{2}$/, '00:00:00') : val;
+            form[fieldName] = dateType === 'date' ? val.replace(/\d{2}:\d{2}:\d{2}$/, '00:00:00') : val;
           }}
         />
         {descOptions && this.$$form.createFormItemDesc({ fieldName, ...descOptions })}

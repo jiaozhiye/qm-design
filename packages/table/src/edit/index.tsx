@@ -5,9 +5,9 @@
  * @Last Modified time: 2021-03-09 13:54:15
  */
 import { defineComponent } from 'vue';
-import { isEqual, isFunction, isObject, get, merge, cloneDeep } from 'lodash';
+import { isEqual, isFunction, isObject, get, merge } from 'lodash';
 import dayjs from 'dayjs';
-import { getCellValue, setCellValue, deepFindColumn, sleep } from '../utils';
+import { getCellValue, setCellValue, deepFindColumn, toDate, dateFormat } from '../utils';
 import { noop } from '../../../_utils/util';
 import { t } from '../../../locale';
 import { warn } from '../../../_utils/error';
@@ -17,7 +17,7 @@ import InputText from './InputText';
 import InputNumber from './InputNumber';
 import { JSXNode } from '../../../_utils/types';
 // import SearchHelper from '../../../SearchHelper';
-// import BaseDialog from '../../../BaseDialog';
+import Dialog from '../../../dialog';
 
 const trueNoop = () => true;
 
@@ -193,22 +193,20 @@ export default defineComponent({
       const { dataIndex } = column;
       const { extra = {}, rules = [], onChange = noop } = this.options;
       const prevValue = getCellValue(row, dataIndex);
-      const dateFormat = !isDateTime ? 'yyyy-MM-dd' : 'yyyy-MM-dd HH:mm:ss';
+      const dateProps = {
+        modelValue: toDate(prevValue),
+        'onUpdate:modelValue': (val) => {
+          setCellValue(row, dataIndex, dateFormat(val, !isDateTime ? 'YYYY-MM-DD' : 'YYYY-MM-DD HH:mm:ss'));
+        },
+      };
       return (
         <el-date-picker
           size={this.size}
           type={!isDateTime ? 'date' : 'datetime'}
           style={{ width: '100%' }}
-          value={prevValue ? dayjs(prevValue).format(dateFormat.replace('yyyy', 'YYYY').replace('dd', 'DD')) : prevValue}
-          onInput={(val) => {
-            setCellValue(row, dataIndex, val);
-          }}
-          format={dateFormat}
-          value-format={dateFormat}
-          picker-options={{
-            disabledDate: (oDate) => {
-              return this.setDisabledDate(oDate, [extra.minDateTime, extra.maxDateTime]);
-            },
+          {...dateProps}
+          disabledDate={(oDate) => {
+            return this.setDisabledDate(oDate, [extra.minDateTime, extra.maxDateTime]);
           }}
           clearable={extra.clearable ?? !0}
           placeholder={!isDateTime ? t('qm.table.editable.datePlaceholder') : t('qm.table.editable.datetimePlaceholder')}
@@ -230,18 +228,17 @@ export default defineComponent({
       const { extra = {}, rules = [], onChange = noop } = this.options;
       const timeFormat = 'HH:mm:ss';
       const prevValue = getCellValue(row, dataIndex);
+      const timeProps = {
+        modelValue: toDate(prevValue),
+        'onUpdate:modelValue': (val) => {
+          setCellValue(row, dataIndex, dateFormat(val, `YYYY-MM-DD ${timeFormat}`));
+        },
+      };
       return (
         <el-time-picker
           size={this.size}
-          value={prevValue}
-          onInput={(val) => {
-            setCellValue(row, dataIndex, val);
-          }}
-          pickerOptions={{
-            format: timeFormat,
-          }}
+          {...timeProps}
           format={timeFormat}
-          value-format={timeFormat}
           style={{ width: '100%' }}
           clearable={extra.clearable ?? !0}
           placeholder={t('qm.table.editable.datetimePlaceholder')}
@@ -291,7 +288,7 @@ export default defineComponent({
         const { fieldAliasMap = noop } = helper;
         return Object.assign({}, fieldAliasMap());
       };
-      const setHelperValues = (val = '', others) => {
+      const setHelperValues = (val = '', others?: any) => {
         // 对其他单元格赋值 & 校验
         if (isObject(others) && Object.keys(others).length) {
           for (let otherDataIndex in others) {
@@ -451,9 +448,9 @@ export default defineComponent({
             />
           </InputText>
           {isObject(helper) && (
-            <BaseDialog {...dialogProps}>
+            <Dialog {...dialogProps}>
               <SearchHelper {...shProps} />
-            </BaseDialog>
+            </Dialog>
           )}
         </div>
       );
