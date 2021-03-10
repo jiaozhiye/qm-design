@@ -2,9 +2,9 @@
  * @Author: 焦质晔
  * @Date: 2020-02-28 23:01:43
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-10 13:29:30
+ * @Last Modified time: 2021-03-10 20:36:40
  */
-import { defineComponent } from 'vue';
+import { defineComponent, reactive } from 'vue';
 import { pickBy, intersection, isFunction } from 'lodash-es';
 import config from '../config';
 import { where } from '../filter-sql';
@@ -252,6 +252,7 @@ export default defineComponent({
           return order === this.ascend ? start.toString().localeCompare(end.toString()) : end.toString().localeCompare(start.toString());
         });
       }
+      this.$$table.tableFullData = reactive([...this.$$table.tableFullData]);
     },
     // 表头筛选
     filterHandle() {

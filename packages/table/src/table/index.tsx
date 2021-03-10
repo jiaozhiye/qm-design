@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-02-09 09:03:59
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-10 17:07:46
+ * @Last Modified time: 2021-03-10 20:25:52
  */
 import { defineComponent } from 'vue';
 import { JSXNode } from '../../../_utils/types';
@@ -348,7 +348,9 @@ export default defineComponent({
       Object.assign(this.scrollYStore, { visibleSize: visibleYSize, offsetSize: visibleYSize, renderSize });
     },
     scrollYLoad(next) {
-      !next ? this.updateScrollYSpace(!0) : this.loadScrollYData(this.$$tableBody.prevST);
+      this.$nextTick(() => {
+        !next ? this.updateScrollYSpace(!0) : this.loadScrollYData(this.$$tableBody.prevST);
+      });
     },
     scrollX(next) {
       this.isPingRight = next;
