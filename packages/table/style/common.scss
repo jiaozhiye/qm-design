@@ -2,18 +2,10 @@
  * @Author: 焦质晔
  * @Date: 2020-02-28 22:02:54
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-10 10:06:20
+ * @Last Modified time: 2021-03-10 12:58:20
  */
 %boxSizing {
   box-sizing: border-box;
-}
-
-[class*='qm-'] {
-  @extend %boxSizing;
-  *:after,
-  *:before {
-    @extend %boxSizing;
-  }
 }
 
 @mixin reset-component() {

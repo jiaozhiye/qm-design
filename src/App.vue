@@ -13,6 +13,7 @@ export default defineComponent({
   name: 'App',
   data() {
     this.templateRender = null;
+    this.selectedKeys = [];
     return {
       expand: true,
       loading: false,

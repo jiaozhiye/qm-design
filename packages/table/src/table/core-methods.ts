@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-03-01 15:20:02
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-10 11:21:53
+ * @Last Modified time: 2021-03-10 13:04:28
  */
 import { get } from 'lodash-es';
 import { difference, hasOwn, getCellValue, setCellValue } from '../utils';
@@ -172,7 +172,7 @@ export default {
   updateScrollYSpace(isReset) {
     const { scrollYStore, tableFullData, $$tableBody } = this;
 
-    const $tableBody = $$tableBody.$el.querySelector('.table--body');
+    const $tableBody = $$tableBody.$el.querySelector('.qm-table--body');
     const $tableYSpaceElem = $$tableBody.$el.querySelector('.body--y-space');
 
     if (!isReset) {

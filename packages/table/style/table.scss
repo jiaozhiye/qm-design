@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-03-01 23:27:04
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-10 11:26:24
+ * @Last Modified time: 2021-03-10 12:25:33
  */
 @import './common.scss';
 
@@ -363,8 +363,8 @@ $prefix: '#{$qm-prefix}-table';
   }
 
   /* 暂无数据 */
-  &--empty-placeholder,
-  &--empty-block {
+  .empty-placeholder,
+  .empty-block {
     min-height: 60px;
     justify-content: center;
     align-items: center;
@@ -373,19 +373,19 @@ $prefix: '#{$qm-prefix}-table';
     width: 100%;
     pointer-events: none;
   }
-  &--empty-block {
+  .empty-block {
     display: none;
     visibility: hidden;
   }
-  &--empty-placeholder {
+  .empty-placeholder {
     display: none;
     position: absolute;
     top: 0;
-  }
-  &--empty-content {
-    display: block;
-    color: $v-font-secondary-color;
-    pointer-events: none;
+    .content {
+      display: block;
+      color: $v-font-secondary-color;
+      pointer-events: none;
+    }
   }
   &.is--empty {
     &--empty-block,

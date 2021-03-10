@@ -2,13 +2,14 @@
  * @Author: 焦质晔
  * @Date: 2020-03-09 13:18:43
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-10 12:19:28
+ * @Last Modified time: 2021-03-10 13:15:37
  */
 import { defineComponent } from 'vue';
 import { cloneDeep } from 'lodash-es';
 import { JSXNode } from '../../../_utils/types';
 import { isEmpty } from '../../../_utils/util';
 import { validateNumber, stringToNumber, toDate, dateFormat } from '../utils';
+import { getPrefixCls } from '../../../_utils/prefix';
 import { t } from '../../../locale';
 import { warn } from '../../../_utils/error';
 
@@ -318,6 +319,7 @@ export default defineComponent({
   },
   render() {
     const { visible, isActived } = this;
+    const prefixCls = getPrefixCls('table');
     const filterBtnCls = [
       `filter-btn`,
       {
@@ -328,6 +330,7 @@ export default defineComponent({
     return (
       <div class="cell--filter" title={t('qm.table.filter.text')}>
         <el-popover
+          popper-class={`${prefixCls}__popper`}
           v-model={[this.visible, 'visible']}
           width="auto"
           trigger="click"
@@ -350,7 +353,7 @@ export default defineComponent({
             ),
           }}
         >
-          <div class="filter--wrapper">{this.renderContent()}</div>
+          {this.visible && this.renderContent()}
         </el-popover>
       </div>
     );

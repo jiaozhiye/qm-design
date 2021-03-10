@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-02-28 23:01:43
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-10 11:13:44
+ * @Last Modified time: 2021-03-10 13:04:20
  */
 import { defineComponent, reactive } from 'vue';
 import addEventListener from 'add-dom-event-listener';
@@ -43,7 +43,7 @@ export default defineComponent({
   },
   computed: {
     $vTableBody() {
-      return this.$el.querySelector('.table--body');
+      return this.$el.querySelector('.qm-table--body');
     },
     bodyWidth() {
       const { layout, scrollY } = this.$$table;
@@ -423,10 +423,10 @@ export default defineComponent({
       },
     };
     return (
-      <div class={`${prefixCls}--body-wrapper body--wrapper`} style={{ ...wrapStyle }}>
+      <div class={`${prefixCls}--body-wrapper`} style={{ ...wrapStyle }}>
         {this.renderBodyYSpace()}
         {this.renderBodyXSpace()}
-        <table class="table--body" cellspacing="0" cellpadding="0" border="0" style={{ width: bodyWidth }}>
+        <table class={`${prefixCls}--body`} cellspacing="0" cellpadding="0" border="0" style={{ width: bodyWidth }}>
           {this.renderColgroup()}
           {!isDraggable ? (
             <tbody>{this.renderRows(tableData)}</tbody>

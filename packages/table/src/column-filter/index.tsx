@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-03-17 10:29:47
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-10 12:16:39
+ * @Last Modified time: 2021-03-10 13:23:50
  */
 import { defineComponent, reactive } from 'vue';
 import Draggable from 'vuedraggable';
@@ -10,7 +10,9 @@ import { JSXNode } from '../../../_utils/types';
 import Checkbox from '../checkbox';
 import SorterIcon from '../icon/sorter';
 
+import { getPrefixCls } from '../../../_utils/prefix';
 import { noop } from '../../../_utils/util';
+
 import { t } from '../../../locale';
 
 export default defineComponent({
@@ -188,11 +190,14 @@ export default defineComponent({
   },
   render(): JSXNode {
     const { visible, showButtonText } = this;
+    const prefixCls = getPrefixCls('table');
     const cls = [`column-filter`, `size--${this.$$table.tableSize}`];
     return (
       <div class={cls}>
         <el-popover
+          popper-class={`${prefixCls}__popper`}
           v-model={[this.visible, 'visible']}
+          width="auto"
           trigger="click"
           placement="bottom-start"
           transition="el-zoom-in-top"
@@ -210,7 +215,7 @@ export default defineComponent({
             ),
           }}
         >
-          <div>{this.renderColumnFilter()}</div>
+          {this.visible && this.renderColumnFilter()}
         </el-popover>
       </div>
     );
