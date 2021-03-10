@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-02-29 22:17:28
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-10 11:23:29
+ * @Last Modified time: 2021-03-10 17:07:47
  */
 import { getPrefixCls } from '../../../_utils/prefix';
 
@@ -156,7 +156,7 @@ export default {
     };
     return (
       <div class={wrapperCls}>
-        <div ref="top-info" class={`${prefixCls}-top`}>
+        <div ref="topper" class={`${prefixCls}-top`}>
           <div class={`${prefixCls}-top__space`}>
             {/* 顶部信息 */}
             {showAlert && <Alert {...alertProps} />}

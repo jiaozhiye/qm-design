@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-08-11 08:19:36
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-09 13:46:52
+ * @Last Modified time: 2021-03-10 16:34:50
  */
 import { defineComponent } from 'vue';
 import { JSXNode } from '../../../_utils/types';
@@ -86,7 +86,7 @@ export default defineComponent({
           this.$emit('keyDown', ev);
         }}
         v-slots={{
-          append: (): JSXNode => this.$slots[`append`]?.() ?? null,
+          append: this.$slots[`append`]?.() ? (): JSXNode => this.$slots[`append`]() : null,
         }}
       />
     );

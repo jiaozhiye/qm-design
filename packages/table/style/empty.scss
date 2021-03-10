@@ -2,17 +2,13 @@
  * @Author: 焦质晔
  * @Date: 2020-05-19 19:18:15
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-10 11:23:57
+ * @Last Modified time: 2021-03-10 16:10:51
  */
 .empty--wrapper {
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  .icon {
-    width: 70px;
-    height: 60px;
-  }
   .text {
     color: $v-font-disabled-color;
     line-height: 20px;

@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-03-09 13:18:43
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-10 13:15:37
+ * @Last Modified time: 2021-03-10 18:07:25
  */
 import { defineComponent } from 'vue';
 import { cloneDeep } from 'lodash-es';
@@ -127,7 +127,7 @@ export default defineComponent({
     },
     renderFormButton() {
       return (
-        <div style="padding: 10px 0 6px">
+        <div style="margin-top: 10px">
           <el-button type="primary" size="mini" onClick={this.doFinish}>
             {t('qm.table.filter.search')}
           </el-button>
@@ -147,20 +147,18 @@ export default defineComponent({
         },
       };
       return (
-        <div style="padding-top: 6px">
-          <el-input
-            ref={`text-${dataKey}`}
-            size={this.size}
-            {...inputProps}
-            placeholder={t('qm.table.filter.searchText', { text: title })}
-            style={{ width: '180px' }}
-            onKeydown={(ev) => {
-              if (ev.keyCode === 13) {
-                this.doFinish();
-              }
-            }}
-          />
-        </div>
+        <el-input
+          ref={`text-${dataKey}`}
+          size={this.size}
+          {...inputProps}
+          placeholder={t('qm.table.filter.searchText', { text: title })}
+          style={{ width: '180px' }}
+          onKeydown={(ev) => {
+            if (ev.keyCode === 13) {
+              this.doFinish();
+            }
+          }}
+        />
       );
     },
     numberHandle(column) {
@@ -334,8 +332,9 @@ export default defineComponent({
           v-model={[this.visible, 'visible']}
           width="auto"
           trigger="click"
-          placement="bottom-start"
+          placement="bottom-end"
           transition="el-zoom-in-top"
+          offset={4}
           show-arrow={false}
           append-to-body={true}
           stop-popper-mouse-event={false}
@@ -346,7 +345,7 @@ export default defineComponent({
           v-slots={{
             reference: (): JSXNode => (
               <div class={filterBtnCls}>
-                <span>
+                <span class="icon-svg">
                   <FilterIcon />
                 </span>
               </div>
