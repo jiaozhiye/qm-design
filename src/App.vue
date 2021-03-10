@@ -523,6 +523,7 @@ export default defineComponent({
       <>
         <qm-table
           uniqueKey="jzyDemoTable"
+          maxHeight="400"
           columns={this.columns}
           dataSource={this.list}
           rowKey={(row) => row.id}

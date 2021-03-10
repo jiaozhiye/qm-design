@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-02-09 16:15:17
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-02-11 15:47:52
+ * @Last Modified time: 2021-03-10 14:46:44
  */
 @import './themes';
 
@@ -18,6 +18,11 @@
   font-style: normal;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-svg {
+  font-style: normal;
+  vertical-align: middle;
 }
 
 .icon-export-excel:before {

@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-02-02 15:58:17
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-10 11:23:14
+ * @Last Modified time: 2021-03-10 15:37:06
  */
 import { defineComponent } from 'vue';
 import dayjs from 'dayjs';
@@ -15,6 +15,7 @@ import { download } from '../../../_utils/download';
 import config from '../config';
 import { t } from '../../../locale';
 import { getCellValue, setCellValue, convertToRows, filterTableColumns } from '../utils';
+import { getPrefixCls } from '../../../_utils/prefix';
 
 export default defineComponent({
   name: 'Export',
@@ -186,6 +187,7 @@ export default defineComponent({
   },
   render() {
     const { fields, fileName, fetch, exportFetch, disabledState } = this;
+    const prefixCls = getPrefixCls('table');
     const exportFileName = fileName ?? `${dayjs().format('YYYYMMDDHHmmss')}.xlsx`;
     const exportFileType = exportFileName.slice(exportFileName.lastIndexOf('.') + 1).toLowerCase();
     const wrapProps = {
@@ -203,13 +205,10 @@ export default defineComponent({
         },
       },
     };
-    const cls = [
-      `export--wrapper`,
-      `size--${this.$$table.tableSize}`,
-      {
-        disabled: disabledState,
-      },
-    ];
+    const cls = {
+      [`${prefixCls}-export`]: true,
+      disabled: disabledState,
+    };
     return (
       <span class={cls} title={t('qm.table.export.text')}>
         {exportFetch || (this.$$table.spanMethod && exportFileType === 'xls') ? (

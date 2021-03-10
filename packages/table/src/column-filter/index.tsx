@@ -2,10 +2,11 @@
  * @Author: 焦质晔
  * @Date: 2020-03-17 10:29:47
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-10 13:23:50
+ * @Last Modified time: 2021-03-10 14:50:45
  */
 import { defineComponent, reactive } from 'vue';
 import Draggable from 'vuedraggable';
+import classnames from 'classnames';
 import { JSXNode } from '../../../_utils/types';
 import Checkbox from '../checkbox';
 import SorterIcon from '../icon/sorter';
@@ -100,7 +101,6 @@ export default defineComponent({
     },
     renderColumnFilter() {
       const { leftFixedColumns, mainColumns, rightFixedColumns } = this;
-      const cls = [`column-filter--wrap`, `size--${this.$$table.tableSize}`];
 
       const leftDragProps = {
         modelValue: leftFixedColumns,
@@ -151,7 +151,7 @@ export default defineComponent({
       };
 
       return (
-        <div class={cls}>
+        <div class="column-filter--wrap">
           <div class="left">
             <Draggable
               {...leftDragProps}
@@ -189,35 +189,42 @@ export default defineComponent({
     },
   },
   render(): JSXNode {
+    const { tableSize } = this.$$table;
     const { visible, showButtonText } = this;
     const prefixCls = getPrefixCls('table');
-    const cls = [`column-filter`, `size--${this.$$table.tableSize}`];
+    const popperCls = {
+      [`${prefixCls}__popper`]: true,
+      [`${prefixCls}__popper--medium`]: tableSize === 'medium',
+      [`${prefixCls}__popper--small`]: tableSize === 'small',
+      [`${prefixCls}__popper--mini`]: tableSize === 'mini',
+    };
     return (
-      <div class={cls}>
-        <el-popover
-          popper-class={`${prefixCls}__popper`}
-          v-model={[this.visible, 'visible']}
-          width="auto"
-          trigger="click"
-          placement="bottom-start"
-          transition="el-zoom-in-top"
-          append-to-body={true}
-          stop-popper-mouse-event={false}
-          gpu-acceleration={false}
-          v-slots={{
-            reference: (): JSXNode => (
-              <span class={{ [`text`]: !0, [`selected`]: visible }} title={!showButtonText ? t('qm.table.columnFilter.text') : ''}>
-                <span>
-                  <SorterIcon />
-                </span>
-                {showButtonText && t('qm.table.columnFilter.text')}
-              </span>
-            ),
-          }}
-        >
-          {this.visible && this.renderColumnFilter()}
-        </el-popover>
-      </div>
+      <el-popover
+        popper-class={`${classnames(popperCls)}`}
+        v-model={[this.visible, 'visible']}
+        width="auto"
+        trigger="click"
+        placement="bottom-start"
+        transition="el-zoom-in-top"
+        append-to-body={true}
+        stop-popper-mouse-event={false}
+        gpu-acceleration={false}
+        v-slots={{
+          reference: (): JSXNode => (
+            <span
+              class={{ [`${prefixCls}-column-filter`]: !0, [`selected`]: visible }}
+              title={!showButtonText ? t('qm.table.columnFilter.text') : ''}
+            >
+              <em class="icon-svg">
+                <SorterIcon />
+              </em>
+              {showButtonText && t('qm.table.columnFilter.text')}
+            </span>
+          ),
+        }}
+      >
+        {this.visible && this.renderColumnFilter()}
+      </el-popover>
     );
   },
 });

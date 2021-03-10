@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-02-08 19:28:31
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-06 10:09:17
+ * @Last Modified time: 2021-03-10 13:41:45
  */
 import { Ref, toRaw, Fragment, Comment, Text, VNode } from 'vue';
 import { isObject, isArray, hasOwn, camelize } from '@vue/shared';
@@ -11,7 +11,7 @@ import isServer from './isServer';
 import { AnyFunction, AnyObject } from './types';
 
 export const isIE = (): boolean => {
-  return !isServer && !isNaN(Number(document.DOCUMENT_NODE));
+  return !isServer && /MSIE|Trident/.test(navigator.userAgent);
 };
 
 export const isEdge = (): boolean => {

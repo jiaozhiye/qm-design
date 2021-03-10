@@ -2,13 +2,13 @@
  * @Author: 焦质晔
  * @Date: 2020-03-26 11:44:24
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-10 11:21:35
+ * @Last Modified time: 2021-03-10 15:04:42
  */
 import { defineComponent } from 'vue';
 import { flatten, groupBy, spread, mergeWith } from 'lodash-es';
-// import Cookies from 'js-cookie';
 import { convertToRows, deepFindColumn, filterTableColumns, getCellValue } from '../utils';
 import config from '../config';
+import { getPrefixCls } from '../../../_utils/prefix';
 import { t } from '../../../locale';
 import { download } from '../../../_utils/download';
 import { JSXNode } from '../../../_utils/types';
@@ -299,9 +299,9 @@ export default defineComponent({
     },
   },
   render(): JSXNode {
-    const cls = [`print--wrapper`, `size--${this.$$table.tableSize}`];
+    const prefixCls = getPrefixCls('table');
     return (
-      <span class={cls} title={t('qm.table.print.text')} onClick={this.printHandle}>
+      <span class={`${prefixCls}-print`} title={t('qm.table.print.text')} onClick={this.printHandle}>
         <i class="iconfont icon-printer" />
       </span>
     );
