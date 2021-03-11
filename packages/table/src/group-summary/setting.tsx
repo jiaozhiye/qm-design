@@ -2,15 +2,16 @@
  * @Author: 焦质晔
  * @Date: 2020-05-19 16:19:58
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-11 10:27:24
+ * @Last Modified time: 2021-03-11 10:44:32
  */
 import { defineComponent } from 'vue';
 import localforage from 'localforage';
 import { createUidKey } from '../utils';
 import { getPrefixCls } from '../../../_utils/prefix';
+import { warn } from '../../../_utils/error';
 import { t } from '../../../locale';
-import config from '../config';
 
+import config from '../config';
 import VTable from '../table';
 import EmptyEle from '../empty/element';
 import GroupSummaryResult from './result';
@@ -212,7 +213,7 @@ export default defineComponent({
     // 保存配置
     async saveConfigHandle() {
       if (!this.groupSummaryKey) {
-        return console.error('[Table]: 必须设置组件参数 `uniqueKey` 才能保存');
+        return warn('Table', '必须设置组件参数 `uniqueKey` 才能保存');
       }
       const title = this.form.name;
       const uuid = createUidKey();

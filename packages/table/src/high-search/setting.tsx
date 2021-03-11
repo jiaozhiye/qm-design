@@ -2,13 +2,14 @@
  * @Author: 焦质晔
  * @Date: 2020-07-12 16:26:19
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-11 10:20:20
+ * @Last Modified time: 2021-03-11 10:45:04
  */
 import { defineComponent } from 'vue';
 import localforage from 'localforage';
 import { isBracketBalance } from '../filter-sql';
 import { hasOwn, createUidKey, createWhereSQL } from '../utils';
 import { getPrefixCls } from '../../../_utils/prefix';
+import { warn } from '../../../_utils/error';
 import { t } from '../../../locale';
 import config from '../config';
 
@@ -287,7 +288,7 @@ export default defineComponent({
     },
     async saveConfigHandle() {
       if (!this.highSearchKey) {
-        return console.error('[Table]: 必须设置组件参数 `uniqueKey` 才能保存');
+        return warn('Table', '必须设置组件参数 `uniqueKey` 才能保存');
       }
       const title = this.form.name;
       const uuid = createUidKey();
