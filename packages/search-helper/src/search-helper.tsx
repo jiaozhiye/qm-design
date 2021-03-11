@@ -2,14 +2,13 @@
  * @Author: 焦质晔
  * @Date: 2021-02-09 09:03:59
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-11 14:37:33
+ * @Last Modified time: 2021-03-11 14:39:15
  */
 import { defineComponent, PropType } from 'vue';
 import addEventListener from 'add-dom-event-listener';
 import { merge, get, isFunction } from 'lodash-es';
 import PropTypes from '../../_utils/vue-types';
 import { JSXNode, ComponentSize, AnyObject } from '../../_utils/types';
-import { useSize } from '../../hooks/useSize';
 import { noop, debounce } from '../../_utils/util';
 import { getParentNode } from '../../_utils/dom';
 import { isValidComponentSize } from '../../_utils/validators';

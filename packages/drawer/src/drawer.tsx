@@ -2,9 +2,10 @@
  * @Author: 焦质晔
  * @Date: 2021-02-09 09:03:59
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-02-28 10:53:18
+ * @Last Modified time: 2021-03-11 15:36:47
  */
 import { CSSProperties, defineComponent, PropType } from 'vue';
+import addEventListener from 'add-dom-event-listener';
 import classnames from 'classnames';
 import PropTypes from '../../_utils/vue-types';
 import { AnyFunction, ComponentSize, JSXNode } from '../../_utils/types';
@@ -14,6 +15,7 @@ import { isValidComponentSize, isValidWidthUnit } from '../../_utils/validators'
 import { useSize } from '../../hooks/useSize';
 import { useGlobalConfig } from '../../hooks/useGlobalConfig';
 import { getPrefixCls } from '../../_utils/prefix';
+import { stop } from '../../_utils/dom';
 import { t } from '../../locale';
 
 import Spin from '../../spin';
@@ -66,15 +68,7 @@ export default defineComponent({
       type: [String, Object] as PropType<string | CSSProperties>,
     },
   },
-  emits: [
-    'update:visible',
-    'open',
-    'opened',
-    'close',
-    'closed',
-    'afterVisibleChange',
-    'viewportChange',
-  ],
+  emits: ['update:visible', 'open', 'opened', 'close', 'closed', 'afterVisibleChange', 'viewportChange'],
   data() {
     this.insideSpinCtrl = isUndefined(this.loading);
     return {
@@ -92,9 +86,7 @@ export default defineComponent({
       return DIR[this.position];
     },
     contentSize(): string {
-      const size: number | string = ['right', 'left'].includes(this.position)
-        ? this.width
-        : this.height;
+      const size: number | string = ['right', 'left'].includes(this.position) ? this.width : this.height;
       return this.calcContentSize(!this.fullscreen ? size : '100%');
     },
   },
@@ -111,6 +103,7 @@ export default defineComponent({
     },
     opened(): void {
       this.panelOpened = true; // 打开过一次
+      this.addStopEvent();
       this.$emit('opened');
       this.$emit('afterVisibleChange', true);
       if (this.insideSpinCtrl) {
@@ -122,8 +115,15 @@ export default defineComponent({
       this.$emit('close');
     },
     closed(): void {
+      this.removeStopEvent();
       this.$emit('closed');
       this.$emit('afterVisibleChange', false);
+    },
+    addStopEvent(): void {
+      this.stopEvent = addEventListener(this.$refs[`drawer`].drawerRef.parentNode, 'click', stop);
+    },
+    removeStopEvent(): void {
+      this.stopEvent?.remove();
     },
     handleClick(): void {
       this.fullscreen = !this.fullscreen;
@@ -142,11 +142,7 @@ export default defineComponent({
         <div class="drawer-title">
           <span class="title">{title}</span>
           {showFullScreen && (
-            <span
-              title={fullscreen ? t('qm.dialog.cancelFullScreen') : t('qm.dialog.fullScreen')}
-              class="fullscreen"
-              onClick={this.handleClick}
-            >
+            <span title={fullscreen ? t('qm.dialog.cancelFullScreen') : t('qm.dialog.fullScreen')} class="fullscreen" onClick={this.handleClick}>
               <i class={['iconfont', fullscreen ? 'icon-fullscreen-exit' : 'icon-fullscreen']} />
             </span>
           )}
@@ -160,7 +156,7 @@ export default defineComponent({
   render(): JSXNode {
     const { contentSize, direction, containerStyle, $props } = this;
 
-    const $DESIGN = useGlobalConfig();
+    const { global } = useGlobalConfig();
     const { $size } = useSize(this.$props);
     const prefixCls = getPrefixCls('drawer');
 
@@ -179,7 +175,7 @@ export default defineComponent({
       withHeader: $props.showHeader,
       showClose: $props.showClose,
       beforeClose: $props.beforeClose,
-      closeOnClickModal: $props.closeOnClickModal ?? $DESIGN.global.closeOnClickModal ?? false,
+      closeOnClickModal: $props.closeOnClickModal ?? global.closeOnClickModal ?? false,
       closeOnPressEscape: $props.closeOnPressEscape,
       destroyOnClose: $props.destroyOnClose,
       appendToBody: true,
