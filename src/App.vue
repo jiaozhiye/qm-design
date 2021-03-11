@@ -474,10 +474,10 @@ export default defineComponent({
   },
   methods: {
     clickHandle(k) {
-      // this.$refs[`gprint`].DO_PRINT();
+      this.$refs[`gprint`].DO_PRINT();
       // this.$message.success('asdasd');
       // this.loading = false;
-      this.visible = true;
+      // this.visible = true;
       // this.visible2 = true;
     },
     async printHandle3() {
@@ -535,15 +535,6 @@ export default defineComponent({
           webPagination
           columnsChange={(columns) => (this.columns = columns)}
         ></qm-table>
-        <qm-button
-          class="asd"
-          confirm={{
-            onConfirm: () => {},
-          }}
-          click={this.clickHandle}
-        >
-          按钮
-        </qm-button>
         {/* <qm-countup endValue={2020} />
         <qm-split direction="vertical" style="height: 300px">
           <qm-split-pane>asdasd</qm-split-pane>
@@ -634,10 +625,6 @@ export default defineComponent({
           <qm-print-item label="打印1" dataSource={[1]} templateRender={PrintTemplate} />
           <qm-print-item label="打印2" dataSource={[]} templateRender={PrintTemplate} />
         </qm-print-group> */}
-        <qm-drawer v-model={[this.visible, 'visible']} title="抽屉标题" destroyOnClose containerStyle={{ paddingBottom: '30px' }}>
-          <div style="height: 1000px">asd</div>
-          <div style="position: absolute; left: 0; bottom: 0; right: 0;">footer</div>
-        </qm-drawer>
       </>
     );
   },

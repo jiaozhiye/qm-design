@@ -2,12 +2,12 @@
  * @Author: 焦质晔
  * @Date: 2021-02-09 09:03:59
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-11 14:39:15
+ * @Last Modified time: 2021-03-11 16:26:18
  */
 import { defineComponent, PropType } from 'vue';
-import addEventListener from 'add-dom-event-listener';
 import { merge, get, isFunction } from 'lodash-es';
 import PropTypes from '../../_utils/vue-types';
+import { addResizeListener, removeResizeListener } from '../../_utils/resize-event';
 import { JSXNode, ComponentSize, AnyObject } from '../../_utils/types';
 import { noop, debounce } from '../../_utils/util';
 import { getParentNode } from '../../_utils/dom';
@@ -90,7 +90,7 @@ export default defineComponent({
     };
   },
   computed: {
-    $topFilter(): any {
+    $topFilter(): unknown {
       return this.$refs[`filter`];
     },
     disabled(): boolean {
@@ -102,15 +102,14 @@ export default defineComponent({
     this.getTableData();
   },
   mounted() {
-    this.resizeEvent = addEventListener(window, 'resize', debounce(this.resizeEventHandle, 0));
     this.$nextTick(() => {
       this.fetch.params = merge({}, this.fetch.params, this.formatParams(this.$topFilter.form));
       this.showTable = true;
     });
-    setTimeout(() => this.calcTableHeight());
+    addResizeListener(this.$refs[`search-helper`], debounce(this.calcTableHeight, 10));
   },
   beforeUnmount() {
-    this.resizeEvent && this.resizeEvent.remove();
+    removeResizeListener(this.$refs[`search-helper`], this.calcTableHeight);
   },
   methods: {
     async getHelperConfig(): Promise<void> {
@@ -143,7 +142,7 @@ export default defineComponent({
           title: t('qm.searchHelper.orderIndex'),
           dataIndex: 'index',
           width: 80,
-          render: (text: string): JSXNode => {
+          render: (text: number): JSXNode => {
             return text + 1;
           },
         },
@@ -253,10 +252,8 @@ export default defineComponent({
     calcTableHeight(): void {
       const $size: string = this.$props.size || this.$DESIGN.size || 'default';
       const containerHeight: number = window.innerHeight - getParentNode(this.$el, 'el-dialog')?.offsetTop * 2 - 50 - footHeight[$size];
-      this.height = containerHeight - this.$topFilter.$el.offsetHeight - 94;
-    },
-    resizeEventHandle(): void {
-      this.calcTableHeight();
+      // 计算表格高度
+      this.height = containerHeight - this.$topFilter.$el.offsetHeight - 100;
     },
   },
   render(): JSXNode {
@@ -274,10 +271,9 @@ export default defineComponent({
       webPagination,
       disabled,
     } = this;
-    const tableProps = { props: !webPagination ? { fetch } : { dataSource: tableList, webPagination: !0 } };
-
+    const tableProps = !webPagination ? { fetch } : { dataSource: tableList, webPagination: !0 };
     return (
-      <div>
+      <div ref="search-helper">
         {/* @ts-ignore */}
         <Spin spinning={loading} tip="Loading...">
           <Form
