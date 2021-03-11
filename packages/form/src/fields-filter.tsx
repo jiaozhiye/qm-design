@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-02-26 14:53:54
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-10 11:15:30
+ * @Last Modified time: 2021-03-11 14:30:28
  */
 import { defineComponent, PropType, reactive } from 'vue';
 import { JSXNode } from '../../_utils/types';
@@ -77,6 +77,7 @@ export default defineComponent({
         width={'auto'}
         trigger="click"
         placement="bottom-end"
+        offset={5}
         transition="el-zoom-in-top"
         popper-options={{ gpuAcceleration: false }}
         append-to-body={true}

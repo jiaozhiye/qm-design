@@ -67,6 +67,11 @@ export default {
     split: {
       resize: '拖动改变大小',
     },
+    searchHelper: {
+      close: '关 闭',
+      confirm: '确 定',
+      orderIndex: '序号',
+    },
     table: {
       config: {
         selectionText: '选择',

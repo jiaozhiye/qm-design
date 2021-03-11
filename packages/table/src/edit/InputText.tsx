@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-08-11 08:19:36
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-10 16:34:50
+ * @Last Modified time: 2021-03-11 14:20:55
  */
 import { defineComponent } from 'vue';
 import { JSXNode } from '../../../_utils/types';
@@ -12,7 +12,7 @@ import { useSize } from '../../../hooks/useSize';
 
 export default defineComponent({
   name: 'InputText',
-  emits: ['update:modelValue', 'change', 'input', 'keyDown'],
+  emits: ['update:modelValue', 'change', 'input', 'dblclick', 'keyDown'],
   props: {
     modelValue: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
     size: PropTypes.string,
@@ -81,6 +81,9 @@ export default defineComponent({
           if (Array.from(ev.target.classList).includes('el-input__clear')) {
             ev.stopPropagation();
           }
+        }}
+        onDblclick={(ev) => {
+          this.$emit('dblclick', ev);
         }}
         onKeyDown={(ev) => {
           this.$emit('keyDown', ev);

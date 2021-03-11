@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-03-22 14:34:21
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-10 19:13:12
+ * @Last Modified time: 2021-03-11 14:38:48
  */
 import { defineComponent } from 'vue';
 import { isEqual, isFunction, isObject, get, merge } from 'lodash';
@@ -16,7 +16,7 @@ import Checkbox from '../checkbox';
 import InputText from './InputText';
 import InputNumber from './InputNumber';
 import { JSXNode } from '../../../_utils/types';
-// import SearchHelper from '../../../SearchHelper';
+import SearchHelper from '../../../search-helper';
 import Dialog from '../../../dialog';
 
 const trueNoop = () => true;
@@ -363,7 +363,6 @@ export default defineComponent({
         const { table, initialValue = {}, beforeFetch = (k) => k } = helper;
         return new Promise(async (resolve, reject) => {
           this.shMatching = !0;
-
           const params = merge({}, table.fetch?.params, beforeFetch({ ...initialValue, ...setHelperFilterValues(val) }), {
             currentPage: 1,
             pageSize: 500,
@@ -379,7 +378,6 @@ export default defineComponent({
           } catch (err) {
             reject();
           }
-
           this.shMatching = !1;
         });
       };
@@ -404,75 +402,74 @@ export default defineComponent({
         this.shVisible = !0;
       };
       const dialogProps = {
-        props: {
-          visible: this.shVisible,
-          title: t('qm.table.editable.searchHelper'),
-          width: helper?.width ?? '60%',
-          height: helper?.height,
-          showFullScreen: false,
-          destroyOnClose: true,
-          stopEventBubble: true,
-          containerStyle: { height: 'calc(100% - 52px)', paddingBottom: '52px' },
+        visible: this.shVisible,
+        title: t('qm.table.editable.searchHelper'),
+        width: helper?.width ?? '60%',
+        height: helper?.height,
+        loading: false,
+        destroyOnClose: true,
+        containerStyle: { paddingBottom: '52px' },
+        'onUpdate:visible': (val) => {
+          this.shVisible = val;
         },
-        on: {
-          'update:visible': (val) => (this.shVisible = val),
-          closed: () => {
-            const { closed = noop } = helper;
-            closed(row);
-          },
+        closed: () => {
+          const { closed = noop } = helper;
+          closed(row);
         },
       };
       const shProps = {
         ref: `sh-panel-${this.dataKey}`,
-        props: {
-          ...helper,
-        },
-        on: {
-          close: closeHelperHandle,
-        },
+        ...helper,
+        onClose: closeHelperHandle,
       };
       const prevValue = getCellValue(row, dataIndex);
       const remoteMatch = helper && (helper.remoteMatch ?? !0);
+      const inputProps = {
+        modelValue: prevValue,
+        'onUpdate:modelValue': (val) => {
+          setCellValue(row, dataIndex, val);
+        },
+      };
       return (
         <div class="search-helper">
           <InputText
             ref={`search-helper-${this.dataKey}`}
             size={this.size}
-            value={prevValue}
-            onInput={(val) => {
-              setCellValue(row, dataIndex, val);
-            }}
+            {...inputProps}
             maxlength={extra.maxlength}
             readonly={extra.readonly}
             clearable={extra.clearable ?? !0}
             disabled={extra.disabled}
+            // @ts-ignore
             onChange={(val) => {
               if (val && remoteMatch) {
                 return getHelperData(val)
-                  .then((list) => resetHelperValue(list, val))
+                  .then((list: any[]) => resetHelperValue(list, val))
                   .catch(() => setHelperValues(''));
               }
               setHelperValues(val);
             }}
-            nativeOnDblclick={(ev) => {
+            onDblclick={(ev) => {
               if (extra.disabled) return;
               isObject(helper) && openHelperPanel();
             }}
-            nativeOnKeydown={(ev) => {
+            onKeydown={(ev) => {
               if (ev.keyCode === 13) {
                 this.$refs[`search-helper-${this.dataKey}`].blur();
               }
             }}
-          >
-            <el-button
-              size={this.size}
-              slot="append"
-              icon="el-icon-search"
-              onClick={(ev) => {
-                isObject(helper) ? openHelperPanel() : onClick({ [this.dataKey]: prevValue }, row, column, setHelperValues, ev);
-              }}
-            />
-          </InputText>
+            v-slots={{
+              append: (): JSXNode => (
+                <el-button
+                  size={this.size}
+                  icon="el-icon-search"
+                  onClick={(ev) => {
+                    isObject(helper) ? openHelperPanel() : onClick({ [this.dataKey]: prevValue }, row, column, setHelperValues, ev);
+                  }}
+                />
+              ),
+            }}
+          />
           {isObject(helper) && (
             <Dialog {...dialogProps}>
               <SearchHelper {...shProps} />

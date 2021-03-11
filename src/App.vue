@@ -178,70 +178,70 @@ export default defineComponent({
               filter: {
                 type: 'text',
               },
-              // editRender: row => {
-              //   const obj = {
-              //     type: 'search-helper',
-              //     // editable: true,
-              //     extra: {
-              //       readonly: false,
-              //       maxlength: 10,
-              //       disabled: row.id === 3
-              //     },
-              //     helper: {
-              //       filters: [
-              //         {
-              //           type: 'INPUT',
-              //           label: '条件1',
-              //           fieldName: 'a'
-              //         }
-              //       ],
-              //       table: {
-              //         columns: [
-              //           {
-              //             title: '创建时间',
-              //             dataIndex: 'date',
-              //             filter: {
-              //               type: 'date'
-              //             }
-              //           },
-              //           {
-              //             title: '姓名',
-              //             dataIndex: 'person.name'
-              //           }
-              //         ],
-              //         rowKey: record => record.id,
-              //         fetch: {
-              //           api: () => {},
-              //           params: {},
-              //           dataKey: 'items'
-              //         }
-              //       },
-              //       fieldAliasMap: () => {
-              //         return { 'person.name': 'date', 'person.age': 'date' };
-              //       },
-              //       closed: () => {
-              //         obj.helper.initialValue = { a: '' };
-              //       }
-              //     },
-              //     rules: [{ required: true, message: '姓名不能为空' }],
-              //     onChange: (cellVal, row) => {
-              //       const keys = Object.keys(cellVal)[0].split('|');
-              //       obj.helper.initialValue = { a: '1234' };
-              //       this.$table.OPEN_SEARCH_HELPER(keys[0], keys[1]);
-              //     }
-              //     // onClick: (cell, row, column, cb, ev) => {
-              //     //   this.tableShProps = Object.assign({}, this.tableShProps, {
-              //     //     dataIndex: column.dataIndex,
-              //     //     fieldAliasMap: () => {
-              //     //       return { 'person.name': 'date', 'person.age': 'date' };
-              //     //     },
-              //     //     callback: cb
-              //     //   });
-              //     //   this.visible_table = true;
-              //     // }
-              //   };
-              //   return obj;
-              // }
+              editRender: (row) => {
+                const obj = {
+                  type: 'search-helper',
+                  // editable: true,
+                  extra: {
+                    readonly: false,
+                    maxlength: 10,
+                    disabled: row.id === 3,
+                  },
+                  helper: {
+                    filters: [
+                      {
+                        type: 'INPUT',
+                        label: '条件1',
+                        fieldName: 'a',
+                      },
+                    ],
+                    table: {
+                      columns: [
+                        {
+                          title: '创建时间',
+                          dataIndex: 'date',
+                          filter: {
+                            type: 'date',
+                          },
+                        },
+                        {
+                          title: '姓名',
+                          dataIndex: 'person.name',
+                        },
+                      ],
+                      rowKey: (record) => record.id,
+                      fetch: {
+                        api: () => {},
+                        params: {},
+                        dataKey: 'items',
+                      },
+                    },
+                    fieldAliasMap: () => {
+                      return { 'person.name': 'date', 'person.age': 'date' };
+                    },
+                    closed: () => {
+                      obj.helper.initialValue = { a: '' };
+                    },
+                  },
+                  rules: [{ required: true, message: '姓名不能为空' }],
+                  onChange: (cellVal, row) => {
+                    const keys = Object.keys(cellVal)[0].split('|');
+                    obj.helper.initialValue = { a: '1234' };
+                    this.$refs.table.OPEN_SEARCH_HELPER(keys[0], keys[1]);
+                  },
+                  // onClick: (cell, row, column, cb, ev) => {
+                  //   this.tableShProps = Object.assign({}, this.tableShProps, {
+                  //     dataIndex: column.dataIndex,
+                  //     fieldAliasMap: () => {
+                  //       return { 'person.name': 'date', 'person.age': 'date' };
+                  //     },
+                  //     callback: cb
+                  //   });
+                  //   this.visible_table = true;
+                  // }
+                };
+                return obj;
+              },
             },
             {
               title: '性别',
@@ -525,6 +525,7 @@ export default defineComponent({
     return (
       <>
         <qm-table
+          ref="table"
           uniqueKey="jzyDemoTable"
           maxHeight="300px"
           columns={this.columns}
