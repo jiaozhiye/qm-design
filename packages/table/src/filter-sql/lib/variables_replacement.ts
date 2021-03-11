@@ -2,21 +2,21 @@
  * @Author: 焦质晔
  * @Date: 2020-07-11 10:52:38
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-08 09:19:58
+ * @Last Modified time: 2021-03-11 09:11:58
  */
 // SQL example
 // a == 1 AND (b == 3 OR c != 5) AND d == 7
-const operations = ['==', '<', '>', '<=', '>=', '!=', 'like', 'in', 'nin'];
+const operations = ['==', '<', '>', '<=', '>=', '!=', 'like', 'likes', 'in', 'nin'];
 
 export default {
   // 判断字符串中括号是否平衡匹配的函数
   isBracketBalance: function (str) {
     let leftBracketNum = 0; // 用于保存左括号个数的变量
-    let strLength = str.length; // 把字符串的长度付给一个变量增加程序的性能
+    const strLength = str.length; // 把字符串的长度付给一个变量增加程序的性能
 
     // 通过 for 循环来读取字符串中的一个一个的字符
     for (let i = 0; i < strLength; i++) {
-      let temp = str.charAt(i); // 付给临时变量增加程序的性能
+      const temp = str.charAt(i); // 付给临时变量增加程序的性能
       if (temp === '(') {
         // 如果是左括号，则 leftBracketNum++
         leftBracketNum++;
@@ -31,6 +31,7 @@ export default {
     if (leftBracketNum === 0) {
       return true;
     }
+
     return false;
   },
 
@@ -47,7 +48,7 @@ export default {
       }
     }
 
-    let splits = new_string.split(' ').filter((x) => x !== '');
+    const splits = new_string.split(' ').filter((x) => x !== '');
 
     // replace all variables with the variables
     // A variable is found if the next in the splits is an operation

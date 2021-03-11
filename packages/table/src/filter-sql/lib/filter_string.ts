@@ -2,16 +2,17 @@
  * @Author: 焦质晔
  * @Date: 2020-07-11 10:24:35
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-08 09:19:44
+ * @Last Modified time: 2021-03-11 09:11:26
  */
-const conjuctions = ['&&', '||', 'AND', 'OR', 'and', 'or', 'like', 'in', 'nin', 'LIKE', 'IN', 'NIN'];
+const conjuctions = ['&&', '||', 'AND', 'OR', 'and', 'or', 'like', 'likes', 'in', 'nin', 'LIKE', 'LIKES', 'IN', 'NIN'];
 
 export default {
   // This method will return an array of separated operations depending of the conjuctions
   operations: function (string) {
-    let str = string.split(' ');
-    let ops = [];
+    const str = string.split(' ');
+    const ops = [];
     let count = 0;
+
     ops[count] = [];
 
     // loop through all the splits and check if the contain a conjuction
@@ -71,7 +72,7 @@ export default {
 
   // This method will format an operation to make it readable
   operation_format: function (string) {
-    let splits = string.split(' ');
+    const splits = string.split(' ');
 
     // remove empty splits
     for (let i = 0; i < splits.length; i++) {
@@ -93,7 +94,7 @@ export default {
     if (splits[splits.length - 1] == ')') {
       splits.splice(splits.length - 1, 1);
     } else if (splits[splits.length - 1][splits[splits.length - 1].length - 1] == ')') {
-      let last = splits.length - 1;
+      const last = splits.length - 1;
       splits[last] = splits[last].split('');
       splits[last].splice(splits[last].length - 1, 1).join('');
       splits[last] = splits[last].join('');
@@ -115,6 +116,7 @@ export default {
     string = this.find_replace(string, ' or ', ' || ');
     string = this.find_replace(string, ' <> ', ' != ');
     string = this.find_replace(string, ' LIKE ', ' like ');
+    string = this.find_replace(string, ' LIKES ', ' likes ');
     string = this.find_replace(string, ' IN ', ' in ');
     string = this.find_replace(string, ' NIN ', ' nin ');
     return string;

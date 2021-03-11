@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-03-09 13:18:43
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-11 08:31:13
+ * @Last Modified time: 2021-03-11 09:09:53
  */
 import { defineComponent } from 'vue';
 import { cloneDeep } from 'lodash-es';
@@ -165,9 +165,9 @@ export default defineComponent({
       const { title } = column;
       const { dataKey } = this;
       const inputProps = {
-        modelValue: this.filterValues[dataKey]?.[`like`],
+        modelValue: this.filterValues[dataKey]?.[`likes`],
         'onUpdate:modelValue': (val) => {
-          this.filterValues[dataKey] = Object.assign({}, this.filterValues[dataKey], { [`like`]: val });
+          this.filterValues[dataKey] = Object.assign({}, this.filterValues[dataKey], { [`likes`]: val });
         },
       };
       return (
