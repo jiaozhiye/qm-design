@@ -2,16 +2,18 @@
  * @Author: 焦质晔
  * @Date: 2021-03-08 11:04:35
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-09 08:10:18
+ * @Last Modified time: 2021-03-11 18:38:36
  */
+import { reactive } from 'vue';
+
 class Store {
-  state = {
+  state = reactive({
     required: [],
     validate: [],
     inserted: [],
     updated: [],
     removed: [],
-  };
+  });
 
   addToRequired = (data) => {
     const index = this.state.required.findIndex((item) => item.x === data.x && item.y === data.y);

@@ -2,11 +2,11 @@
  * @Author: 焦质晔
  * @Date: 2020-03-01 15:20:02
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-10 13:04:28
+ * @Last Modified time: 2021-03-11 18:05:29
  */
 import { get } from 'lodash-es';
-import { difference, hasOwn, getCellValue, setCellValue } from '../utils';
-import { throttle, errorCapture, isChrome, isIE, noop } from '../../../_utils/util';
+import { difference, hasOwn, throttle, getCellValue, setCellValue } from '../utils';
+import { errorCapture, isChrome, isIE, noop } from '../../../_utils/util';
 import { warn } from '../../../_utils/error';
 import config from '../config';
 
@@ -59,7 +59,7 @@ export default {
     if (!fetch) return;
     const { beforeFetch = () => !0, xhrAbort = !1 } = fetch;
     if (!beforeFetch(fetchParams) || xhrAbort) return;
-    // console.log(`ajax 请求参数：`, fetchParams);
+    console.log(`ajax 请求参数：`, fetchParams);
     this.showLoading = true;
     try {
       const res = await fetch.api(fetchParams);

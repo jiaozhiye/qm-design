@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-02-09 09:03:59
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-11 16:26:18
+ * @Last Modified time: 2021-03-11 18:07:18
  */
 import { defineComponent, PropType } from 'vue';
 import { merge, get, isFunction } from 'lodash-es';
@@ -32,9 +32,9 @@ enum footHeight {
   mini = 48,
 }
 
-const trueNoop = () => !0;
+const trueNoop = (): boolean => !0;
 // tds
-const DEFINE = ['valueName', 'displayName', 'descriptionName'];
+const DEFINE: string[] = ['valueName', 'displayName', 'descriptionName'];
 
 export default defineComponent({
   name: 'QmSearchHelper',
@@ -68,6 +68,7 @@ export default defineComponent({
     return {
       showTable: false,
       result: null,
+      loading: false,
       topFilters: this.createTopFilters(),
       height: 300,
       columns: this.createTableColumns(),
@@ -86,12 +87,11 @@ export default defineComponent({
       },
       alias: this.fieldAliasMap() || {},
       webPagination,
-      loading: false,
     };
   },
   computed: {
     $topFilter(): unknown {
-      return this.$refs[`filter`];
+      return this.$refs[`top-filter`];
     },
     disabled(): boolean {
       return !this.result;
@@ -227,7 +227,7 @@ export default defineComponent({
     },
     createDictList(code: string): IDict[] {
       const { global } = this.$DESIGN;
-      const dictKey: string = global['dict_key'] || 'doct';
+      const dictKey: string = global['dict_key'] || 'dict';
       const $dict: Record<string, IDict[]> = JSON.parse(localStorage.getItem(dictKey)) || {};
       let res: IDict[] = [];
       if ($dict && Array.isArray($dict[code])) {
@@ -277,7 +277,7 @@ export default defineComponent({
         {/* @ts-ignore */}
         <Spin spinning={loading} tip="Loading...">
           <Form
-            ref="filter"
+            ref="top-filter"
             // @ts-ignore
             formType="search"
             initialValue={initialValue}

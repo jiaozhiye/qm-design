@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-03-08 08:28:55
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-09 12:47:55
+ * @Last Modified time: 2021-03-11 18:02:37
  */
 import { get, set, transform, intersection, isEqual, isObject } from 'lodash-es';
 import dayjs from 'dayjs';
@@ -265,6 +265,25 @@ export const setCellValue = (record, dataIndex, val, precision?: number) => {
     val = Number(val).toFixed(precision);
   }
   set(record, dataIndex, val);
+};
+
+// 函数截流
+export const throttle = (fn: any, delay: number): AnyFunction<void> => {
+  return function (...args) {
+    const nowTime: number = +new Date();
+    if (!fn.lastTime || nowTime - fn.lastTime > delay) {
+      fn.apply(this, args);
+      fn.lastTime = nowTime;
+    }
+  };
+};
+
+// 函数防抖
+export const debounce = (fn: any, delay = 0): AnyFunction<void> => {
+  return function (...args) {
+    fn.timer && clearTimeout(fn.timer);
+    fn.timer = setTimeout(() => fn.apply(this, args), delay);
+  };
 };
 
 // 数字格式化
