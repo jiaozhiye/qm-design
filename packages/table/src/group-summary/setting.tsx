@@ -2,22 +2,22 @@
  * @Author: 焦质晔
  * @Date: 2020-05-19 16:19:58
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-10 11:20:39
+ * @Last Modified time: 2021-03-11 10:20:00
  */
+import { defineComponent } from 'vue';
 import localforage from 'localforage';
 import { createUidKey } from '../utils';
-import { getConfig } from '../../../_utils/globle-config';
+import { t } from '../../../locale';
 import config from '../config';
-import Locale from '../locale/mixin';
 
 import VTable from '../table';
 import EmptyEle from '../empty/element';
 import GroupSummaryResult from './result';
-import BaseDialog from '../../../BaseDialog';
+import Dialog from '../../../Dialog';
+import { JSXNode } from '../../../_utils/types';
 
-export default {
+export default defineComponent({
   name: 'GroupSummarySetting',
-  mixins: [Locale],
   props: ['columns'],
   inject: ['$$table'],
   data() {
@@ -30,11 +30,11 @@ export default {
     ];
     // 计算公式 字典
     this.formulaItems = [
-      { text: this.t('table.groupSummary.sumText'), value: 'sum' },
-      { text: this.t('table.groupSummary.maxText'), value: 'max' },
-      { text: this.t('table.groupSummary.minText'), value: 'min' },
-      { text: this.t('table.groupSummary.avgText'), value: 'avg' },
-      { text: this.t('table.groupSummary.countText'), value: 'count' },
+      { text: t('qm.table.groupSummary.sumText'), value: 'sum' },
+      { text: t('qm.table.groupSummary.maxText'), value: 'max' },
+      { text: t('qm.table.groupSummary.minText'), value: 'min' },
+      { text: t('qm.table.groupSummary.avgText'), value: 'avg' },
+      { text: t('qm.table.groupSummary.countText'), value: 'count' },
     ];
     return {
       savedItems: [],
@@ -112,7 +112,7 @@ export default {
                     this.$tableGroup.REMOVE_RECORDS(row);
                   }}
                 >
-                  {this.t('table.groupSummary.removeText')}
+                  {t('qm.table.groupSummary.removeText')}
                 </el-button>
               </div>
             );
@@ -151,7 +151,7 @@ export default {
                     this.$tableSummary.REMOVE_RECORDS(row);
                   }}
                 >
-                  {this.t('table.groupSummary.removeText')}
+                  {t('qm.table.groupSummary.removeText')}
                 </el-button>
               </div>
             );
@@ -228,8 +228,8 @@ export default {
       await this.saveGroupSummaryConfig(this.groupSummaryKey, this.savedItems);
     },
     async getGroupSummaryConfig(key) {
-      if (process.env.MOCK_DATA === 'true') return;
-      const fetchFn = getConfig('getComponentConfigApi');
+      const { global } = this.$DESIGN;
+      const fetchFn = global['getComponentConfigApi'];
       if (!fetchFn) return;
       try {
         const res = await fetchFn({ key });
@@ -240,8 +240,8 @@ export default {
       return null;
     },
     async saveGroupSummaryConfig(key, value) {
-      if (process.env.MOCK_DATA === 'true') return;
-      const fetchFn = getConfig('saveComponentConfigApi');
+      const { global } = this.$DESIGN;
+      const fetchFn = global['saveComponentConfigApi'];
       if (!fetchFn) return;
       try {
         await fetchFn({ [key]: value });
@@ -268,7 +268,7 @@ export default {
       this.visible = true;
     },
   },
-  render() {
+  render(): JSXNode {
     const {
       columns,
       groupList,
@@ -284,15 +284,14 @@ export default {
       summaryTableData,
     } = this;
     const wrapProps = {
-      props: {
-        visible,
-        title: this.t('table.groupSummary.resultText'),
-        showFullScreen: false,
-        width: '1000px',
-        destroyOnClose: true,
-      },
-      on: {
-        'update:visible': (val) => (this.visible = val),
+      visible,
+      title: t('qm.table.groupSummary.resultText'),
+      width: '1000px',
+      loading: false,
+      showFullScreen: false,
+      destroyOnClose: true,
+      'onUpdate:visible': (val: boolean): void => {
+        this.visible = val;
       },
     };
     return (
@@ -350,18 +349,18 @@ export default {
             <div class="form-wrap">
               <el-input
                 class="form-item"
-                placeholder={this.t('table.groupSummary.configText')}
+                placeholder={t('qm.table.groupSummary.configText')}
                 value={form.name}
                 disabled={confirmDisabled}
                 onInput={(val) => (this.form.name = val)}
               />
               <el-button type="primary" disabled={!form.name} style={{ marginLeft: '10px' }} onClick={() => this.saveConfigHandle()}>
-                {this.t('table.groupSummary.saveButton')}
+                {t('qm.table.groupSummary.saveButton')}
               </el-button>
             </div>
             <div class="card-wrap">
               <h5 style={{ height: `${config.rowHeightMaps[this.$$table.tableSize]}px` }}>
-                <span>{this.t('table.groupSummary.savedSetting')}</span>
+                <span>{t('qm.table.groupSummary.savedSetting')}</span>
               </h5>
               <ul>
                 {savedItems.map((x) => (
@@ -372,7 +371,7 @@ export default {
                     </span>
                     <i
                       class="iconfont icon-close-circle close"
-                      title={this.t('table.groupSummary.removeText')}
+                      title={t('qm.table.groupSummary.removeText')}
                       onClick={(ev) => this.removeSavedHandle(ev, x.value)}
                     />
                   </li>
@@ -399,15 +398,15 @@ export default {
             textAlign: 'right',
           }}
         >
-          <el-button onClick={() => this.cancelHandle()}>{this.t('table.groupSummary.closeButton')}</el-button>
+          <el-button onClick={() => this.cancelHandle()}>{t('qm.table.groupSummary.closeButton')}</el-button>
           <el-button type="primary" disabled={confirmDisabled} onClick={() => this.confirmHandle()}>
-            {this.t('table.groupSummary.confirmButton')}
+            {t('qm.table.groupSummary.confirmButton')}
           </el-button>
         </div>
-        <BaseDialog {...wrapProps}>
+        <Dialog {...wrapProps}>
           <GroupSummaryResult columns={columns} group={groupTableData} summary={summaryTableData} />
-        </BaseDialog>
+        </Dialog>
       </div>
     );
   },
-};
+});

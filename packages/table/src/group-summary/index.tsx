@@ -2,17 +2,18 @@
  * @Author: 焦质晔
  * @Date: 2020-05-19 15:58:23
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2020-11-24 13:09:14
+ * @Last Modified time: 2021-03-11 10:19:45
  */
+import { defineComponent } from 'vue';
+import { t } from '../../../locale';
 import config from '../config';
-import Locale from '../locale/mixin';
 
-import BaseDialog from '../../../BaseDialog';
+import Dialog from '../../../Dialog';
 import GroupSummarySetting from './setting';
+import { JSXNode } from '../../../_utils/types';
 
-export default {
+export default defineComponent({
   name: 'GroupSummary',
-  mixins: [Locale],
   props: ['columns'],
   inject: ['$$table'],
   data() {
@@ -28,19 +29,18 @@ export default {
       this.visible = val;
     },
   },
-  render() {
+  render(): JSXNode {
     const { visible } = this;
     const wrapProps = {
-      props: {
-        visible,
-        title: this.t('table.groupSummary.settingTitle'),
-        showFullScreen: false,
-        width: '1000px',
-        destroyOnClose: true,
-        containerStyle: { height: 'calc(100% - 52px)', paddingBottom: '52px' },
-      },
-      on: {
-        'update:visible': (val) => (this.visible = val),
+      visible,
+      title: t('qm.table.groupSummary.settingTitle'),
+      width: '1000px',
+      loading: false,
+      showFullScreen: false,
+      destroyOnClose: true,
+      containerStyle: { paddingBottom: '52px' },
+      'onUpdate:visible': (val: boolean): void => {
+        this.visible = val;
       },
     };
     const columns = this.columns.filter(
@@ -49,13 +49,13 @@ export default {
     const cls = [`group-summary--wrapper`, `size--${this.$$table.tableSize}`];
     return (
       <div class={cls}>
-        <span class="summary-button" title={this.t('table.groupSummary.text')} onClick={this.clickHandle}>
+        <span class="summary-button" title={t('qm.table.groupSummary.text')} onClick={this.clickHandle}>
           <i class="iconfont icon-piechart" />
         </span>
-        <BaseDialog {...wrapProps}>
+        <Dialog {...wrapProps}>
           <GroupSummarySetting columns={columns} onClose={this.closeHandle} />
-        </BaseDialog>
+        </Dialog>
       </div>
     );
   },
-};
+});

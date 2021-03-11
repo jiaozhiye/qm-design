@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-07-12 16:26:19
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-11 09:55:58
+ * @Last Modified time: 2021-03-11 10:20:20
  */
 import { defineComponent } from 'vue';
 import localforage from 'localforage';
@@ -14,6 +14,7 @@ import config from '../config';
 
 import VTable from '../table';
 import EmptyEle from '../empty/element';
+import { JSXNode } from '../../../_utils/types';
 
 export default defineComponent({
   name: 'HighSearchSetting',
@@ -346,7 +347,7 @@ export default defineComponent({
       this.$emit('close', false);
     },
   },
-  render() {
+  render(): JSXNode {
     const { list, searchColumns, form, savedItems, currentKey, query, confirmDisabled, loading } = this;
     const prefixCls = getPrefixCls('table');
     return (
