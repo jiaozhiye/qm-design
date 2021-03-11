@@ -2,18 +2,19 @@
  * @Author: 焦质晔
  * @Date: 2020-05-19 16:19:58
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-11 10:20:00
+ * @Last Modified time: 2021-03-11 10:27:24
  */
 import { defineComponent } from 'vue';
 import localforage from 'localforage';
 import { createUidKey } from '../utils';
+import { getPrefixCls } from '../../../_utils/prefix';
 import { t } from '../../../locale';
 import config from '../config';
 
 import VTable from '../table';
 import EmptyEle from '../empty/element';
 import GroupSummaryResult from './result';
-import Dialog from '../../../Dialog';
+import Dialog from '../../../dialog';
 import { JSXNode } from '../../../_utils/types';
 
 export default defineComponent({
@@ -283,6 +284,7 @@ export default defineComponent({
       groupTableData,
       summaryTableData,
     } = this;
+    const prefixCls = getPrefixCls('table');
     const wrapProps = {
       visible,
       title: t('qm.table.groupSummary.resultText'),
@@ -295,7 +297,7 @@ export default defineComponent({
       },
     };
     return (
-      <div class="group-summary--setting">
+      <div class={`${prefixCls}-group-summary__setting`}>
         <div class="main">
           <div class="container" style={{ width: '280px' }}>
             <VTable
@@ -311,14 +313,12 @@ export default defineComponent({
                 this.groupTableData = tableData;
               }}
             >
-              <template slot="default">
-                <el-button
-                  type="primary"
-                  icon="el-icon-plus"
-                  onClick={() => this.$tableGroup.INSERT_RECORDS({})}
-                  style={{ marginLeft: '10px', marginRight: '-10px' }}
-                />
-              </template>
+              <el-button
+                type="primary"
+                icon="el-icon-plus"
+                onClick={() => this.$tableGroup.INSERT_RECORDS({})}
+                style={{ marginLeft: '10px', marginRight: '-10px' }}
+              />
             </VTable>
           </div>
           <div class="container line" style={{ width: '430px' }}>
@@ -335,14 +335,7 @@ export default defineComponent({
                 this.summaryTableData = tableData;
               }}
             >
-              <template slot="default">
-                <el-button
-                  type="primary"
-                  icon="el-icon-plus"
-                  style={{ marginRight: '-10px' }}
-                  onClick={() => this.$tableSummary.INSERT_RECORDS({})}
-                />
-              </template>
+              <el-button type="primary" icon="el-icon-plus" style={{ marginRight: '-10px' }} onClick={() => this.$tableSummary.INSERT_RECORDS({})} />
             </VTable>
           </div>
           <div class="saved line">

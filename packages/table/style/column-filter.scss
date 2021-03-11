@@ -2,13 +2,13 @@
  * @Author: 焦质晔
  * @Date: 2020-02-28 22:13:50
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-11 10:04:03
+ * @Last Modified time: 2021-03-11 10:30:13
  */
 $prefix: '#{$qm-prefix}-table';
 
 .#{$prefix}-column-filter {
   display: inline-block;
-  margin-left: 3px;
+  margin-left: 4px;
   cursor: pointer;
   transition: all 0.3s ease;
   &:hover,

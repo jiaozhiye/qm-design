@@ -2,29 +2,25 @@
  * @Author: 焦质晔
  * @Date: 2020-03-26 11:45:02
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-10 17:05:20
+ * @Last Modified time: 2021-03-11 10:28:15
  */
-.group-summary--wrapper {
-  .summary-button {
-    padding: 3px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    i {
-      font-size: $v-font-size + 2px;
-    }
-    &:hover {
-      color: $v-primary-color;
-    }
+$prefix: '#{$qm-prefix}-table';
+
+.#{$prefix}-group-summary {
+  display: inline-block;
+  padding: 5px 3px;
+  line-height: 1;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  .iconfont {
+    font-size: 1.15em;
   }
-  &.size--mini {
-    .summary-button {
-      i {
-        font-size: $v-font-size;
-      }
-    }
+  &:hover {
+    color: $v-primary-color;
   }
 }
-.group-summary--setting {
+
+.#{$prefix}-group-summary__setting {
   .main {
     display: flex;
     flex-direction: row;
