@@ -206,7 +206,7 @@ export default defineComponent({
         trigger="click"
         placement="bottom-start"
         transition="el-zoom-in-top"
-        offset={5}
+        offset={10}
         append-to-body={true}
         stop-popper-mouse-event={false}
         gpu-acceleration={false}

@@ -24,7 +24,7 @@ const columnItem = {
   sorter: PropTypes.oneOfType([PropTypes.bool, PropTypes.func]), // 列排序
   // 列筛选
   filter: PropTypes.shape({
-    type: PropTypes.oneOf(['text', 'checkbox', 'radio', 'number', 'date']).isRequired, // 列筛选类型
+    type: PropTypes.oneOf(['text', 'textarea', 'checkbox', 'radio', 'number', 'date']).isRequired, // 列筛选类型
     // 筛选字典项
     items: PropTypes.arrayOf(
       PropTypes.shape({

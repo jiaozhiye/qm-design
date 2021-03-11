@@ -203,8 +203,8 @@ export default defineComponent({
         <el-date-picker
           size={this.size}
           type={!isDateTime ? 'date' : 'datetime'}
-          style={{ width: '100%' }}
           {...dateProps}
+          style={{ width: '100%' }}
           disabledDate={(oDate) => {
             return this.setDisabledDate(oDate, [extra.minDateTime, extra.maxDateTime]);
           }}
@@ -293,7 +293,6 @@ export default defineComponent({
         <el-switch
           size={this.size}
           {...switchProps}
-          disabled={disabled}
           activeValue={trueValue}
           inactiveValue={falseValue}
           onChange={(val) => {
@@ -301,6 +300,7 @@ export default defineComponent({
             onChange({ [this.dataKey]: val }, row);
             this.$$table.dataChangeHandle();
           }}
+          disabled={disabled}
         />
       );
     },

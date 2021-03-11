@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-03-09 13:18:43
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-10 18:46:00
+ * @Last Modified time: 2021-03-11 08:31:13
  */
 import { defineComponent } from 'vue';
 import { cloneDeep } from 'lodash-es';
@@ -128,10 +128,10 @@ export default defineComponent({
     renderFormButton() {
       return (
         <div style="margin-top: 10px">
-          <el-button type="primary" size="mini" onClick={this.doFinish}>
+          <el-button type="primary" size={this.size} onClick={this.doFinish}>
             {t('qm.table.filter.search')}
           </el-button>
-          <el-button size="mini" onClick={this.doReset}>
+          <el-button size={this.size} onClick={this.doReset}>
             {t('qm.table.filter.reset')}
           </el-button>
         </div>
@@ -153,6 +153,32 @@ export default defineComponent({
           {...inputProps}
           placeholder={t('qm.table.filter.searchText', { text: title })}
           style={{ width: '180px' }}
+          onKeydown={(ev) => {
+            if (ev.keyCode === 13) {
+              this.doFinish();
+            }
+          }}
+        />
+      );
+    },
+    textareaHandle(column) {
+      const { title } = column;
+      const { dataKey } = this;
+      const inputProps = {
+        modelValue: this.filterValues[dataKey]?.[`like`],
+        'onUpdate:modelValue': (val) => {
+          this.filterValues[dataKey] = Object.assign({}, this.filterValues[dataKey], { [`like`]: val });
+        },
+      };
+      return (
+        <el-input
+          ref={`textarea-${dataKey}`}
+          size={this.size}
+          type="textarea"
+          rows={3}
+          {...inputProps}
+          placeholder={t('qm.table.filter.searchAreaText', { text: title })}
+          style={{ width: '220px' }}
           onKeydown={(ev) => {
             if (ev.keyCode === 13) {
               this.doFinish();

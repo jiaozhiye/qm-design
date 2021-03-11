@@ -4,11 +4,11 @@
  * @Last Modified by: 焦质晔
  * @Last Modified time: 2021-03-09 08:13:06
  */
-import { t } from '../../../locale';
-
 const config = {
   // 表格列的默认最小宽度
   defaultColumnWidth: 80,
+  // 选择列的宽度
+  selectionColumnWidth: 50,
   // 行高的映射表
   rowHeightMaps: {
     default: 43,

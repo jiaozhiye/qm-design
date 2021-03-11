@@ -449,6 +449,9 @@ export default defineComponent({
           title: '地址',
           dataIndex: 'address',
           width: 200,
+          filter: {
+            type: 'textarea',
+          },
           editRender: (row) => {
             return {
               type: 'text',

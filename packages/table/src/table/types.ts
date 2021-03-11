@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-03-06 15:11:01
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-06 17:02:15
+ * @Last Modified time: 2021-03-11 08:19:26
  */
 import { AnyFunction, AnyObject, JSXNode, Nullable } from '../../../_utils/types';
 
@@ -10,7 +10,7 @@ export type IFixed = 'left' | 'right';
 
 export type IAlign = 'left' | 'center' | 'right';
 
-export type IFilterType = 'text' | 'checkbox' | 'radio' | 'number' | 'date';
+export type IFilterType = 'text' | 'textarea' | 'checkbox' | 'radio' | 'number' | 'date';
 
 export type IEditerType = 'text' | 'number' | 'select' | 'select-multiple' | 'checkbox' | 'switch' | 'search-helper' | 'date' | 'datetime' | 'time';
 

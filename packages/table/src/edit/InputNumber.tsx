@@ -12,7 +12,7 @@ import { useSize } from '../../../hooks/useSize';
 
 export default defineComponent({
   name: 'InputNumber',
-  emits: ['input', 'change', 'keyDown'],
+  emits: ['update:modelValue', 'change', 'keyDown'],
   props: {
     modelValue: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
     size: PropTypes.string,
@@ -56,7 +56,7 @@ export default defineComponent({
     },
     emitEventHandle(val) {
       val = val !== '' ? Number(val) : undefined;
-      this.$emit('input', val);
+      this.$emit('update:modelValue', val);
       this.$emit('change', val);
     },
     increaseHandle() {
