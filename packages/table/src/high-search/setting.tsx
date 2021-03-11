@@ -2,28 +2,28 @@
  * @Author: 焦质晔
  * @Date: 2020-07-12 16:26:19
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-10 11:20:52
+ * @Last Modified time: 2021-03-11 09:55:58
  */
+import { defineComponent } from 'vue';
 import localforage from 'localforage';
 import { isBracketBalance } from '../filter-sql';
 import { hasOwn, createUidKey, createWhereSQL } from '../utils';
-import { getConfig } from '../../../_utils/globle-config';
+import { getPrefixCls } from '../../../_utils/prefix';
+import { t } from '../../../locale';
 import config from '../config';
-import Locale from '../locale/mixin';
 
 import VTable from '../table';
 import EmptyEle from '../empty/element';
 
-export default {
+export default defineComponent({
   name: 'HighSearchSetting',
-  mixins: [Locale],
   props: ['columns'],
   inject: ['$$table'],
   data() {
     this.fieldDicts = this.columns.filter((column) => !!column.filter).map((x) => ({ value: x.dataIndex, text: x.title }));
     this.logicDicts = [
-      { value: 'and', text: this.t('table.highSearch.andText') },
-      { value: 'or', text: this.t('table.highSearch.orText') },
+      { value: 'and', text: t('qm.table.highSearch.andText') },
+      { value: 'or', text: t('qm.table.highSearch.orText') },
     ];
     return {
       loading: !1,
@@ -95,7 +95,7 @@ export default {
                     this.$$vTable.REMOVE_RECORDS(row);
                   }}
                 >
-                  {this.t('table.highSearch.removeText')}
+                  {t('qm.table.highSearch.removeText')}
                 </el-button>
               </div>
             );
@@ -240,29 +240,29 @@ export default {
         case 'date':
         case 'number':
           result = [
-            { value: '>', text: this.t('table.highSearch.gtText') },
-            { value: '<', text: this.t('table.highSearch.ltText') },
-            { value: '>=', text: this.t('table.highSearch.gteText') },
-            { value: '<=', text: this.t('table.highSearch.lteText') },
-            { value: '==', text: this.t('table.highSearch.eqText') },
-            { value: '!=', text: this.t('table.highSearch.neqText') },
+            { value: '>', text: t('qm.table.highSearch.gtText') },
+            { value: '<', text: t('qm.table.highSearch.ltText') },
+            { value: '>=', text: t('qm.table.highSearch.gteText') },
+            { value: '<=', text: t('qm.table.highSearch.lteText') },
+            { value: '==', text: t('qm.table.highSearch.eqText') },
+            { value: '!=', text: t('qm.table.highSearch.neqText') },
           ];
           break;
         case 'checkbox':
         case 'radio':
           result = [
-            { value: 'in', text: this.t('table.highSearch.inText') },
-            { value: 'nin', text: this.t('table.highSearch.ninText') },
-            { value: '==', text: this.t('table.highSearch.eqText') },
-            { value: '!=', text: this.t('table.highSearch.neqText') },
+            { value: 'in', text: t('qm.table.highSearch.inText') },
+            { value: 'nin', text: t('qm.table.highSearch.ninText') },
+            { value: '==', text: t('qm.table.highSearch.eqText') },
+            { value: '!=', text: t('qm.table.highSearch.neqText') },
           ];
           break;
         case 'text':
         default:
           result = [
-            { value: 'like', text: this.t('table.highSearch.likeText') },
-            { value: '==', text: this.t('table.highSearch.eqText') },
-            { value: '!=', text: this.t('table.highSearch.neqText') },
+            { value: 'like', text: t('qm.table.highSearch.likeText') },
+            { value: '==', text: t('qm.table.highSearch.eqText') },
+            { value: '!=', text: t('qm.table.highSearch.neqText') },
           ];
           break;
       }
@@ -300,8 +300,8 @@ export default {
       await this.saveHighSearchConfig(this.highSearchKey, this.savedItems);
     },
     async getHighSearchConfig(key) {
-      if (process.env.MOCK_DATA === 'true') return;
-      const fetchFn = getConfig('getComponentConfigApi');
+      const { global } = this.$DESIGN;
+      const fetchFn = global['getComponentConfigApi'];
       if (!fetchFn) return;
       try {
         const res = await fetchFn({ key });
@@ -312,8 +312,8 @@ export default {
       return null;
     },
     async saveHighSearchConfig(key, value) {
-      if (process.env.MOCK_DATA === 'true') return;
-      const fetchFn = getConfig('saveComponentConfigApi');
+      const { global } = this.$DESIGN;
+      const fetchFn = global['saveComponentConfigApi'];
       if (!fetchFn) return;
       try {
         await fetchFn({ [key]: value });
@@ -348,8 +348,9 @@ export default {
   },
   render() {
     const { list, searchColumns, form, savedItems, currentKey, query, confirmDisabled, loading } = this;
+    const prefixCls = getPrefixCls('table');
     return (
-      <div class="high-search--setting">
+      <div class={`${prefixCls}-super-search__setting`}>
         <div class="main">
           <div class="container">
             <VTable
@@ -366,9 +367,7 @@ export default {
                 this.currentData = tableData;
               }}
             >
-              <template slot="default">
-                <el-button type="primary" icon="el-icon-plus" onClick={this.insertRowsHandle} style={{ marginRight: '-10px' }} />
-              </template>
+              <el-button type="primary" icon="el-icon-plus" onClick={this.insertRowsHandle} style={{ marginRight: '-10px' }} />
             </VTable>
             {config.highSearch.showSQL && query && <code class="lang-js">{query}</code>}
           </div>
@@ -376,18 +375,18 @@ export default {
             <div class="form-wrap">
               <el-input
                 class="form-item"
-                placeholder={this.t('table.highSearch.configText')}
+                placeholder={t('qm.table.highSearch.configText')}
                 disabled={confirmDisabled}
                 value={form.name}
                 onInput={(val) => (this.form.name = val)}
               />
               <el-button type="primary" disabled={!form.name} style={{ marginLeft: '10px' }} onClick={() => this.saveConfigHandle()}>
-                {this.t('table.highSearch.saveButton')}
+                {t('qm.table.highSearch.saveButton')}
               </el-button>
             </div>
             <div class="card-wrap">
               <h5 style={{ height: `${config.rowHeightMaps[this.$$table.tableSize]}px` }}>
-                <span>{this.t('table.highSearch.savedSetting')}</span>
+                <span>{t('qm.table.highSearch.savedSetting')}</span>
               </h5>
               <ul>
                 {savedItems.map((x) => (
@@ -398,7 +397,7 @@ export default {
                     </span>
                     <i
                       class="iconfont icon-close-circle close"
-                      title={this.t('table.highSearch.removeText')}
+                      title={t('qm.table.highSearch.removeText')}
                       onClick={(ev) => this.removeSavedHandle(ev, x.value)}
                     />
                   </li>
@@ -425,12 +424,12 @@ export default {
             textAlign: 'right',
           }}
         >
-          <el-button onClick={() => this.cancelHandle()}>{this.t('table.highSearch.closeButton')}</el-button>
+          <el-button onClick={() => this.cancelHandle()}>{t('qm.table.highSearch.closeButton')}</el-button>
           <el-button type="primary" loading={loading} disabled={confirmDisabled} onClick={() => this.confirmHandle()}>
-            {this.t('table.highSearch.searchButton')}
+            {t('qm.table.highSearch.searchButton')}
           </el-button>
         </div>
       </div>
     );
   },
-};
+});

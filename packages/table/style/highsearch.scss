@@ -2,29 +2,25 @@
  * @Author: 焦质晔
  * @Date: 2020-03-26 11:45:02
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-10 17:05:25
+ * @Last Modified time: 2021-03-11 10:08:34
  */
-.high-search--wrapper {
-  .search-button {
-    padding: 3px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    i {
-      font-size: $v-font-size + 2px;
-    }
-    &:hover {
-      color: $v-primary-color;
-    }
+$prefix: '#{$qm-prefix}-table';
+
+.#{$prefix}-super-search {
+  display: inline-block;
+  padding: 5px 3px;
+  line-height: 1;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  .iconfont {
+    font-size: 1.15em;
   }
-  &.size--mini {
-    .search-button {
-      i {
-        font-size: $v-font-size;
-      }
-    }
+  &:hover {
+    color: $v-primary-color;
   }
 }
-.high-search--setting {
+
+.#{$prefix}-super-search__setting {
   .main {
     display: flex;
     flex-direction: row;
@@ -37,7 +33,6 @@
         margin-top: $v-module-distance;
         background-color: #2b3a42;
         padding: 6px 10px;
-        font-size: 13px;
         color: #62b1d8;
         border-radius: $v-border-radius;
         text-shadow: 0 1px 0 rgba(23, 31, 35, 0.5);
@@ -56,7 +51,6 @@
           display: flex;
           align-items: center;
           padding: 0 $v-module-distance;
-          font-size: $v-font-size;
           border-bottom: 1px solid $v-table-border-color;
           background-color: $v-table-header-background-color;
         }

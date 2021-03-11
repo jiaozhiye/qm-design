@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-02-29 22:17:28
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-10 17:07:47
+ * @Last Modified time: 2021-03-11 09:56:45
  */
 import { getPrefixCls } from '../../../_utils/prefix';
 
@@ -175,7 +175,7 @@ export default {
             {/* 导出 */}
             {exportExcel && <Export {...exportProps} />}
             {/* 高级检索 */}
-            {/* {isSuperSearch && <HighSearch columns={flattenColumns} />} */}
+            {isSuperSearch && <HighSearch columns={flattenColumns} />}
             {/* 分组汇总 */}
             {/* {isGroupSummary && <GroupSummary columns={flattenColumns} />} */}
             {/* 列定义 */}

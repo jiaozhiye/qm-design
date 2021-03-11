@@ -2,10 +2,10 @@
  * @Author: 焦质晔
  * @Date: 2020-03-26 11:44:24
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-10 15:04:42
+ * @Last Modified time: 2021-03-11 09:59:33
  */
 import { defineComponent } from 'vue';
-import { flatten, groupBy, spread, mergeWith } from 'lodash-es';
+import { flatten, groupBy, spread, mergeWith, isFunction } from 'lodash-es';
 import { convertToRows, deepFindColumn, filterTableColumns, getCellValue } from '../utils';
 import config from '../config';
 import { getPrefixCls } from '../../../_utils/prefix';
@@ -289,10 +289,10 @@ export default defineComponent({
     renderCell(row, rowIndex, column, columnIndex) {
       const { dataIndex, render, extraRender } = column;
       const text = getCellValue(row, dataIndex);
-      if (_.isFunction(extraRender)) {
+      if (isFunction(extraRender)) {
         return extraRender(text, row, column, rowIndex, columnIndex);
       }
-      if (_.isFunction(render)) {
+      if (isFunction(render)) {
         return render(text, row, column, rowIndex, columnIndex);
       }
       return this.$$table.$$tableBody.renderText(text, column, row);

@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-02-09 09:03:59
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-03 18:21:57
+ * @Last Modified time: 2021-03-11 09:32:04
  */
 import { defineComponent, PropType, reactive } from 'vue';
 import localforage from 'localforage';
@@ -31,14 +31,7 @@ export default defineComponent({
       $$preview: this,
     };
   },
-  props: [
-    'dataSource',
-    'templateRender',
-    'preview',
-    'uniqueKey',
-    'defaultConfig',
-    'closeOnPrinted',
-  ],
+  props: ['dataSource', 'templateRender', 'preview', 'uniqueKey', 'defaultConfig', 'closeOnPrinted'],
   data() {
     return {
       form: {
@@ -176,18 +169,7 @@ export default defineComponent({
     },
   },
   render(): JSXNode {
-    const {
-      form,
-      preview,
-      printerTypeItems,
-      printerItems,
-      currentPage,
-      totalPage,
-      visible,
-      pageSize,
-      dataSource,
-      templateRender,
-    } = this;
+    const { form, preview, printerTypeItems, printerItems, currentPage, totalPage, visible, pageSize, dataSource, templateRender } = this;
     const prefixCls = getPrefixCls('print-preview');
     const dialogProps = {
       visible,
@@ -197,7 +179,7 @@ export default defineComponent({
       showFullScreen: false,
       destroyOnClose: true,
       containerStyle: { paddingBottom: '52px' },
-      'onUpdate:visible': (val) => {
+      'onUpdate:visible': (val: boolean): void => {
         this.visible = val;
       },
     };
@@ -226,11 +208,7 @@ export default defineComponent({
             </span>
             <span>
               打印类型：
-              <el-select
-                v-model={form.printerType}
-                style={{ width: '120px' }}
-                onChange={this.printerTypeChange}
-              >
+              <el-select v-model={form.printerType} style={{ width: '120px' }} onChange={this.printerTypeChange}>
                 {printerTypeItems.map((x) => (
                   <el-option key={x.value} label={x.text} value={x.value} />
                 ))}
@@ -238,13 +216,7 @@ export default defineComponent({
             </span>
             <span>
               份数：
-              <el-input-number
-                v-model={form.copies}
-                controls={!1}
-                min={1}
-                precision={0}
-                style={{ width: '50px' }}
-              />
+              <el-input-number v-model={form.copies} controls={!1} min={1} precision={0} style={{ width: '50px' }} />
             </span>
             <span>
               打印第
@@ -278,12 +250,7 @@ export default defineComponent({
             </span>
           </div>
           <div class="main">
-            <Container
-              ref="container"
-              dataSource={dataSource}
-              templateRender={templateRender}
-              directPrint={!1}
-            />
+            <Container ref="container" dataSource={dataSource} templateRender={templateRender} directPrint={!1} />
           </div>
           <div class="footer">
             <span>
@@ -311,12 +278,7 @@ export default defineComponent({
         </Dialog>
       </div>
     ) : (
-      <Container
-        ref="container"
-        dataSource={dataSource}
-        templateRender={templateRender}
-        directPrint={!0}
-      />
+      <Container ref="container" dataSource={dataSource} templateRender={templateRender} directPrint={!0} />
     );
   },
 });

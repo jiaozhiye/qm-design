@@ -2,17 +2,18 @@
  * @Author: 焦质晔
  * @Date: 2020-05-19 15:58:23
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-10 11:20:47
+ * @Last Modified time: 2021-03-11 10:09:29
  */
+import { defineComponent } from 'vue';
+import { getPrefixCls } from '../../../_utils/prefix';
+import { t } from '../../../locale';
 import config from '../config';
-import Locale from '../locale/mixin';
 
-import BaseDialog from '../../../BaseDialog';
+import Dialog from '../../../dialog';
 import HighSearchSetting from './setting';
 
-export default {
+export default defineComponent({
   name: 'HighSearch',
-  mixins: [Locale],
   props: ['columns'],
   inject: ['$$table'],
   data() {
@@ -30,32 +31,31 @@ export default {
   },
   render() {
     const { visible } = this;
+    const prefixCls = getPrefixCls('table');
     const wrapProps = {
-      props: {
-        visible,
-        title: this.t('table.highSearch.settingTitle'),
-        showFullScreen: false,
-        width: '1100px',
-        destroyOnClose: true,
-        containerStyle: { height: 'calc(100% - 52px)', paddingBottom: '52px' },
-      },
-      on: {
-        'update:visible': (val) => (this.visible = val),
+      visible,
+      title: t('qm.table.highSearch.settingTitle'),
+      width: '1100px',
+      loading: false,
+      showFullScreen: false,
+      destroyOnClose: true,
+      containerStyle: { paddingBottom: '52px' },
+      'onUpdate:visible': (val: boolean): void => {
+        this.visible = val;
       },
     };
     const columns = this.columns.filter(
       (x) => !['__expandable__', '__selection__', 'index', 'pageIndex', config.operationColumn].includes(x.dataIndex)
     );
-    const cls = [`high-search--wrapper`, `size--${this.$$table.tableSize}`];
     return (
-      <div class={cls}>
-        <span class="search-button" title={this.t('table.highSearch.text')} onClick={this.clickHandle}>
+      <>
+        <span class={`${prefixCls}-super-search`} title={t('qm.table.highSearch.text')} onClick={this.clickHandle}>
           <i class="iconfont icon-funnelplot" />
         </span>
-        <BaseDialog {...wrapProps}>
+        <Dialog {...wrapProps}>
           <HighSearchSetting columns={columns} onClose={this.closeHandle} />
-        </BaseDialog>
-      </div>
+        </Dialog>
+      </>
     );
   },
-};
+});
