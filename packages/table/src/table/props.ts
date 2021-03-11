@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-02-28 23:04:58
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-11 20:58:22
+ * @Last Modified time: 2021-03-11 21:09:30
  */
 import { PropType } from 'vue';
 import PropTypes from '../../../_utils/vue-types';
@@ -243,7 +243,7 @@ export default {
   onlyShowIcon: PropTypes.bool,
   // 加载表格之前的拦截器，适用于 fetch.api 情况
   beforeLoadTable: PropTypes.func,
-  // 各种事件
+  // 事件监听
   onChange: PropTypes.func,
   onDataChange: PropTypes.func,
   onDataLoaded: PropTypes.func,
