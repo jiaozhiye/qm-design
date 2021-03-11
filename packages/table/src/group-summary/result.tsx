@@ -2,16 +2,18 @@
  * @Author: 焦质晔
  * @Date: 2020-05-20 09:36:38
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-11 10:19:34
+ * @Last Modified time: 2021-03-11 21:05:32
  */
 import { defineComponent } from 'vue';
 import { maxBy, minBy, sumBy, isObject } from 'lodash';
 import { groupBy, getCellValue, setCellValue } from '../utils';
 import { t } from '../../../locale';
+import { JSXNode, AnyObject } from '../../../_utils/types';
 
 import config from '../config';
 import VTable from '../table';
-import { JSXNode } from '../../../_utils/types';
+
+const GROUP_TYPES = ['date'];
 
 export default defineComponent({
   name: 'GroupSummaryResult',
@@ -28,7 +30,6 @@ export default defineComponent({
       }
       return { dataIndex: x.summary, ...this.formatColumn(x.summary), formula: x.formula };
     });
-    this.groupTypes = ['date'];
     return {
       loading: !1,
       list: [], // 汇总表格数据
@@ -67,7 +68,7 @@ export default defineComponent({
             const { filter, fieldType } = this.columns.find((k) => k.dataIndex === x.group);
             const type = filter?.type || fieldType;
             // ** 适应 MEP 后端 **
-            return !this.groupTypes.includes(type) ? `${x.group}` : `${x.group}|${type}`;
+            return !GROUP_TYPES.includes(type) ? `${x.group}` : `${x.group}|${type}`;
           })
           .join(','),
         usedJH: 2,
@@ -92,7 +93,7 @@ export default defineComponent({
         })),
         ...summaryColumns.map((x) => {
           let groupSummary = this.columns.find((k) => k.dataIndex === x.dataIndex)?.groupSummary;
-          let summation = groupSummary ? { summation: isObject(groupSummary) ? groupSummary : {} } : null;
+          let summation: AnyObject<unknown> = groupSummary ? { summation: isObject(groupSummary) ? groupSummary : {} } : null;
           if (x.dataIndex === config.groupSummary.total.value) {
             summation = { dataIndex: config.groupSummary.recordTotalIndex, summation: { render: () => this.$$table.total } };
           }

@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-05-19 16:19:58
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-11 10:44:32
+ * @Last Modified time: 2021-03-11 21:01:05
  */
 import { defineComponent } from 'vue';
 import localforage from 'localforage';
@@ -10,38 +10,39 @@ import { createUidKey } from '../utils';
 import { getPrefixCls } from '../../../_utils/prefix';
 import { warn } from '../../../_utils/error';
 import { t } from '../../../locale';
+import { JSXNode } from '../../../_utils/types';
 
 import config from '../config';
 import VTable from '../table';
+import Dialog from '../../../dialog';
 import EmptyEle from '../empty/element';
 import GroupSummaryResult from './result';
-import Dialog from '../../../dialog';
-import { JSXNode } from '../../../_utils/types';
 
 export default defineComponent({
   name: 'GroupSummarySetting',
-  props: ['columns'],
+  props: ['columns', 'onClose'],
   inject: ['$$table'],
   data() {
-    // 分组项 字典
-    this.groupItems = this.columns.filter((x) => !x.groupSummary).map((x) => ({ text: x.title, value: x.dataIndex }));
-    // 汇总列 字典
-    this.summaryItems = [
-      config.groupSummary.total,
-      ...this.columns.filter((x) => !!x.groupSummary).map((x) => ({ text: x.title, value: x.dataIndex })),
-    ];
-    // 计算公式 字典
-    this.formulaItems = [
-      { text: t('qm.table.groupSummary.sumText'), value: 'sum' },
-      { text: t('qm.table.groupSummary.maxText'), value: 'max' },
-      { text: t('qm.table.groupSummary.minText'), value: 'min' },
-      { text: t('qm.table.groupSummary.avgText'), value: 'avg' },
-      { text: t('qm.table.groupSummary.countText'), value: 'count' },
-    ];
+    Object.assign(this, {
+      // 分组项 字典
+      groupItems: this.columns.filter((x) => !x.groupSummary).map((x) => ({ text: x.title, value: x.dataIndex })),
+      // 汇总列 字典
+      summaryItems: [config.groupSummary.total, ...this.columns.filter((x) => !!x.groupSummary).map((x) => ({ text: x.title, value: x.dataIndex }))],
+      // 计算公式 字典
+      formulaItems: [
+        { text: t('qm.table.groupSummary.sumText'), value: 'sum' },
+        { text: t('qm.table.groupSummary.maxText'), value: 'max' },
+        { text: t('qm.table.groupSummary.minText'), value: 'min' },
+        { text: t('qm.table.groupSummary.avgText'), value: 'avg' },
+        { text: t('qm.table.groupSummary.countText'), value: 'count' },
+      ],
+    });
     return {
       savedItems: [],
       currentKey: '',
-      form: { name: '' },
+      form: {
+        name: '',
+      },
       groupList: [],
       groupColumns: this.createGroupColumns(),
       summaryList: [],

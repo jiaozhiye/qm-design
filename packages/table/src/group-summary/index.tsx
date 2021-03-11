@@ -2,16 +2,16 @@
  * @Author: 焦质晔
  * @Date: 2020-05-19 15:58:23
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-11 10:26:02
+ * @Last Modified time: 2021-03-11 20:59:02
  */
 import { defineComponent } from 'vue';
 import { getPrefixCls } from '../../../_utils/prefix';
 import { t } from '../../../locale';
+import { JSXNode } from '../../../_utils/types';
 
 import config from '../config';
 import Dialog from '../../../dialog';
 import GroupSummarySetting from './setting';
-import { JSXNode } from '../../../_utils/types';
 
 export default defineComponent({
   name: 'GroupSummary',

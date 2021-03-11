@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-07-12 16:26:19
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-11 10:45:04
+ * @Last Modified time: 2021-03-11 20:58:40
  */
 import { defineComponent } from 'vue';
 import localforage from 'localforage';
@@ -11,22 +11,24 @@ import { hasOwn, createUidKey, createWhereSQL } from '../utils';
 import { getPrefixCls } from '../../../_utils/prefix';
 import { warn } from '../../../_utils/error';
 import { t } from '../../../locale';
+import { JSXNode } from '../../../_utils/types';
 import config from '../config';
 
 import VTable from '../table';
 import EmptyEle from '../empty/element';
-import { JSXNode } from '../../../_utils/types';
 
 export default defineComponent({
   name: 'HighSearchSetting',
-  props: ['columns'],
+  props: ['columns', 'onClose'],
   inject: ['$$table'],
   data() {
-    this.fieldDicts = this.columns.filter((column) => !!column.filter).map((x) => ({ value: x.dataIndex, text: x.title }));
-    this.logicDicts = [
-      { value: 'and', text: t('qm.table.highSearch.andText') },
-      { value: 'or', text: t('qm.table.highSearch.orText') },
-    ];
+    Object.assign(this, {
+      logicDicts: [
+        { value: 'and', text: t('qm.table.highSearch.andText') },
+        { value: 'or', text: t('qm.table.highSearch.orText') },
+      ],
+      fieldDicts: this.columns.filter((column) => !!column.filter).map((x) => ({ value: x.dataIndex, text: x.title })),
+    });
     return {
       loading: !1,
       searchColumns: this.createVTableColumns(),
@@ -34,7 +36,9 @@ export default defineComponent({
       currentData: [],
       savedItems: [],
       currentKey: '',
-      form: { name: '' },
+      form: {
+        name: '',
+      },
     };
   },
   computed: {
