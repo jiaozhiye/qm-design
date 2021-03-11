@@ -2,11 +2,11 @@
  * @Author: 焦质晔
  * @Date: 2020-03-22 14:34:21
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-11 18:55:05
+ * @Last Modified time: 2021-03-11 20:13:56
  */
 import { defineComponent } from 'vue';
-import { isEqual, isFunction, isObject, get, merge } from 'lodash';
 import dayjs from 'dayjs';
+import { isEqual, isFunction, isObject, get, merge } from 'lodash';
 import { getCellValue, setCellValue, deepFindColumn, toDate, dateFormat } from '../utils';
 import { noop } from '../../../_utils/util';
 import { t } from '../../../locale';
@@ -97,7 +97,6 @@ export default defineComponent({
           size={this.size}
           {...inputProps}
           maxlength={extra.maxlength}
-          // @ts-ignore
           onInput={(val) => {
             onInput({ [this.dataKey]: val }, row);
           }}
@@ -137,7 +136,6 @@ export default defineComponent({
           max={extra.max}
           maxlength={extra.maxlength}
           style={{ width: '100%' }}
-          // @ts-ignore
           onChange={(val) => {
             this.createFieldValidate(rules, val);
             this.store.addToUpdated(row);
@@ -440,7 +438,6 @@ export default defineComponent({
             readonly={extra.readonly}
             clearable={extra.clearable ?? !0}
             disabled={extra.disabled}
-            // @ts-ignore
             onChange={(val) => {
               if (val && remoteMatch) {
                 return getHelperData(val)
@@ -449,7 +446,7 @@ export default defineComponent({
               }
               setHelperValues(val);
             }}
-            onDblclick={(ev) => {
+            onDblclick={() => {
               if (extra.disabled) return;
               isObject(helper) && openHelperPanel();
             }}

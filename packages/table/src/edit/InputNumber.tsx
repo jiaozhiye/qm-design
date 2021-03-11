@@ -2,13 +2,12 @@
  * @Author: 焦质晔
  * @Date: 2020-08-11 08:19:36
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-09 13:51:54
+ * @Last Modified time: 2021-03-11 20:12:47
  */
 import { defineComponent } from 'vue';
-import { JSXNode } from '../../../_utils/types';
 import PropTypes from '../../../_utils/vue-types';
-
 import { useSize } from '../../../hooks/useSize';
+import { JSXNode } from '../../../_utils/types';
 
 export default defineComponent({
   name: 'InputNumber',
@@ -24,6 +23,8 @@ export default defineComponent({
     controls: PropTypes.bool.def(false),
     placeholder: PropTypes.string,
     disabled: PropTypes.bool.def(false),
+    onChange: PropTypes.func,
+    onKeydown: PropTypes.func,
   },
   data() {
     return {

@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-12-23 13:13:25
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-11 10:42:39
+ * @Last Modified time: 2021-03-11 20:20:19
  */
 import { utils, write } from 'xlsx';
 
@@ -272,7 +272,7 @@ const ExcellentExport = (function () {
     version: function () {
       return version;
     },
-    excel: function (tableHTML, name) {
+    excel: function (tableHTML, name?: string) {
       const ctx = { worksheet: name || 'sheet1', table: tableHTML };
       const b64 = base64(format(template.excel, ctx));
       return b64toBlob(b64, 'application/vnd.ms-excel');

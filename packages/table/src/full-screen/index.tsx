@@ -2,13 +2,13 @@
  * @Author: 焦质晔
  * @Date: 2020-03-20 10:18:05
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-10 14:52:20
+ * @Last Modified time: 2021-03-11 20:24:38
  */
 import { defineComponent } from 'vue';
 import addEventListener from 'add-dom-event-listener';
-import { JSXNode } from '../../../_utils/types';
 import { getPrefixCls } from '../../../_utils/prefix';
 import { t } from '../../../locale';
+import { JSXNode } from '../../../_utils/types';
 
 export default defineComponent({
   name: 'FullScreen',
@@ -20,7 +20,7 @@ export default defineComponent({
   },
   computed: {
     title() {
-      return !this.isFull ? t('1m.table.screen.full') : t('1m.table.screen.cancelFull');
+      return !this.isFull ? t('qm.table.screen.full') : t('qm.table.screen.cancelFull');
     },
   },
   methods: {
@@ -39,7 +39,7 @@ export default defineComponent({
     this.event = addEventListener(document, 'keydown', this.keyboardHandle);
   },
   unmounted() {
-    this.event.remove();
+    this.event?.remove();
   },
   render(): JSXNode {
     const { isFull, title } = this;

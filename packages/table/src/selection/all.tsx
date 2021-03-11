@@ -2,14 +2,15 @@
  * @Author: 焦质晔
  * @Date: 2020-03-06 21:30:12
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-08 09:57:20
+ * @Last Modified time: 2021-03-11 20:32:26
  */
 import { defineComponent } from 'vue';
 import { intersection, xor } from 'lodash-es';
-import Checkbox from '../checkbox';
 import { getAllRowKeys } from '../utils';
 import { noop } from '../../../_utils/util';
 import { JSXNode } from '../../../_utils/types';
+
+import Checkbox from '../checkbox';
 
 export default defineComponent({
   name: 'AllSelection',

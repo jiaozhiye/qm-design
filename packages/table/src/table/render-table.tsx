@@ -2,9 +2,10 @@
  * @Author: 焦质晔
  * @Date: 2020-02-29 22:17:28
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-11 10:20:38
+ * @Last Modified time: 2021-03-11 20:36:51
  */
 import { getPrefixCls } from '../../../_utils/prefix';
+import { JSXNode } from '../../../_utils/types';
 
 import TableHeader from '../header';
 import TableBody from '../body';
@@ -20,7 +21,6 @@ import FullScreen from '../full-screen';
 import Export from '../export';
 import PrintTable from '../print';
 import Reload from '../reload';
-import { JSXNode } from '../../../_utils/types';
 
 const prefixCls = getPrefixCls('table');
 
@@ -75,7 +75,6 @@ export default {
       isGroupSummary,
       showColumnDefine,
     } = this;
-
     const wrapperCls = {
       [`${prefixCls}--wrapper`]: true,
       [`${prefixCls}--maximize`]: isFullScreen,

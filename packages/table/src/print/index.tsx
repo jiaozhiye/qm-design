@@ -2,16 +2,17 @@
  * @Author: 焦质晔
  * @Date: 2020-03-26 11:44:24
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-11 09:59:33
+ * @Last Modified time: 2021-03-11 20:31:14
  */
 import { defineComponent } from 'vue';
 import { flatten, groupBy, spread, mergeWith, isFunction } from 'lodash-es';
 import { convertToRows, deepFindColumn, filterTableColumns, getCellValue } from '../utils';
-import config from '../config';
 import { getPrefixCls } from '../../../_utils/prefix';
 import { t } from '../../../locale';
 import { download } from '../../../_utils/download';
 import { JSXNode } from '../../../_utils/types';
+
+import config from '../config';
 
 const defaultHtmlStyle = `
   * {

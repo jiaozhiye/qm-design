@@ -2,14 +2,15 @@
  * @Author: 焦质晔
  * @Date: 2020-03-06 12:05:16
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-08 09:59:11
+ * @Last Modified time: 2021-03-11 20:32:47
  */
 import { defineComponent } from 'vue';
 import { deepFindRowKey, isArrayContain } from '../utils';
 import { noop } from '../../../_utils/util';
+import { JSXNode } from '../../../_utils/types';
+
 import Radio from '../radio';
 import Checkbox from '../checkbox';
-import { JSXNode } from '../../../_utils/types';
 
 export default defineComponent({
   name: 'Selection',

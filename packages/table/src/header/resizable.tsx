@@ -2,12 +2,14 @@
  * @Author: 焦质晔
  * @Date: 2020-03-07 19:04:14
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-10 11:20:43
+ * @Last Modified time: 2021-03-11 20:27:56
  */
 import { defineComponent } from 'vue';
 import { getNodeOffset } from '../utils';
-import config from '../config';
+import { stop } from '../../../_utils/dom';
 import { JSXNode } from '../../../_utils/types';
+
+import config from '../config';
 
 export default defineComponent({
   name: 'Resizable',
@@ -20,7 +22,7 @@ export default defineComponent({
   },
   methods: {
     resizeMousedown(ev) {
-      ev.preventDefault();
+      stop(ev);
 
       const _this = this;
       const dom = ev.target;
@@ -70,12 +72,10 @@ export default defineComponent({
   },
   render(): JSXNode {
     const { resizable, bordered } = this.$$table;
-    const resizableCls = [
-      `resizable`,
-      {
-        [`is--line`]: resizable && !bordered,
-      },
-    ];
-    return <div class={resizableCls} onMousedown={this.resizeMousedown} onClick={(ev) => ev.stopPropagation()} />;
+    const resizableCls = {
+      [`resizable`]: true,
+      [`is--line`]: resizable && !bordered,
+    };
+    return <div class={resizableCls} onMousedown={this.resizeMousedown} onClick={(ev) => stop(ev)} />;
   },
 });

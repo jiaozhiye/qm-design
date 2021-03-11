@@ -2,21 +2,20 @@
  * @Author: 焦质晔
  * @Date: 2021-02-09 09:03:59
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-11 18:39:02
+ * @Last Modified time: 2021-03-11 20:34:14
  */
-import { defineComponent, reactive } from 'vue';
+import { defineComponent } from 'vue';
+import { isEqual } from 'lodash-es';
 import { JSXNode } from '../../../_utils/types';
 
 import baseProps from './props';
 import Store from '../store';
-import { isEqual } from 'lodash-es';
 import { isChrome, isIE, noop } from '../../../_utils/util';
 import { useSize } from '../../../hooks/useSize';
-
 import { isEmpty } from '../../../_utils/util';
 import { getScrollBarWidth } from '../../../_utils/scrollbar-width';
-import { warn } from '../../../_utils/error';
 import { columnsFlatMap, getAllColumns, getAllRowKeys, tableDataFlatMap, createOrderBy, createWhereSQL, parseHeight, debounce } from '../utils';
+import { warn } from '../../../_utils/error';
 import config from '../config';
 
 import columnsMixin from '../columns';

@@ -2,20 +2,20 @@
  * @Author: 焦质晔
  * @Date: 2020-02-02 15:58:17
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-10 15:37:06
+ * @Last Modified time: 2021-03-11 20:18:35
  */
 import { defineComponent } from 'vue';
 import dayjs from 'dayjs';
 import { isFunction } from 'lodash';
 
 import PropTypes from '../../../_utils/vue-types';
-import ExcellentExport from './tableToExcel';
+import { getCellValue, setCellValue, convertToRows, filterTableColumns } from '../utils';
+import { getPrefixCls } from '../../../_utils/prefix';
+import { t } from '../../../locale';
 import { download } from '../../../_utils/download';
 
 import config from '../config';
-import { t } from '../../../locale';
-import { getCellValue, setCellValue, convertToRows, filterTableColumns } from '../utils';
-import { getPrefixCls } from '../../../_utils/prefix';
+import ExcellentExport from './tableToExcel';
 
 export default defineComponent({
   name: 'Export',

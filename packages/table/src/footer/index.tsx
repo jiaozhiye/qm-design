@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-03-01 23:54:20
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-10 13:06:18
+ * @Last Modified time: 2021-03-11 20:23:37
  */
 import { defineComponent } from 'vue';
 import { formatNumber, setCellValue, getCellValue } from '../utils';
@@ -130,13 +130,7 @@ export default defineComponent({
     const prefixCls = getPrefixCls('table');
     return (
       <div class={`${prefixCls}--footer-wrapper`}>
-        <table
-          class={`${prefixCls}--footer`}
-          cellspacing="0"
-          cellpadding="0"
-          border="0"
-          style={{ width: tableBodyWidth ? `${tableBodyWidth}px` : null }}
-        >
+        <table class={`${prefixCls}--footer`} cellspacing="0" cellpadding="0" style={{ width: tableBodyWidth ? `${tableBodyWidth}px` : null }}>
           {this.renderColgroup()}
           <tfoot>{this.renderRows()}</tfoot>
         </table>

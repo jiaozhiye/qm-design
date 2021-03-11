@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-05-30 14:13:37
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-10 19:08:41
+ * @Last Modified time: 2021-03-11 19:18:08
  */
 $prefix: '#{$qm-prefix}-table';
 
@@ -27,16 +27,6 @@ $prefix: '#{$qm-prefix}-table';
       .col--ellipsis {
         .cell {
           max-height: $v-table-row-height-medium;
-        }
-      }
-    }
-    .cell--edit {
-      .el-input__inner {
-        font-size: $v-font-size-medium;
-        &.is-error {
-          .cell-error {
-            top: 9px;
-          }
         }
       }
     }
@@ -65,16 +55,6 @@ $prefix: '#{$qm-prefix}-table';
       .col--ellipsis {
         .cell {
           max-height: $v-table-row-height-small;
-        }
-      }
-    }
-    .cell--edit {
-      .el-input__inner {
-        font-size: $v-font-size-small;
-        &.is-error {
-          .cell-error {
-            top: 9px;
-          }
         }
       }
     }
@@ -109,11 +89,6 @@ $prefix: '#{$qm-prefix}-table';
     .cell--edit {
       .el-input__inner {
         font-size: $v-font-size-mini;
-      }
-      &.is-error {
-        .cell-error {
-          top: 7px;
-        }
       }
     }
   }

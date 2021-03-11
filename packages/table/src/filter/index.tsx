@@ -2,16 +2,16 @@
  * @Author: 焦质晔
  * @Date: 2020-03-09 13:18:43
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-11 09:09:53
+ * @Last Modified time: 2021-03-11 20:21:37
  */
 import { defineComponent } from 'vue';
 import { cloneDeep } from 'lodash-es';
-import { JSXNode } from '../../../_utils/types';
 import { isEmpty } from '../../../_utils/util';
 import { validateNumber, stringToNumber, toDate, dateFormat } from '../utils';
 import { getPrefixCls } from '../../../_utils/prefix';
 import { t } from '../../../locale';
 import { warn } from '../../../_utils/error';
+import { JSXNode } from '../../../_utils/types';
 
 import Radio from '../radio';
 import Checkbox from '../checkbox';
@@ -365,7 +365,7 @@ export default defineComponent({
           append-to-body={true}
           stop-popper-mouse-event={false}
           gpu-acceleration={false}
-          onShow={(): void => {
+          onShow={() => {
             this.popperVisibleHandle(true);
           }}
           v-slots={{

@@ -2,13 +2,13 @@
  * @Author: 焦质晔
  * @Date: 2021-03-09 11:31:08
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-09 11:38:43
+ * @Last Modified time: 2021-03-11 20:28:18
  */
 import { defineComponent } from 'vue';
 import { JSXNode } from '../../../_utils/types';
 
 export default defineComponent({
-  name: 'caretDownIcon',
+  name: 'CaretDownIcon',
   render(): JSXNode {
     return (
       <svg viewBox="0 0 1024 1024" focusable="false" data-icon="caret-down" width="1em" height="1em" fill="currentColor" aria-hidden="true">

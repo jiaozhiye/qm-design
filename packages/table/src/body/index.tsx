@@ -2,17 +2,19 @@
  * @Author: 焦质晔
  * @Date: 2020-02-28 23:01:43
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-10 13:04:20
+ * @Last Modified time: 2021-03-11 20:03:27
  */
 import { defineComponent, reactive } from 'vue';
 import addEventListener from 'add-dom-event-listener';
+import { isEqual, isFunction, isObject } from 'lodash';
 import { parseHeight, getCellValue, deepFindRowKey, isArrayContain } from '../utils';
 import { getPrefixCls } from '../../../_utils/prefix';
+import { noop } from '../../../_utils/util';
 import { contains } from '../../../_utils/dom';
 import { warn } from '../../../_utils/error';
-import config from '../config';
-import { isEqual, isFunction, isObject } from 'lodash';
+import { JSXNode } from '../../../_utils/types';
 
+import config from '../config';
 import formatMixin from './format';
 import keyboardMixin from './keyboard';
 
@@ -20,9 +22,6 @@ import Draggable from 'vuedraggable';
 import Expandable from '../expandable';
 import Selection from '../selection';
 import CellEdit from '../edit';
-import { JSXNode } from '../../../_utils/types';
-
-const noop = () => {};
 
 export default defineComponent({
   name: 'TableBody',
@@ -426,7 +425,7 @@ export default defineComponent({
       <div class={`${prefixCls}--body-wrapper`} style={{ ...wrapStyle }}>
         {this.renderBodyYSpace()}
         {this.renderBodyXSpace()}
-        <table class={`${prefixCls}--body`} cellspacing="0" cellpadding="0" border="0" style={{ width: bodyWidth }}>
+        <table class={`${prefixCls}--body`} cellspacing="0" cellpadding="0" style={{ width: bodyWidth }}>
           {this.renderColgroup()}
           {!isDraggable ? (
             <tbody>{this.renderRows(tableData)}</tbody>

@@ -2,22 +2,22 @@
  * @Author: 焦质晔
  * @Date: 2020-02-28 23:01:43
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-10 20:36:40
+ * @Last Modified time: 2021-03-11 20:26:02
  */
 import { defineComponent, reactive } from 'vue';
 import { pickBy, intersection, isFunction } from 'lodash-es';
-import config from '../config';
-import { where } from '../filter-sql';
 import { hasOwn, convertToRows, deepFindColumn, getCellValue, createWhereSQL } from '../utils';
 import { getPrefixCls } from '../../../_utils/prefix';
 import { isEmpty } from '../../../_utils/util';
 import { t } from '../../../locale';
+import { JSXNode } from '../../../_utils/types';
+
+import config from '../config';
+import { where } from '../filter-sql';
 
 import Resizable from './resizable';
 import AllSelection from '../selection/all';
 import THeadFilter from '../filter';
-import { JSXNode } from '../../../_utils/types';
-
 import CaretUpIcon from '../icon/caretup';
 import CaretDownIcon from '../icon/caretdown';
 
@@ -335,13 +335,7 @@ export default defineComponent({
     this.setFixedColumns(columnRows);
     return (
       <div class={`${prefixCls}--header-wrapper`}>
-        <table
-          class={`${prefixCls}--header`}
-          cellspacing="0"
-          cellpadding="0"
-          border="0"
-          style={{ width: tableBodyWidth ? `${tableBodyWidth}px` : null }}
-        >
+        <table class={`${prefixCls}--header`} cellspacing="0" cellpadding="0" style={{ width: tableBodyWidth ? `${tableBodyWidth}px` : null }}>
           {this.renderColgroup()}
           <thead>{this.renderRows(columnRows)}</thead>
         </table>

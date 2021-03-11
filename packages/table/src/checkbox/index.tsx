@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-03-06 01:13:44
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-08 09:56:37
+ * @Last Modified time: 2021-03-11 20:05:03
  */
 import { defineComponent } from 'vue';
 import PropTypes from '../../../_utils/vue-types';
@@ -81,7 +81,7 @@ export default defineComponent({
     return (
       <label class={wrapCls}>
         <span class={checkboxCls}>
-          <span class={innerCls}></span>
+          <span class={innerCls} />
           <input
             type="checkbox"
             class={inputCls}

@@ -2,12 +2,13 @@
  * @Author: 焦质晔
  * @Date: 2020-03-05 10:27:24
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-08 09:59:20
+ * @Last Modified time: 2021-03-11 20:32:56
  */
 import { uniqWith } from 'lodash-es';
 import { deepFindRowKey, tableDataFlatMap, isArrayContain } from '../utils';
-import config from '../config';
 import { t } from '../../../locale';
+
+import config from '../config';
 
 const selectionMixin = {
   methods: {

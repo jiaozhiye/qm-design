@@ -2,12 +2,18 @@
  * @Author: 焦质晔
  * @Date: 2020-02-28 22:13:54
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-10 16:28:33
+ * @Last Modified time: 2021-03-11 19:23:37
  */
 .body--column {
   .cell--edit {
     .el-input-group {
       display: table;
+      .el-input__suffix {
+        transition: none;
+      }
+      .el-input-group__append {
+        padding: 0 13px;
+      }
     }
     .el-input__inner {
       font-size: $v-font-size;
@@ -32,6 +38,8 @@
     }
     &.is-error {
       position: relative;
+      display: flex;
+      align-items: center;
       .el-input__inner {
         border-color: $v-danger-color;
       }
@@ -41,10 +49,8 @@
       .cell-error {
         position: absolute;
         font-size: $v-font-size-mini;
-        line-height: 1.2;
         color: $v-danger-color;
-        top: 9px;
-        right: 8px;
+        right: $v-module-distance;
         pointer-events: none;
       }
     }

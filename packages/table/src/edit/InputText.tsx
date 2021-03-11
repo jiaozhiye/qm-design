@@ -2,13 +2,13 @@
  * @Author: 焦质晔
  * @Date: 2020-08-11 08:19:36
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-11 14:20:55
+ * @Last Modified time: 2021-03-11 20:13:44
  */
 import { defineComponent } from 'vue';
-import { JSXNode } from '../../../_utils/types';
 import PropTypes from '../../../_utils/vue-types';
-
+import { stop } from '../../../_utils/dom';
 import { useSize } from '../../../hooks/useSize';
+import { JSXNode } from '../../../_utils/types';
 
 export default defineComponent({
   name: 'InputText',
@@ -21,6 +21,10 @@ export default defineComponent({
     readonly: PropTypes.bool.def(false),
     clearable: PropTypes.bool.def(false),
     disabled: PropTypes.bool.def(false),
+    onInput: PropTypes.func,
+    onChange: PropTypes.func,
+    onDblclick: PropTypes.func,
+    onKeydown: PropTypes.func,
   },
   data() {
     return {
@@ -79,7 +83,7 @@ export default defineComponent({
         }}
         onClick={(ev) => {
           if (Array.from(ev.target.classList).includes('el-input__clear')) {
-            ev.stopPropagation();
+            stop(ev);
           }
         }}
         onDblclick={(ev) => {

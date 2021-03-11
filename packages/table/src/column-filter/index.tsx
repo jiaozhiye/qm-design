@@ -2,19 +2,18 @@
  * @Author: 焦质晔
  * @Date: 2020-03-17 10:29:47
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-11 14:47:54
+ * @Last Modified time: 2021-03-11 20:07:42
  */
 import { defineComponent, reactive } from 'vue';
 import Draggable from 'vuedraggable';
 import classnames from 'classnames';
 import { JSXNode } from '../../../_utils/types';
-import Checkbox from '../checkbox';
-import SorterIcon from '../icon/sorter';
-
 import { getPrefixCls } from '../../../_utils/prefix';
 import { noop } from '../../../_utils/util';
-
 import { t } from '../../../locale';
+
+import Checkbox from '../checkbox';
+import SorterIcon from '../icon/sorter';
 
 export default defineComponent({
   name: 'ColumnFilter',
@@ -162,7 +161,7 @@ export default defineComponent({
               }}
             />
           </div>
-          <div class="divider"></div>
+          <div class="divider" />
           <div class="main">
             <Draggable
               {...mainDragProps}
@@ -173,7 +172,7 @@ export default defineComponent({
               }}
             />
           </div>
-          <div class="divider"></div>
+          <div class="divider" />
           <div class="right">
             <Draggable
               {...rightDragProps}

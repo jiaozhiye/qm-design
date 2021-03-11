@@ -2,12 +2,12 @@
  * @Author: 焦质晔
  * @Date: 2021-03-08 13:54:33
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-10 18:49:35
+ * @Last Modified time: 2021-03-11 20:29:15
  */
 import { defineComponent } from 'vue';
+import { getPrefixCls } from '../../../_utils/prefix';
 import { JSXNode } from '../../../_utils/types';
 
-import { getPrefixCls } from '../../../_utils/prefix';
 import config from '../config';
 
 export default defineComponent({
