@@ -2,10 +2,10 @@
  * @Author: 焦质晔
  * @Date: 2020-05-20 09:36:38
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-11 21:05:32
+ * @Last Modified time: 2021-03-12 09:23:22
  */
 import { defineComponent } from 'vue';
-import { maxBy, minBy, sumBy, isObject } from 'lodash';
+import { maxBy, minBy, sumBy, isObject } from 'lodash-es';
 import { groupBy, getCellValue, setCellValue } from '../utils';
 import { t } from '../../../locale';
 import { JSXNode, AnyObject } from '../../../_utils/types';

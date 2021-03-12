@@ -2,11 +2,11 @@
  * @Author: 焦质晔
  * @Date: 2020-03-22 14:34:21
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-11 20:13:56
+ * @Last Modified time: 2021-03-12 09:23:08
  */
 import { defineComponent } from 'vue';
 import dayjs from 'dayjs';
-import { isEqual, isFunction, isObject, get, merge } from 'lodash';
+import { isEqual, isFunction, isObject, get, merge } from 'lodash-es';
 import { getCellValue, setCellValue, deepFindColumn, toDate, dateFormat } from '../utils';
 import { noop } from '../../../_utils/util';
 import { t } from '../../../locale';

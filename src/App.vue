@@ -470,6 +470,12 @@ export default defineComponent({
           this.selectedKeys = val;
         },
       },
+      tablePrint: {
+        showLogo: true,
+      },
+      exportExcel: {
+        fileName: '导出文件.xlsx',
+      },
     };
   },
   methods: {
@@ -533,6 +539,8 @@ export default defineComponent({
           rowKey={(row) => row.id}
           rowSelection={this.selection}
           webPagination
+          tablePrint={this.tablePrint}
+          exportExcel={this.exportExcel}
           columnsChange={(columns) => (this.columns = columns)}
         ></qm-table>
         {/* <qm-countup endValue={2020} />

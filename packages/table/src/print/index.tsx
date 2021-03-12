@@ -5,8 +5,9 @@
  * @Last Modified time: 2021-03-11 20:31:14
  */
 import { defineComponent } from 'vue';
-import { flatten, groupBy, spread, mergeWith, isFunction } from 'lodash-es';
+import { flatten, groupBy, map, spread, mergeWith, isFunction } from 'lodash-es';
 import { convertToRows, deepFindColumn, filterTableColumns, getCellValue } from '../utils';
+import { deepToRaw } from '../../../_utils/util';
 import { getPrefixCls } from '../../../_utils/prefix';
 import { t } from '../../../locale';
 import { download } from '../../../_utils/download';
@@ -58,10 +59,10 @@ export default defineComponent({
   },
   computed: {
     headColumns() {
-      return filterTableColumns(this.tableColumns, ['__expandable__', '__selection__', config.operationColumn]);
+      return deepToRaw(filterTableColumns(this.tableColumns, ['__expandable__', '__selection__', config.operationColumn]));
     },
     flatColumns() {
-      return filterTableColumns(this.flattenColumns, ['__expandable__', '__selection__', config.operationColumn]);
+      return deepToRaw(filterTableColumns(this.flattenColumns, ['__expandable__', '__selection__', config.operationColumn]));
     },
   },
   methods: {
@@ -103,30 +104,16 @@ export default defineComponent({
       });
     },
     doMerge(columns, mark) {
-      return flatten(columns)
-        .groupBy(mark)
-        .map(
-          spread((...values) => {
-            return mergeWith(...values, (objValue, srcValue) => {
-              if (Array.isArray(objValue)) {
-                return this.doMerge(objValue.concat(srcValue), mark);
-              }
-            });
-          })
-        )
-        .value();
-      // return _(_.flatten(columns))
-      // .groupBy(mark)
-      // .map(
-      //   _.spread((...values) => {
-      //     return _.mergeWith(...values, (objValue, srcValue) => {
-      //       if (Array.isArray(objValue)) {
-      //         return this.doMerge(objValue.concat(srcValue), mark);
-      //       }
-      //     });
-      //   })
-      // )
-      // .value();
+      return map(
+        groupBy(flatten(columns), mark),
+        spread((...rest) => {
+          return mergeWith(...rest, (objValue, srcValue) => {
+            if (Array.isArray(objValue)) {
+              return this.doMerge(objValue.concat(srcValue), mark);
+            }
+          });
+        })
+      );
     },
     createChunkColumns(columns) {
       let res = [];

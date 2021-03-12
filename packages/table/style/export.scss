@@ -18,4 +18,8 @@ $prefix: '#{$qm-prefix}-table';
   &:hover {
     color: $v-primary-color;
   }
+  &.disabled {
+    color: $v-font-disabled-color;
+    cursor: not-allowed;
+  }
 }

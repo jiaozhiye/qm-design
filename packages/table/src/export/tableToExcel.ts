@@ -137,7 +137,6 @@ const ExcellentExport = (function () {
       anchor.download = filename;
       anchor.href = 'data:' + exporttype + ';base64,' + base64data;
     }
-
     return true;
   };
 

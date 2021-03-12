@@ -2,29 +2,25 @@
  * @Author: 焦质晔
  * @Date: 2020-02-02 15:58:17
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-11 20:18:35
+ * @Last Modified time: 2021-03-12 09:23:55
  */
 import { defineComponent } from 'vue';
 import dayjs from 'dayjs';
-import { isFunction } from 'lodash';
+import { isFunction } from 'lodash-es';
 
-import PropTypes from '../../../_utils/vue-types';
 import { getCellValue, setCellValue, convertToRows, filterTableColumns } from '../utils';
+import { deepToRaw } from '../../../_utils/util';
 import { getPrefixCls } from '../../../_utils/prefix';
 import { t } from '../../../locale';
 import { download } from '../../../_utils/download';
 
 import config from '../config';
+import JsonToExcel from './jsonToExcel';
 import ExcellentExport from './tableToExcel';
 
 export default defineComponent({
   name: 'Export',
-  props: {
-    tableColumns: PropTypes.array,
-    flattenColumns: PropTypes.array,
-    fileName: PropTypes.string,
-    fetch: PropTypes.object,
-  },
+  props: ['tableColumns', 'flattenColumns', 'fileName', 'fetch'],
   inject: ['$$table'],
   data() {
     return {
@@ -33,10 +29,10 @@ export default defineComponent({
   },
   computed: {
     headColumns() {
-      return filterTableColumns(this.tableColumns, ['__expandable__', '__selection__', config.operationColumn]);
+      return deepToRaw(filterTableColumns(this.tableColumns, ['__expandable__', '__selection__', config.operationColumn]));
     },
     flatColumns() {
-      return filterTableColumns(this.flattenColumns, ['__expandable__', '__selection__', config.operationColumn]);
+      return deepToRaw(filterTableColumns(this.flattenColumns, ['__expandable__', '__selection__', config.operationColumn]));
     },
     exportFetch() {
       return this.$$table.exportExcel.fetch ?? null;
@@ -94,7 +90,7 @@ export default defineComponent({
         });
         if (res.data) {
           download(res.data, fileName);
-          this.recordExportInfo();
+          this.recordExportLog();
         }
       } catch (err) {}
       this.exporting = !1;
@@ -103,7 +99,7 @@ export default defineComponent({
       const tableHTML = this._toTable(convertToRows(this.headColumns), this.flatColumns);
       const blob = ExcellentExport.excel(tableHTML);
       download(blob, fileName);
-      this.recordExportInfo();
+      this.recordExportLog();
     },
     _toTable(columnRows, flatColumns) {
       const { tableFullData, showHeader, showFooter, $refs } = this.$$table;
@@ -176,7 +172,7 @@ export default defineComponent({
       }
       return result;
     },
-    recordExportInfo() {
+    recordExportLog() {
       const { global } = this.$DESIGN;
       const fetchFn = global['getComponentConfigApi'];
       if (!fetchFn) return;
@@ -186,39 +182,40 @@ export default defineComponent({
     },
   },
   render() {
+    const { tableFullData, spanMethod } = this.$$table;
     const { fields, fileName, fetch, exportFetch, disabledState } = this;
     const prefixCls = getPrefixCls('table');
     const exportFileName = fileName ?? `${dayjs().format('YYYYMMDDHHmmss')}.xlsx`;
     const exportFileType = exportFileName.slice(exportFileName.lastIndexOf('.') + 1).toLowerCase();
-    const wrapProps = {
-      props: {
-        initialValue: this.$$table.tableFullData,
-        fields,
-        fileType: exportFileType,
-        fileName: exportFileName,
-        ...this.createFetchParams(fetch),
-        formatHandle: this.createDataList,
-      },
-      on: {
-        success: () => {
-          this.recordExportInfo();
-        },
+    const toExcelProps = {
+      initialValue: tableFullData,
+      fields,
+      fileType: exportFileType,
+      fileName: exportFileName,
+      ...this.createFetchParams(fetch),
+      formatHandle: this.createDataList,
+      onSuccess: () => {
+        this.recordExportLog();
       },
     };
+    const isJsonToExcel = !(exportFetch || (isFunction(spanMethod) && exportFileType === 'xls'));
     const cls = {
       [`${prefixCls}-export`]: true,
       disabled: disabledState,
     };
     return (
-      <span class={cls} title={t('qm.table.export.text')}>
-        {exportFetch || (this.$$table.spanMethod && exportFileType === 'xls') ? (
-          <i
-            class="iconfont icon-export-excel"
-            onClick={() => (exportFetch ? this.exportHandle(exportFileName) : this.localExportHandle(exportFileName))}
-          />
-        ) : (
-          <JsonToExcel type="text" {...wrapProps} />
-        )}
+      <span
+        class={cls}
+        title={t('qm.table.export.text')}
+        onClick={() => {
+          if (disabledState) return;
+          if (isJsonToExcel) {
+            return this.$refs[`json-to-excel`].DO_EXPORT();
+          }
+          exportFetch ? this.exportHandle(exportFileName) : this.localExportHandle(exportFileName);
+        }}
+      >
+        {isJsonToExcel ? <JsonToExcel ref="json-to-excel" {...toExcelProps} /> : <i class="iconfont icon-download" />}
       </span>
     );
   },

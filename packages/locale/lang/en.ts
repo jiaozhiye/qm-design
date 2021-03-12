@@ -119,6 +119,7 @@ export default {
       export: {
         fileName: '导出数据',
         text: '导出',
+        noData: '数据为空，无法导出！',
       },
       print: {
         text: '打印',
