@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-03-06 15:11:01
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-11 08:19:26
+ * @Last Modified time: 2021-03-12 14:55:00
  */
 import { AnyFunction, AnyObject, JSXNode, Nullable } from '../../../_utils/types';
 
@@ -30,7 +30,7 @@ export type IDictDeep = IDict & {
 
 export type IEditerReturn = {
   type: IEditerType;
-  items?: Array<IDict> | AnyFunction<IDict[]>;
+  items?: Array<IDict>;
   editable?: boolean;
   disabled?: boolean;
   extra?: {
@@ -68,7 +68,7 @@ export type IEditerReturn = {
 export type IFetch = {
   api: AnyFunction<Promise<any>>;
   params?: AnyObject<any>;
-  beforeFetch?: AnyFunction<void | Promise<void> | boolean>;
+  beforeFetch?: AnyFunction<boolean>;
   xhrAbort?: boolean;
   stopToFirst?: boolean;
   dataKey?: string;
@@ -89,13 +89,13 @@ export type IColumn = {
   sorter?: boolean | AnyFunction<void>;
   filter?: {
     type?: IFilterType;
-    items?: Array<IDict> | AnyFunction<IDict[]>;
+    items?: Array<IDict>;
   };
   precision?: number;
   formatType?: IFormatType;
   required?: boolean;
   editRender?: AnyFunction<IEditerReturn>;
-  dictItems?: Array<IDict> | AnyFunction<IDict[]>;
+  dictItems?: Array<IDict>;
   summation?: {
     dataKey?: string;
     unit?: string;

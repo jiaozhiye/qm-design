@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-03-22 14:34:21
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-12 09:23:08
+ * @Last Modified time: 2021-03-12 14:45:26
  */
 import { defineComponent } from 'vue';
 import dayjs from 'dayjs';
@@ -344,11 +344,21 @@ export default defineComponent({
           const current = alias[dataIndex] ? data[alias[dataIndex]] : '';
           // 关闭的前置钩子
           const beforeClose = helper.beforeClose ?? helper.close ?? trueNoop;
-          if (!beforeClose(data, { [this.dataKey]: prevValue }, row, column)) return;
-          // 对表格单元格赋值
-          setHelperValues(current, others);
+          const before = beforeClose(data, { [this.dataKey]: prevValue }, row, column);
+          if (before?.then) {
+            before
+              .then(() => {
+                this.shVisible = visible;
+                setHelperValues(current, others);
+              })
+              .catch(() => {});
+          } else if (before !== false) {
+            this.shVisible = visible;
+            setHelperValues(current, others);
+          }
+        } else {
+          this.shVisible = visible;
         }
-        this.shVisible = visible;
       };
       const setHelperFilterValues = (val) => {
         const { filterAliasMap = noop } = helper;
@@ -396,8 +406,16 @@ export default defineComponent({
       const openHelperPanel = () => {
         // 打开的前置钩子
         const beforeOpen = helper.beforeOpen ?? helper.open ?? trueNoop;
-        if (!beforeOpen({ [this.dataKey]: prevValue }, row, column)) return;
-        this.shVisible = !0;
+        const before = beforeOpen({ [this.dataKey]: prevValue }, row, column);
+        if (before?.then) {
+          before
+            .then(() => {
+              this.shVisible = !0;
+            })
+            .catch(() => {});
+        } else if (before !== false) {
+          this.shVisible = !0;
+        }
       };
       const dialogProps = {
         visible: this.shVisible,
