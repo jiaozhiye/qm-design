@@ -2,20 +2,40 @@
  * @Author: 焦质晔
  * @Date: 2021-02-23 21:56:33
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-02-28 08:14:22
+ * @Last Modified time: 2021-03-12 20:16:58
  */
 import { defineComponent } from 'vue';
-import { JSXNode } from '../../_utils/types';
+import { merge, get, isObject, isFunction } from 'lodash-es';
+import { JSXNode, ValueOf, AnyFunction } from '../../_utils/types';
+import { IFormData } from './types';
 
 import { t } from '../../locale';
 import { noop } from './utils';
 import { getParserWidth } from '../../_utils/util';
+
+import Dialog from '../../dialog';
+import SearchHelper from '../../search-helper';
+
+const trueNoop = (): boolean => !0;
 
 export default defineComponent({
   name: 'FormInput',
   inheritAttrs: false,
   inject: ['$$form'],
   props: ['option'],
+  data() {
+    return {
+      visible: false,
+      extraKeys: [],
+      descKeys: [],
+    };
+  },
+  methods: {
+    reset(val?: string): void {
+      this.extraKeys.forEach((key) => (this.$$form.form[key] = val));
+      this.descKeys.forEach((key) => (this.$$form.desc[key] = val));
+    },
+  },
   render(): JSXNode {
     const { form } = this.$$form;
     const {
@@ -49,8 +69,171 @@ export default defineComponent({
       onClick = noop,
       onDblClick = noop,
     } = options;
+
     const isSearchHelper: boolean = !!Object.keys(searchHelper).length;
-    this.$$form.setViewValue(fieldName, form[fieldName]);
+    const isAppend: boolean = isSearchHelper || isFunction(unitRender);
+
+    // 搜索帮助关闭带值事件
+    const shCloseHandle = (visible: boolean, data: Record<string, unknown>, alias: Record<string, string>): void => {
+      const aliasKeys: string[] = Object.keys(alias);
+      if (isObject(data) && aliasKeys.length) {
+        for (let key in alias) {
+          if (key !== 'extra' && !key.endsWith('__desc')) {
+            form[key] = data[alias[key]];
+          }
+          if (key === 'extra') {
+            this.$$form.desc[fieldName] = data[alias[key]];
+          }
+          if (key.endsWith('__desc')) {
+            this.$$form.desc[key.slice(0, -6)] = data[alias[key]];
+          }
+        }
+        if (aliasKeys.includes(fieldName)) {
+          shChangeHandle(form[fieldName]);
+        }
+      }
+      const { closed = noop } = searchHelper;
+      closed(data);
+      this.visible = visible;
+    };
+
+    // 搜索帮助 change 事件
+    const shChangeHandle = (val: string): void => {
+      const others: Record<string, ValueOf<IFormData>> = {};
+      this.extraKeys.forEach((key) => (others[key] = form[key]));
+      onChange(val, Object.keys(others).length ? others : null);
+    };
+
+    // 设置搜做帮助组件表单数据
+    const createShFilters = (val: string): Record<string, string> => {
+      const { name, fieldsDefine, getServerConfig, filterAliasMap = noop } = searchHelper;
+      const alias: string[] = Object.assign([], filterAliasMap());
+      const inputParams: Record<string, string> = name && fieldsDefine && getServerConfig ? {} : { [fieldName]: val };
+      alias.forEach((x) => (inputParams[x] = val));
+      return inputParams;
+    };
+
+    // 执行搜索帮助接口，获取数据
+    const getShTableData = (val: string): Promise<Record<string, unknown>[]> => {
+      const { table, initialValue = {}, beforeFetch = (k) => k } = searchHelper;
+      return new Promise(async (resolve, reject) => {
+        const params = merge({}, table.fetch?.params, beforeFetch({ ...initialValue, ...createShFilters(val) }), { currentPage: 1, pageSize: 500 });
+        try {
+          const res = await table.fetch.api(params);
+          if (res.code === 200) {
+            const list: Record<string, any>[] = get(res.data, table.fetch.dataKey) ?? (Array.isArray(res.data) ? res.data : []);
+            return resolve(list);
+          }
+        } catch (err) {}
+        reject();
+      });
+    };
+
+    // 执行打开动作
+    const doOpen = (val: string): void => {
+      this.visible = !0;
+      // 清空搜索帮助
+      clearSearchHelperValue();
+      // 设置搜索帮助查询参数
+      this.$nextTick(() => this.$refs[`${type}-SH`].$refs[`top-filter`]?.SET_FORM_VALUES(createShFilters(val)));
+    };
+
+    // 打开搜索帮助面板
+    const openShPanel = (val: string, cb?: AnyFunction<void>): void => {
+      // 打开的前置钩子
+      const beforeOpen = searchHelper.beforeOpen ?? searchHelper.open ?? trueNoop;
+      const before = beforeOpen(this.form);
+      if (before?.then) {
+        before
+          .then(() => {
+            doOpen(val);
+            cb?.();
+          })
+          .catch(() => {});
+      } else if (before !== false) {
+        doOpen(val);
+        cb?.();
+      }
+    };
+
+    // 创建 field alias 别名
+    const createFieldAlias = async (): Promise<Record<string, string>> => {
+      const { name, fieldsDefine, getServerConfig, fieldAliasMap = noop } = searchHelper;
+      let alias: Record<string, string> = {}; // 别名映射
+      // tds
+      if (name && fieldsDefine && getServerConfig) {
+        const DEFINE = ['valueName', 'displayName', 'descriptionName'];
+        const target = {};
+        try {
+          const res = await getServerConfig({ name });
+          if (res?.code === 200) {
+            for (let key in fieldsDefine) {
+              if (!DEFINE.includes(key)) continue;
+              target[fieldsDefine[key]] = res.data[key];
+            }
+          }
+        } catch (err) {}
+        alias = Object.assign({}, target);
+      } else {
+        alias = Object.assign({}, fieldAliasMap());
+      }
+      return alias;
+    };
+
+    // 设置搜索帮助的值
+    const resetSearchHelperValue = async (list: Record<string, any> = [], val: string): Promise<void> => {
+      const alias = await createFieldAlias();
+      const records = list.filter((data) => data[alias[fieldName]]?.toString().toLowerCase().includes(val.toLowerCase()));
+      if (records.length === 1) {
+        return shCloseHandle(false, records[0], alias);
+      }
+      openShPanel(val);
+    };
+
+    // 清空搜索帮助
+    const clearSearchHelperValue = (val?: boolean): void => {
+      this.reset('');
+      form[fieldName] = '';
+      val && shChangeHandle('');
+    };
+
+    if (isSearchHelper) {
+      let fieldKeys: string[] = [...Object.keys(searchHelper.fieldAliasMap?.() ?? {}), ...Object.values(searchHelper.fieldsDefine ?? {})] as string[];
+      // 其他表单项的 fieldName
+      this.extraKeys = fieldKeys.filter((x) => x !== fieldName && x !== 'extra' && !x.endsWith('__desc'));
+      // 表单项的表述信息
+      this.descKeys = fieldKeys
+        .filter((x) => x === 'extra' || x.endsWith('__desc'))
+        .map((x) => {
+          if (x === 'extra') {
+            return fieldName;
+          }
+          return x.slice(0, -6);
+        });
+    }
+
+    const dialogProps = isSearchHelper
+      ? {
+          visible: this.visible,
+          title: t('qm.form.searchHelper'),
+          width: searchHelper.width ?? '60%',
+          height: searchHelper.height,
+          loading: false,
+          showFullScreen: false,
+          destroyOnClose: true,
+          containerStyle: { paddingBottom: '52px' },
+          'onUpdate:visible': (val: boolean): void => {
+            this.visible = val;
+          },
+        }
+      : null;
+    const shProps = isSearchHelper
+      ? {
+          ref: `${type}-SH`,
+          ...searchHelper,
+          onClose: shCloseHandle,
+        }
+      : null;
 
     const wrapProps = {
       modelValue: form[fieldName],
@@ -61,6 +244,8 @@ export default defineComponent({
         onInput(val);
       },
     };
+
+    this.$$form.setViewValue(fieldName, form[fieldName]);
 
     return (
       <el-form-item
@@ -78,18 +263,80 @@ export default defineComponent({
           title={form[fieldName]}
           minlength={minlength}
           maxlength={maxlength}
-          placeholder={
-            !disabled ? (!isSearchHelper ? placeholder : t('qm.form.selectPlaceholder')) : ''
-          }
+          placeholder={!disabled ? (!isSearchHelper ? placeholder : t('qm.form.selectPlaceholder')) : ''}
           clearable={clearable}
           readonly={readonly}
           disabled={disabled}
           style={{ ...style }}
           show-password={password}
           show-word-limit={showLimit}
-          onChange={() => {}}
+          onChange={(val: string): void => {
+            val = val.trim();
+            form[fieldName] = val;
+            if (isSearchHelper) {
+              if (!val) {
+                clearSearchHelperValue(!0);
+              }
+              if (val && searchHelper.table.fetch?.api) {
+                if (searchHelper.closeServerMatch) {
+                  shChangeHandle(form[fieldName]);
+                } else {
+                  getShTableData(val)
+                    .then((list) => resetSearchHelperValue(list, val))
+                    .catch(() => clearSearchHelperValue(!0));
+                }
+              }
+            } else {
+              onChange(form[fieldName], null);
+            }
+          }}
+          onFocus={onFocus}
+          onBlur={() => {
+            onBlur(form[fieldName]);
+          }}
+          onClick={() => {
+            onClick(form[fieldName]);
+          }}
+          onDblclick={() => {
+            onDblClick(form[fieldName]);
+            if (!isSearchHelper || disabled) return;
+            openShPanel(form[fieldName], () => {
+              // 防止二次触发 change 事件
+              this.$refs[type].blur();
+            });
+          }}
+          onKeydown={(ev) => {
+            if (ev.keyCode !== 13) return;
+            if (isSearchHelper) return;
+            onEnter(ev.target.value.trim());
+            this.$$form.formItemValidate(fieldName);
+          }}
+          v-slots={{
+            append: isAppend
+              ? (): JSXNode => {
+                  if (isSearchHelper) {
+                    return (
+                      <el-button
+                        icon="el-icon-search"
+                        style={disabled && { cursor: 'not-allowed' }}
+                        onClick={(): void => {
+                          if (disabled) return;
+                          openShPanel(form[fieldName]);
+                        }}
+                      />
+                    );
+                  }
+                  return <div style={disabled && { pointerEvents: 'none' }}>{unitRender()}</div>;
+                }
+              : null,
+          }}
         />
         {descOptions && this.$$form.createFormItemDesc({ fieldName, ...descOptions })}
+        {isSearchHelper && (
+          <Dialog {...dialogProps}>
+            <SearchHelper {...shProps} />
+          </Dialog>
+        )}
       </el-form-item>
     );
   },

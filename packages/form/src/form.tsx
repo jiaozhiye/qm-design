@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-02-09 09:03:59
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-04 14:14:32
+ * @Last Modified time: 2021-03-12 19:44:52
  */
 import { ComponentPublicInstance, defineComponent } from 'vue';
 import scrollIntoView from 'scroll-into-view-if-needed';
@@ -16,16 +16,7 @@ import { warn } from '../../_utils/error';
 import { noop, difference, secretFormat } from './utils';
 import { FormColsMixin } from './form-cols-mixin';
 import { PublicMethodsMixin } from './public-methods-mixin';
-import {
-  IFormType,
-  IFormData,
-  IFormItem,
-  IFormDesc,
-  props,
-  ARRAY_TYPE,
-  FORMAT_TYPE,
-  UNFIX_TYPE,
-} from './types';
+import { IFormType, IFormData, IFormItem, IFormDesc, props, ARRAY_TYPE, FORMAT_TYPE, UNFIX_TYPE } from './types';
 
 import FieldsFilter from './fields-filter';
 import FormInput from './form-input';
@@ -109,9 +100,7 @@ export default defineComponent({
       return result;
     },
     descContents(): Array<IFormDesc> {
-      return this.formItemList
-        .filter((x) => isObject(x.descOptions))
-        .map((x) => ({ fieldName: x.fieldName, content: x.descOptions.content }));
+      return this.formItemList.filter((x) => isObject(x.descOptions)).map((x) => ({ fieldName: x.fieldName, content: x.descOptions.content }));
     },
     isFilterType(): boolean {
       return this.formType === 'search';
@@ -125,9 +114,7 @@ export default defineComponent({
         let index: number = this.list.findIndex((x) => x === this.dividers[i]);
         let nextIndex: number = this.list.findIndex((x) => x === this.dividers[i + 1]);
         nextIndex = nextIndex > -1 ? nextIndex : undefined;
-        result.push(
-          this.list.slice(index, nextIndex).map((x) => ({ label: x.label, fieldName: x.fieldName }))
-        );
+        result.push(this.list.slice(index, nextIndex).map((x) => ({ label: x.label, fieldName: x.fieldName })));
       }
       return result;
     },
@@ -238,9 +225,7 @@ export default defineComponent({
     // 创建分隔符 展开/收起
     createDividerExpand(): IComponentData['expand'] {
       const target = {};
-      this.dividers
-        .filter((x) => x.collapse)
-        .forEach((x) => (target[x.fieldName] = !!x.collapse.defaultExpand));
+      this.dividers.filter((x) => x.collapse).forEach((x) => (target[x.fieldName] = !!x.collapse.defaultExpand));
       return Object.assign({}, this.expand, target);
     },
     // 获取表单数据的初始值
@@ -276,25 +261,12 @@ export default defineComponent({
     },
     createFormItemLabel(option): JSXNode {
       const { form } = this;
-      const {
-        label,
-        type = 'SELECT',
-        fieldName,
-        options = {},
-        style = {},
-        disabled,
-        onChange = noop,
-      } = option;
+      const { label, type = 'SELECT', fieldName, options = {}, style = {}, disabled, onChange = noop } = option;
       const { itemList, trueValue = '1', falseValue = '0' } = options;
       return (
         <div class="label-wrap" style={{ ...style }}>
           {type === 'SELECT' && (
-            <el-select
-              v-model={form[fieldName]}
-              placeholder={''}
-              disabled={disabled}
-              onChange={onChange}
-            >
+            <el-select v-model={form[fieldName]} placeholder={''} disabled={disabled} onChange={onChange}>
               {itemList.map((x) => (
                 <el-option key={x.value} label={x.text} value={x.value} disabled={x.disabled} />
               ))}
@@ -305,13 +277,7 @@ export default defineComponent({
               <span class="desc-text" style={{ paddingRight: '10px' }}>
                 {label}
               </span>
-              <el-checkbox
-                v-model={form[fieldName]}
-                trueLabel={trueValue}
-                falseLabel={falseValue}
-                disabled={disabled}
-                onChange={onChange}
-              />
+              <el-checkbox v-model={form[fieldName]} trueLabel={trueValue} falseLabel={falseValue} disabled={disabled} onChange={onChange} />
             </span>
           )}
         </div>
@@ -334,11 +300,7 @@ export default defineComponent({
         );
       }
       return (
-        <span
-          title={content as string}
-          class="desc-text"
-          style={{ display: 'inline-block', paddingLeft: '10px', ...style }}
-        >
+        <span title={content as string} class="desc-text" style={{ display: 'inline-block', paddingLeft: '10px', ...style }}>
           {content}
         </span>
       );
@@ -533,17 +495,8 @@ export default defineComponent({
           this.SET_FIELDS_VALUE({ [x.fieldName]: cloneDeep(this.initialValues[x.fieldName]) });
         }
         // 搜索帮助
-        let extraKeys: string[] = this[`${x.fieldName}ExtraKeys`];
-        if (Array.isArray(extraKeys) && extraKeys.length) {
-          extraKeys.forEach((key) => {
-            this.SET_FORM_VALUES({ [key]: undefined });
-          });
-        }
-        let descKeys: string[] = this[`${x.fieldName}DescKeys`];
-        if (Array.isArray(descKeys) && descKeys.length) {
-          descKeys.forEach((key) => {
-            this.desc[key] = undefined;
-          });
+        if (x.type === 'INPUT') {
+          this.$$(`${x.fieldName}-${x.type}`)?.reset();
         }
       });
       // this.$refs[`form`].resetFields();
@@ -589,22 +542,11 @@ export default defineComponent({
         warn('qm-form', `配置项 ${item.fieldName} 的 type 类型错误`);
         return null;
       }
-      return !item.invisible
-        ? item.render
-          ? this.renderFormItem(item)
-          : this[item.type](item)
-        : null;
+      return !item.invisible ? (item.render ? this.renderFormItem(item) : this[item.type](item)) : null;
     },
     // 表单布局
     createFormLayout(): Array<JSXNode> {
-      const {
-        flexCols: cols,
-        defaultRows,
-        isFilterType,
-        collapse,
-        isDividerCollapse,
-        showFilterCollapse,
-      } = this;
+      const { flexCols: cols, defaultRows, isFilterType, collapse, isDividerCollapse, showFilterCollapse } = this;
 
       // 栅格列的数组
       const colsArr: Partial<IFormItem>[] = [];
@@ -632,8 +574,7 @@ export default defineComponent({
       }, 0);
 
       // 默认展示的行数
-      const defaultPlayRows: number =
-        defaultRows > Math.ceil(total / cols) ? Math.ceil(total / cols) : defaultRows;
+      const defaultPlayRows: number = defaultRows > Math.ceil(total / cols) ? Math.ceil(total / cols) : defaultRows;
 
       const tmpArr: number[] = []; // 用于获取最后一个展示栅格的 cols
       const colFormItems = colsArr.map((x, i) => {
@@ -652,11 +593,7 @@ export default defineComponent({
             type={UNFIX_TYPE.includes(type) ? 'UN_FIXED' : 'FIXED'}
             id={fieldName}
             span={selfCols * colSpan}
-            style={
-              isFilterType
-                ? { display: !showFilterCollapse || isBlock ? 'block' : 'none' }
-                : { display: isDisplay ? 'block' : 'none' }
-            }
+            style={isFilterType ? { display: !showFilterCollapse || isBlock ? 'block' : 'none' } : { display: isDisplay ? 'block' : 'none' }}
           >
             {this.createFormItem(x)}
           </el-col>
@@ -681,23 +618,13 @@ export default defineComponent({
 
       return isSearchBtn ? (
         <el-col key="-" span={colSpan} offset={offset * colSpan} style={{ textAlign: 'right' }}>
-          <el-button
-            type="primary"
-            size={$size}
-            icon="iconfont icon-search"
-            onClick={this.submitForm}
-          >
+          <el-button type="primary" size={$size} icon="iconfont icon-search" onClick={this.submitForm}>
             {t('qm.form.search')}
           </el-button>
           <el-button size={$size} icon="iconfont icon-reload" onClick={this.resetForm}>
             {t('qm.form.reset')}
           </el-button>
-          <FieldsFilter
-            size={$size}
-            list={this.list}
-            uniqueKey={this.uniqueKey}
-            fieldsChange={this.fieldsChange}
-          />
+          <FieldsFilter size={$size} list={this.list} uniqueKey={this.uniqueKey} fieldsChange={this.fieldsChange} />
           {showFilterCollapse ? (
             <el-button type="text" size={$size} onClick={() => (this.collapse = !collapse)}>
               {collapse ? t('qm.form.collect') : t('qm.form.spread')}

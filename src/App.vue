@@ -23,8 +23,8 @@ export default defineComponent({
       btnList: [1, 2],
       formList: [
         {
-          type: 'TIME',
-          label: '条件6',
+          type: 'INPUT',
+          label: '条件1',
           fieldName: 'z',
         },
         {
@@ -543,6 +543,16 @@ export default defineComponent({
           exportExcel={this.exportExcel}
           columnsChange={(columns) => (this.columns = columns)}
         ></qm-table>
+        <qm-form
+          uniqueKey="jzy_filter"
+          formType="search"
+          list={this.formList}
+          initialValue={{}}
+          onFinish={this.finish}
+          fieldsChange={(list) => {
+            this.formList = list;
+          }}
+        ></qm-form>
         {/* <qm-countup endValue={2020} />
         <qm-split direction="vertical" style="height: 300px">
           <qm-split-pane>asdasd</qm-split-pane>
