@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-03-22 14:34:21
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-14 00:58:08
+ * @Last Modified time: 2021-03-14 01:40:28
  */
 import { defineComponent } from 'vue';
 import dayjs from 'dayjs';
@@ -27,6 +27,7 @@ export default defineComponent({
   inject: ['$$table', '$$body'],
   data() {
     return {
+      shDeriveValue: {},
       shVisible: false, // 是否显示搜索帮助面板
       shMatching: false, // 是否正在匹配数据回显
     };
@@ -397,23 +398,25 @@ export default defineComponent({
         if (records.length === 1) {
           return closeHelperHandle(false, records[0]);
         }
-        openHelperPanel();
-        setHelperValues('');
-        this.$nextTick(() => {
-          this.$refs[`sh-panel-${this.dataKey}`]?.$refs[`top-filter`]?.SET_FORM_VALUES(setHelperFilterValues(val));
+        openHelperPanel(() => {
+          this.shDeriveValue = setHelperFilterValues(val);
+          // 清空输入框
+          setHelperValues('');
         });
       };
-      const openHelperPanel = () => {
+      const openHelperPanel = (cb) => {
         // 打开的前置钩子
         const beforeOpen = helper.beforeOpen ?? helper.open ?? trueNoop;
         const before = beforeOpen({ [this.dataKey]: prevValue }, row, column);
         if (before?.then) {
           before
             .then(() => {
+              cb?.();
               this.shVisible = !0;
             })
             .catch(() => {});
         } else if (before !== false) {
+          cb?.();
           this.shVisible = !0;
         }
       };
@@ -430,12 +433,13 @@ export default defineComponent({
         },
         onClosed: () => {
           const { closed = noop } = helper;
+          this.shDeriveValue = {};
           closed(row);
         },
       };
       const shProps = {
-        ref: `sh-panel-${this.dataKey}`,
         ...helper,
+        initialValue: merge({}, helper?.initialValue, this.shDeriveValue),
         onClose: closeHelperHandle,
       };
       const prevValue = getCellValue(row, dataIndex);
@@ -459,14 +463,17 @@ export default defineComponent({
             onChange={(val) => {
               if (val && remoteMatch) {
                 return getHelperData(val)
-                  .then((list: unknown[]) => resetHelperValue(list, val))
+                  .then((list: Record<string, unknown>[]) => resetHelperValue(list, val))
                   .catch(() => setHelperValues(''));
               }
               setHelperValues(val);
             }}
             onDblclick={() => {
               if (extra.disabled) return;
-              isObject(helper) && openHelperPanel();
+              isObject(helper) &&
+                openHelperPanel(() => {
+                  this.shDeriveValue = setHelperFilterValues(prevValue);
+                });
             }}
             onKeydown={(ev) => {
               if (ev.keyCode === 13) {
@@ -479,7 +486,11 @@ export default defineComponent({
                   size={this.size}
                   icon="el-icon-search"
                   onClick={(ev) => {
-                    isObject(helper) ? openHelperPanel() : onClick({ [this.dataKey]: prevValue }, row, column, setHelperValues, ev);
+                    isObject(helper)
+                      ? openHelperPanel(() => {
+                          this.shDeriveValue = setHelperFilterValues(prevValue);
+                        })
+                      : onClick({ [this.dataKey]: prevValue }, row, column, setHelperValues, ev);
                   }}
                 />
               ),

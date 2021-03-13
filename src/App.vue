@@ -235,6 +235,9 @@ export default defineComponent({
                     fieldAliasMap: () => {
                       return { 'person.name': 'date', 'person.age': 'date' };
                     },
+                    filterAliasMap: () => {
+                      return ['a'];
+                    },
                     closed: () => {
                       obj.helper.initialValue = { a: '' };
                     },
