@@ -66,7 +66,6 @@ export default defineComponent({
   data() {
     const { fetch, webPagination = !1 } = this.table;
     return {
-      showTable: false,
       result: null,
       loading: false,
       topFilters: this.createTopFilters(),
@@ -102,10 +101,6 @@ export default defineComponent({
     this.getTableData();
   },
   mounted() {
-    this.$nextTick(() => {
-      this.fetch.params = merge({}, this.fetch.params, this.formatParams(this.$topFilter.form));
-      this.showTable = true;
-    });
     addResizeListener(this.$refs[`search-helper`], debounce(this.calcTableHeight, 10));
   },
   beforeUnmount() {
@@ -257,20 +252,7 @@ export default defineComponent({
     },
   },
   render(): JSXNode {
-    const {
-      showTable,
-      loading,
-      initialValue,
-      topFilters,
-      showFilterCollapse,
-      height,
-      columns,
-      selection,
-      tableList,
-      fetch,
-      webPagination,
-      disabled,
-    } = this;
+    const { loading, initialValue, topFilters, showFilterCollapse, height, columns, selection, tableList, fetch, webPagination, disabled } = this;
     const tableProps = !webPagination ? { fetch } : { dataSource: tableList, webPagination: !0 };
     return (
       <div ref="search-helper">
@@ -286,19 +268,17 @@ export default defineComponent({
             onChange={this.filterChangeHandle}
             onCollapseChange={this.collapseHandle}
           />
-          {showTable ? (
-            <Table
-              {...tableProps}
-              // @ts-ignore
-              height={height}
-              columns={columns}
-              rowKey={this.table.rowKey}
-              rowSelection={selection}
-              columnsChange={(columns) => (this.columns = columns)}
-              onRowEnter={this.rowEnterHandle}
-              onRowDblclick={this.dbClickHandle}
-            />
-          ) : null}
+          <Table
+            {...tableProps}
+            // @ts-ignore
+            height={height}
+            columns={columns}
+            rowKey={this.table.rowKey}
+            rowSelection={selection}
+            columnsChange={(columns) => (this.columns = columns)}
+            onRowEnter={this.rowEnterHandle}
+            onRowDblclick={this.dbClickHandle}
+          />
         </Spin>
         <div
           style={{

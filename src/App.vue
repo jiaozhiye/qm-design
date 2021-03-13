@@ -67,6 +67,9 @@ export default defineComponent({
                 dataKey: 'records',
               },
             },
+            filterAliasMap: () => {
+              return ['a1'];
+            },
             fieldAliasMap: () => {
               return { z: 'date', code: 'id', z__desc: 'date', d: 'date', d__desc: 'date' };
             },
@@ -74,6 +77,9 @@ export default defineComponent({
           style: { width: `calc(100% - 80px)` },
           descOptions: {
             style: { width: '70px' },
+          },
+          onChange: (val) => {
+            console.log(1234, val);
           },
         },
         {
@@ -557,7 +563,7 @@ export default defineComponent({
           uniqueKey="jzy_filter"
           formType="search"
           list={this.formList}
-          initialValue={{ b: '1', a: ['9', '5'] }}
+          initialValue={{ b: '1', a: ['9', '5'], vvv: 9 }}
           onFinish={this.finish}
           fieldsChange={(list) => {
             this.formList = list;

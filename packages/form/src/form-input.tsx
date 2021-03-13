@@ -2,11 +2,11 @@
  * @Author: 焦质晔
  * @Date: 2021-02-23 21:56:33
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-13 16:50:56
+ * @Last Modified time: 2021-03-14 00:29:17
  */
 import { defineComponent } from 'vue';
 import { merge, get, isObject, isFunction } from 'lodash-es';
-import { JSXNode, ValueOf, AnyFunction } from '../../_utils/types';
+import { JSXNode, ValueOf, AnyFunction, AnyObject } from '../../_utils/types';
 import { IFormData } from './types';
 
 import { t } from '../../locale';
@@ -26,6 +26,7 @@ export default defineComponent({
   data() {
     return {
       visible: false,
+      deriveValue: {},
       extraKeys: [],
       descKeys: [],
     };
@@ -34,6 +35,74 @@ export default defineComponent({
     reset(val?: string): void {
       this.extraKeys.forEach((key) => (this.$$form.form[key] = val));
       this.descKeys.forEach((key) => (this.$$form.desc[key] = val));
+    },
+    // 格式化搜索帮助接口参数 tds
+    formatParams(val: AnyObject<unknown>): AnyObject<unknown> {
+      const { name, getServerConfig, beforeFetch = (k) => k } = this.option.searchHelper;
+      val = beforeFetch(val);
+      // tds 搜索条件的参数规范
+      if (name && isFunction(getServerConfig)) {
+        val = { name, condition: val };
+      }
+      return val;
+    },
+    // 设置搜做帮助组件表单数据
+    createFilters(val: string): AnyObject<string> {
+      const { fieldName } = this.option;
+      const { name, fieldsDefine, getServerConfig, filterAliasMap = noop } = this.option.searchHelper;
+      const alias: string[] = Object.assign([], filterAliasMap());
+      const inputParams: AnyObject<string> = name && fieldsDefine && getServerConfig ? {} : { [fieldName]: val };
+      alias.forEach((x) => (inputParams[x] = val));
+      return inputParams;
+    },
+    // 执行搜索帮助接口，获取数据
+    getSearchHelperTableData(val: string): Promise<Record<string, unknown>[]> {
+      const { table, initialValue = {} } = this.option.searchHelper;
+      return new Promise(async (resolve, reject) => {
+        const params: AnyObject<unknown> = merge(
+          {},
+          table.fetch?.params,
+          this.formatParams({
+            ...initialValue,
+            ...this.createFilters(val),
+          }),
+          {
+            currentPage: 1,
+            pageSize: 500,
+          }
+        );
+        try {
+          const res = await table.fetch.api(params);
+          if (res.code === 200) {
+            const list: Record<string, unknown>[] = get(res.data, table.fetch.dataKey) ?? (Array.isArray(res.data) ? res.data : []);
+            return resolve(list);
+          }
+        } catch (err) {}
+        reject();
+      });
+    },
+    // 创建 field alias 别名
+    async createFieldAlias(): Promise<Record<string, string>> {
+      const { name, fieldsDefine, getServerConfig, fieldAliasMap = noop } = this.option.searchHelper;
+      let alias: Record<string, string> = {}; // 别名映射
+      // tds
+      if (name && fieldsDefine && getServerConfig) {
+        const DEFINE = ['valueName', 'displayName', 'descriptionName'];
+        const target: Record<string, string> = {};
+        try {
+          const res = await getServerConfig({ name });
+          if (res?.code === 200) {
+            for (let key in fieldsDefine) {
+              if (!DEFINE.includes(key)) continue;
+              target[fieldsDefine[key]] = res.data[key];
+            }
+          }
+        } catch (err) {}
+        alias = Object.assign({}, target);
+      } else {
+        alias = Object.assign({}, fieldAliasMap());
+      }
+      return alias;
     },
   },
   render(): JSXNode {
@@ -73,8 +142,8 @@ export default defineComponent({
     const isSearchHelper: boolean = !!Object.keys(searchHelper).length;
     const isAppend: boolean = isSearchHelper || isFunction(unitRender);
 
-    // 搜索帮助关闭带值事件
-    const shCloseHandle = (visible: boolean, data: Record<string, unknown>, alias: Record<string, string>): void => {
+    // 搜索帮助关闭，回显值事件
+    const closeSearchHelper = (visible: boolean, data: Record<string, unknown>, alias: Record<string, string>): void => {
       const aliasKeys: string[] = Object.keys(alias);
       if (isObject(data) && aliasKeys.length) {
         for (let key in alias) {
@@ -89,7 +158,7 @@ export default defineComponent({
           }
         }
         if (aliasKeys.includes(fieldName)) {
-          shChangeHandle(form[fieldName]);
+          searchHelperChangeHandle(form[fieldName]);
         }
       }
       const { closed = noop } = searchHelper;
@@ -98,107 +167,57 @@ export default defineComponent({
     };
 
     // 搜索帮助 change 事件
-    const shChangeHandle = (val: string): void => {
+    const searchHelperChangeHandle = (val: string): void => {
       const others: Record<string, ValueOf<IFormData>> = {};
       this.extraKeys.forEach((key) => (others[key] = form[key]));
       onChange(val, Object.keys(others).length ? others : null);
     };
 
-    // 设置搜做帮助组件表单数据
-    const createShFilters = (val: string): Record<string, string> => {
-      const { name, fieldsDefine, getServerConfig, filterAliasMap = noop } = searchHelper;
-      const alias: string[] = Object.assign([], filterAliasMap());
-      const inputParams: Record<string, string> = name && fieldsDefine && getServerConfig ? {} : { [fieldName]: val };
-      alias.forEach((x) => (inputParams[x] = val));
-      return inputParams;
-    };
-
-    // 执行搜索帮助接口，获取数据
-    const getShTableData = (val: string): Promise<Record<string, unknown>[]> => {
-      const { table, initialValue = {}, beforeFetch = (k) => k } = searchHelper;
-      return new Promise(async (resolve, reject) => {
-        const params = merge({}, table.fetch?.params, beforeFetch({ ...initialValue, ...createShFilters(val) }), { currentPage: 1, pageSize: 500 });
-        try {
-          const res = await table.fetch.api(params);
-          if (res.code === 200) {
-            const list: Record<string, any>[] = get(res.data, table.fetch.dataKey) ?? (Array.isArray(res.data) ? res.data : []);
-            return resolve(list);
-          }
-        } catch (err) {}
-        reject();
-      });
-    };
-
     // 执行打开动作
-    const doOpen = (val: string): void => {
-      this.visible = !0;
+    const todoOpen = (val: string): void => {
+      this.deriveValue = this.createFilters(val);
       // 清空搜索帮助
       clearSearchHelperValue();
-      // 设置搜索帮助查询参数
-      this.$nextTick(() => this.$refs[`${type}-SH`].$refs[`top-filter`]?.SET_FORM_VALUES(createShFilters(val)));
+      this.visible = !0;
     };
 
     // 打开搜索帮助面板
-    const openShPanel = (val: string, cb?: AnyFunction<void>): void => {
+    const openSearchHelper = (val: string, cb?: AnyFunction<void>): void => {
       // 打开的前置钩子
       const beforeOpen = searchHelper.beforeOpen ?? searchHelper.open ?? trueNoop;
       const before = beforeOpen(this.form);
       if (before?.then) {
         before
           .then(() => {
-            doOpen(val);
+            todoOpen(val);
             cb?.();
           })
           .catch(() => {});
       } else if (before !== false) {
-        doOpen(val);
+        todoOpen(val);
         cb?.();
       }
     };
 
-    // 创建 field alias 别名
-    const createFieldAlias = async (): Promise<Record<string, string>> => {
-      const { name, fieldsDefine, getServerConfig, fieldAliasMap = noop } = searchHelper;
-      let alias: Record<string, string> = {}; // 别名映射
-      // tds
-      if (name && fieldsDefine && getServerConfig) {
-        const DEFINE = ['valueName', 'displayName', 'descriptionName'];
-        const target = {};
-        try {
-          const res = await getServerConfig({ name });
-          if (res?.code === 200) {
-            for (let key in fieldsDefine) {
-              if (!DEFINE.includes(key)) continue;
-              target[fieldsDefine[key]] = res.data[key];
-            }
-          }
-        } catch (err) {}
-        alias = Object.assign({}, target);
-      } else {
-        alias = Object.assign({}, fieldAliasMap());
-      }
-      return alias;
-    };
-
     // 设置搜索帮助的值
-    const resetSearchHelperValue = async (list: Record<string, any> = [], val: string): Promise<void> => {
-      const alias = await createFieldAlias();
+    const resetSearchHelperValue = async (list: Record<string, unknown>[] = [], val: string): Promise<void> => {
+      const alias: Record<string, string> = await this.createFieldAlias();
       const records = list.filter((data) => data[alias[fieldName]]?.toString().toLowerCase().includes(val.toLowerCase()));
       if (records.length === 1) {
-        return shCloseHandle(false, records[0], alias);
+        return closeSearchHelper(false, records[0], alias);
       }
-      openShPanel(val);
+      openSearchHelper(val);
     };
 
     // 清空搜索帮助
     const clearSearchHelperValue = (val?: boolean): void => {
-      this.reset('');
-      form[fieldName] = '';
-      val && shChangeHandle('');
+      this.reset();
+      form[fieldName] = undefined;
+      val && searchHelperChangeHandle('');
     };
 
     if (isSearchHelper) {
-      let fieldKeys: string[] = [...Object.keys(searchHelper.fieldAliasMap?.() ?? {}), ...Object.values(searchHelper.fieldsDefine ?? {})] as string[];
+      const fieldKeys = [...Object.keys(searchHelper.fieldAliasMap?.() ?? {}), ...Object.values(searchHelper.fieldsDefine ?? {})] as string[];
       // 其他表单项的 fieldName
       this.extraKeys = fieldKeys.filter((x) => x !== fieldName && x !== 'extra' && !x.endsWith('__desc'));
       // 表单项的表述信息
@@ -224,13 +243,17 @@ export default defineComponent({
           'onUpdate:visible': (val: boolean): void => {
             this.visible = val;
           },
+          onClosed: (): void => {
+            this.deriveValue = {};
+          },
         }
       : null;
-    const shProps = isSearchHelper
+
+    const searchHelperProps = isSearchHelper
       ? {
-          ref: `${type}-SH`,
           ...searchHelper,
-          onClose: shCloseHandle,
+          initialValue: merge({}, searchHelper.initialValue, this.deriveValue),
+          onClose: closeSearchHelper,
         }
       : null;
 
@@ -283,9 +306,9 @@ export default defineComponent({
               }
               if (val && searchHelper.table.fetch?.api) {
                 if (searchHelper.closeServerMatch) {
-                  shChangeHandle(form[fieldName]);
+                  searchHelperChangeHandle(form[fieldName]);
                 } else {
-                  getShTableData(val)
+                  this.getSearchHelperTableData(val)
                     .then((list) => resetSearchHelperValue(list, val))
                     .catch(() => clearSearchHelperValue(!0));
                 }
@@ -304,7 +327,7 @@ export default defineComponent({
           onDblclick={() => {
             onDblClick(form[fieldName]);
             if (!isSearchHelper || disabled) return;
-            openShPanel(form[fieldName], () => {
+            openSearchHelper(form[fieldName], () => {
               // 防止二次触发 change 事件
               this.$refs[type].blur();
             });
@@ -325,7 +348,7 @@ export default defineComponent({
                         style={disabled && { cursor: 'not-allowed' }}
                         onClick={(): void => {
                           if (disabled) return;
-                          openShPanel(form[fieldName]);
+                          openSearchHelper(form[fieldName]);
                         }}
                       />
                     );
@@ -338,7 +361,7 @@ export default defineComponent({
         {descOptions && this.$$form.createFormItemDesc({ fieldName, ...descOptions })}
         {isSearchHelper && (
           <Dialog {...dialogProps}>
-            <SearchHelper {...shProps} />
+            <SearchHelper {...searchHelperProps} />
           </Dialog>
         )}
       </el-form-item>
