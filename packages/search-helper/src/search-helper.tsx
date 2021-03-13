@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-02-09 09:03:59
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-13 17:02:27
+ * @Last Modified time: 2021-03-14 00:43:24
  */
 import { defineComponent, PropType } from 'vue';
 import { merge, get, isFunction } from 'lodash-es';
@@ -101,7 +101,7 @@ export default defineComponent({
     this.getTableData();
   },
   mounted() {
-    addResizeListener(this.$refs[`search-helper`], debounce(this.calcTableHeight, 10));
+    addResizeListener(this.$refs[`search-helper`], debounce(this.calcTableHeight, 100));
   },
   beforeUnmount() {
     removeResizeListener(this.$refs[`search-helper`], this.calcTableHeight);
