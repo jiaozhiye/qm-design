@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-02-28 22:13:07
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-10 18:40:06
+ * @Last Modified time: 2021-03-13 09:04:23
  */
 $prefix: '#{$qm-prefix}-radio';
 
@@ -70,9 +70,9 @@ $prefix: '#{$qm-prefix}-radio';
       cursor: pointer;
     }
 
-    &-focus {
-      box-shadow: 0 0 0 2px rgba($v-primary-color, 0.15);
-    }
+    // &-focus {
+    //   box-shadow: 0 0 0 2px rgba($v-primary-color, 0.15);
+    // }
 
     &-disabled {
       cursor: not-allowed;

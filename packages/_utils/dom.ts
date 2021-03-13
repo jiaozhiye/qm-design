@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-02-08 19:28:20
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-08 12:35:40
+ * @Last Modified time: 2021-03-13 09:05:08
  */
 import { camelize, isObject } from '@vue/shared';
 import isServer from './isServer';
@@ -23,10 +23,10 @@ export const off = (element: HTMLElement | Document | Window, event: string, han
 };
 
 // 阻止事件冒泡
-export const stop = (e: Event): void => e.stopPropagation();
+export const stop = (ev: Event): void => ev.stopPropagation();
 
 // 阻止默认行为
-export const prevent = (e: Event): void => e.preventDefault();
+export const prevent = (ev: Event): void => ev.preventDefault();
 
 /**
  * @description 获取元素样式
