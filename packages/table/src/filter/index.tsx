@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-03-09 13:18:43
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-11 20:21:37
+ * @Last Modified time: 2021-03-13 15:20:22
  */
 import { defineComponent } from 'vue';
 import { cloneDeep } from 'lodash-es';
@@ -119,7 +119,7 @@ export default defineComponent({
         return null;
       }
       return (
-        <div class="filter--wrap">
+        <div class="head-filter--wrap">
           {renderFormItem(this.column)}
           {this.renderFormButton()}
         </div>
@@ -127,14 +127,14 @@ export default defineComponent({
     },
     renderFormButton() {
       return (
-        <div style="margin-top: 10px">
+        <dl style="margin-top: 10px">
           <el-button type="primary" size={this.size} onClick={this.doFinish}>
             {t('qm.table.filter.search')}
           </el-button>
           <el-button size={this.size} onClick={this.doReset}>
             {t('qm.table.filter.reset')}
           </el-button>
-        </div>
+        </dl>
       );
     },
     textHandle(column) {
@@ -206,55 +206,51 @@ export default defineComponent({
         },
       });
       return (
-        <div>
-          <ul class="filter-list">
-            <li>
-              <span>&gt;&nbsp;</span>
-              <el-input
-                ref={`number-${dataKey}`}
-                size={this.size}
-                {...inputPropsFn('>')}
-                placeholder={t('qm.table.filter.gtPlaceholder')}
-                style={{ width: '120px' }}
-              />
-            </li>
-            <li>
-              <span>&lt;&nbsp;</span>
-              <el-input size={this.size} {...inputPropsFn('<')} placeholder={t('qm.table.filter.ltPlaceholder')} style={{ width: '120px' }} />
-            </li>
-            <li>
-              <span>=&nbsp;</span>
-              <el-input size={this.size} {...inputPropsFn('==')} placeholder={t('qm.table.filter.eqPlaceholder')} style={{ width: '120px' }} />
-            </li>
-            <li>
-              <span>!=</span>
-              <el-input size={this.size} {...inputPropsFn('!=')} placeholder={t('qm.table.filter.neqPlaceholder')} style={{ width: '120px' }} />
-            </li>
-          </ul>
-        </div>
+        <ul>
+          <li>
+            <span>&gt;&nbsp;</span>
+            <el-input
+              ref={`number-${dataKey}`}
+              size={this.size}
+              {...inputPropsFn('>')}
+              placeholder={t('qm.table.filter.gtPlaceholder')}
+              style={{ width: '120px' }}
+            />
+          </li>
+          <li>
+            <span>&lt;&nbsp;</span>
+            <el-input size={this.size} {...inputPropsFn('<')} placeholder={t('qm.table.filter.ltPlaceholder')} style={{ width: '120px' }} />
+          </li>
+          <li>
+            <span>=&nbsp;</span>
+            <el-input size={this.size} {...inputPropsFn('==')} placeholder={t('qm.table.filter.eqPlaceholder')} style={{ width: '120px' }} />
+          </li>
+          <li>
+            <span>!=</span>
+            <el-input size={this.size} {...inputPropsFn('!=')} placeholder={t('qm.table.filter.neqPlaceholder')} style={{ width: '120px' }} />
+          </li>
+        </ul>
       );
     },
     radioHandle(column) {
       const { filter } = column;
       const { dataKey } = this;
       return (
-        <div>
-          <ul class="filter-list">
-            {filter.items.map((x) => {
-              const radioProps = {
-                modelValue: this.filterValues[dataKey]?.[`==`] ?? null,
-                'onUpdate:modelValue': (val) => {
-                  this.filterValues[dataKey] = Object.assign({}, this.filterValues[dataKey], { [`==`]: val });
-                },
-              };
-              return (
-                <li>
-                  <Radio {...radioProps} trueValue={x.value} falseValue={null} label={x.text} disabled={x.disabled} />
-                </li>
-              );
-            })}
-          </ul>
-        </div>
+        <ul>
+          {filter.items.map((x) => {
+            const radioProps = {
+              modelValue: this.filterValues[dataKey]?.[`==`] ?? null,
+              'onUpdate:modelValue': (val) => {
+                this.filterValues[dataKey] = Object.assign({}, this.filterValues[dataKey], { [`==`]: val });
+              },
+            };
+            return (
+              <li>
+                <Radio {...radioProps} trueValue={x.value} falseValue={null} label={x.text} disabled={x.disabled} />
+              </li>
+            );
+          })}
+        </ul>
       );
     },
     checkboxHandle(column) {
@@ -264,25 +260,23 @@ export default defineComponent({
       const { dataKey } = this;
       const results = this.filterValues[dataKey]?.[`in`] ?? [];
       return (
-        <div>
-          <ul class="filter-list">
-            {items.map((x) => {
-              const prevValue = results.includes(x.value) ? x.value : null;
-              const checkboxProps = {
-                modelValue: prevValue,
-                'onUpdate:modelValue': (val) => {
-                  const arr = val !== null ? [...new Set([...results, val])] : results.filter((x) => x !== prevValue);
-                  this.filterValues[dataKey] = Object.assign({}, this.filterValues[dataKey], { [`in`]: arr });
-                },
-              };
-              return (
-                <li>
-                  <Checkbox {...checkboxProps} trueValue={x.value} falseValue={null} label={x.text} disabled={x.disabled} />
-                </li>
-              );
-            })}
-          </ul>
-        </div>
+        <ul>
+          {items.map((x) => {
+            const prevValue = results.includes(x.value) ? x.value : null;
+            const checkboxProps = {
+              modelValue: prevValue,
+              'onUpdate:modelValue': (val) => {
+                const arr = val !== null ? [...new Set([...results, val])] : results.filter((x) => x !== prevValue);
+                this.filterValues[dataKey] = Object.assign({}, this.filterValues[dataKey], { [`in`]: arr });
+              },
+            };
+            return (
+              <li>
+                <Checkbox {...checkboxProps} trueValue={x.value} falseValue={null} label={x.text} disabled={x.disabled} />
+              </li>
+            );
+          })}
+        </ul>
       );
     },
     dateHandle(column) {
@@ -294,50 +288,48 @@ export default defineComponent({
         },
       });
       return (
-        <div>
-          <ul class="filter-list">
-            <li>
-              <span>&gt;&nbsp;</span>
-              <el-date-picker
-                size={this.size}
-                type="date"
-                {...datePropsFn('>')}
-                placeholder={t('qm.table.filter.gtPlaceholder')}
-                style={{ width: '150px' }}
-              />
-            </li>
-            <li>
-              <span>&lt;&nbsp;</span>
-              <el-date-picker
-                size={this.size}
-                type="date"
-                {...datePropsFn('<')}
-                placeholder={t('qm.table.filter.ltPlaceholder')}
-                style={{ width: '150px' }}
-              />
-            </li>
-            <li>
-              <span>=&nbsp;</span>
-              <el-date-picker
-                size={this.size}
-                type="date"
-                {...datePropsFn('==')}
-                placeholder={t('qm.table.filter.eqPlaceholder')}
-                style={{ width: '150px' }}
-              />
-            </li>
-            <li>
-              <span>!=</span>
-              <el-date-picker
-                size={this.size}
-                type="date"
-                {...datePropsFn('!=')}
-                placeholder={t('qm.table.filter.neqPlaceholder')}
-                style={{ width: '150px' }}
-              />
-            </li>
-          </ul>
-        </div>
+        <ul>
+          <li>
+            <span>&gt;&nbsp;</span>
+            <el-date-picker
+              size={this.size}
+              type="date"
+              {...datePropsFn('>')}
+              placeholder={t('qm.table.filter.gtPlaceholder')}
+              style={{ width: '150px' }}
+            />
+          </li>
+          <li>
+            <span>&lt;&nbsp;</span>
+            <el-date-picker
+              size={this.size}
+              type="date"
+              {...datePropsFn('<')}
+              placeholder={t('qm.table.filter.ltPlaceholder')}
+              style={{ width: '150px' }}
+            />
+          </li>
+          <li>
+            <span>=&nbsp;</span>
+            <el-date-picker
+              size={this.size}
+              type="date"
+              {...datePropsFn('==')}
+              placeholder={t('qm.table.filter.eqPlaceholder')}
+              style={{ width: '150px' }}
+            />
+          </li>
+          <li>
+            <span>!=</span>
+            <el-date-picker
+              size={this.size}
+              type="date"
+              {...datePropsFn('!=')}
+              placeholder={t('qm.table.filter.neqPlaceholder')}
+              style={{ width: '150px' }}
+            />
+          </li>
+        </ul>
       );
     },
   },

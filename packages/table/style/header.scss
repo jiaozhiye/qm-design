@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-02-28 22:11:53
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-13 14:57:34
+ * @Last Modified time: 2021-03-13 15:19:09
  */
 $prefix: '#{$qm-prefix}-table';
 
@@ -147,15 +147,13 @@ $prefix: '#{$qm-prefix}-table';
   }
 }
 
-.filter--wrap {
-  .filter-list {
-    li {
-      display: flex;
-      align-items: center;
-      margin-bottom: 5px;
-      & > span {
-        margin-right: 5px;
-      }
+.head-filter--wrap {
+  ul li {
+    display: flex;
+    align-items: center;
+    margin-bottom: 5px;
+    & > span {
+      margin-right: 5px;
     }
   }
 }

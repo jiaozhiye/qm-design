@@ -2,26 +2,41 @@
  * @Author: 焦质晔
  * @Date: 2020-04-14 16:03:27
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-08 14:48:07
+ * @Last Modified time: 2021-03-13 16:16:49
  */
 import { intersection, isObject, isFunction } from 'lodash-es';
 import { getCellValue, setCellValue, tableDataFlatMap } from '../utils';
+import { AnyFunction, AnyObject } from '../../../_utils/types';
 import config from '../config';
+
+type ITableLog = {
+  required: Array<Record<string, unknown>>;
+  validate: Array<Record<string, unknown>>;
+  inserted: Array<Record<string, unknown>>;
+  updated: Array<Record<string, unknown>>;
+  removed: Array<Record<string, unknown>>;
+};
+
+type IRecord = {
+  index: number;
+  pageIndex: number;
+  [key: string]: unknown;
+};
 
 export default {
   // 计算表格高度
-  CALCULATE_HEIGHT() {
+  CALCULATE_HEIGHT(): void {
     this.$nextTick(() => this.calcTableHeight());
   },
   // 刷新表格数据
-  async DO_REFRESH(callback) {
+  async DO_REFRESH(callback?: AnyFunction<void>): Promise<void> {
     this.clearRowSelection();
     this.clearRowHighlight();
     await this.getTableData();
     callback?.();
   },
   // 获取表格操作记录
-  GET_LOG() {
+  GET_LOG(): ITableLog {
     const { required, validate, inserted, updated, removed } = this.store.state;
     // 求 inserted, removed 的交集
     const intersections = intersection(inserted, removed);
@@ -34,7 +49,7 @@ export default {
     };
   },
   // 获取表格的查询参数
-  GET_FETCH_PARAMS() {
+  GET_FETCH_PARAMS(): AnyObject<unknown> {
     const params = {};
     for (const key in this.fetchParams) {
       // 过滤分页参数
@@ -44,13 +59,13 @@ export default {
     return params;
   },
   // 打开单元格搜索帮助面板
-  OPEN_SEARCH_HELPER(rowKey, dataIndex) {
+  OPEN_SEARCH_HELPER(rowKey: string, dataIndex: string): void {
     const editableCell = this.$$tableBody.$refs[`${rowKey}-${dataIndex}`];
     if (!editableCell) return;
     editableCell.shVisible = !0;
   },
   // 清空表格数据
-  CLEAR_TABLE_DATA() {
+  CLEAR_TABLE_DATA(): void {
     if (this.isFetch) {
       this.setRecordsTotal(0);
     } else {
@@ -70,27 +85,27 @@ export default {
     this.createTableData([]);
   },
   // 清空表格操作记录
-  CLEAR_LOG() {
+  CLEAR_LOG(): void {
     this.clearTableLog();
   },
   // 选中首行数据
-  SELECT_FIRST_RECORD() {
+  SELECT_FIRST_RECORD(): void {
     this.selectFirstRow(true);
   },
   // 清空表格焦点
-  CLEAR_TABLE_FOCUS() {
+  CLEAR_TABLE_FOCUS(): void {
     this.$$tableBody.setClickedValues([]);
   },
   // 滚动到指定数据行
-  SCROLL_TO_RECORD(rowKey) {
+  SCROLL_TO_RECORD(rowKey): void {
     this.$$tableBody.scrollYToRecord(rowKey);
   },
   // 滚动到指定表格列
-  SCROLL_TO_COLUMN(dataIndex) {
+  SCROLL_TO_COLUMN(dataIndex): void {
     this.$$tableBody.scrollXToColumn(dataIndex);
   },
   // 表格数据插入
-  INSERT_RECORDS(records) {
+  INSERT_RECORDS<T extends IRecord>(records: T | T[]): void {
     const rows = (Array.isArray(records) ? records : [records]).filter((x) => isObject(x));
     const lastIndex = this.tableOriginData[this.tableOriginData.length - 1]?.index ?? -1;
     rows.forEach((row, index) => {
@@ -119,9 +134,9 @@ export default {
     }
   },
   // 删除数据
-  REMOVE_RECORDS(records) {
+  REMOVE_RECORDS<T extends IRecord | string>(records: T | T[]): void {
     const rows = Array.isArray(records) ? records : [records];
-    const rowKeys = rows.filter((x) => !!x).map((x) => (isObject(x) ? this.getRowKey(x, x.index) : x));
+    const rowKeys = rows.filter((x) => !!x).map((x) => (isObject(x) ? this.getRowKey(x, (x as IRecord).index) : x));
     const editableColumns = this.flattenColumns.filter((column) => isFunction(column.editRender));
     for (let i = 0; i < this.tableFullData.length; i++) {
       const row = this.tableFullData[i];
@@ -160,7 +175,7 @@ export default {
     }
   },
   // 表单校验
-  FORM_VALIDATE() {
+  FORM_VALIDATE(): Pick<ITableLog, 'required' | 'validate'> {
     const editableColumns = this.flattenColumns.filter((column) => isFunction(column.editRender));
     tableDataFlatMap(this.tableFullData).forEach((record) => {
       editableColumns.forEach((column) => {
