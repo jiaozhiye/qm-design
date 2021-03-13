@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-02-09 09:03:59
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-13 11:27:09
+ * @Last Modified time: 2021-03-13 16:57:54
  */
 import { ComponentPublicInstance, defineComponent } from 'vue';
 import scrollIntoView from 'scroll-into-view-if-needed';
@@ -130,7 +130,7 @@ export default defineComponent({
     fieldNames: {
       handler(next: string[], prev: string[]): void {
         if ([...new Set(next)].length !== next.length) {
-          warn('qm-form', `配置项 fieldName 属性是唯一的，不能重复`);
+          warn('Form', `配置项 fieldName 属性是唯一的，不能重复`);
         }
         if (!Array.isArray(prev)) return;
         const diffs: string[] = xor(prev, next);
@@ -535,7 +535,7 @@ export default defineComponent({
     // 表单元素
     createFormItem(item: IFormItem): Nullable<JSXNode> {
       if (!isFunction(this[item.type])) {
-        warn('qm-form', `配置项 ${item.fieldName} 的 type 类型错误`);
+        warn('Form', `配置项 ${item.fieldName} 的 type 类型错误`);
         return null;
       }
       return !item.invisible ? (item.render ? this.renderFormItem(item) : this[item.type](item)) : null;

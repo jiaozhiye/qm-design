@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-02-23 21:56:33
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-02-26 13:42:50
+ * @Last Modified time: 2021-03-13 16:57:42
  */
 import { defineComponent } from 'vue';
 import { JSXNode } from '../../_utils/types';
@@ -26,16 +26,10 @@ export default defineComponent({
   props: ['option'],
   methods: {
     // 获取搜索帮助数据
-    async querySearchAsync(
-      request,
-      fieldName: string,
-      columns: Array<IColumn>,
-      queryString = '',
-      cb
-    ): Promise<void> {
+    async querySearchAsync(request, fieldName: string, columns: Array<IColumn>, queryString = '', cb): Promise<void> {
       const { fetchApi, params = {}, datakey = '' } = request;
       if (!fetchApi) {
-        return warn('qm-form', '[SEARCH_HELPER] 类型的 `fetchApi` 参数不正确');
+        return warn('Form', '[SEARCH_HELPER] 类型的 `fetchApi` 参数不正确');
       }
       const res = await fetchApi({ ...{ [fieldName]: queryString }, ...params });
       if (res.code === 200) {
@@ -75,7 +69,7 @@ export default defineComponent({
     } = this.option;
     const { columns = [], fieldAliasMap, onlySelect = !0 } = options;
     if (!isFunction(fieldAliasMap)) {
-      warn('qm-form', '[SEARCH_HELPER] 类型的 `fieldAliasMap` 参数不正确');
+      warn('Form', '[SEARCH_HELPER] 类型的 `fieldAliasMap` 参数不正确');
     }
     this.$$form.setViewValue(fieldName, form[fieldName]);
     const prefixCls = getPrefixCls('search-helper');
