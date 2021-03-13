@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-02-23 21:56:33
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-13 13:38:36
+ * @Last Modified time: 2021-03-13 14:30:10
  */
 import { defineComponent } from 'vue';
 import { AnyObject, JSXNode, Nullable } from '../../_utils/types';
@@ -106,7 +106,7 @@ export default defineComponent({
     this.$$form.setViewValue(fieldName, textVal);
 
     const wrapProps = {
-      modelValue: form[fieldName],
+      modelValue: this.itemList.length ? form[fieldName] : undefined,
       'onUpdate:modelValue': (val: string): void => {
         form[fieldName] = val;
       },

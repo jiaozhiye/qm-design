@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-10 20:39:28
+ * @Last Modified time: 2021-03-13 14:34:30
  */
 import Mock from 'mockjs';
 
@@ -34,6 +34,6 @@ export default {
         address: '@county(true)',
       },
     ],
-    'total|500': 1,
+    total: 500,
   }),
 };

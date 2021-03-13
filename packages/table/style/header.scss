@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-02-28 22:11:53
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-10 19:02:47
+ * @Last Modified time: 2021-03-13 14:57:34
  */
 $prefix: '#{$qm-prefix}-table';
 
@@ -152,7 +152,7 @@ $prefix: '#{$qm-prefix}-table';
     li {
       display: flex;
       align-items: center;
-      margin-bottom: $v-module-distance;
+      margin-bottom: 5px;
       & > span {
         margin-right: 5px;
       }

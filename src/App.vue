@@ -539,18 +539,20 @@ export default defineComponent({
   render(): VNode {
     return (
       <>
-        <qm-table
-          ref="table"
-          uniqueKey="jzyDemoTable"
-          maxHeight="300px"
-          columns={this.columns}
-          fetch={this.fetch}
-          rowKey={(row) => row.id}
-          rowSelection={this.selection}
-          tablePrint={this.tablePrint}
-          exportExcel={this.exportExcel}
-          columnsChange={(columns) => (this.columns = columns)}
-        ></qm-table>
+        <div style="margin: 10px;">
+          <qm-table
+            ref="table"
+            uniqueKey="jzyDemoTable"
+            maxHeight="300px"
+            columns={this.columns}
+            fetch={this.fetch}
+            rowKey={(row) => row.id}
+            rowSelection={this.selection}
+            tablePrint={this.tablePrint}
+            exportExcel={this.exportExcel}
+            columnsChange={(columns) => (this.columns = columns)}
+          ></qm-table>
+        </div>
         <qm-form
           uniqueKey="jzy_filter"
           formType="search"

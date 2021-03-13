@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-02-09 09:27:46
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-13 11:12:43
+ * @Last Modified time: 2021-03-13 14:33:38
  */
 @import '../../style/src/common';
 @import './fields-filter';
@@ -18,7 +18,7 @@ $prefix: '#{$qm-prefix}-form';
         display: flex;
         align-items: center;
         justify-content: flex-end;
-        padding-right: 6px;
+        padding-right: 8px;
         .label-wrap {
           display: inline-block;
           .el-input__inner {
@@ -69,10 +69,6 @@ $prefix: '#{$qm-prefix}-form';
           font-family: inherit;
           overflow-y: auto;
         }
-        .el-input__count {
-          line-height: 1;
-          right: 6px;
-        }
       }
       .el-input-number {
         width: 100%;
@@ -118,6 +114,11 @@ $prefix: '#{$qm-prefix}-form';
         .el-form-item__label {
           color: $error-color;
         }
+      }
+    }
+    .el-button {
+      .iconfont {
+        margin-right: 4px;
       }
     }
   }

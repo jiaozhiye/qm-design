@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-03-01 23:27:04
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-10 17:05:35
+ * @Last Modified time: 2021-03-13 14:55:23
  */
 @import './common.scss';
 
@@ -46,7 +46,6 @@ $prefix: '#{$qm-prefix}-table';
   padding: $v-module-distance;
   padding-bottom: 0;
   background-color: $v-table-background-color;
-  @extend %boxSizing;
 }
 
 /* 顶部信息 */
@@ -81,7 +80,6 @@ $prefix: '#{$qm-prefix}-table';
 }
 
 .#{$prefix}--body-wrapper {
-  @include reset-component();
   overflow-y: auto;
   overflow-x: auto;
 }
