@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-03-22 14:34:21
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-13 12:47:59
+ * @Last Modified time: 2021-03-14 00:58:08
  */
 import { defineComponent } from 'vue';
 import dayjs from 'dayjs';
@@ -419,7 +419,7 @@ export default defineComponent({
       };
       const dialogProps = {
         visible: this.shVisible,
-        title: t('qm.table.editable.searchHelper'),
+        title: t('qm.searchHelper.text'),
         width: helper?.width ?? '60%',
         height: helper?.height,
         loading: false,

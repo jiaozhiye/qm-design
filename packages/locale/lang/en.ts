@@ -68,6 +68,7 @@ export default {
       resize: '拖动改变大小',
     },
     searchHelper: {
+      text: '搜索帮助',
       close: '关 闭',
       confirm: '确 定',
       orderIndex: '序号',
@@ -94,7 +95,6 @@ export default {
         selectPlaceholder: '请选择',
         datePlaceholder: '选择日期',
         datetimePlaceholder: '选择时间',
-        searchHelper: '搜索帮助',
       },
       sorter: {
         text: '排序',

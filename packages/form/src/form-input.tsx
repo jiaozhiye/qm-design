@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-02-23 21:56:33
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-14 00:29:17
+ * @Last Modified time: 2021-03-14 00:57:56
  */
 import { defineComponent } from 'vue';
 import { merge, get, isObject, isFunction } from 'lodash-es';
@@ -234,7 +234,7 @@ export default defineComponent({
     const dialogProps = isSearchHelper
       ? {
           visible: this.visible,
-          title: t('qm.form.searchHelper'),
+          title: t('qm.searchHelper.text'),
           width: searchHelper.width ?? '60%',
           height: searchHelper.height,
           loading: false,
