@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-03-06 15:11:01
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-12 14:55:00
+ * @Last Modified time: 2021-03-13 08:46:42
  */
 import { AnyFunction, AnyObject, JSXNode, Nullable } from '../../../_utils/types';
 
@@ -78,6 +78,7 @@ export type IFetch = {
 export type IColumn = {
   dataIndex: string;
   title: string;
+  description?: string;
   width?: number | string;
   fixed?: IFixed;
   align?: IAlign;

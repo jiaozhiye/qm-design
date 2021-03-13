@@ -34,6 +34,7 @@ $prefix: '#{$qm-prefix}-form';
         align-items: center;
         .el-input__inner {
           text-align: left;
+          line-height: 1;
         }
         .el-form-item__error {
           margin-top: -2px;
@@ -100,7 +101,6 @@ $prefix: '#{$qm-prefix}-form';
         line-height: inherit;
       }
       .desc-text {
-        font-size: $font-size-base;
         cursor: default;
         .el-tag {
           margin-right: 8px;

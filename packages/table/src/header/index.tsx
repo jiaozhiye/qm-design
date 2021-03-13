@@ -2,13 +2,14 @@
  * @Author: 焦质晔
  * @Date: 2020-02-28 23:01:43
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-11 20:26:02
+ * @Last Modified time: 2021-03-13 08:44:57
  */
 import { defineComponent, reactive } from 'vue';
 import { pickBy, intersection, isFunction } from 'lodash-es';
 import { hasOwn, convertToRows, deepFindColumn, getCellValue, createWhereSQL } from '../utils';
 import { getPrefixCls } from '../../../_utils/prefix';
 import { isEmpty } from '../../../_utils/util';
+import { stop } from '../../../_utils/dom';
 import { t } from '../../../locale';
 import { JSXNode } from '../../../_utils/types';
 
@@ -18,6 +19,7 @@ import { where } from '../filter-sql';
 import Resizable from './resizable';
 import AllSelection from '../selection/all';
 import THeadFilter from '../filter';
+import TooltipIcon from '../icon/tooltip';
 import CaretUpIcon from '../icon/caretup';
 import CaretDownIcon from '../icon/caretdown';
 
@@ -153,7 +155,7 @@ export default defineComponent({
       );
     },
     renderCell(column) {
-      const { dataIndex, type, sorter, title } = column;
+      const { dataIndex, type, sorter, title, description } = column;
       const { selectionKeys } = this.$$table;
       if (dataIndex === '__selection__' && type === 'checkbox') {
         return (
@@ -168,6 +170,13 @@ export default defineComponent({
           {title}
         </div>
       );
+      if (description) {
+        vNodes.push(
+          <el-tooltip effect="dark" placement="top" content={description} style={{ marginLeft: '2px' }}>
+            <TooltipIcon onClick={(ev) => stop(ev)} />
+          </el-tooltip>
+        );
+      }
       if (sorter) {
         vNodes.push(this.renderSorter(this.sorter[dataIndex]));
       }

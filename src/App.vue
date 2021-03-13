@@ -144,6 +144,7 @@ export default defineComponent({
         },
         {
           title: '序号',
+          description: '数据索引',
           dataIndex: 'pageIndex',
           width: 80,
           sorter: true,

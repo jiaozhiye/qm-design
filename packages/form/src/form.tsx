@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-02-09 09:03:59
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-12 19:44:52
+ * @Last Modified time: 2021-03-13 08:46:11
  */
 import { ComponentPublicInstance, defineComponent } from 'vue';
 import scrollIntoView from 'scroll-into-view-if-needed';
@@ -295,7 +295,7 @@ export default defineComponent({
               content: (): JSXNode => <div>{content}</div>,
             }}
           >
-            <i class="el-icon-info desc-icon" />
+            <i class="iconfont icon-info-circle" />
           </el-tooltip>
         );
       }

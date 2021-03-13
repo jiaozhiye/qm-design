@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-02-28 23:04:58
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-11 21:09:30
+ * @Last Modified time: 2021-03-13 08:09:52
  */
 import { PropType } from 'vue';
 import PropTypes from '../../../_utils/vue-types';
@@ -12,7 +12,8 @@ import { isValidComponentSize, isValidWidthUnit } from '../../../_utils/validato
 
 const columnItem = {
   dataIndex: PropTypes.string.isRequired,
-  title: PropTypes.any.isRequired,
+  title: PropTypes.string.isRequired, // 列标题
+  description: PropTypes.string, // 列描述
   width: PropTypes.number, // 列宽度/最小宽度
   fixed: PropTypes.oneOf(['left', 'right']), // 列固定（IE 下无效）
   align: PropTypes.oneOf(['left', 'center', 'right']), // 设置列的对齐方式
@@ -34,7 +35,15 @@ const columnItem = {
     ),
   }),
   precision: PropTypes.number, // 数值类型字段的精度
-  formatType: PropTypes.oneOf(['date', 'datetime', 'dateShortTime', 'finance', 'secret-name', 'secret-phone', 'secret-IDnumber']), // 字段的格式化类型
+  formatType: PropTypes.oneOf([
+    'date',
+    'datetime',
+    'dateShortTime',
+    'finance',
+    'secret-name',
+    'secret-phone',
+    'secret-IDnumber',
+  ]), // 字段的格式化类型
   required: PropTypes.bool, // 可编辑列是否必填
   editRender: PropTypes.func, // 可编辑单元格，参数: row, column; 返回值类型: object
   // 数据字典项
