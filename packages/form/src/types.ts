@@ -2,11 +2,11 @@
  * @Author: 焦质晔
  * @Date: 2021-02-24 13:02:36
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-04 18:09:31
+ * @Last Modified time: 2021-03-13 12:11:28
  */
 import { CSSProperties, PropType } from 'vue';
 import PropTypes from '../../_utils/vue-types';
-import { JSXNode, AnyFunction, Nullable, ComponentSize, AnyObject } from '../../_utils/types';
+import { JSXNode, AnyFunction, Nullable, ComponentSize, AnyObject, ValueOf } from '../../_utils/types';
 
 import { isNumber } from 'lodash-es';
 import { isValidWidthUnit, isValidComponentSize } from '../../_utils/validators';
@@ -58,21 +58,8 @@ export const ARRAY_TYPE: IFormItemType[] = [
   'UPLOAD_IMG',
   'UPLOAD_FILE',
 ];
-export const FORMAT_TYPE: IFormItemType[] = [
-  'RANGE_INPUT',
-  'RANGE_INPUT_NUMBER',
-  'RANGE_DATE',
-  'RANGE_DATE_EL',
-  'RANGE_TIME',
-  'RANGE_TIME_SELECT',
-];
-export const UNFIX_TYPE: IFormItemType[] = [
-  'TEXT_AREA',
-  'MULTIPLE_CHECKBOX',
-  'UPLOAD_IMG',
-  'UPLOAD_FILE',
-  'TINYMCE',
-];
+export const FORMAT_TYPE: IFormItemType[] = ['RANGE_INPUT', 'RANGE_INPUT_NUMBER', 'RANGE_DATE', 'RANGE_DATE_EL', 'RANGE_TIME', 'RANGE_TIME_SELECT'];
+export const UNFIX_TYPE: IFormItemType[] = ['TEXT_AREA', 'MULTIPLE_CHECKBOX', 'UPLOAD_IMG', 'UPLOAD_FILE', 'TINYMCE'];
 
 export type IFormData = Record<string, string | number | Array<string | number> | undefined>;
 
@@ -131,7 +118,22 @@ export type IFormItem = {
     onBlur?: AnyFunction<any>;
   };
   searchHelper?: {
-    // ...
+    name?: string;
+    filters?: Array<IFormItem>;
+    initialValue?: AnyObject<ValueOf<IFormData>>;
+    showFilterCollapse?: boolean;
+    table?: {
+      fetch?: AnyObject<unknown>;
+      columns?: Array<unknown>;
+      rowKey?: string | AnyFunction<string | number>;
+      webPagination?: boolean;
+    };
+    fieldAliasMap?: AnyFunction<Record<string, string>>;
+    getServerConfig?: AnyFunction<Promise<unknown>>;
+    fieldsDefine?: Record<string, string>;
+    beforeOpen?: AnyFunction<void | Promise<void> | boolean>;
+    open?: AnyFunction<void | Promise<void> | boolean>;
+    closed?: AnyFunction<void>;
   };
   request?: {
     fetchApi: AnyFunction<any>;
@@ -289,7 +291,22 @@ export const props = {
         onBlur: PropTypes.func,
       }),
       searchHelper: PropTypes.shape({
-        // ...
+        name: PropTypes.string,
+        filters: PropTypes.array,
+        initialValue: PropTypes.object,
+        showFilterCollapse: PropTypes.bool,
+        table: PropTypes.shape({
+          fetch: PropTypes.object,
+          columns: PropTypes.array,
+          rowKey: PropTypes.oneOfType([PropTypes.string, PropTypes.func]),
+          webPagination: PropTypes.bool,
+        }),
+        fieldAliasMap: PropTypes.func,
+        getServerConfig: PropTypes.func,
+        fieldsDefine: PropTypes.object,
+        beforeOpen: PropTypes.func,
+        open: PropTypes.func,
+        closed: PropTypes.func,
       }),
       request: PropTypes.shape({
         fetchApi: PropTypes.func.isRequired,
@@ -317,7 +334,7 @@ export const props = {
       }),
       labelOptions: PropTypes.object,
       descOptions: PropTypes.shape({
-        content: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
+        content: PropTypes.any,
         style: PropTypes.object,
         isTooltip: PropTypes.bool,
       }),

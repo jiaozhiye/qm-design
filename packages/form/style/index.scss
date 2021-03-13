@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-02-09 09:27:46
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-02 17:32:26
+ * @Last Modified time: 2021-03-13 11:12:43
  */
 @import '../../style/src/common';
 @import './fields-filter';
@@ -32,15 +32,23 @@ $prefix: '#{$qm-prefix}-form';
       .el-form-item__content {
         display: flex;
         align-items: center;
-        .el-input__inner {
-          text-align: left;
-          line-height: 1;
-        }
         .el-form-item__error {
           margin-top: -2px;
           transform-origin: 0 50%;
           -webkit-transform: scale(0.9);
           transform: scale(0.9);
+        }
+      }
+      .el-input__inner {
+        text-align: left;
+        line-height: 1;
+      }
+      .el-search-helper {
+        .el-input__suffix {
+          transition: none;
+        }
+        .el-input-group__append {
+          padding: 0 13px;
         }
       }
       .el-select {

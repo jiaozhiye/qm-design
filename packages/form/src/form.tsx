@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-02-09 09:03:59
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-13 08:46:11
+ * @Last Modified time: 2021-03-13 11:27:09
  */
 import { ComponentPublicInstance, defineComponent } from 'vue';
 import scrollIntoView from 'scroll-into-view-if-needed';
@@ -274,9 +274,7 @@ export default defineComponent({
           )}
           {type === 'CHECKBOX' && (
             <span>
-              <span class="desc-text" style={{ paddingRight: '10px' }}>
-                {label}
-              </span>
+              <span style={{ paddingRight: '10px' }}>{label}</span>
               <el-checkbox v-model={form[fieldName]} trueLabel={trueValue} falseLabel={falseValue} disabled={disabled} onChange={onChange} />
             </span>
           )}
@@ -317,9 +315,7 @@ export default defineComponent({
             label: (): JSXNode => labelOptions && this.createFormItemLabel(labelOptions),
           }}
         >
-          <div class="desc-text" style={{ width: '100%', ...style }}>
-            {render(option, this)}
-          </div>
+          <div style={{ width: '100%', ...style }}>{render(option, this)}</div>
         </el-form-item>
       );
     },
@@ -496,7 +492,7 @@ export default defineComponent({
         }
         // 搜索帮助
         if (x.type === 'INPUT') {
-          this.$$(`${x.fieldName}-${x.type}`)?.reset();
+          this.$$(x.fieldName)?.reset?.();
         }
       });
       // this.$refs[`form`].resetFields();

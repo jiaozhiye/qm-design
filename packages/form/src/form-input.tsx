@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-02-23 21:56:33
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-12 20:16:58
+ * @Last Modified time: 2021-03-13 11:12:47
  */
 import { defineComponent } from 'vue';
 import { merge, get, isObject, isFunction } from 'lodash-es';
@@ -245,6 +245,10 @@ export default defineComponent({
       },
     };
 
+    const cls = {
+      [`el-search-helper`]: isSearchHelper,
+    };
+
     this.$$form.setViewValue(fieldName, form[fieldName]);
 
     return (
@@ -259,6 +263,7 @@ export default defineComponent({
       >
         <el-input
           ref={type}
+          class={cls}
           {...wrapProps}
           title={form[fieldName]}
           minlength={minlength}

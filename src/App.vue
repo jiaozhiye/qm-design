@@ -26,6 +26,55 @@ export default defineComponent({
           type: 'INPUT',
           label: '条件1',
           fieldName: 'z',
+          searchHelper: {
+            // filters: [
+            //   {
+            //     type: 'INPUT',
+            //     label: '条件1',
+            //     fieldName: 'a1',
+            //   },
+            //   {
+            //     type: 'INPUT',
+            //     label: '条件2',
+            //     fieldName: 'a2',
+            //   },
+            //   {
+            //     type: 'INPUT',
+            //     label: '条件3',
+            //     fieldName: 'a3',
+            //   },
+            //   {
+            //     type: 'INPUT',
+            //     label: '条件4',
+            //     fieldName: 'a4',
+            //   },
+            // ],
+            table: {
+              columns: [
+                {
+                  title: '创建时间',
+                  dataIndex: 'date',
+                },
+                {
+                  title: '姓名',
+                  dataIndex: 'person.name',
+                },
+              ],
+              rowKey: (record) => record.id,
+              fetch: {
+                api: getTableData,
+                params: {},
+                dataKey: 'records',
+              },
+            },
+            // fieldAliasMap: () => {
+            //   return { z: 'date', code: 'id', z__desc: 'date', d__desc: 'date' };
+            // },
+          },
+          style: { width: `calc(100% - 80px)` },
+          descOptions: {
+            style: { width: '70px' },
+          },
         },
         {
           type: 'MULTIPLE_TREE_SELECT',
@@ -114,10 +163,14 @@ export default defineComponent({
           type: 'INPUT',
           fieldName: 'd',
           label: '表单项4',
-          render: (opt, ctx) => {
-            const { fieldName } = opt;
-            return <el-input v-model={ctx.form[fieldName]} />;
+          style: { width: `calc(100% - 80px)` },
+          descOptions: {
+            style: { width: '70px' },
           },
+          // render: (opt, ctx) => {
+          //   const { fieldName } = opt;
+          //   return <el-input v-model={ctx.form[fieldName]} />;
+          // },
         },
         {
           type: 'SWITCH',
