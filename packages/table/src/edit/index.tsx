@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-03-22 14:34:21
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-12 14:45:26
+ * @Last Modified time: 2021-03-13 12:47:59
  */
 import { defineComponent } from 'vue';
 import dayjs from 'dayjs';
@@ -428,7 +428,7 @@ export default defineComponent({
         'onUpdate:visible': (val) => {
           this.shVisible = val;
         },
-        closed: () => {
+        onClosed: () => {
           const { closed = noop } = helper;
           closed(row);
         },

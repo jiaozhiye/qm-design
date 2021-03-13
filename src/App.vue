@@ -3,7 +3,7 @@ import { defineComponent, VNode } from 'vue';
 
 import PrintTemplate from './demo2';
 
-import { getTableData } from './api/test';
+import { getTableData, getSelectData, getTreeData } from './api/test';
 
 const sleep = async (delay: number): Promise<any> => {
   return new Promise((resolve) => setTimeout(resolve, delay));
@@ -27,28 +27,28 @@ export default defineComponent({
           label: '条件1',
           fieldName: 'z',
           searchHelper: {
-            // filters: [
-            //   {
-            //     type: 'INPUT',
-            //     label: '条件1',
-            //     fieldName: 'a1',
-            //   },
-            //   {
-            //     type: 'INPUT',
-            //     label: '条件2',
-            //     fieldName: 'a2',
-            //   },
-            //   {
-            //     type: 'INPUT',
-            //     label: '条件3',
-            //     fieldName: 'a3',
-            //   },
-            //   {
-            //     type: 'INPUT',
-            //     label: '条件4',
-            //     fieldName: 'a4',
-            //   },
-            // ],
+            filters: [
+              {
+                type: 'INPUT',
+                label: '条件1',
+                fieldName: 'a1',
+              },
+              {
+                type: 'INPUT',
+                label: '条件2',
+                fieldName: 'a2',
+              },
+              {
+                type: 'INPUT',
+                label: '条件3',
+                fieldName: 'a3',
+              },
+              {
+                type: 'INPUT',
+                label: '条件4',
+                fieldName: 'a4',
+              },
+            ],
             table: {
               columns: [
                 {
@@ -67,9 +67,9 @@ export default defineComponent({
                 dataKey: 'records',
               },
             },
-            // fieldAliasMap: () => {
-            //   return { z: 'date', code: 'id', z__desc: 'date', d__desc: 'date' };
-            // },
+            fieldAliasMap: () => {
+              return { z: 'date', code: 'id', z__desc: 'date', d: 'date', d__desc: 'date' };
+            },
           },
           style: { width: `calc(100% - 80px)` },
           descOptions: {
@@ -80,71 +80,22 @@ export default defineComponent({
           type: 'MULTIPLE_TREE_SELECT',
           label: '条件6',
           fieldName: 'a',
-          options: {
-            itemList: [
-              {
-                value: '1',
-                text: '一级 1',
-                children: [
-                  {
-                    value: '4',
-                    text: '二级 1-1',
-                    children: [
-                      {
-                        value: '9',
-                        text: '三级 1-1-1',
-                      },
-                      {
-                        value: '10',
-                        text: '三级 1-1-2',
-                      },
-                    ],
-                  },
-                ],
-              },
-              {
-                value: '2',
-                text: '一级 2',
-                children: [
-                  {
-                    value: '5',
-                    text: '二级 2-1',
-                  },
-                  {
-                    value: '6',
-                    text: '二级 2-2',
-                  },
-                ],
-              },
-              {
-                value: '3',
-                text: '一级 3',
-                children: [
-                  {
-                    value: '7',
-                    text: '二级 3-1',
-                  },
-                  {
-                    value: '8',
-                    text: '二级 3-2',
-                  },
-                ],
-              },
-            ],
+          request: {
+            fetchApi: getTreeData,
+            params: {},
+            datakey: 'records',
           },
         },
         {
           type: 'SELECT',
           fieldName: 'b',
           label: '表单项2',
-          options: {
-            itemList: [
-              { text: '标题1', value: '1' },
-              { text: '标题2', value: '2' },
-              { text: '标题3', value: '3' },
-              { text: '标题4', value: '4' },
-              { text: '大海', value: '5' },
-            ],
+          request: {
+            fetchApi: getSelectData,
+            params: {},
+            datakey: 'records',
+            valueKey: 'value',
+            textKey: 'text',
           },
         },
         {
@@ -270,9 +221,9 @@ export default defineComponent({
                       ],
                       rowKey: (record) => record.id,
                       fetch: {
-                        api: () => {},
+                        api: getTableData,
                         params: {},
-                        dataKey: 'items',
+                        dataKey: 'records',
                       },
                     },
                     fieldAliasMap: () => {
@@ -283,11 +234,11 @@ export default defineComponent({
                     },
                   },
                   rules: [{ required: true, message: '姓名不能为空' }],
-                  onChange: (cellVal, row) => {
-                    const keys = Object.keys(cellVal)[0].split('|');
-                    obj.helper.initialValue = { a: '1234' };
-                    this.$refs.table.OPEN_SEARCH_HELPER(keys[0], keys[1]);
-                  },
+                  // onChange: (cellVal, row) => {
+                  //   const keys = Object.keys(cellVal)[0].split('|');
+                  //   obj.helper.initialValue = { a: '1234' };
+                  //   this.$refs.table.OPEN_SEARCH_HELPER(keys[0], keys[1]);
+                  // },
                   // onClick: (cell, row, column, cb, ev) => {
                   //   this.tableShProps = Object.assign({}, this.tableShProps, {
                   //     dataIndex: column.dataIndex,
@@ -604,7 +555,7 @@ export default defineComponent({
           uniqueKey="jzy_filter"
           formType="search"
           list={this.formList}
-          initialValue={{}}
+          initialValue={{ b: '1', a: ['9', '5'] }}
           onFinish={this.finish}
           fieldsChange={(list) => {
             this.formList = list;

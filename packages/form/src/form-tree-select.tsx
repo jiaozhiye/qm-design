@@ -2,12 +2,12 @@
  * @Author: 焦质晔
  * @Date: 2021-02-23 21:56:33
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-04 13:50:25
+ * @Last Modified time: 2021-03-13 14:01:06
  */
-import { defineComponent } from 'vue';
+import { defineComponent, CSSProperties } from 'vue';
+import { get } from 'lodash-es';
 import { AnyObject, JSXNode, Nullable } from '../../_utils/types';
 
-import { get } from 'lodash-es';
 import { t } from '../../locale';
 import { IDictDeep } from './types';
 import { noop, deepFind, deepMapList } from './utils';
@@ -53,13 +53,7 @@ export default defineComponent({
       return deepFind<IDictDeep>(this.itemList, val)?.text || '';
     },
     async getItemList(): Promise<void> {
-      const {
-        fetchApi,
-        params = {},
-        datakey = '',
-        valueKey = 'value',
-        textKey = 'text',
-      } = this.option.request;
+      const { fetchApi, params = {}, datakey = '', valueKey = 'value', textKey = 'text' } = this.option.request;
       const res = await fetchApi(params);
       if (res.code === 200) {
         const dataList = !datakey ? res.data : get(res.data, datakey, []);
@@ -105,7 +99,7 @@ export default defineComponent({
     if (!isFetch) {
       this.itemList = itemList ?? [];
     }
-    const innerStyle = {
+    const innerStyle: CSSProperties = {
       minWidth: '195px',
       maxHeight: '300px',
       marginLeft: '-12px',
@@ -116,10 +110,8 @@ export default defineComponent({
     };
     const prefixCls = getPrefixCls('tree-select');
     // select 组件的值
-    const labels = !multiple
-      ? this.getItemText(form[fieldName])
-      : form[fieldName].map((val) => this.getItemText(val));
-    this.$$form.setViewValue(fieldName, !multiple ? labels : labels.join(','));
+    const labels: string | string[] = !multiple ? this.getItemText(form[fieldName]) : form[fieldName].map((val) => this.getItemText(val));
+    this.$$form.setViewValue(fieldName, !multiple ? labels : (labels as string[]).join(','));
     return (
       <el-form-item
         key={fieldName}
@@ -159,17 +151,14 @@ export default defineComponent({
                   style={readonly && { pointerEvents: 'none' }}
                   popper-append-to-body={false}
                   // v-click-outside={() => (this.visible = !1)}
-                  v-click-outside={[
-                    () => (this.visible = !1),
-                    document.querySelector(`.tree-select__${fieldName}`),
-                  ]}
+                  v-click-outside={[() => (this.visible = !1), document.querySelector(`.tree-select__${fieldName}`)]}
                   onVisibleChange={(visible: boolean): void => {
                     if (!visible) return;
                     this.width = this.$refs[`select`].$el.getBoundingClientRect().width + 'px';
                   }}
                   onRemoveTag={(tag) => {
                     if (!multiple) return;
-                    const val = this.deepFindValue(this.itemList, tag).value;
+                    const val: string = this.deepFindValue(this.itemList, tag).value;
                     form[fieldName] = form[fieldName].filter((x) => x !== val);
                     this.$refs[`tree`].setCheckedKeys(form[fieldName]);
                     onChange(form[fieldName], null);
@@ -181,6 +170,7 @@ export default defineComponent({
                   }}
                   onClear={(): void => {
                     form[fieldName] = !multiple ? undefined : [];
+                    this.$refs[`tree`].setCheckedKeys(form[fieldName]);
                     onChange(form[fieldName], null);
                   }}
                 />

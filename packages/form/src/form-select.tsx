@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-02-23 21:56:33
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-02-26 12:17:14
+ * @Last Modified time: 2021-03-13 13:38:36
  */
 import { defineComponent } from 'vue';
 import { AnyObject, JSXNode, Nullable } from '../../_utils/types';
@@ -59,9 +59,7 @@ export default defineComponent({
             .join(',');
     },
     filterMethodHandle(queryString = '', isPyt: boolean): Array<IDict> {
-      const res: IDict[] = this.originItemList.filter(
-        this.createSearchHelpFilter(queryString, isPyt)
-      );
+      const res: IDict[] = this.originItemList.filter(this.createSearchHelpFilter(queryString, isPyt));
       // 动态改变列表项
       this.itemList = res;
       return res;
@@ -74,13 +72,7 @@ export default defineComponent({
       };
     },
     async getItemList(): Promise<void> {
-      const {
-        fetchApi,
-        params = {},
-        datakey = '',
-        valueKey = 'value',
-        textKey = 'text',
-      } = this.option.request;
+      const { fetchApi, params = {}, datakey = '', valueKey = 'value', textKey = 'text' } = this.option.request;
       const res = await fetchApi(params);
       if (res.code === 200) {
         const dataList = !datakey ? res.data : get(res.data, datakey, []);
