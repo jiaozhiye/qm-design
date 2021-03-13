@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-03-02 21:21:13
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-09 08:13:06
+ * @Last Modified time: 2021-03-13 10:36:18
  */
 const config = {
   // 表格列的默认最小宽度
@@ -19,7 +19,7 @@ const config = {
   // 分页
   pagination: {
     currentPage: 1,
-    pageSize: 10,
+    pageSize: 20,
     pageSizeOptions: [10, 20, 30, 40, 50],
   },
   // 汇总

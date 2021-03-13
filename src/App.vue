@@ -3,7 +3,7 @@ import { defineComponent, VNode } from 'vue';
 
 import PrintTemplate from './demo2';
 
-import tableData from './mock/tableData';
+import { getTableData } from './api/test';
 
 const sleep = async (delay: number): Promise<any> => {
   return new Promise((resolve) => setTimeout(resolve, delay));
@@ -127,6 +127,11 @@ export default defineComponent({
       ],
       printDataList: [],
       content: '',
+      fetch: {
+        api: getTableData,
+        params: {},
+        dataKey: 'records',
+      },
       columns: [
         {
           title: '操作',
@@ -460,7 +465,6 @@ export default defineComponent({
           },
         },
       ],
-      list: tableData.data.items,
       selection: {
         type: 'checkbox',
         selectedRowKeys: this.selectedKeys,
@@ -536,10 +540,9 @@ export default defineComponent({
           uniqueKey="jzyDemoTable"
           maxHeight="300px"
           columns={this.columns}
-          dataSource={this.list}
+          fetch={this.fetch}
           rowKey={(row) => row.id}
           rowSelection={this.selection}
-          webPagination
           tablePrint={this.tablePrint}
           exportExcel={this.exportExcel}
           columnsChange={(columns) => (this.columns = columns)}
