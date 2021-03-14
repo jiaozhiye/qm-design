@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-02-09 09:27:46
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-13 14:33:38
+ * @Last Modified time: 2021-03-14 19:01:25
  */
 @import '../../style/src/common';
 @import './fields-filter';
@@ -117,6 +117,24 @@ $prefix: '#{$qm-prefix}-form';
     .el-button {
       .iconfont {
         margin-right: 4px;
+      }
+    }
+  }
+  &__only-show {
+    .el-col {
+      .el-form-item {
+        .is-disabled {
+          .el-input__inner,
+          .el-textarea__inner {
+            color: $text-color;
+            border-style: dashed;
+            background-color: #fff;
+          }
+          .el-input-group__append {
+            background-color: transparent;
+            border-style: dashed;
+          }
+        }
       }
     }
   }
