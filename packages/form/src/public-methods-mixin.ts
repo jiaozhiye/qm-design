@@ -37,7 +37,7 @@ export const PublicMethodsMixin = {
     CLEAR_FORM(): void {
       this.clearForm();
     },
-    VALIDATE_FIELDS(fieldNames: string[] | string): void {
+    VALIDATE_FIELDS<T extends string>(fieldNames: T[] | T): void {
       const fields: string[] = Array.isArray(fieldNames) ? fieldNames : [fieldNames];
       fields.forEach((fieldName) => this.formItemValidate(fieldName));
     },
