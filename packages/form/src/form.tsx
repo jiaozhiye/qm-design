@@ -293,12 +293,12 @@ export default defineComponent({
               content: (): JSXNode => <div>{content}</div>,
             }}
           >
-            <i class="iconfont icon-info-circle" />
+            <i class="iconfont icon-info-circle desc-icon" />
           </el-tooltip>
         );
       }
       return (
-        <span title={content as string} class="desc-text" style={{ display: 'inline-block', paddingLeft: '10px', ...style }}>
+        <span title={content as string} class="desc-text" style={{ ...style }}>
           {content}
         </span>
       );

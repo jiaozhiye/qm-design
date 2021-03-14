@@ -105,10 +105,9 @@ $prefix: '#{$qm-prefix}-form';
         line-height: inherit;
       }
       .desc-text {
+        @include text-overflow-cut;
+        margin-left: 8px;
         cursor: default;
-        .el-tag {
-          margin-right: 8px;
-        }
       }
       &.is-required {
         .el-form-item__label {

@@ -273,6 +273,7 @@ export default defineComponent({
             {...tableProps}
             // @ts-ignore
             height={height}
+            minHeight={200}
             columns={columns}
             rowKey={this.table.rowKey}
             rowSelection={selection}

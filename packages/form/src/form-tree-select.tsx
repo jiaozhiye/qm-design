@@ -111,7 +111,8 @@ export default defineComponent({
     const prefixCls = getPrefixCls('tree-select');
     // select 组件的值
     const labels: string | string[] = !multiple ? this.getItemText(form[fieldName]) : form[fieldName].map((val) => this.getItemText(val));
-    this.$$form.setViewValue(fieldName, !multiple ? labels : (labels as string[]).join(','));
+    const textVal: string = !multiple ? (labels as string) : (labels as string[]).join(',');
+    this.$$form.setViewValue(fieldName, textVal);
     return (
       <el-form-item
         key={fieldName}
@@ -144,6 +145,7 @@ export default defineComponent({
                   popper-class="select-option"
                   modelValue={labels}
                   multiple={multiple}
+                  title={multiple ? textVal : null}
                   placeholder={!disabled ? placeholder : ''}
                   clearable={clearable}
                   disabled={disabled}
