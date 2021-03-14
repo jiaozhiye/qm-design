@@ -608,7 +608,7 @@ export default defineComponent({
     },
     // 搜索类型按钮布局
     createSearchButtonLayout(lastCols = 0): Nullable<JSXNode> {
-      const { flexCols: cols, collapse, showFilterCollapse, isFilterType, isSearchBtn } = this;
+      const { flexCols: cols, collapse, showFilterCollapse, isFilterType, isSearchBtn, isFieldsDefine } = this;
       const { $size } = useSize(this.$props);
 
       // 不是搜索类型
@@ -628,7 +628,7 @@ export default defineComponent({
           <el-button size={$size} icon="iconfont icon-reload" onClick={this.resetForm}>
             {t('qm.form.reset')}
           </el-button>
-          <FieldsFilter size={$size} list={this.list} uniqueKey={this.uniqueKey} fieldsChange={this.fieldsChange} />
+          {isFieldsDefine && <FieldsFilter size={$size} list={this.list} uniqueKey={this.uniqueKey} fieldsChange={this.fieldsChange} />}
           {showFilterCollapse ? (
             <el-button type="text" size={$size} onClick={() => (this.collapse = !collapse)}>
               {collapse ? t('qm.form.collect') : t('qm.form.spread')}

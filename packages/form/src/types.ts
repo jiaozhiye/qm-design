@@ -380,6 +380,10 @@ export const props = {
       return ['default', 'search', 'onlyShow'].includes(val);
     },
   },
+  isFieldsDefine: {
+    type: Boolean,
+    default: true,
+  },
   isCollapse: {
     type: Boolean,
     default: true,
