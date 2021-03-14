@@ -24,15 +24,12 @@ const ExcellentExport = (function () {
     let offset;
     for (offset = 0; offset < byteCharacters.length; offset += sliceSize) {
       const slice = byteCharacters.slice(offset, offset + sliceSize);
-
       const byteNumbers = new Array(slice.length);
       let i;
       for (i = 0; i < slice.length; i = i + 1) {
         byteNumbers[i] = slice.charCodeAt(i);
       }
-
       const byteArray = new window.Uint8Array(byteNumbers);
-
       byteArrays.push(byteArray);
     }
 
@@ -46,8 +43,8 @@ const ExcellentExport = (function () {
     excel:
       '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40"><head><meta name=ProgId content=Excel.Sheet><meta name=Generator content="Microsoft Excel 11"><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><!--[if gte mso 9]><xml><x:ExcelWorkbook><x:ExcelWorksheets><x:ExcelWorksheet><x:Name>{worksheet}</x:Name><x:WorksheetOptions><x:DisplayGridlines/></x:WorksheetOptions></x:ExcelWorksheet></x:ExcelWorksheets></x:ExcelWorkbook></xml><![endif]--></head><body>{table}</body></html>',
   };
-  let csvDelimiter = ',';
-  let csvNewLine = '\r\n';
+  const csvDelimiter = ',';
+  const csvNewLine = '\r\n';
 
   /**
    * Convert a string to Base64.
@@ -228,6 +225,7 @@ const ExcellentExport = (function () {
           throw new Error('Parameter "filterRowFn" must be a function.');
         }
       }
+
       // Filter columns
       if (sheetConf.removeColumns) {
         const toRemove = sheetConf.removeColumns.sort().reverse();
@@ -268,26 +266,20 @@ const ExcellentExport = (function () {
   };
 
   return {
-    version: function () {
+    version: function (): string {
       return version;
     },
-    excel: function (tableHTML, name?: string) {
-      const ctx = { worksheet: name || 'sheet1', table: tableHTML };
+    excel: function (tableHTML: string, sheetName?: string): Blob {
+      const ctx = { worksheet: sheetName || 'sheet1', table: tableHTML };
       const b64 = base64(format(template.excel, ctx));
       return b64toBlob(b64, 'application/vnd.ms-excel');
     },
-    csv: function (tableHTML, delimiter, newLine) {
-      if (delimiter !== undefined && delimiter) {
-        csvDelimiter = delimiter;
-      }
-      if (newLine !== undefined && newLine) {
-        csvNewLine = newLine;
-      }
+    csv: function (tableHTML: string): Blob {
       const csvData = '\uFEFF' + tableToCSV(parseNode(tableHTML));
       const b64 = base64(csvData);
       return b64toBlob(b64, 'application/csv');
     },
-    convert: function (options, sheets) {
+    convert: function (options, sheets): Blob {
       return convert(options, sheets);
     },
   };

@@ -5,14 +5,21 @@
  * @Last Modified time: 2021-03-12 09:23:13
  */
 import { defineComponent } from 'vue';
-import { get, isFunction, isObject, isBoolean } from 'lodash-es';
+import { get, isFunction } from 'lodash-es';
 import { ElMessage } from 'element-plus';
+import { utils, write } from 'xlsx';
 import dayjs from 'dayjs';
-import XLSX from 'xlsx';
 import PropTypes from '../../../_utils/vue-types';
+
+import { getCellValue } from '../utils';
 import { download } from '../../../_utils/download';
 import { t } from '../../../locale';
 import { JSXNode } from '../../../_utils/types';
+
+const XLSX = {
+  utils,
+  write,
+};
 
 export default defineComponent({
   name: 'JsonToExcel',
@@ -23,8 +30,6 @@ export default defineComponent({
     initialValue: PropTypes.array.def([]).isRequired,
     // fields inside the Json Object that you want to export
     fields: PropTypes.object.def({}).isRequired,
-    // Use as fallback when the row has no field values
-    defaultValue: PropTypes.string.def(''),
     // mime type [xlsx, csv]
     fileType: PropTypes.string.def('xlsx'),
     // filename to export
@@ -110,11 +115,11 @@ export default defineComponent({
     getProcessedJson(data, header) {
       let keys = this.getKeys(data, header);
       let newData = [];
-      data.forEach((item, index) => {
+      data.forEach((item) => {
         let newItem = {};
         for (let label in keys) {
           let property = keys[label];
-          newItem[label] = this.getValue(property, item);
+          newItem[label] = getCellValue(item, property);
         }
         newData.push(newItem);
       });
@@ -129,41 +134,6 @@ export default defineComponent({
         keys[key] = key;
       }
       return keys;
-    },
-    getValue(key, item) {
-      const field = isObject(key) ? key.field : key;
-      let indexes = Array.isArray(field) ? field : field.split('.');
-      let value = this.defaultValue;
-      if (!field) {
-        value = item;
-      } else if (indexes.length > 1) {
-        value = this.getValueFromNestedItem(item, indexes);
-      } else {
-        value = this.parseValue(item[field]);
-      }
-      if (key.hasOwnProperty('callback')) {
-        value = this.getValueFromCallback(value, key.callback);
-      }
-      return value;
-    },
-    getValueFromNestedItem(item, indexes) {
-      let nestedItem = item;
-      for (let index of indexes) {
-        if (nestedItem) {
-          nestedItem = nestedItem[index];
-        }
-      }
-      return this.parseValue(nestedItem);
-    },
-    getValueFromCallback(item, callback) {
-      if (!isFunction(callback)) {
-        return this.defaultValue;
-      }
-      const value = callback(item);
-      return this.parseValue(value);
-    },
-    parseValue(value) {
-      return value || value === 0 || isBoolean(value) ? value : this.defaultValue;
     },
     clearWorkbook() {
       this.workbook.SheetNames = [];
