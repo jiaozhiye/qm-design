@@ -49,7 +49,7 @@ export default defineComponent({
         labelWidth={labelWidth && getParserWidth(labelWidth)}
         prop={fieldName}
         v-slots={{
-          label: (): JSXNode => labelOptions && this.$$form.createFormItemLabel(labelOptions),
+          label: (): JSXNode => labelOptions && this.$$form.createFormItemLabel({ label, ...labelOptions }),
         }}
       >
         <el-time-picker

@@ -70,13 +70,7 @@ export default defineComponent({
         .join(',');
     },
     async getItemList(): Promise<void> {
-      const {
-        fetchApi,
-        params = {},
-        datakey = '',
-        valueKey = 'value',
-        textKey = 'text',
-      } = this.option.request;
+      const { fetchApi, params = {}, datakey = '', valueKey = 'value', textKey = 'text' } = this.option.request;
       const res = await fetchApi(params);
       if (res.code === 200) {
         const dataList = !datakey ? res.data : get(res.data, datakey, []);
@@ -115,7 +109,7 @@ export default defineComponent({
         labelWidth={labelWidth && getParserWidth(labelWidth)}
         prop={fieldName}
         v-slots={{
-          label: (): JSXNode => labelOptions && this.$$form.createFormItemLabel(labelOptions),
+          label: (): JSXNode => labelOptions && this.$$form.createFormItemLabel({ label, ...labelOptions }),
         }}
       >
         <el-cascader

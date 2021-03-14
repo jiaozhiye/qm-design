@@ -19,18 +19,7 @@ export default defineComponent({
   props: ['option'],
   render(): JSXNode {
     const { form } = this.$$form;
-    const {
-      type,
-      label,
-      fieldName,
-      labelWidth,
-      labelOptions,
-      descOptions,
-      upload = {},
-      style = {},
-      disabled,
-      onChange = noop,
-    } = this.option;
+    const { type, label, fieldName, labelWidth, labelOptions, descOptions, upload = {}, style = {}, disabled, onChange = noop } = this.option;
 
     this.$$form.setViewValue(fieldName, '');
 
@@ -41,7 +30,7 @@ export default defineComponent({
         labelWidth={labelWidth && getParserWidth(labelWidth)}
         prop={fieldName}
         v-slots={{
-          label: (): JSXNode => labelOptions && this.$$form.createFormItemLabel(labelOptions),
+          label: (): JSXNode => labelOptions && this.$$form.createFormItemLabel({ label, ...labelOptions }),
         }}
       >
         <UploadCropper

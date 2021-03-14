@@ -261,10 +261,10 @@ export default defineComponent({
     },
     createFormItemLabel(option): JSXNode {
       const { form } = this;
-      const { label, type = 'SELECT', fieldName, options = {}, style = {}, disabled, onChange = noop } = option;
+      const { label, type, description, fieldName, options = {}, style = {}, disabled, onChange = noop } = option;
       const { itemList, trueValue = '1', falseValue = '0' } = options;
       return (
-        <div class="label-wrap" style={{ ...style }}>
+        <div class="custom-label__wrap" style={{ ...style }}>
           {type === 'SELECT' && (
             <el-select v-model={form[fieldName]} placeholder={''} disabled={disabled} onChange={onChange}>
               {itemList.map((x) => (
@@ -273,10 +273,18 @@ export default defineComponent({
             </el-select>
           )}
           {type === 'CHECKBOX' && (
-            <span>
-              <span style={{ paddingRight: '10px' }}>{label}</span>
+            <>
+              <span style={{ paddingRight: '5px' }}>{label}</span>
               <el-checkbox v-model={form[fieldName]} trueLabel={trueValue} falseLabel={falseValue} disabled={disabled} onChange={onChange} />
-            </span>
+            </>
+          )}
+          {description && (
+            <>
+              <span style={{ paddingRight: '5px' }}>{label}</span>
+              <el-tooltip effect="dark" placement="top" content={description}>
+                <i class="iconfont icon-info-circle" />
+              </el-tooltip>
+            </>
           )}
         </div>
       );
@@ -312,7 +320,7 @@ export default defineComponent({
           labelWidth={labelWidth && getParserWidth(labelWidth)}
           prop={fieldName}
           v-slots={{
-            label: (): JSXNode => labelOptions && this.createFormItemLabel(labelOptions),
+            label: (): JSXNode => labelOptions && this.createFormItemLabel({ label, ...labelOptions }),
           }}
         >
           <div style={{ width: '100%', ...style }}>{render(option, this)}</div>

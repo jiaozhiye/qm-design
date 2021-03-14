@@ -33,14 +33,7 @@ export default defineComponent({
       disabled,
       onChange = noop,
     } = this.option;
-    const {
-      rows = 2,
-      maxrows,
-      maxlength = 200,
-      onInput = noop,
-      onClick = noop,
-      onDblClick = noop,
-    } = options;
+    const { rows = 2, maxrows, maxlength = 200, onInput = noop, onClick = noop, onDblClick = noop } = options;
     this.$$form.setViewValue(fieldName, form[fieldName]);
     return (
       <el-form-item
@@ -49,7 +42,7 @@ export default defineComponent({
         labelWidth={labelWidth && getParserWidth(labelWidth)}
         prop={fieldName}
         v-slots={{
-          label: (): JSXNode => labelOptions && this.$$form.createFormItemLabel(labelOptions),
+          label: (): JSXNode => labelOptions && this.$$form.createFormItemLabel({ label, ...labelOptions }),
         }}
       >
         <el-input

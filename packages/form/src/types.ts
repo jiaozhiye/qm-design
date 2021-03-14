@@ -68,6 +68,7 @@ export type IFormItem = {
   fieldName: string;
   label: string;
   labelWidth?: number | string;
+  description?: string;
   hidden?: boolean;
   invisible?: boolean;
   disabled?: boolean;

@@ -20,18 +20,7 @@ export default defineComponent({
   props: ['option'],
   render(): JSXNode {
     const { form } = this.$$form;
-    const {
-      label,
-      fieldName,
-      labelWidth,
-      labelOptions,
-      descOptions,
-      options = {},
-      clearable,
-      readonly,
-      disabled,
-      onChange = noop,
-    } = this.option;
+    const { label, fieldName, labelWidth, labelOptions, descOptions, options = {}, clearable, readonly, disabled, onChange = noop } = this.option;
     const { min = 0, max, step = 1, precision } = options;
     const [startVal = min, endVal = max] = form[fieldName];
     this.$$form.setViewValue(fieldName, form[fieldName].join('-'));
@@ -42,7 +31,7 @@ export default defineComponent({
         labelWidth={labelWidth && getParserWidth(labelWidth)}
         prop={fieldName}
         v-slots={{
-          label: (): JSXNode => labelOptions && this.$$form.createFormItemLabel(labelOptions),
+          label: (): JSXNode => labelOptions && this.$$form.createFormItemLabel({ label, ...labelOptions }),
         }}
       >
         <div>

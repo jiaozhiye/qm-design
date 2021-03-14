@@ -33,14 +33,7 @@ export default defineComponent({
       disabled,
       onChange = noop,
     } = this.option;
-    const {
-      valueFormat = 'HH:mm',
-      startTime = '00:00',
-      endTime = '23:45',
-      stepTime = '00:15',
-      startDisabled,
-      endDisabled,
-    } = options;
+    const { valueFormat = 'HH:mm', startTime = '00:00', endTime = '23:45', stepTime = '00:15', startDisabled, endDisabled } = options;
     this.$$form.setViewValue(fieldName, form[fieldName].join('-'));
     const startWrapProps = {
       modelValue: form[fieldName][0],
@@ -61,7 +54,7 @@ export default defineComponent({
         labelWidth={labelWidth && getParserWidth(labelWidth)}
         prop={fieldName}
         v-slots={{
-          label: (): JSXNode => labelOptions && this.$$form.createFormItemLabel(labelOptions),
+          label: (): JSXNode => labelOptions && this.$$form.createFormItemLabel({ label, ...labelOptions }),
         }}
       >
         <div>

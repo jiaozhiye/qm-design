@@ -96,6 +96,9 @@ export default defineComponent({
           type: 'SELECT',
           fieldName: 'b',
           label: '表单项2',
+          labelOptions: {
+            description: 'asdasd',
+          },
           request: {
             fetchApi: getSelectData,
             params: {},

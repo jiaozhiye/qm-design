@@ -18,23 +18,9 @@ export default defineComponent({
   props: ['option'],
   render(): JSXNode {
     const { form } = this.$$form;
-    const {
-      type,
-      label,
-      fieldName,
-      labelWidth,
-      labelOptions,
-      descOptions,
-      options = {},
-      style = {},
-      disabled,
-      onChange = noop,
-    } = this.option;
+    const { type, label, fieldName, labelWidth, labelOptions, descOptions, options = {}, style = {}, disabled, onChange = noop } = this.option;
     const { trueValue = '1', falseValue = '0' } = options;
-    this.$$form.setViewValue(
-      fieldName,
-      form[fieldName] === trueValue ? t('qm.form.trueText') : t('qm.form.falseText')
-    );
+    this.$$form.setViewValue(fieldName, form[fieldName] === trueValue ? t('qm.form.trueText') : t('qm.form.falseText'));
     return (
       <el-form-item
         key={fieldName}
@@ -42,17 +28,11 @@ export default defineComponent({
         labelWidth={labelWidth && getParserWidth(labelWidth)}
         prop={fieldName}
         v-slots={{
-          label: (): JSXNode => labelOptions && this.$$form.createFormItemLabel(labelOptions),
+          label: (): JSXNode => labelOptions && this.$$form.createFormItemLabel({ label, ...labelOptions }),
         }}
       >
         <div style={{ position: 'relative', top: '-1px', ...style }}>
-          <el-switch
-            v-model={form[fieldName]}
-            disabled={disabled}
-            activeValue={trueValue}
-            inactiveValue={falseValue}
-            onChange={onChange}
-          />
+          <el-switch v-model={form[fieldName]} disabled={disabled} activeValue={trueValue} inactiveValue={falseValue} onChange={onChange} />
         </div>
         {descOptions && this.$$form.createFormItemDesc({ fieldName, ...descOptions })}
       </el-form-item>

@@ -19,7 +19,7 @@ $prefix: '#{$qm-prefix}-form';
         align-items: center;
         justify-content: flex-end;
         padding-right: 8px;
-        .label-wrap {
+        .custom-label__wrap {
           display: inline-block;
           .el-input__inner {
             border-color: $border-color-base;
@@ -100,9 +100,8 @@ $prefix: '#{$qm-prefix}-form';
         line-height: inherit;
       }
       .desc-icon {
-        padding: 0 6px;
-        font-size: 18px;
-        line-height: inherit;
+        margin-left: 8px;
+        font-size: larger;
       }
       .desc-text {
         @include text-overflow-cut;
