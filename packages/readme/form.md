@@ -259,17 +259,17 @@
 
 `只对 UPLOAD_IMG|UPLOAD_FILE 有效`
 
-| 参数         | 说明                                                         | 类型     | 默认值                               |
-| ------------ | ------------------------------------------------------------ | -------- | ------------------------------------ |
-| actionUrl    | 上传的地址，必要参数                                         | string   | -                                    |
-| headers      | 接口请求的 header 头                                         | object   | -                                    |
-| params       | 上传接口的参数                                               | object   | -                                    |
-| fileTypes    | 限制上传附件的类型                                           | string[] | ['jpg', 'png', 'pdf', 'xls', 'xlsx'] |
-| fileSize     | 限制上传附件的大小，如果不指定此参数，图片类型不开启裁剪功能 | number   | -                                    |
-| limit        | 限制上传附件的数量                                           | number   | 1                                    |
-| fixedSize    | 裁剪框的宽高比                                               | array    | [1.5, 1]                             |
-| isCalcHeight | 是否根据裁剪图片宽高比自动计显示框高度                       | boolean  | true                                 |
-| titles       | 上传图片对应的标题，个数与 limit 一致                        | string[] | -                                    |
+| 参数         | 说明                                                         | 类型     | 默认值                                      |
+| ------------ | ------------------------------------------------------------ | -------- | ------------------------------------------- |
+| actionUrl    | 上传的地址，必要参数                                         | string   | -                                           |
+| headers      | 接口请求的 header 头                                         | object   | -                                           |
+| params       | 上传接口的参数                                               | object   | -                                           |
+| fileTypes    | 限制上传附件的类型                                           | string[] | ['jpg', 'png', 'bmp', 'pdf', 'xls', 'xlsx'] |
+| fileSize     | 限制上传附件的大小，如果不指定此参数，图片类型不开启裁剪功能 | number   | -                                           |
+| limit        | 限制上传附件的数量                                           | number   | 1                                           |
+| fixedSize    | 裁剪框的宽高比，空数组则不约束裁剪框的宽高比                 | array    | [1.5, 1]                                    |
+| isCalcHeight | 是否根据裁剪图片宽高比自动计显示框高度                       | boolean  | true                                        |
+| titles       | 上传图片对应的标题，个数与 limit 一致                        | string[] | -                                           |
 
 `文件上传前后端数据交互的格式`
 

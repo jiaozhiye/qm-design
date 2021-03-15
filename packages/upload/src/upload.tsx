@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-02-09 09:03:59
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-02-28 10:36:07
+ * @Last Modified time: 2021-03-15 16:56:44
  */
 import { defineComponent, PropType } from 'vue';
 import { ElMessage } from 'element-plus';
@@ -37,7 +37,7 @@ export default defineComponent({
         url: PropTypes.string,
       }).loose
     ).def([]),
-    fileTypes: PropTypes.array.def([]),
+    fileTypes: PropTypes.array.def(['jpg', 'png', 'bmp', 'pdf', 'xls', 'xlsx']),
     isOnlyButton: PropTypes.bool,
     limit: PropTypes.number.def(1),
     fileSize: PropTypes.number.def(5),
@@ -69,9 +69,7 @@ export default defineComponent({
   },
   methods: {
     beforeUploadHandle(file): boolean {
-      const isType = this.fileTypes.length
-        ? this.fileTypes.includes(file.name.slice(file.name.lastIndexOf('.') + 1).toLowerCase())
-        : !0;
+      const isType = this.fileTypes.length ? this.fileTypes.includes(file.name.slice(file.name.lastIndexOf('.') + 1).toLowerCase()) : !0;
       const isLt5M = file.size / 1024 / 1024 < this.fileSize;
       const result = isType && isLt5M;
       if (!isType) {
@@ -125,10 +123,7 @@ export default defineComponent({
       let fileName = url.slice(url.lastIndexOf('/') + 1);
       if (name) {
         let extendName = url.slice(url.lastIndexOf('.') + 1);
-        fileName = `${name.slice(
-          0,
-          name.lastIndexOf('.') !== -1 ? name.lastIndexOf('.') : undefined
-        )}.${extendName}`;
+        fileName = `${name.slice(0, name.lastIndexOf('.') !== -1 ? name.lastIndexOf('.') : undefined)}.${extendName}`;
       }
       download(blob, fileName);
     },
@@ -140,18 +135,7 @@ export default defineComponent({
     },
   },
   render(): JSXNode {
-    const {
-      fileTypes,
-      fileList,
-      fileSize,
-      loading,
-      type = 'primary',
-      round,
-      circle,
-      icon = 'iconfont icon-upload',
-      disabled,
-      $props,
-    } = this;
+    const { fileTypes, fileList, fileSize, loading, type = 'primary', round, circle, icon = 'iconfont icon-upload', disabled, $props } = this;
     const { $size } = useSize(this.$props);
     const wrapProps = {
       action: $props.actionUrl,
@@ -185,9 +169,8 @@ export default defineComponent({
           tip: (): JSXNode =>
             !$props.isOnlyButton ? (
               <div class="el-upload__tip" style="line-height: 1.5">
-                {(fileTypes.length
-                  ? `${t('qm.upload.tooltip', { type: fileTypes.join(',') })}，`
-                  : '') + `${t('qm.upload.sizeLimit', { size: fileSize })}`}
+                {(fileTypes.length ? `${t('qm.upload.tooltip', { type: fileTypes.join(',') })}，` : '') +
+                  `${t('qm.upload.sizeLimit', { size: fileSize })}`}
               </div>
             ) : null,
         }}
