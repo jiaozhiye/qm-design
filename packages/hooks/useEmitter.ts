@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-03-15 14:48:59
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-15 15:28:48
+ * @Last Modified time: 2021-03-15 16:58:14
  */
 import { getCurrentInstance, ComponentInternalInstance } from 'vue';
 
@@ -13,7 +13,7 @@ export const useDispatch = function (componentName: string, eventName: string, p
   if (!vm) return;
 
   let parent = vm.parent || vm.root;
-  let name = (parent.type as any).componentName || parent.type.name;
+  let name: string = (parent.type as any).componentName || parent.type.name;
 
   while (parent && (!name || name !== componentName)) {
     parent = parent.parent;
