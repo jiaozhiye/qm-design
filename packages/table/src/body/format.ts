@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-03-23 12:51:24
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-08 12:33:09
+ * @Last Modified time: 2021-03-15 12:48:23
  */
 import dayjs from 'dayjs';
 import { formatNumber } from '../utils';
@@ -32,6 +32,9 @@ const formatMixin = {
     },
     [`secret-IDnumber`](val) {
       return val.replace(/^(\d{3}).+(\w{4})$/, '$1***********$2');
+    },
+    [`secret-bankNumber`](val) {
+      return val.replace(/^(\d{4}).+(\w{3})$/, '$1************$2');
     },
   },
 };

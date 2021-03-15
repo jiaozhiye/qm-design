@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-03-06 15:11:01
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-13 08:46:42
+ * @Last Modified time: 2021-03-15 12:48:49
  */
 import { AnyFunction, AnyObject, JSXNode, Nullable } from '../../../_utils/types';
 
@@ -16,7 +16,15 @@ export type IEditerType = 'text' | 'number' | 'select' | 'select-multiple' | 'ch
 
 export type ISelectionType = 'checkbox' | 'radio';
 
-export type IFormatType = 'date' | 'datetime' | 'dateShortTime' | 'finance' | 'secret-name' | 'secret-phone' | 'secret-IDnumber';
+export type IFormatType =
+  | 'date'
+  | 'datetime'
+  | 'dateShortTime'
+  | 'finance'
+  | 'secret-name'
+  | 'secret-phone'
+  | 'secret-IDnumber'
+  | 'secret-bankNumber';
 
 export type IDict = {
   text: string;

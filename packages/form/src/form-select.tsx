@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-02-23 21:56:33
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-13 14:30:10
+ * @Last Modified time: 2021-03-15 13:00:54
  */
 import { defineComponent } from 'vue';
 import { AnyObject, JSXNode, Nullable } from '../../_utils/types';
@@ -100,7 +100,7 @@ export default defineComponent({
       disabled,
       onChange = noop,
     } = this.option;
-    const { filterable = !0, showTags = !1, openPyt = !0, limit } = options;
+    const { filterable = !0, collapseTags = !0, openPyt = !0, limit } = options;
 
     const textVal: string = this.createViewText(form[fieldName]);
     this.$$form.setViewValue(fieldName, textVal);
@@ -127,7 +127,7 @@ export default defineComponent({
           {...wrapProps}
           multiple={multiple}
           multipleLimit={limit}
-          collapseTags={!showTags && multiple}
+          collapseTags={collapseTags && multiple}
           filterable={filterable}
           title={multiple ? textVal : null}
           placeholder={!disabled ? placeholder : ''}

@@ -133,9 +133,12 @@ export default defineComponent({
           // },
         },
         {
-          type: 'SWITCH',
+          type: 'DATE',
           fieldName: 'e',
           label: '表单项5',
+          options: {
+            dateType: 'week',
+          },
         },
       ],
       printDataList: [],
@@ -555,26 +558,17 @@ export default defineComponent({
   render(): VNode {
     return (
       <>
-        <qm-button
-          class="asd"
-          confirm={{
-            onConfirm: () => {},
+        <qm-form
+          uniqueKey="jzy_filter"
+          formType="search"
+          list={this.formList}
+          initialValue={{ b: '1', a: ['9', '5'], vvv: 9 }}
+          onFinish={this.finish}
+          fieldsChange={(list) => {
+            this.formList = list;
           }}
-          click={this.clickHandle}
-        >
-          按钮
-        </qm-button>
-        <qm-drawer
-          ref="asdasd"
-          v-model={[this.visible2, 'visible']}
-          title="抽屉标题"
-          destroyOnClose
-          containerStyle={{ paddingBottom: '30px' }}
-          // beforeClose={this.beforeLeave}
-        >
-          <div style="height: 1000px">asd</div>
-          <div style="position: absolute; left: 0; bottom: 0; right: 0;">footer</div>
-        </qm-drawer>
+        ></qm-form>
+
         {/* <div style="margin: 10px;">
           <qm-table
             ref="table"
@@ -589,16 +583,7 @@ export default defineComponent({
             columnsChange={(columns) => (this.columns = columns)}
           ></qm-table>
         </div>
-        <qm-form
-          uniqueKey="jzy_filter"
-          formType="search"
-          list={this.formList}
-          initialValue={{ b: '1', a: ['9', '5'], vvv: 9 }}
-          onFinish={this.finish}
-          fieldsChange={(list) => {
-            this.formList = list;
-          }}
-        ></qm-form> */}
+         */}
         {/* <qm-countup endValue={2020} />
         <qm-split direction="vertical" style="height: 300px">
           <qm-split-pane>asdasd</qm-split-pane>

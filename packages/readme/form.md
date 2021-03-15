@@ -98,29 +98,62 @@
 
 ### options
 
-| 参数       | 说明                                                        | 类型             | 默认值 |
-| ---------- | ----------------------------------------------------------- | ---------------- | ------ |
-| itemList   | 下拉框的列表数据，[配置项](#dict)                           | array            | -      |
-| secretType | 值保密类型，在只读或禁用的状态下有效，[配置项](#secretType) | string           | -      |
-| trueValue  | 选中的值                                                    | string \| number | -      |
-| falseValue | 非选中的值                                                  | string \| number | -      |
-| dateType   | 日期控件的类型，[配置项](#dateType)                         | string           | -      |
+| 参数          | 说明                                                        | 类型             | 默认值 |
+| ------------- | ----------------------------------------------------------- | ---------------- | ------ |
+| itemList      | 下拉框的列表数据，[配置项](#dict)                           | array            | -      |
+| secretType    | 值保密类型，在只读或禁用的状态下有效，[配置项](#secretType) | string           | -      |
+| trueValue     | 选中的值                                                    | string \| number | '1'    |
+| falseValue    | 非选中的值                                                  | string \| number | '0'    |
+| dateType      | 日期控件的类型，[配置项](#dateType)                         | string           | -      |
+| minDateTime   | 最小日期，小于该时间的日期段将被禁用                        | string           | -      |
+| maxDateTime   | 最大日期，大于该时间的日期段将被禁用                        | string           | -      |
+| defaultTime   | 默认的时间                                                  | string           | -      |
+| shortCuts     | 是否显示日期组件的快捷选项                                  | boolean          | true   |
+| unlinkPanels  | 取消两个日期面板之间的联动                                  | boolean          | true   |
+| startDisabled | 是否禁用开始日期                                            | boolean          | -      |
+| endDisabled   | 是否禁用结束日期                                            | boolean          | -      |
+| columns       | 下拉联想搜索帮助的，下拉列表的配置，[配置项](#columns)      | array            | -      |
+| fieldAliasMap | -                                                           | function         | -      |
+| onlySelect    | 是否只能选择，针对下拉联想搜索帮助的有效                    | boolean          | true   |
+| limit         | 数量限制                                                    | number           | -      |
+| min           | 最小值                                                      | number           | 0      |
+| max           | 最大值                                                      | number           | -      |
+| step          | 计数器步长                                                  | number           | 1      |
+| precision     | 浮点型数值的精度                                            | number           | 0      |
+| controls      | 是否显示控制按钮                                            | boolean          | false  |
+| minlength     | 最小长度                                                    | number           | 0      |
+| maxlength     | 最大长度                                                    | number           | -      |
+| rows          | 文本域输入框行数                                            | number           | 2      |
+| maxrows       | 文本域最大行数                                              | number           | -      |
+| showLimit     | 是否显示输入字数统计                                        | boolean          | false  |
+| password      | 是否时密码格式                                              | boolean          | false  |
+| noInput       | 输入框是否不允许输入                                        | boolean          | false  |
+| toUpper       | 输入框文本自动转大写                                        | boolean          | false  |
+| filterable    | 是否开启自动检索功能                                        | boolean          | true   |
+| collapseTags  | 是否折叠 tag 标签                                           | boolean          | false  |
+| openPyt       | 是否开启拼音头检索                                          | boolean          | true   |
+| onInput       | 输入框 input 事件                                           | function(value)  | -      |
+| onClick       | 单击事件                                                    | function(value)  | -      |
+| onDblClick    | 双击事件                                                    | function(value)  | -      |
+| onEnter       | 回车事件                                                    | function(value)  | -      |
+| onFocus       | 输入框获得焦点事件                                          | function(value)  | -      |
+| onBlur        | 输入框失去焦点事件                                          | function(value)  | -      |
 
 ### dateType
 
-| 参数           | 说明                                           | 类型   | 默认值 |
-| -------------- | ---------------------------------------------- | ------ | ------ |
-| date           | 日期类型，值的格式 YYYY-MM-DD HH:mm:ss         | tring  | 默认   |
-| datetime       | 日期时间类型，值的格式 YYYY-MM-DD HH:mm:ss     | tring  | -      |
-| exactdate      | 严格日期类型，值的格式 YYYY-MM-DD              | string | -      |
-| daterange      | 日期区间类型，值的格式 YYYY-MM-DD HH:mm:ss     | string | 默认   |
-| datetimerange  | 日期时间区间类型，值的格式 YYYY-MM-DD HH:mm:ss | string | -      |
-| exactdaterange | 严格日期时间区间类型，值的格式 YYYY-MM-DD      | string | -      |
-| week           | 周类型，值的格式 YYYY-MM-DD                    | string | -      |
-| month          | 月份类型，值的格式 YYYY-MM                     | string | -      |
-| monthrange     | 月份区间类型，值的格式 YYYY-MM                 | string | -      |
-| year           | 年份类型，值的格式 YYYY                        | string | -      |
-| yearrange      | 年份区间类型，值的格式 YYYY                    | string | -      |
+| 参数           | 说明                 | 类型   | 格式                |
+| -------------- | -------------------- | ------ | ------------------- |
+| date           | 日期类型，默认       | tring  | YYYY-MM-DD HH:mm:ss |
+| datetime       | 日期时间类型         | tring  | YYYY-MM-DD HH:mm:ss |
+| exactdate      | 严格日期类型         | string | YYYY-MM-DD          |
+| daterange      | 日期区间类型，默认   | string | YYYY-MM-DD HH:mm:ss |
+| datetimerange  | 日期时间区间类型     | string | YYYY-MM-DD HH:mm:ss |
+| exactdaterange | 严格日期时间区间类型 | string | YYYY-MM-DD          |
+| week           | 周类型               | string | YYYY-MM-DD          |
+| month          | 月份类型             | string | YYYY-MM             |
+| monthrange     | 月份区间类型         | string | YYYY-MM             |
+| year           | 年份类型             | string | YYYY                |
+| yearrange      | 年份区间类型         | string | YYYY                |
 
 ### secretType
 

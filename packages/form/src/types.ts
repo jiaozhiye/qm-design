@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-02-24 13:02:36
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-15 11:30:04
+ * @Last Modified time: 2021-03-15 13:00:06
  */
 import { CSSProperties, PropType } from 'vue';
 import PropTypes from '../../_utils/vue-types';
@@ -124,7 +124,7 @@ export type IFormItem = {
     noInput?: boolean;
     toUpper?: boolean;
     filterable?: boolean;
-    showTags?: boolean;
+    collapseTags?: boolean;
     openPyt?: boolean;
     onInput?: AnyFunction<any>;
     onClick?: AnyFunction<any>;
@@ -312,7 +312,7 @@ export const props = {
         noInput: PropTypes.bool,
         toUpper: PropTypes.bool,
         filterable: PropTypes.bool,
-        showTags: PropTypes.bool,
+        collapseTags: PropTypes.bool,
         openPyt: PropTypes.bool,
         onInput: PropTypes.func,
         onClick: PropTypes.func,
