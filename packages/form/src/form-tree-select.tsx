@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-02-23 21:56:33
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-13 14:01:06
+ * @Last Modified time: 2021-03-15 19:31:25
  */
 import { defineComponent, CSSProperties } from 'vue';
 import { get } from 'lodash-es';
@@ -89,7 +89,7 @@ export default defineComponent({
       options = {},
       request = {},
       style = {},
-      placeholder = t('qm.form.inputPlaceholder'),
+      placeholder = t('qm.form.selectPlaceholder'),
       clearable = !0,
       readonly,
       disabled,

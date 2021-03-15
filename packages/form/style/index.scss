@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-02-09 09:27:46
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-15 19:24:41
+ * @Last Modified time: 2021-03-15 19:33:52
  */
 @import '../../style/src/common';
 @import './fields-filter';
@@ -162,6 +162,7 @@ $prefix: '#{$qm-prefix}-form';
 }
 
 .qm-search-helper__popper {
+  box-sizing: border-box;
   .el-autocomplete-suggestion__wrap {
     padding: 0;
     ul {

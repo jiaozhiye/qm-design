@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-02-23 21:56:33
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-15 19:26:11
+ * @Last Modified time: 2021-03-15 19:32:14
  */
 import { defineComponent } from 'vue';
 import { get } from 'lodash-es';
@@ -90,7 +90,7 @@ export default defineComponent({
       options = {},
       request = {},
       style = {},
-      placeholder = t('qm.form.inputPlaceholder'),
+      placeholder = t('qm.form.selectPlaceholder'),
       clearable = !0,
       readonly,
       disabled,
@@ -143,7 +143,6 @@ export default defineComponent({
                   readonly={readonly}
                   style={readonly && { pointerEvents: 'none' }}
                   popper-append-to-body={false}
-                  // v-click-outside={() => (this.visible = !1)}
                   v-click-outside={[() => (this.visible = !1), document.querySelector(`.region-select__${fieldName}`)]}
                   onVisibleChange={(visible: boolean): void => {
                     if (!visible) return;
