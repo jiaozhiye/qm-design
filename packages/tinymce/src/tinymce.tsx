@@ -2,15 +2,16 @@
  * @Author: 焦质晔
  * @Date: 2021-02-09 09:03:59
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-06 08:40:38
+ * @Last Modified time: 2021-03-15 16:36:24
  */
 import { defineComponent, PropType } from 'vue';
+import { isNumber } from 'lodash-es';
 import PropTypes from '../../_utils/vue-types';
 import { ComponentSize, JSXNode } from '../../_utils/types';
 
 import { useSize } from '../../hooks/useSize';
 import { getPrefixCls } from '../../_utils/prefix';
-import { isValidComponentSize } from '../../_utils/validators';
+import { isValidComponentSize, isValidWidthUnit } from '../../_utils/validators';
 
 import { Editor } from './components/Editor';
 import UploadImg from './upload-img';
@@ -26,7 +27,13 @@ export default defineComponent({
       type: String as PropType<ComponentSize>,
       validator: isValidComponentSize,
     },
-    height: PropTypes.number.def(400),
+    height: {
+      type: [Number, String] as PropType<number | string>,
+      default: 400,
+      validator: (val: string | number): boolean => {
+        return isNumber(val) || isValidWidthUnit(val);
+      },
+    },
     upload: PropTypes.shape({
       actionUrl: PropTypes.string.isRequired,
       headers: PropTypes.object.def({}),
