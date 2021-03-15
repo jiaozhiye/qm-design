@@ -23,6 +23,16 @@ export default defineComponent({
       btnList: [1, 2],
       formList: [
         {
+          type: 'REGION_SELECT',
+          label: '条件7',
+          fieldName: 'f',
+          request: {
+            fetchApi: getTreeData,
+            params: {},
+            datakey: 'records',
+          },
+        },
+        {
           type: 'INPUT',
           label: '条件1',
           fieldName: 'z',

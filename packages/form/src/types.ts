@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-02-24 13:02:36
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-15 13:48:43
+ * @Last Modified time: 2021-03-15 18:10:20
  */
 import { CSSProperties, PropType } from 'vue';
 import PropTypes from '../../_utils/vue-types';
@@ -42,6 +42,7 @@ export type IFormItemType =
   | 'MULTIPLE_CASCADER'
   | 'SELECT'
   | 'MULTIPLE_SELECT'
+  | 'REGION_SELECT'
   | 'SWITCH'
   | 'RADIO'
   | 'CHECKBOX'
@@ -65,6 +66,7 @@ export const ARRAY_TYPE: IFormItemType[] = [
   'MULTIPLE_TREE_SELECT',
   'MULTIPLE_CASCADER',
   'MULTIPLE_SELECT',
+  'REGION_SELECT',
   'MULTIPLE_CHECKBOX',
   'RANGE_DATE',
   'RANGE_DATE_EL',

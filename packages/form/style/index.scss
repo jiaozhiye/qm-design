@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-02-09 09:27:46
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-14 19:01:25
+ * @Last Modified time: 2021-03-15 19:24:41
  */
 @import '../../style/src/common';
 @import './fields-filter';
@@ -77,7 +77,7 @@ $prefix: '#{$qm-prefix}-form';
           border-color: $border-color-base;
         }
       }
-      .tree-select {
+      .tree-select, .region-select {
         width: 100%;
         .select-option {
           display: none !important;
@@ -137,6 +137,13 @@ $prefix: '#{$qm-prefix}-form';
         }
       }
     }
+  }
+}
+
+.qm-region-select__popper {
+  box-sizing: border-box;
+  .container {
+    margin-top: -10px;
   }
 }
 
