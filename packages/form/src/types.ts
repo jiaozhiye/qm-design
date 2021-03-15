@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-02-24 13:02:36
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-13 23:29:42
+ * @Last Modified time: 2021-03-15 10:19:30
  */
 import { CSSProperties, PropType } from 'vue';
 import PropTypes from '../../_utils/vue-types';
@@ -243,6 +243,7 @@ export const props = {
       fieldName: PropTypes.string,
       label: PropTypes.string,
       labelWidth: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+      description: PropTypes.string,
       hidden: PropTypes.bool,
       invisible: PropTypes.bool,
       disabled: PropTypes.bool,
