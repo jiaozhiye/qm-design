@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-02-23 21:56:33
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-14 00:57:56
+ * @Last Modified time: 2021-03-15 09:14:28
  */
 import { defineComponent } from 'vue';
 import { merge, get, isObject, isFunction } from 'lodash-es';
@@ -186,8 +186,8 @@ export default defineComponent({
       // 打开的前置钩子
       const beforeOpen = searchHelper.beforeOpen ?? searchHelper.open ?? trueNoop;
       const before = beforeOpen(this.form);
-      if (before?.then) {
-        before
+      if ((before as Promise<void>)?.then) {
+        (before as Promise<void>)
           .then(() => {
             todoOpen(val);
             cb?.();

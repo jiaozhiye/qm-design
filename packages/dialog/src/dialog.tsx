@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-02-09 09:03:59
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-11 15:22:56
+ * @Last Modified time: 2021-03-15 09:11:22
  */
 import { defineComponent, PropType, CSSProperties } from 'vue';
 import addEventListener from 'add-dom-event-listener';
@@ -20,6 +20,8 @@ import { stop } from '../../_utils/dom';
 import { t } from '../../locale';
 
 import Spin from '../../spin';
+
+const trueNoop = (): boolean => !0;
 
 export default defineComponent({
   name: 'QmDialog',
@@ -142,6 +144,19 @@ export default defineComponent({
       this.fullscreen = !this.fullscreen;
       this.$emit('viewportChange', this.fullscreen ? 'fullscreen' : 'default');
     },
+    beforeCloseHandle(cb: AnyFunction<void>): void {
+      const beforeClose = this.beforeClose ?? trueNoop;
+      const before = beforeClose();
+      if ((before as Promise<void>)?.then) {
+        (before as Promise<void>)
+          .then(() => {
+            cb();
+          })
+          .catch(() => {});
+      } else if (before !== false) {
+        cb();
+      }
+    },
     renderHeader(): JSXNode {
       const { title, fullscreen, showFullScreen } = this;
       return (
@@ -183,7 +198,7 @@ export default defineComponent({
       // withHeader: $props.showHeader,
       showClose: $props.showClose,
       fullscreen,
-      beforeClose: $props.beforeClose,
+      beforeClose: this.beforeCloseHandle,
       closeOnClickModal: $props.closeOnClickModal ?? global.closeOnClickModal ?? false,
       closeOnPressEscape: $props.closeOnPressEscape,
       destroyOnClose: $props.destroyOnClose,

@@ -501,11 +501,15 @@ export default defineComponent({
   },
   methods: {
     clickHandle(k) {
-      this.$refs[`gprint`].DO_PRINT();
+      // this.$refs[`gprint`].DO_PRINT();
       // this.$message.success('asdasd');
       // this.loading = false;
       // this.visible = true;
-      // this.visible2 = true;
+      this.visible2 = true;
+
+      setTimeout(() => {
+        this.$refs.asdasd.DO_CLOSE();
+      }, 3000);
     },
     async printHandle3() {
       await sleep(1000);
@@ -551,7 +555,27 @@ export default defineComponent({
   render(): VNode {
     return (
       <>
-        <div style="margin: 10px;">
+        <qm-button
+          class="asd"
+          confirm={{
+            onConfirm: () => {},
+          }}
+          click={this.clickHandle}
+        >
+          按钮
+        </qm-button>
+        <qm-drawer
+          ref="asdasd"
+          v-model={[this.visible2, 'visible']}
+          title="抽屉标题"
+          destroyOnClose
+          containerStyle={{ paddingBottom: '30px' }}
+          // beforeClose={this.beforeLeave}
+        >
+          <div style="height: 1000px">asd</div>
+          <div style="position: absolute; left: 0; bottom: 0; right: 0;">footer</div>
+        </qm-drawer>
+        {/* <div style="margin: 10px;">
           <qm-table
             ref="table"
             uniqueKey="jzyDemoTable"
@@ -574,7 +598,7 @@ export default defineComponent({
           fieldsChange={(list) => {
             this.formList = list;
           }}
-        ></qm-form>
+        ></qm-form> */}
         {/* <qm-countup endValue={2020} />
         <qm-split direction="vertical" style="height: 300px">
           <qm-split-pane>asdasd</qm-split-pane>
