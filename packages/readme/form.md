@@ -104,6 +104,23 @@
 | secretType | 值保密类型，在只读或禁用的状态下有效，[配置项](#secretType) | string           | -      |
 | trueValue  | 选中的值                                                    | string \| number | -      |
 | falseValue | 非选中的值                                                  | string \| number | -      |
+| dateType   | 日期控件的类型，[配置项](#dateType)                         | string           | -      |
+
+### dateType
+
+| 参数           | 说明                                           | 类型   | 默认值 |
+| -------------- | ---------------------------------------------- | ------ | ------ |
+| date           | 日期类型，值的格式 YYYY-MM-DD HH:mm:ss         | tring  | 默认   |
+| datetime       | 日期时间类型，值的格式 YYYY-MM-DD HH:mm:ss     | tring  | -      |
+| exactdate      | 严格日期类型，值的格式 YYYY-MM-DD              | string | -      |
+| daterange      | 日期区间类型，值的格式 YYYY-MM-DD HH:mm:ss     | string | 默认   |
+| datetimerange  | 日期时间区间类型，值的格式 YYYY-MM-DD HH:mm:ss | string | -      |
+| exactdaterange | 严格日期时间区间类型，值的格式 YYYY-MM-DD      | string | -      |
+| week           | 周类型，值的格式 YYYY-MM-DD                    | string | -      |
+| month          | 月份类型，值的格式 YYYY-MM                     | string | -      |
+| monthrange     | 月份区间类型，值的格式 YYYY-MM                 | string | -      |
+| year           | 年份类型，值的格式 YYYY                        | string | -      |
+| yearrange      | 年份区间类型，值的格式 YYYY                    | string | -      |
 
 ### secretType
 
