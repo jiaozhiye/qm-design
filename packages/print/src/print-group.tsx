@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-02-09 09:03:59
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-03 11:31:23
+ * @Last Modified time: 2021-03-15 14:27:22
  */
 import { defineComponent, PropType } from 'vue';
 import PropTypes from '../../_utils/vue-types';
@@ -26,6 +26,7 @@ const PRINT_ITEM_NAME = 'QmPrintItem';
 export default defineComponent({
   name: 'QmPrintGroup',
   componentName: 'QmPrintGroup',
+  emits: ['open', 'close'],
   props: {
     uniqueKey: PropTypes.string,
     size: {

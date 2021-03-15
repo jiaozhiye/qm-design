@@ -1,6 +1,6 @@
 ## API
 
-### Anchor
+### Form
 
 说明：formType[search] -> 筛选器; formType[default] -> 表单; formType[onlyShow] -> 只读表单
 

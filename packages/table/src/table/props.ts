@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-02-28 23:04:58
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-13 08:09:52
+ * @Last Modified time: 2021-03-15 14:11:51
  */
 import { PropType } from 'vue';
 import PropTypes from '../../../_utils/vue-types';
@@ -43,6 +43,7 @@ const columnItem = {
     'secret-name',
     'secret-phone',
     'secret-IDnumber',
+    'secret-bankNumber',
   ]), // 字段的格式化类型
   required: PropTypes.bool, // 可编辑列是否必填
   editRender: PropTypes.func, // 可编辑单元格，参数: row, column; 返回值类型: object

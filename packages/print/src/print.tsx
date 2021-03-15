@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-02-09 09:03:59
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-02 15:44:58
+ * @Last Modified time: 2021-03-15 14:27:09
  */
 import { defineComponent, PropType, Component } from 'vue';
 import PropTypes from '../../_utils/vue-types';
@@ -21,6 +21,7 @@ export default defineComponent({
   name: 'QmPrint',
   componentName: 'QmPrint',
   inheritAttrs: false,
+  emits: ['open', 'close'],
   props: {
     dataSource: PropTypes.oneOfType([PropTypes.array, PropTypes.object]).isRequired,
     templateRender: {
