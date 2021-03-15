@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-02-09 09:03:59
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-13 16:57:54
+ * @Last Modified time: 2021-03-15 11:21:46
  */
 import { ComponentPublicInstance, defineComponent } from 'vue';
 import scrollIntoView from 'scroll-into-view-if-needed';
@@ -16,7 +16,7 @@ import { warn } from '../../_utils/error';
 import { noop, difference, secretFormat } from './utils';
 import { FormColsMixin } from './form-cols-mixin';
 import { PublicMethodsMixin } from './public-methods-mixin';
-import { IFormType, IFormData, IFormItem, IFormDesc, props, ARRAY_TYPE, FORMAT_TYPE, UNFIX_TYPE } from './types';
+import { IFormType, IFormData, IFormItem, IFormDesc, ISecretType, props, ARRAY_TYPE, FORMAT_TYPE, UNFIX_TYPE } from './types';
 
 import FieldsFilter from './fields-filter';
 import FormInput from './form-input';
@@ -238,7 +238,7 @@ export default defineComponent({
       if (type === 'INPUT' && (readonly || item.disabled)) {
         const { secretType } = options;
         if (secretType) {
-          val = secretFormat(val, secretType);
+          val = secretFormat(val, secretType as ISecretType);
         }
       }
       if (type === 'CHECKBOX') {

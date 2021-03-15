@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-02-24 10:24:37
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-03 18:51:02
+ * @Last Modified time: 2021-03-15 11:19:09
  */
 import { transform, isEqual, isObject } from 'lodash-es';
 import dayjs from 'dayjs';
@@ -75,6 +75,9 @@ export const secretFormat = (value = '', type: string): string => {
   }
   if (type === 'IDnumber') {
     value = value.replace(/^(\d{3}).+(\w{4})$/, '$1***********$2');
+  }
+  if (type === 'bankNumber') {
+    value = value.replace(/^(\d{4}).+(\w{3})$/, '$1************$2');
   }
   return value;
 };

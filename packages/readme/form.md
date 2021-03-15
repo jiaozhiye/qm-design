@@ -98,5 +98,28 @@
 
 ### options
 
-| 参数 | 说明 | 类型 | 默认值 |
-| ---- | ---- | ---- | ------ |
+| 参数       | 说明                                                        | 类型             | 默认值 |
+| ---------- | ----------------------------------------------------------- | ---------------- | ------ |
+| itemList   | 下拉框的列表数据，[配置项](#dict)                           | array            | -      |
+| secretType | 值保密类型，在只读或禁用的状态下有效，[配置项](#secretType) | string           | -      |
+| trueValue  | 选中的值                                                    | string \| number | -      |
+| falseValue | 非选中的值                                                  | string \| number | -      |
+
+### secretType
+
+| 参数     | 说明           |
+| -------- | -------------- |
+| finance  | 转金融数字格式 |
+| name     | 姓名           |
+| phone    | 手机号         |
+| IDnumber | 身份证号       |
+| bankCard | 银行卡号       |
+
+### dict
+
+| 参数     | 说明                 | 类型    |
+| -------- | -------------------- | ------- |
+| text     | 数字字典的文本，必要 | string  |
+| value    | 数据字典的值，必要   | string  |
+| disabled | 是否禁用             | boolean |
+| children | 树结构               | array   |

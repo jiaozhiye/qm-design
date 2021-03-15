@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-02-24 13:02:36
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-15 10:19:30
+ * @Last Modified time: 2021-03-15 11:17:16
  */
 import { CSSProperties, PropType } from 'vue';
 import PropTypes from '../../_utils/vue-types';
@@ -14,6 +14,8 @@ import { noop } from './utils';
 import { t } from '../../locale';
 
 export type IFormType = 'default' | 'search' | 'onlyShow';
+
+export type ISecretType = 'finance' | 'name' | 'phone' | 'IDnumber' | 'bankNumber';
 
 export type IFormItemType =
   | 'BREAK_SPACE'
@@ -80,7 +82,7 @@ export type IFormItem = {
   id?: string;
   options?: {
     itemList?: Record<string, string | number>[];
-    secretType?: string;
+    secretType?: ISecretType;
     trueValue?: number | string;
     falseValue?: number | string;
     dateType?: string;
@@ -255,7 +257,7 @@ export const props = {
       id: PropTypes.string,
       options: PropTypes.shape({
         itemList: PropTypes.array,
-        secretType: PropTypes.string,
+        secretType: PropTypes.oneOf(['finance', 'name', 'phone', 'IDnumber', 'bankNumber']),
         trueValue: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
         falseValue: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
         dateType: PropTypes.string,
