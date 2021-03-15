@@ -2,12 +2,13 @@
  * @Author: 焦质晔
  * @Date: 2020-08-02 15:37:32
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-02 15:27:09
+ * @Last Modified time: 2021-03-15 15:30:09
  */
 import { ElMessage } from 'element-plus';
 import { getLodop } from './LodopFuncs';
 import dayjs from 'dayjs';
 import config from './config';
+import { useDispatch } from '../../hooks/useEmitter';
 import { t } from '../../locale';
 
 export default {
@@ -139,7 +140,7 @@ export default {
 
       // 监听事件
       LODOP.On_Return = (TaskID, Value) => {
-        this.dispatch('ClientPrint', 'print', Value);
+        useDispatch.apply(this._, ['QmPrint', 'print', Value]);
         if (Value) {
           closeOnPrinted && this.doClose();
         } else {
@@ -186,7 +187,7 @@ export default {
       LODOP.PRINT_INIT(uniqueKey ?? Math.random().toString().slice(2));
 
       LODOP.On_Return = (TaskID, Value) => {
-        this.dispatch('ClientPrint', 'export', Value);
+        useDispatch.apply(this._, ['QmPrint', 'export', Value]);
         if (Value) {
           closeOnPrinted && this.doClose();
         } else {
@@ -194,13 +195,7 @@ export default {
         }
       };
 
-      LODOP.ADD_PRINT_TABLE(
-        0,
-        0,
-        'RightMargin: 0',
-        'BottomMargin: 0',
-        this.createStyle() + __html__
-      );
+      LODOP.ADD_PRINT_TABLE(0, 0, 'RightMargin: 0', 'BottomMargin: 0', this.createStyle() + __html__);
 
       // 横向打印   1-纵向, 2-横向
       LODOP.SET_SAVE_MODE('Orientation', setting.direction === 'vertical' ? 1 : 2);

@@ -517,7 +517,7 @@ export default defineComponent({
     async printHandle3() {
       await sleep(1000);
       let res = [];
-      for (let i = 0; i < 100; i++) {
+      for (let i = 0; i < 2; i++) {
         res[i] = i;
       }
       this.templateRender = PrintTemplate;
@@ -558,17 +558,17 @@ export default defineComponent({
   render(): VNode {
     return (
       <>
-        <qm-form
-          uniqueKey="jzy_filter"
-          formType="search"
-          list={this.formList}
-          initialValue={{ b: '1', a: ['9', '5'], vvv: 9 }}
-          onFinish={this.finish}
-          fieldsChange={(list) => {
-            this.formList = list;
+        <qm-print
+          uniqueKey="cprint_jzy"
+          dataSource={this.printDataList}
+          templateRender={this.templateRender}
+          click={this.printHandle3}
+          onExport={(a) => {
+            console.log(111, a);
           }}
-        ></qm-form>
-
+        >
+          客户端打印
+        </qm-print>
         {/* <div style="margin: 10px;">
           <qm-table
             ref="table"
