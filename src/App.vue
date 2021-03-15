@@ -558,17 +558,16 @@ export default defineComponent({
   render(): VNode {
     return (
       <>
-        <qm-print
-          uniqueKey="cprint_jzy"
-          dataSource={this.printDataList}
-          templateRender={this.templateRender}
-          click={this.printHandle3}
-          onExport={(a) => {
-            console.log(111, a);
+        <qm-form
+          uniqueKey="jzy_filter"
+          formType="search"
+          list={this.formList}
+          initialValue={{}}
+          onFinish={this.finish}
+          fieldsChange={(list) => {
+            this.formList = list;
           }}
-        >
-          客户端打印
-        </qm-print>
+        ></qm-form>
         {/* <div style="margin: 10px;">
           <qm-table
             ref="table"
