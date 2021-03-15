@@ -48,10 +48,11 @@ export default defineComponent({
     create() {
       this.instance = new CountUp(this.$refs.countup, this.endValue, this.options) || { error: true };
       if (this.instance.error) return;
-      if (this.delay < 0) {
-        return this.$emit('ready', this.instance, CountUp);
-      }
-      setTimeout(() => this.instance.start(() => this.$emit('ready', this.instance, CountUp)), this.delay);
+      setTimeout(() => {
+        this.instance.start(() => {
+          this.$emit('ready', this.instance, CountUp);
+        });
+      }, this.delay);
     },
     printValue(value) {
       if (this.instance && isFunction(this.instance.printValue)) {

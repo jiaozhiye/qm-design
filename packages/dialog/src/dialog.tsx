@@ -28,7 +28,6 @@ export default defineComponent({
   props: {
     visible: PropTypes.bool.def(false),
     title: PropTypes.string,
-    position: PropTypes.oneOf(['right', 'left', 'top', 'bottom']).def('right'),
     size: {
       type: String as PropType<ComponentSize>,
       validator: isValidComponentSize,

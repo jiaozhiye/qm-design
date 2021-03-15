@@ -55,7 +55,7 @@ export default defineComponent({
     isVisible(): boolean {
       // 没有权限控制，默认该按钮显示状态
       if (!this.authList) return true;
-      return this.authList.includes(this.authMark.trim());
+      return this.authList.includes(this.authMark);
     },
   },
   methods: {
@@ -85,11 +85,7 @@ export default defineComponent({
     };
 
     if (!confirm) {
-      return (
-        <el-button {...Object.assign({}, wrapProps, $attrs, ajaxClick)}>
-          {this.$slots.default?.()}
-        </el-button>
-      );
+      return <el-button {...Object.assign({}, wrapProps, $attrs, ajaxClick)}>{this.$slots.default?.()}</el-button>;
     }
 
     return (
