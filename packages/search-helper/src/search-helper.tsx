@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-02-09 09:03:59
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-14 00:54:32
+ * @Last Modified time: 2021-03-15 15:32:43
  */
 import { defineComponent, PropType } from 'vue';
 import { merge, get, isFunction } from 'lodash-es';
@@ -42,7 +42,6 @@ export default defineComponent({
   inheritAttrs: false,
   emits: ['close'],
   props: {
-    name: PropTypes.string, // tds
     size: {
       type: String as PropType<ComponentSize>,
       validator: isValidComponentSize,
@@ -60,6 +59,7 @@ export default defineComponent({
     beforeFetch: PropTypes.func,
     dataIndex: PropTypes.string,
     callback: PropTypes.func,
+    name: PropTypes.string, // tds
     fieldsDefine: PropTypes.object.def({}), // tds
     getServerConfig: PropTypes.func, // tds
   },

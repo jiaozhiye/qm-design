@@ -210,7 +210,7 @@
 | filterAliasMap     | 输入框与筛选器条件的映射，返回 筛选器 fieldName 列表                      | function(): string[]   | -      |
 | fieldAliasMap      | 输入框与回传数据字段的映射，返回值 [配置项](#aliasMap)                    | function(): object     | -      |
 | name               | 搜索帮助名称，for TDS                                                     | string                 | -      |
-| fieldsDefine       | 搜索帮助字段定义，for TDS                                                 | object                 | -      |
+| fieldsDefine       | 表单字段的定义，for TDS                                                   | object                 | -      |
 | getServerConfig    | 获取服务端搜索帮助定义的接口，for TDS                                     | async function         | -      |
 | beforeOpen         | 打开搜索帮助前触发，若返回 false 或者返回 Promise 且被 reject，则阻止打开 | function(formData)     | -      |
 | closed             | 关闭搜索帮助后触发                                                        | function(tableRowData) | -      |
