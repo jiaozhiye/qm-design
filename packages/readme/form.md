@@ -20,6 +20,31 @@
 | isSubmitBtn    | 是否显示 保存/重置 按钮 - formType[default]           | boolean                       | false   |
 | fieldsChange   | 表单配置项变化回调，必要参数 - formType[search]       | function(fields)              | -       |
 
+### 事件
+
+| 事件名称     | 说明                 | 回调参数                       |
+| ------------ | -------------------- | ------------------------------ |
+| finish       | 表单提交后触发       | function(formData: object)     |
+| finishFailed | 表单提交失败后触发   | function(error)                |
+| change       | 表单提交后触发       | function(formData: object)     |
+| reset        | 重置表单时触发       | -                              |
+| valuesChange | 字段值变化时触发     | function(changedValue: object) |
+| collapse     | 展开/收起 切换时触发 | function(collapse: boolean)    |
+
+### 方法
+
+| 方法名称         | 说明                         | 参数                                | 返回值                               |
+| ---------------- | ---------------------------- | ----------------------------------- | ------------------------------------ |
+| SUBMIT_FORM      | 表单提交                     | -                                   | -                                    |
+| RESET_FORM       | 重置表单                     | -                                   | -                                    |
+| CLEAR_FORM       | 清空表单                     | -                                   | -                                    |
+| SET_FIELDS_VALUE | 设置表单字段的值             | function(values:object)             | -                                    |
+| SET_FORM_VALUES  | 可以设置除了表单字段的额外值 | function(values:object)             | -                                    |
+| CREATE_FOCUS     | 设置表单元素获得焦点方法     | function(fieldName:string)          | -                                    |
+| GET_FORM_DATA    | 获取表单数据，异步方法       | -                                   | 返回错误前置的数组 [error, formData] |
+| GET_FIELD_VALUE  | 获取表单项的值               | function(fieldName:string)          | 返回表单字段值                       |
+| VALIDATE_FIELDS  | 对表单字段进行校验           | function(fieldNames[] \| fieldName) | -                                    |
+
 ### formType
 
 | 表单类型             | 说明                   |
@@ -98,46 +123,46 @@
 
 ### options
 
-| 参数          | 说明                                                        | 类型             | 默认值 |
-| ------------- | ----------------------------------------------------------- | ---------------- | ------ |
-| itemList      | 下拉框的列表数据，[配置项](#dict)                           | array            | -      |
-| secretType    | 值保密类型，在只读或禁用的状态下有效，[配置项](#secretType) | string           | -      |
-| trueValue     | 选中的值                                                    | string \| number | '1'    |
-| falseValue    | 非选中的值                                                  | string \| number | '0'    |
-| dateType      | 日期控件的类型，[配置项](#dateType)                         | string           | -      |
-| minDateTime   | 最小日期，小于该时间的日期段将被禁用                        | string           | -      |
-| maxDateTime   | 最大日期，大于该时间的日期段将被禁用                        | string           | -      |
-| defaultTime   | 默认的时间                                                  | string           | -      |
-| shortCuts     | 是否显示日期组件的快捷选项                                  | boolean          | true   |
-| unlinkPanels  | 取消两个日期面板之间的联动                                  | boolean          | true   |
-| startDisabled | 是否禁用开始日期                                            | boolean          | -      |
-| endDisabled   | 是否禁用结束日期                                            | boolean          | -      |
-| columns       | 下拉联想搜索帮助的，下拉列表的配置，[配置项](#columns)      | array            | -      |
-| fieldAliasMap | -                                                           | function         | -      |
-| onlySelect    | 是否只能选择，针对下拉联想搜索帮助的有效                    | boolean          | true   |
-| limit         | 数量限制                                                    | number           | -      |
-| min           | 最小值                                                      | number           | 0      |
-| max           | 最大值                                                      | number           | -      |
-| step          | 计数器步长                                                  | number           | 1      |
-| precision     | 浮点型数值的精度                                            | number           | 0      |
-| controls      | 是否显示控制按钮                                            | boolean          | false  |
-| minlength     | 最小长度                                                    | number           | 0      |
-| maxlength     | 最大长度                                                    | number           | -      |
-| rows          | 文本域输入框行数                                            | number           | 2      |
-| maxrows       | 文本域最大行数                                              | number           | -      |
-| showLimit     | 是否显示输入字数统计                                        | boolean          | false  |
-| password      | 是否时密码格式                                              | boolean          | false  |
-| noInput       | 输入框是否不允许输入                                        | boolean          | false  |
-| toUpper       | 输入框文本自动转大写                                        | boolean          | false  |
-| filterable    | 是否开启自动检索功能                                        | boolean          | true   |
-| collapseTags  | 是否折叠 tag 标签                                           | boolean          | false  |
-| openPyt       | 是否开启拼音头检索                                          | boolean          | true   |
-| onInput       | 输入框 input 事件                                           | function(value)  | -      |
-| onClick       | 单击事件                                                    | function(value)  | -      |
-| onDblClick    | 双击事件                                                    | function(value)  | -      |
-| onEnter       | 回车事件                                                    | function(value)  | -      |
-| onFocus       | 输入框获得焦点事件                                          | function(value)  | -      |
-| onBlur        | 输入框失去焦点事件                                          | function(value)  | -      |
+| 参数          | 说明                                                        | 类型               | 默认值 |
+| ------------- | ----------------------------------------------------------- | ------------------ | ------ |
+| itemList      | 下拉框的列表数据，[配置项](#dict)                           | array              | -      |
+| secretType    | 值保密类型，在只读或禁用的状态下有效，[配置项](#secretType) | string             | -      |
+| trueValue     | 选中的值                                                    | string \| number   | '1'    |
+| falseValue    | 非选中的值                                                  | string \| number   | '0'    |
+| dateType      | 日期控件的类型，[配置项](#dateType)                         | string             | -      |
+| minDateTime   | 最小日期，小于该时间的日期段将被禁用                        | string             | -      |
+| maxDateTime   | 最大日期，大于该时间的日期段将被禁用                        | string             | -      |
+| defaultTime   | 默认的时间                                                  | string             | -      |
+| shortCuts     | 是否显示日期组件的快捷选项                                  | boolean            | true   |
+| unlinkPanels  | 取消两个日期面板之间的联动                                  | boolean            | true   |
+| startDisabled | 是否禁用开始日期                                            | boolean            | -      |
+| endDisabled   | 是否禁用结束日期                                            | boolean            | -      |
+| columns       | 下拉联想搜索帮助的，下拉列表的配置，[配置项](#columns)      | array              | -      |
+| fieldAliasMap | 表单字段与回传数据字段的映射，返回值 [配置项](#aliasMap)    | function(): object | -      |
+| onlySelect    | 是否只能选择，针对下拉联想搜索帮助的有效                    | boolean            | true   |
+| limit         | 数量限制                                                    | number             | -      |
+| min           | 最小值                                                      | number             | 0      |
+| max           | 最大值                                                      | number             | -      |
+| step          | 计数器步长                                                  | number             | 1      |
+| precision     | 浮点型数值的精度                                            | number             | 0      |
+| controls      | 是否显示控制按钮                                            | boolean            | false  |
+| minlength     | 最小长度                                                    | number             | 0      |
+| maxlength     | 最大长度                                                    | number             | -      |
+| rows          | 文本域输入框行数                                            | number             | 2      |
+| maxrows       | 文本域最大行数                                              | number             | -      |
+| showLimit     | 是否显示输入字数统计                                        | boolean            | false  |
+| password      | 是否时密码格式                                              | boolean            | false  |
+| noInput       | 输入框是否不允许输入                                        | boolean            | false  |
+| toUpper       | 输入框文本自动转大写                                        | boolean            | false  |
+| filterable    | 是否开启自动检索功能                                        | boolean            | true   |
+| collapseTags  | 是否折叠 tag 标签                                           | boolean            | false  |
+| openPyt       | 是否开启拼音头检索                                          | boolean            | true   |
+| onInput       | 输入框 input 事件                                           | function(value)    | -      |
+| onClick       | 单击事件                                                    | function()         | -      |
+| onDblClick    | 双击事件                                                    | function()         | -      |
+| onEnter       | 回车事件                                                    | function(value)    | -      |
+| onFocus       | 输入框获得焦点事件                                          | function()         | -      |
+| onBlur        | 输入框失去焦点事件                                          | function()         | -      |
 
 ### dateType
 
@@ -155,6 +180,15 @@
 | year           | 年份类型             | string | YYYY                |
 | yearrange      | 年份区间类型         | string | YYYY                |
 
+### dict
+
+| 参数     | 说明                 | 类型    |
+| -------- | -------------------- | ------- |
+| text     | 数字字典的文本，必要 | string  |
+| value    | 数据字典的值，必要   | string  |
+| disabled | 是否禁用             | boolean |
+| children | 树结构               | array   |
+
 ### secretType
 
 | 参数     | 说明           |
@@ -165,11 +199,99 @@
 | IDnumber | 身份证号       |
 | bankCard | 银行卡号       |
 
-### dict
+### searchHelper
 
-| 参数     | 说明                 | 类型    |
-| -------- | -------------------- | ------- |
-| text     | 数字字典的文本，必要 | string  |
-| value    | 数据字典的值，必要   | string  |
-| disabled | 是否禁用             | boolean |
-| children | 树结构               | array   |
+| 参数               | 说明                                                                      | 类型                   | 默认值 |
+| ------------------ | ------------------------------------------------------------------------- | ---------------------- | ------ |
+| filters            | 顶部筛选器配置，必要参数，[配置项](#formItem)                             | array                  | -      |
+| initialValue       | 表单初始值                                                                | object                 | -      |
+| showFilterCollapse | 是否显示筛选器 展开/收起 按钮                                             | boolean                | true   |
+| table              | 表格组件配置，支持 fetch, columns, rowKey, webPagination                  | object                 | -      |
+| filterAliasMap     | 输入框与筛选器条件的映射，返回 筛选器 fieldName 列表                      | function(): string[]   | -      |
+| fieldAliasMap      | 输入框与回传数据字段的映射，返回值 [配置项](#aliasMap)                    | function(): object     | -      |
+| name               | 搜索帮助名称，for TDS                                                     | string                 | -      |
+| fieldsDefine       | 搜索帮助字段定义，for TDS                                                 | object                 | -      |
+| getServerConfig    | 获取服务端搜索帮助定义的接口，for TDS                                     | async function         | -      |
+| beforeOpen         | 打开搜索帮助前触发，若返回 false 或者返回 Promise 且被 reject，则阻止打开 | function(formData)     | -      |
+| closed             | 关闭搜索帮助后触发                                                        | function(tableRowData) | -      |
+
+### aliasMap
+
+注意：
+
+1. key 为 extra 时，对应的数据会显示成该表单元素的描述信息
+2. key 为 [fieldName]\_\_desc 时，对应的数据会显示成对应表单元素的描述信息，支持配置多个
+
+| 参数  | 说明                         | 类型   | 默认值 |
+| ----- | ---------------------------- | ------ | ------ |
+| key   | 表单字段名                   | string | -      |
+| value | 搜索帮助接口数据对应的字段名 | string | -      |
+
+### labelOptions
+
+| 参数 | 说明           | 类型               | 默认值 |
+| ---- | -------------- | ------------------ | ------ |
+| type | label 表单类型 | SELECT \| CHECKBOX | -      |
+
+注意：除了 type 的其他配置，参考 [配置项](#formItem)
+
+### descOptions
+
+注意：描述信息会占据原有表单元素的部分空间，因此需要通过 list 配置项中的 style 来控制表单元素的宽度
+
+| 参数      | 说明                            | 类型              | 默认值 |
+| --------- | ------------------------------- | ----------------- | ------ |
+| isTooltip | 是否以 Tooltip 形式显示描述信息 | boolean           | false  |
+| style     | 描述文本容器的 css 样式         | object            | -      |
+| content   | 描述信息的内容                  | string \| JSXNode | -      |
+
+### request
+
+| 参数     | 说明                                | 类型           | 默认值 |
+| -------- | ----------------------------------- | -------------- | ------ |
+| fetchApi | 请求的接口方法，必要参数            | async function | -      |
+| params   | 接口的参数                          | object         | -      |
+| datakey  | 数据的 key，支持 `a.b.c` 的路径写法 | string         | -      |
+| valueKey | 数据值的字段名                      | string         | value  |
+| textKey  | 文本的字段名                        | string         | text   |
+
+### upload
+
+`只对 UPLOAD_IMG|UPLOAD_FILE 有效`
+
+| 参数         | 说明                                                         | 类型     | 默认值                               |
+| ------------ | ------------------------------------------------------------ | -------- | ------------------------------------ |
+| actionUrl    | 上传的地址，必要参数                                         | string   | -                                    |
+| headers      | 接口请求的 header 头                                         | object   | -                                    |
+| params       | 上传接口的参数                                               | object   | -                                    |
+| fileTypes    | 限制上传附件的类型                                           | string[] | ['jpg', 'png', 'pdf', 'xls', 'xlsx'] |
+| fileSize     | 限制上传附件的大小，如果不指定此参数，图片类型不开启裁剪功能 | number   | -                                    |
+| limit        | 限制上传附件的数量                                           | number   | 1                                    |
+| fixedSize    | 裁剪框的宽高比                                               | array    | [1.5, 1]                             |
+| isCalcHeight | 是否根据裁剪图片宽高比自动计显示框高度                       | boolean  | true                                 |
+| titles       | 上传图片对应的标题，个数与 limit 一致                        | string[] | -                                    |
+
+`文件上传前后端数据交互的格式`
+
+| 参数 | 说明     | 类型   | 默认值 |
+| ---- | -------- | ------ | ------ |
+| name | 文件名称 | string | -      |
+| url  | 文件地址 | string | -      |
+
+### collapse
+
+`只对 BREAK_SPACE 有效`
+
+| 参数          | 说明                                                             | 类型                     | 默认值 |
+| ------------- | ---------------------------------------------------------------- | ------------------------ | ------ |
+| defaultExpand | 默认的展开状态                                                   | boolean                  | false  |
+| showLimit     | 默认显示表单项的数量                                             | number                   | -      |
+| remarkItems   | 指定被隐藏的表单作为摘要显示到分隔符区域，[配置项](#remarkItems) | array                    | -      |
+| onCollapse    | 展开/收起 状态改变时的回调事件                                   | function(collapse: bool) | -      |
+
+### remarkItems
+
+| 参数      | 说明                        | 类型   | 默认值 |
+| --------- | --------------------------- | ------ | ------ |
+| fieldName | 表单项的字段名(fieldName)   | string | -      |
+| isLabel   | 是否显示表单项的 label 名称 | string | -      |
