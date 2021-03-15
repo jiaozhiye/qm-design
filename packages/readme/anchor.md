@@ -8,12 +8,25 @@
 | size       | 尺寸                                   | medium \| small \| mini | -      |
 | labelList  | label 的配置列表，[配置项](#labelList) | array                   | -      |
 
+### AnchorItem
+
+| 参数        | 说明                     | 类型    | 默认值 |
+| ----------- | ------------------------ | ------- | ------ |
+| label       | lable 标签名称，必要参数 | string  | -      |
+| showDivider | 是否添加分隔符           | boolean | false  |
+
 ### labelList
 
 | 参数  | 说明                          | 类型   | 默认值 |
 | ----- | ----------------------------- | ------ | ------ |
 | id    | 锚点元素的 id，用于锚点的定位 | string | -      |
 | label | label 标签名称                | string | -      |
+
+### AnchorItem Slot
+
+| 名称    | 说明       |
+| ------- | ---------- |
+| default | 锚点内容区 |
 
 ### 说明
 
