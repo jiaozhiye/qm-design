@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-02-23 21:56:33
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-16 19:30:27
+ * @Last Modified time: 2021-03-16 19:40:05
  */
 import { defineComponent } from 'vue';
 import { get } from 'lodash-es';
@@ -137,7 +137,7 @@ export default defineComponent({
                 <span
                   key={x.value}
                   class={{ [`region-item__item`]: true, actived: this.values.includes(x.value) }}
-                  onClick={() => {
+                  onClick={(): void => {
                     this.values[index] = x.value;
                     this.values = this.values.slice(0, index + 1);
                     if (index >= this.leaves - 1) {
@@ -177,7 +177,7 @@ export default defineComponent({
 
     let textValue: string = this.prevText;
     if (!this.visible) {
-      let temp = this.createTextValue(form[fieldName]);
+      let temp: string = this.createTextValue(form[fieldName]);
       if (temp === '' || temp.split('/').every((x) => x !== '')) {
         textValue = temp;
         this.prevText = textValue;
