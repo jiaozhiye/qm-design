@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-02-23 21:56:33
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-16 18:34:23
+ * @Last Modified time: 2021-03-16 19:30:27
  */
 import { defineComponent } from 'vue';
 import { get } from 'lodash-es';
@@ -45,6 +45,9 @@ export default defineComponent({
     fetchParams(): Nullable<AnyObject<unknown>> {
       return this.isFetch ? this.option.request.params ?? {} : null;
     },
+    leaves(): number {
+      return !this.isFetchStreet ? 3 : 4;
+    },
     formItemValue(): string {
       const { fieldName } = this.option;
       return this.$$form.form[fieldName];
@@ -58,7 +61,8 @@ export default defineComponent({
       this.tabs[0] = next.map((x) => ({ text: x.text, value: x.value })) as IDict[];
       this.isFetch && this.createTabs();
     },
-    formItemValue(): void {
+    formItemValue(next: string): void {
+      if (this.values.join(',') === next) return;
       this.initial();
     },
   },
@@ -96,14 +100,14 @@ export default defineComponent({
       if (!this.itemList.length) return;
       this.tabs = this.tabs.slice(0, 1);
       for (let i = 0; i < this.values.length; i++) {
-        const items: Nullable<IDictDeep[]> = deepFind<IDictDeep>(this.itemList, this.values[i]).children;
-        if (!items) {
+        const target: Nullable<IDictDeep> = deepFind<IDictDeep>(this.itemList, this.values[i]);
+        if (target && isEmpty(target.children)) {
           if (this.isFetchStreet) {
             this.getStreetList(this.values[i]);
           }
           break;
         }
-        this.tabs[i + 1] = items.map((x) => ({ text: x.text, value: x.value })) as IDict[];
+        this.tabs[i + 1] = target.children.map((x) => ({ text: x.text, value: x.value })) as IDict[];
       }
     },
     async getItemList(): Promise<void> {
@@ -119,7 +123,7 @@ export default defineComponent({
       const res = await fetchStreetApi({ code });
       if (res.code === 200) {
         const dataList = !datakey ? res.data : get(res.data, datakey, []);
-        this.tabs.push(dataList.map((x) => ({ text: x[textKey], value: x[valueKey], isLast: true })) as IDict[]);
+        this.tabs.push(dataList.map((x) => ({ text: x[textKey], value: x[valueKey] })) as IDict[]);
       }
     },
     renderTabPane(): Array<JSXNode> {
@@ -136,7 +140,7 @@ export default defineComponent({
                   onClick={() => {
                     this.values[index] = x.value;
                     this.values = this.values.slice(0, index + 1);
-                    if (x.isLast || (!this.isFetchStreet && isEmpty(deepFind<IDictDeep>(this.itemList, x.value)?.children))) {
+                    if (index >= this.leaves - 1) {
                       return this.setFormItemValue();
                     }
                     this.createTabs();
