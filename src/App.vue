@@ -26,6 +26,20 @@ export default defineComponent({
           type: 'REGION_SELECT',
           label: '条件7',
           fieldName: 'f',
+          // options: {
+          //   itemList: [
+          //     {
+          //       text: '浙江省',
+          //       value: '330000',
+          //       children: [{ text: '杭州市', value: '330100', children: [{ text: '清河区', value: '330201' }] }],
+          //     },
+          //     {
+          //       text: '江苏省',
+          //       value: '320000',
+          //       children: [{ text: '苏州市', value: '320101', children: [{ text: '沧浪区', value: '320502' }] }],
+          //     },
+          //   ],
+          // },
           request: {
             fetchApi: getRegionData,
             fetchStreetApi: getSelectData,
@@ -517,7 +531,7 @@ export default defineComponent({
   },
   mounted() {
     setTimeout(() => {
-      // this.$refs.qweqwe.SET_FIELDS_VALUE({ a: ['9', '10'], f: '320000,320101,320502,3' });
+      this.$refs.qweqwe.SET_FIELDS_VALUE({ a: ['9', '10'], f: '320000,320101,320502,3' });
     }, 3000);
   },
   methods: {
@@ -581,7 +595,7 @@ export default defineComponent({
           uniqueKey="jzy_filter"
           formType="search"
           list={this.formList}
-          initialValue={{ f: '320000,320101,320502,3' }}
+          initialValue={{}}
           onFinish={this.finish}
           fieldsChange={(list) => {
             this.formList = list;

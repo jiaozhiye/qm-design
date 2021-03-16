@@ -60,6 +60,7 @@
 | MULTIPLE_CASCADER    | 级联选择器多选         |
 | SELECT               | 下拉选择器             |
 | MULTIPLE_SELECT      | 下拉选择器，多选       |
+| REGION_SELECT        | 地区选择，支持街道     |
 | SWITCH               | 开关类型               |
 | RADIO                | 单选按钮               |
 | CHECKBOX             | 复选框                 |
@@ -247,13 +248,14 @@
 
 ### request
 
-| 参数     | 说明                                | 类型           | 默认值 |
-| -------- | ----------------------------------- | -------------- | ------ |
-| fetchApi | 请求的接口方法，必要参数            | async function | -      |
-| params   | 接口的参数                          | object         | -      |
-| datakey  | 数据的 key，支持 `a.b.c` 的路径写法 | string         | -      |
-| valueKey | 数据值的字段名                      | string         | value  |
-| textKey  | 文本的字段名                        | string         | text   |
+| 参数           | 说明                                | 类型           | 默认值 |
+| -------------- | ----------------------------------- | -------------- | ------ |
+| fetchApi       | 请求的接口方法，必要参数            | async function | -      |
+| fetchStreetApi | 请求街道数据的接口                  | async function | -      |
+| params         | 接口的参数                          | object         | -      |
+| datakey        | 数据的 key，支持 `a.b.c` 的路径写法 | string         | -      |
+| valueKey       | 数据值的字段名                      | string         | value  |
+| textKey        | 文本的字段名                        | string         | text   |
 
 ### upload
 

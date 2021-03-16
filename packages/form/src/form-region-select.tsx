@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-02-23 21:56:33
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-16 14:25:28
+ * @Last Modified time: 2021-03-16 14:48:01
  */
 import { defineComponent } from 'vue';
 import { get } from 'lodash-es';
@@ -56,6 +56,7 @@ export default defineComponent({
     },
     itemList(next: Array<IDictDeep>): void {
       this.tabs[0] = next.map((x) => ({ text: x.text, value: x.value })) as IDict[];
+      this.isFetch && this.createTabs();
     },
     formItemValue(): void {
       this.initial();
@@ -91,7 +92,8 @@ export default defineComponent({
       const values: string[] = val ? val.split(',') : [];
       return values.map((x, i) => this.tabs[i]?.find((k) => k.value === x)?.text).join('/');
     },
-    createTabs() {
+    createTabs(): void {
+      if (!this.itemList.length) return;
       this.tabs = this.tabs.slice(0, 1);
       for (let i = 0; i < this.values.length; i++) {
         const items: Nullable<IDictDeep[]> = deepFind<IDictDeep>(this.itemList, this.values[i]).children;
@@ -120,9 +122,9 @@ export default defineComponent({
         this.tabs.push(dataList.map((x) => ({ text: x[textKey], value: x[valueKey], isLast: true })) as IDict[]);
       }
     },
-    renderTabPane(): JSXNode {
+    renderTabPane(): Array<JSXNode> {
       return this.tabs.map((arr, index) => {
-        const label = arr.find((x) => x.value === this.values[index])?.text || t('qm.form.selectPlaceholder').replace('...', '');
+        const label: string = arr.find((x) => x.value === this.values[index])?.text || t('qm.form.selectPlaceholder').replace('...', '');
         return (
           // @ts-ignore
           <TabPane key={index} label={label} name={index.toString()}>
