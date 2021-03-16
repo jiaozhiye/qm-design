@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-02-23 21:56:33
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-16 14:48:01
+ * @Last Modified time: 2021-03-16 18:34:23
  */
 import { defineComponent } from 'vue';
 import { get } from 'lodash-es';
@@ -173,12 +173,14 @@ export default defineComponent({
 
     let textValue: string = this.prevText;
     if (!this.visible) {
-      textValue = this.createTextValue(form[fieldName]);
-      this.prevText = textValue;
+      let temp = this.createTextValue(form[fieldName]);
+      if (temp === '' || temp.split('/').every((x) => x !== '')) {
+        textValue = temp;
+        this.prevText = textValue;
+      }
     }
 
     this.$$form.setViewValue(fieldName, textValue);
-
     return (
       <el-form-item
         key={fieldName}
