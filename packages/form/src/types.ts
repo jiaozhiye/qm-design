@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-02-24 13:02:36
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-16 10:19:45
+ * @Last Modified time: 2021-03-16 16:51:42
  */
 import { CSSProperties, PropType } from 'vue';
 import PropTypes from '../../_utils/vue-types';
@@ -145,6 +145,7 @@ export type IFormItem = {
       rowKey?: string | AnyFunction<string | number>;
       webPagination?: boolean;
     };
+    closeServerMatch?: boolean;
     filterAliasMap?: AnyFunction<string[]>;
     fieldAliasMap?: AnyFunction<Record<string, string>>;
     getServerConfig?: AnyFunction<Promise<unknown>>;
@@ -333,6 +334,7 @@ export const props = {
           rowKey: PropTypes.oneOfType([PropTypes.string, PropTypes.func]),
           webPagination: PropTypes.bool,
         }),
+        closeServerMatch: PropTypes.bool,
         filterAliasMap: PropTypes.func,
         fieldAliasMap: PropTypes.func,
         getServerConfig: PropTypes.func, // tds

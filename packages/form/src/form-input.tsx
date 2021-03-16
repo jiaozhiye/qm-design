@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-02-23 21:56:33
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-15 09:14:28
+ * @Last Modified time: 2021-03-16 16:48:16
  */
 import { defineComponent } from 'vue';
 import { merge, get, isObject, isFunction } from 'lodash-es';
@@ -160,6 +160,7 @@ export default defineComponent({
         if (aliasKeys.includes(fieldName)) {
           searchHelperChangeHandle(form[fieldName]);
         }
+        this._is_change = !1;
       }
       const { closed = noop } = searchHelper;
       closed(data);
@@ -176,8 +177,6 @@ export default defineComponent({
     // 执行打开动作
     const todoOpen = (val: string): void => {
       this.deriveValue = this.createFilters(val);
-      // 清空搜索帮助
-      clearSearchHelperValue();
       this.visible = !0;
     };
 
@@ -243,8 +242,12 @@ export default defineComponent({
           'onUpdate:visible': (val: boolean): void => {
             this.visible = val;
           },
-          onClosed: (): void => {
+          onClose: (): void => {
             this.deriveValue = {};
+            if (this._is_change) {
+              clearSearchHelperValue();
+            }
+            this._is_change = !1;
           },
         }
       : null;
@@ -264,6 +267,7 @@ export default defineComponent({
         if (noInput) return;
         form[fieldName] = !toUpper ? val : val.toUpperCase();
         onInput(val);
+        isSearchHelper && (this._is_change = !0);
       },
     };
 
