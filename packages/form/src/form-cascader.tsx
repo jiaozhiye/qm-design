@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-02-23 21:56:33
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-04 13:11:50
+ * @Last Modified time: 2021-03-16 11:19:33
  */
 import { defineComponent } from 'vue';
 import { AnyObject, JSXNode, Nullable } from '../../_utils/types';
@@ -74,7 +74,7 @@ export default defineComponent({
       const res = await fetchApi(params);
       if (res.code === 200) {
         const dataList = !datakey ? res.data : get(res.data, datakey, []);
-        this.itemList = deepMapList(dataList, valueKey, textKey);
+        this.itemList = deepMapList<IDictDeep>(dataList, valueKey, textKey);
       }
     },
   },

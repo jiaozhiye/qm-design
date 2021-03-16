@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-02-09 09:27:46
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-15 19:33:52
+ * @Last Modified time: 2021-03-16 11:15:07
  */
 @import '../../style/src/common';
 @import './fields-filter';
@@ -144,6 +144,13 @@ $prefix: '#{$qm-prefix}-form';
   box-sizing: border-box;
   .container {
     margin-top: -10px;
+    .region--item {
+      margin-right: 10px;
+      cursor: pointer;
+      &.actived {
+        color: $primary-color;
+      }
+    }
   }
 }
 

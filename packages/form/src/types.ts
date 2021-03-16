@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-02-24 13:02:36
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-15 18:10:20
+ * @Last Modified time: 2021-03-16 10:19:45
  */
 import { CSSProperties, PropType } from 'vue';
 import PropTypes from '../../_utils/vue-types';
@@ -66,7 +66,6 @@ export const ARRAY_TYPE: IFormItemType[] = [
   'MULTIPLE_TREE_SELECT',
   'MULTIPLE_CASCADER',
   'MULTIPLE_SELECT',
-  'REGION_SELECT',
   'MULTIPLE_CHECKBOX',
   'RANGE_DATE',
   'RANGE_DATE_EL',
@@ -155,7 +154,8 @@ export type IFormItem = {
     closed?: AnyFunction<void>;
   };
   request?: {
-    fetchApi: AnyFunction<any>;
+    fetchApi?: AnyFunction<any>;
+    fetchStreetApi?: AnyFunction<any>;
     params?: Record<string, any>;
     datakey?: string;
     valueKey?: string;
@@ -342,7 +342,8 @@ export const props = {
         closed: PropTypes.func,
       }),
       request: PropTypes.shape({
-        fetchApi: PropTypes.func.isRequired,
+        fetchApi: PropTypes.func,
+        fetchStreetApi: PropTypes.func,
         params: PropTypes.object,
         datakey: PropTypes.string,
         valueKey: PropTypes.string.def('value'),
