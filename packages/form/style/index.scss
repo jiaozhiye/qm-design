@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-02-09 09:27:46
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-16 11:15:07
+ * @Last Modified time: 2021-03-16 14:26:16
  */
 @import '../../style/src/common';
 @import './fields-filter';
@@ -142,13 +142,19 @@ $prefix: '#{$qm-prefix}-form';
 
 .qm-region-select__popper {
   box-sizing: border-box;
+  max-width: 400px;
   .container {
     margin-top: -10px;
-    .region--item {
-      margin-right: 10px;
-      cursor: pointer;
-      &.actived {
-        color: $primary-color;
+    .region-item {
+      display: flex;
+      flex-wrap: wrap;
+      line-height: $line-height-base;
+      &__item {
+        margin: 0 6px;
+        cursor: pointer;
+        &.actived {
+          color: $primary-color;
+        }
       }
     }
   }

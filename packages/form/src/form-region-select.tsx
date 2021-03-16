@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-02-23 21:56:33
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-16 11:17:54
+ * @Last Modified time: 2021-03-16 14:25:28
  */
 import { defineComponent } from 'vue';
 import { get } from 'lodash-es';
@@ -10,7 +10,7 @@ import { getParserWidth, isEmpty, noop } from '../../_utils/util';
 import { setStyle } from '../../_utils/dom';
 import { getPrefixCls } from '../../_utils/prefix';
 import { t } from '../../locale';
-import { JSXNode, AnyObject, Nullable, AnyFunction } from '../../_utils/types';
+import { JSXNode, AnyObject, Nullable } from '../../_utils/types';
 
 import { IDict, IDictDeep } from './types';
 import { deepFind, deepMapList } from './utils';
@@ -26,12 +26,12 @@ export default defineComponent({
   directives: { ClickOutside },
   props: ['option'],
   data() {
+    Object.assign(this, { prevText: '' });
     return {
       itemList: [], // 省市区，不包含街道
       values: [],
       tabs: [], // 二维数组
       activeName: '0',
-      textValue: '',
       visible: false,
     };
   },
@@ -45,6 +45,10 @@ export default defineComponent({
     fetchParams(): Nullable<AnyObject<unknown>> {
       return this.isFetch ? this.option.request.params ?? {} : null;
     },
+    formItemValue(): string {
+      const { fieldName } = this.option;
+      return this.$$form.form[fieldName];
+    },
   },
   watch: {
     fetchParams(): void {
@@ -52,7 +56,9 @@ export default defineComponent({
     },
     itemList(next: Array<IDictDeep>): void {
       this.tabs[0] = next.map((x) => ({ text: x.text, value: x.value })) as IDict[];
-      this.echoFormItemText();
+    },
+    formItemValue(): void {
+      this.initial();
     },
   },
   created() {
@@ -61,48 +67,42 @@ export default defineComponent({
     } else {
       this.itemList = this.option.options?.itemList ?? [];
     }
+    this.initial();
   },
   methods: {
+    initial(): void {
+      const { form } = this.$$form;
+      const { fieldName } = this.option;
+      this.values = (form[fieldName] ? form[fieldName].split(',') : []) as string[];
+      this.createTabs();
+      this.createActiveName(this.values.length ? this.values.length - 1 : 0);
+    },
     setFormItemValue(): void {
       const { form } = this.$$form;
       const { fieldName } = this.option;
       form[fieldName] = this.values.join(',');
-      this.createTextValue();
       // 关闭 popper
       this.visible = !1;
-    },
-    echoFormItemText(): void {
-      const { form } = this.$$form;
-      const { fieldName } = this.option;
-      this.values = form[fieldName]?.split(',') ?? [];
-      this.createTabs(() => {
-        this.createTextValue();
-        const index: number = this.values.length - 1 < 0 ? 0 : this.values.length - 1;
-        this.createActiveName(index);
-      });
-    },
-    createTextValue(): void {
-      this.textValue = this.values.map((x, i) => this.tabs[i].find((k) => k.value === x).text).join('/');
     },
     createActiveName(index: number): void {
       this.activeName = index.toString();
     },
-    createTabs(cb?: AnyFunction<void>): void {
+    createTextValue(val: string): string {
+      const values: string[] = val ? val.split(',') : [];
+      return values.map((x, i) => this.tabs[i]?.find((k) => k.value === x)?.text).join('/');
+    },
+    createTabs() {
       this.tabs = this.tabs.slice(0, 1);
-      // 假设没有街道
-      let isStreet = false;
       for (let i = 0; i < this.values.length; i++) {
         const items: Nullable<IDictDeep[]> = deepFind<IDictDeep>(this.itemList, this.values[i]).children;
         if (!items) {
           if (this.isFetchStreet) {
-            this.getStreetList(this.values[i], cb);
-            isStreet = true;
+            this.getStreetList(this.values[i]);
           }
           break;
         }
         this.tabs[i + 1] = items.map((x) => ({ text: x.text, value: x.value })) as IDict[];
       }
-      !isStreet && cb?.();
     },
     async getItemList(): Promise<void> {
       const { fetchApi, params = {}, datakey = '', valueKey = 'value', textKey = 'text' } = this.option.request;
@@ -112,38 +112,39 @@ export default defineComponent({
         this.itemList = deepMapList<IDictDeep>(dataList, valueKey, textKey);
       }
     },
-    async getStreetList(code: string, cb?: AnyFunction<void>): Promise<void> {
+    async getStreetList(code: string): Promise<void> {
       const { fetchStreetApi, datakey = '', valueKey = 'value', textKey = 'text' } = this.option.request;
       const res = await fetchStreetApi({ code });
       if (res.code === 200) {
         const dataList = !datakey ? res.data : get(res.data, datakey, []);
         this.tabs.push(dataList.map((x) => ({ text: x[textKey], value: x[valueKey], isLast: true })) as IDict[]);
-        cb?.();
       }
     },
     renderTabPane(): JSXNode {
       return this.tabs.map((arr, index) => {
-        const label = arr.find((x) => x.value === this.values[index])?.text || '请选择';
+        const label = arr.find((x) => x.value === this.values[index])?.text || t('qm.form.selectPlaceholder').replace('...', '');
         return (
           // @ts-ignore
           <TabPane key={index} label={label} name={index.toString()}>
-            {arr.map((x) => (
-              <span
-                key={x.value}
-                class={{ [`region--item`]: true, actived: this.values.includes(x.value) }}
-                onClick={() => {
-                  this.values[index] = x.value;
-                  this.values = this.values.slice(0, index + 1);
-                  if (x.isLast || (!this.isFetchStreet && isEmpty(deepFind<IDictDeep>(this.itemList, x.value)?.children))) {
-                    return this.setFormItemValue();
-                  }
-                  this.createActiveName(index + 1);
-                  this.createTabs();
-                }}
-              >
-                {x.text}
-              </span>
-            ))}
+            <div class="region-item">
+              {arr.map((x) => (
+                <span
+                  key={x.value}
+                  class={{ [`region-item__item`]: true, actived: this.values.includes(x.value) }}
+                  onClick={() => {
+                    this.values[index] = x.value;
+                    this.values = this.values.slice(0, index + 1);
+                    if (x.isLast || (!this.isFetchStreet && isEmpty(deepFind<IDictDeep>(this.itemList, x.value)?.children))) {
+                      return this.setFormItemValue();
+                    }
+                    this.createTabs();
+                    this.createActiveName(index + 1);
+                  }}
+                >
+                  {x.text}
+                </span>
+              ))}
+            </div>
           </TabPane>
         );
       });
@@ -166,8 +167,16 @@ export default defineComponent({
       disabled,
       onChange = noop,
     } = this.option;
-    this.$$form.setViewValue(fieldName, this.textValue);
     const prefixCls = getPrefixCls('region-select');
+
+    let textValue: string = this.prevText;
+    if (!this.visible) {
+      textValue = this.createTextValue(form[fieldName]);
+      this.prevText = textValue;
+    }
+
+    this.$$form.setViewValue(fieldName, textValue);
+
     return (
       <el-form-item
         key={fieldName}
@@ -194,7 +203,7 @@ export default defineComponent({
                 <el-select
                   ref="select"
                   popper-class="select-option"
-                  modelValue={this.textValue}
+                  modelValue={textValue}
                   placeholder={!disabled ? placeholder : ''}
                   clearable={clearable}
                   disabled={disabled}
@@ -217,7 +226,6 @@ export default defineComponent({
                   }}
                   onClear={(): void => {
                     form[fieldName] = undefined;
-                    this.echoFormItemText();
                     onChange(form[fieldName], null);
                   }}
                 />
