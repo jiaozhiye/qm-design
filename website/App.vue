@@ -1,5 +1,5 @@
 <template>
-  <div>asdasd</div>
+  <router-view />
 </template>
 
 <script lang="tsx">
@@ -9,5 +9,3 @@ export default defineComponent({
   name: 'App',
 });
 </script>
-
-<style lang="scss"></style>
