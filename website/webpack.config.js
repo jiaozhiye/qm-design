@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-02-08 14:35:05
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-17 17:18:30
+ * @Last Modified time: 2021-03-17 18:55:08
  */
 'use strict';
 
@@ -26,7 +26,7 @@ module.exports = {
   },
   output: {
     path: path.resolve(__dirname, '../website-dist'),
-    filename: isProd ? 'js/[name].[hash].js' : 'js/[name].js',
+    filename: isProd ? 'js/[name].[contenthash:8].js' : 'js/[name].js',
     publicPath: '/',
   },
   // node: {
