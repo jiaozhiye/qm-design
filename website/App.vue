@@ -2,7 +2,7 @@
   <router-view />
 </template>
 
-<script lang="tsx">
+<script lang="ts">
 import { defineComponent } from 'vue';
 
 export default defineComponent({

@@ -12,14 +12,13 @@ module.exports = (md) => {
         const description = m && m.length > 1 ? m[1] : '';
         const content = tokens[idx + 1].type === 'fence' ? tokens[idx + 1].content : '';
         return `<demo-block>
-        ${description ? `<div>${md.render(description)}</div>` : ''}
-        <!--element-demo: ${content}:element-demo-->
+          ${description ? `<div>${md.render(description)}</div>` : ''}
+          <!--element-demo: ${content}:element-demo-->
         `;
       }
       return '</demo-block>';
     },
   });
-
   md.use(mdContainer, 'tip');
   md.use(mdContainer, 'warning');
 };

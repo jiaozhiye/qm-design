@@ -56,13 +56,13 @@ module.exports = function (source) {
 
   output.push(content.slice(start));
   const result = `
-  <template>
-    <section class="content element-doc">
-      ${output.join('')}
-      <right-nav />
-    </section>
-  </template>
-  ${pageScript}
+    <template>
+      <section class="content element-doc">
+        ${output.join('')}
+        <right-nav />
+      </section>
+    </template>
+    ${pageScript}
   `;
   return result;
 };

@@ -50,12 +50,8 @@ export default defineComponent({
   },
 
   computed: {
-    lang() {
-      return this.$route.path.split('/')[1];
-    },
-
     blockClass() {
-      return `demo-${this.lang} demo-${this.$router.currentRoute.value.path.split('/').pop()}`;
+      return `demo-${this.$router.currentRoute.value.path.split('/').pop()}`;
     },
 
     iconClass() {
