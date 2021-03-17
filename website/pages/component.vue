@@ -55,6 +55,7 @@ export default defineComponent({
     this.componentScrollBox = this.componentScrollBar.$el.querySelector('.el-scrollbar__wrap');
     this.componentScrollBox.addEventListener('scroll', throttle(this.handleScroll, 300));
     document.body.classList.add('is-component');
+    this.addContentObserver();
   },
   unmounted() {
     document.body.classList.remove('is-component');
@@ -64,6 +65,18 @@ export default defineComponent({
     this.observer.disconnect();
   },
   methods: {
+    addContentObserver() {
+      this.observer = new MutationObserver((mutationsList, observer) => {
+        for (const mutation of mutationsList) {
+          if (mutation.type === 'childList') {
+            this.renderAnchorHref();
+            this.goAnchor();
+          }
+        }
+      });
+      this.observer.observe(document.querySelector('.content-wrap'), { childList: true });
+    },
+
     renderAnchorHref() {
       if (/changelog/g.test(location.href)) return;
       const anchors = document.querySelectorAll('h2 a,h3 a,h4 a,h5 a');

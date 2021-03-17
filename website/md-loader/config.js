@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 const Config = require('markdown-it-chain');
 const anchorPlugin = require('markdown-it-anchor');
+const slugify = require('transliteration').slugify;
 const hljs = require('highlight.js');
 const containers = require('./containers');
 const overWriteFenceRule = require('./fence');
@@ -24,6 +25,7 @@ config.options
   .use(anchorPlugin, [
     {
       level: 2,
+      slugify: slugify,
       permalink: true,
       permalinkBefore: true,
     },
