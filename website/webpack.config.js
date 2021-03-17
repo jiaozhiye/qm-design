@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-02-08 14:35:05
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-17 12:08:05
+ * @Last Modified time: 2021-03-17 17:18:30
  */
 'use strict';
 
@@ -11,6 +11,8 @@ const path = require('path');
 const webpack = require('webpack');
 const VueLoaderPlugin = require('vue-loader').VueLoaderPlugin;
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
 
 const isProd = process.env.NODE_ENV === 'production';
 
@@ -140,6 +142,10 @@ module.exports = {
       },
     ],
   },
+  optimization: {
+    minimize: true,
+    minimizer: [new CssMinimizerPlugin()],
+  },
   devServer: {
     clientLogLevel: 'warning',
     /* 当使用 HTML5 History API 时，任意的 404 响应都可能需要被替代为 index.html */
@@ -162,7 +168,15 @@ module.exports = {
     proxy: {},
     watchOptions: { poll: false },
   },
-  plugins: [
+  plugins: (isProd
+    ? [
+        new MiniCssExtractPlugin({
+          filename: '[name].[contenthash:8].css',
+          chunkFilename: '[id].[contenthash:8].css',
+        }),
+      ]
+    : []
+  ).concat([
     new webpack.DefinePlugin({
       'process.env': {
         NODE_ENV: JSON.stringify(process.env.NODE_ENV),
@@ -178,5 +192,5 @@ module.exports = {
       favicon: './website/favicon.ico',
       inject: true,
     }),
-  ],
+  ]),
 };

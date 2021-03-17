@@ -55,7 +55,8 @@ export default defineComponent({
       if (this.isSmallScreen) {
         style.paddingBottom = '60px';
       }
-      style.opacity = this.isFade ? '0.5' : '1';
+      // style.opacity = this.isFade ? '0.5' : '1';
+      style.opacity = this.isFade ? '1' : '1';
       return style;
     },
   },
