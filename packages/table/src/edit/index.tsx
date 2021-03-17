@@ -398,25 +398,23 @@ export default defineComponent({
         if (records.length === 1) {
           return closeHelperHandle(false, records[0]);
         }
-        openHelperPanel(() => {
-          this.shDeriveValue = setHelperFilterValues(val);
-          // 清空输入框
-          setHelperValues('');
-        });
+        openHelperPanel(val);
+        // 清空输入框
+        setHelperValues('');
       };
-      const openHelperPanel = (cb) => {
+      const openHelperPanel = (val) => {
         // 打开的前置钩子
         const beforeOpen = helper.beforeOpen ?? helper.open ?? trueNoop;
         const before = beforeOpen({ [this.dataKey]: prevValue }, row, column);
         if (before?.then) {
           before
             .then(() => {
-              cb?.();
+              this.shDeriveValue = setHelperFilterValues(val);
               this.shVisible = !0;
             })
             .catch(() => {});
         } else if (before !== false) {
-          cb?.();
+          this.shDeriveValue = setHelperFilterValues(val);
           this.shVisible = !0;
         }
       };
@@ -470,10 +468,7 @@ export default defineComponent({
             }}
             onDblclick={() => {
               if (extra.disabled) return;
-              isObject(helper) &&
-                openHelperPanel(() => {
-                  this.shDeriveValue = setHelperFilterValues(prevValue);
-                });
+              isObject(helper) && openHelperPanel(prevValue);
             }}
             onKeydown={(ev) => {
               if (ev.keyCode === 13) {
@@ -486,11 +481,7 @@ export default defineComponent({
                   size={this.size}
                   icon="el-icon-search"
                   onClick={(ev) => {
-                    isObject(helper)
-                      ? openHelperPanel(() => {
-                          this.shDeriveValue = setHelperFilterValues(prevValue);
-                        })
-                      : onClick({ [this.dataKey]: prevValue }, row, column, setHelperValues, ev);
+                    isObject(helper) ? openHelperPanel(prevValue) : onClick({ [this.dataKey]: prevValue }, row, column, setHelperValues, ev);
                   }}
                 />
               ),
