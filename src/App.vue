@@ -1,7 +1,7 @@
 <script lang="tsx">
 import { defineComponent, VNode } from 'vue';
 
-import PrintTemplate from './demo2';
+import PrintTemplate from './print-template.vue';
 
 import { getTableData, getSelectData, getTreeData, getRegionData } from './api/test';
 
@@ -594,7 +594,7 @@ export default defineComponent({
           <qm-table
             ref="table"
             uniqueKey="jzyDemoTable"
-            maxHeight="300px"
+            maxHeight="400px"
             columns={this.columns}
             fetch={this.fetch}
             rowKey={(row) => row.id}
