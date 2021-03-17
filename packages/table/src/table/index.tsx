@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-02-09 09:03:59
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-11 20:34:14
+ * @Last Modified time: 2021-03-17 20:21:28
  */
 import { defineComponent } from 'vue';
 import { isEqual } from 'lodash-es';
@@ -204,8 +204,7 @@ export default defineComponent({
       const query = createWhereSQL(this.filters, config.showFilterType) || createWhereSQL(this.superFilters, config.showFilterType);
       const params = this.isFetch ? this.fetch.params : null;
       const sorter = orderby ? { [config.sorterFieldName]: orderby } : null;
-      // 去掉 where 参数单引号，为了兼容 MEP
-      const filter = query ? { [config.filterFieldName]: query.replace(/'/g, '') } : null;
+      const filter = query ? { [config.filterFieldName]: query } : null;
       const summary = this.columnSummaryQuery ? { [config.groupSummary.summaryFieldName]: this.columnSummaryQuery, usedJH: 1 } : null;
       return {
         ...sorter,
