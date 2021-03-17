@@ -156,7 +156,7 @@ export default defineComponent({
   .page-logo {
     margin: 20px 20px 10px 0;
     height: 40px;
-    background: #f0f0f0;
+    background: #e9e9e9;
   }
 
   .side-nav {
