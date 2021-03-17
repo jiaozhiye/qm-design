@@ -2,29 +2,29 @@
  * @Author: 焦质晔
  * @Date: 2021-02-08 14:35:05
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-17 11:24:09
+ * @Last Modified time: 2021-03-17 12:08:05
  */
 'use strict';
 
+/* eslint-disable @typescript-eslint/no-var-requires */
 const path = require('path');
 const webpack = require('webpack');
-const utils = require('./utils');
 const VueLoaderPlugin = require('vue-loader').VueLoaderPlugin;
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
-process.env.NODE_ENV = 'development';
+const isProd = process.env.NODE_ENV === 'production';
 
 module.exports = {
-  mode: 'development',
+  mode: isProd ? 'production' : 'development',
   context: process.cwd(),
   target: 'web', // webpack5.x 加上之后热更新才有效果
-  devtool: 'eval-cheap-source-map',
+  devtool: !isProd && 'eval-cheap-source-map',
   entry: {
-    app: utils.resolve('src/index.ts'),
+    app: path.resolve(__dirname, './index.ts'),
   },
   output: {
-    path: utils.resolve('dist'),
-    filename: 'js/[name].js',
+    path: path.resolve(__dirname, '../website-dist'),
+    filename: isProd ? 'js/[name].[hash].js' : 'js/[name].js',
     publicPath: '/',
   },
   // node: {
@@ -41,7 +41,7 @@ module.exports = {
     extensions: ['.ts', '.tsx', '.js', '.jsx', '.vue', '.json'],
     alias: {
       vue$: 'vue/dist/vue.esm-bundler.js',
-      '@': utils.resolve('src'),
+      '@': path.resolve(__dirname, '../website'),
     },
     fallback: {
       crypto: false,
@@ -87,6 +87,23 @@ module.exports = {
         ],
         exclude: /node_modules/,
       },
+      // md
+      {
+        test: /\.md$/,
+        use: [
+          {
+            loader: 'vue-loader',
+            options: {
+              compilerOptions: {
+                preserveWhitespace: false,
+              },
+            },
+          },
+          {
+            loader: path.resolve(__dirname, './md-loader/index.js'),
+          },
+        ],
+      },
       // css
       {
         test: /\.css?$/,
@@ -95,17 +112,7 @@ module.exports = {
       // scss
       {
         test: /\.scss?$/,
-        use: [
-          'vue-style-loader',
-          'css-loader',
-          'sass-loader',
-          {
-            loader: 'style-resources-loader',
-            options: {
-              patterns: [utils.resolve('src/assets/variables.scss')],
-            },
-          },
-        ],
+        use: ['vue-style-loader', 'css-loader', 'sass-loader'],
       },
       // do not base64-inline SVG
       {
@@ -150,7 +157,7 @@ module.exports = {
       errors: true,
     },
     host: 'localhost',
-    port: '8081',
+    port: '8082',
     open: true,
     proxy: {},
     watchOptions: { poll: false },
@@ -167,8 +174,8 @@ module.exports = {
     new VueLoaderPlugin(),
     new HtmlWebpackPlugin({
       filename: 'index.html',
-      template: utils.resolve('src/index.html'),
-      favicon: utils.resolve('src/favicon.ico'),
+      template: './website/index.html',
+      favicon: './website/favicon.ico',
       inject: true,
     }),
   ],
