@@ -2,6 +2,7 @@
   <el-scrollbar ref="componentScrollBar" class="page-component__scroll">
     <div class="page-container page-component">
       <el-scrollbar class="page-component__nav">
+        <div class="page-logo"></div>
         <side-nav :data="navList" :base="`/component`" />
       </el-scrollbar>
       <div class="page-component__content">
@@ -54,7 +55,6 @@ export default defineComponent({
     this.componentScrollBox = this.componentScrollBar.$el.querySelector('.el-scrollbar__wrap');
     this.componentScrollBox.addEventListener('scroll', throttle(this.handleScroll, 300));
     document.body.classList.add('is-component');
-    this.addContentObserver();
   },
   unmounted() {
     document.body.classList.remove('is-component');
@@ -64,18 +64,6 @@ export default defineComponent({
     this.observer.disconnect();
   },
   methods: {
-    addContentObserver() {
-      this.observer = new MutationObserver((mutationsList, observer) => {
-        for (const mutation of mutationsList) {
-          if (mutation.type === 'childList') {
-            this.renderAnchorHref();
-            this.goAnchor();
-          }
-        }
-      });
-      this.observer.observe(document.querySelector('.content-wrap'), { childList: true });
-    },
-
     renderAnchorHref() {
       if (/changelog/g.test(location.href)) return;
       const anchors = document.querySelectorAll('h2 a,h3 a,h4 a,h5 a');
@@ -95,7 +83,6 @@ export default defineComponent({
         if (!anchor) return;
         const elm = document.querySelector(anchor[0]);
         if (!elm) return;
-
         setTimeout(() => {
           this.componentScrollBox.scrollTop = elm.offsetTop;
         }, 50);
@@ -153,6 +140,12 @@ export default defineComponent({
     }
   }
 
+  .page-logo {
+    margin: 20px 20px 10px 0;
+    height: 40px;
+    background: #f0f0f0;
+  }
+
   .side-nav {
     height: 100%;
     padding-right: 0;
@@ -160,7 +153,6 @@ export default defineComponent({
 
   .page-component__content {
     padding-left: 220px;
-    padding-bottom: 20px;
     margin-right: 160px;
     box-sizing: border-box;
   }

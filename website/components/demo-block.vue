@@ -21,6 +21,7 @@
     </div>
   </div>
 </template>
+
 <script>
 import { defineComponent, nextTick } from 'vue';
 import hljs from 'highlight.js';
@@ -131,47 +132,6 @@ export default defineComponent({
   },
 
   methods: {
-    goCodepen() {
-      // since 2.6.2 use code rather than jsfiddle https://blog.codepen.io/documentation/api/prefill/
-      const { script, html, style } = this.codepen;
-      const resourcesTpl =
-        '<scr' + 'ipt src="//unpkg.com/vue@next"></scr' + 'ipt>' + '\n<scr' + `ipt src="//unpkg.com/element-plus/lib/index.full.js"></scr` + 'ipt>';
-      let htmlTpl = `${resourcesTpl}\n<div id="app">\n${html.trim()}\n</div>`;
-      let cssTpl = `@import url("//unpkg.com/element-plus/lib/theme-chalk/index.css");\n${(style || '').trim()}\n`;
-      let jsTpl = script
-        ? script
-            .replace(/export default/, 'var Main =')
-            .trim()
-            .replace(/import ({.*}) from 'vue'/g, (s, s1) => `const ${s1} = Vue`)
-            .replace(/import ({.*}) from 'element-plus'/g, (s, s1) => `const ${s1} = ElementPlus`)
-        : 'var Main = {}';
-      jsTpl += '\n;const app = Vue.createApp(Main);\napp.use(ElementPlus);\napp.mount("#app")';
-      const data = {
-        js: jsTpl,
-        css: cssTpl,
-        html: htmlTpl,
-      };
-      const form = document.getElementById('fiddle-form') || document.createElement('form');
-      while (form.firstChild) {
-        form.removeChild(form.firstChild);
-      }
-      form.method = 'POST';
-      form.action = 'https://codepen.io/pen/define/';
-      form.target = '_blank';
-      form.style.display = 'none';
-
-      const input = document.createElement('input');
-      input.setAttribute('name', 'data');
-      input.setAttribute('type', 'hidden');
-      input.setAttribute('value', JSON.stringify(data));
-
-      form.appendChild(input);
-      document.body.appendChild(form);
-
-      form.submit();
-      document.body.removeChild(form);
-    },
-
     scrollHandler() {
       const { top, bottom, left } = this.$refs.meta.getBoundingClientRect();
       const controlBarHeight = 44;
