@@ -2,8 +2,8 @@
   <el-scrollbar
     ref="navScroll"
     class="right-nav"
-    wrap-style="max-height: 300px"
-    style="position: fixed; right: 20px; top: 20px; width: 150px; border-left: 1px solid rgb(220, 223, 230); height: auto; max-height: 300px"
+    wrap-style="max-height: 400px"
+    style="position: fixed; right: 20px; top: 20px; width: 150px; border-left: 1px solid rgb(220, 223, 230); height: auto; max-height: 400px"
   >
     <div v-for="item in anchors" :key="item" style="margin: 3px 0 3px 10px">
       <el-link
