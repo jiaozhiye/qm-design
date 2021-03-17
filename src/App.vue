@@ -530,9 +530,9 @@ export default defineComponent({
     };
   },
   mounted() {
-    setTimeout(() => {
-      this.$refs.qweqwe.SET_FIELDS_VALUE({ a: ['9', '10'], f: '320000,320101,320502,3' });
-    }, 3000);
+    // setTimeout(() => {
+    //   this.$refs.qweqwe.SET_FIELDS_VALUE({ a: ['9', '10'], f: '320000,320101,320502,3' });
+    // }, 3000);
   },
   methods: {
     clickHandle(k) {

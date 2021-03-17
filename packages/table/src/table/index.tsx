@@ -28,6 +28,8 @@ import coreMethods from './core-methods';
 import interfaceMethods from './interface-methods';
 import renderMethods from './render-table';
 
+const EMITS = ['change', 'dataChange', 'dataLoaded'];
+
 export default defineComponent({
   name: 'QmTable',
   componentName: 'QmTable',
@@ -41,6 +43,7 @@ export default defineComponent({
     };
   },
   mixins: [columnsMixin, expandableMixin, selectionMixin, validateMixin, localStorageMixin],
+  emits: EMITS,
   data() {
     Object.assign(this, {
       // 原始数据

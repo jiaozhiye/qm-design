@@ -45,7 +45,7 @@ import FormUploadImg from './form-upload-img';
 import FormUploadFile from './form-upload-file';
 import FormTinymce from './form-tinymce';
 
-const EMITS = ['collapse', 'valuesChange', 'change', 'finish', 'finishFailed', 'reset'];
+const EMITS: string[] = ['collapse', 'valuesChange', 'change', 'finish', 'finishFailed', 'reset'];
 
 type IComponentData = {
   form: IFormData;

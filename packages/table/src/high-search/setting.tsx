@@ -21,6 +21,7 @@ export default defineComponent({
   name: 'HighSearchSetting',
   props: ['columns', 'onClose'],
   inject: ['$$table'],
+  emits: ['close'],
   data() {
     Object.assign(this, {
       logicDicts: [

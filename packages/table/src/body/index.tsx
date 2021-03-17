@@ -33,6 +33,7 @@ export default defineComponent({
     };
   },
   mixins: [keyboardMixin, formatMixin],
+  emits: ['rowClick', 'rowDblclick', 'rowEnter'],
   data() {
     Object.assign(this, { prevST: 0, prevSL: 0 });
     return {

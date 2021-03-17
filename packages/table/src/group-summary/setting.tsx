@@ -22,6 +22,7 @@ export default defineComponent({
   name: 'GroupSummarySetting',
   props: ['columns', 'onClose'],
   inject: ['$$table'],
+  emits: ['close'],
   data() {
     Object.assign(this, {
       // 分组项 字典
