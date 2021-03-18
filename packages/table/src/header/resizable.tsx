@@ -5,8 +5,9 @@
  * @Last Modified time: 2021-03-11 20:27:56
  */
 import { defineComponent } from 'vue';
-import { getNodeOffset } from '../utils';
+import { isUndefined, isNull } from 'lodash-es';
 import { clearSelections } from '../../../_utils/dom';
+import { getNodeOffset } from '../utils';
 import { JSXNode } from '../../../_utils/types';
 
 import config from '../config';
@@ -39,20 +40,27 @@ export default defineComponent({
       let res = renderWidth;
 
       document.onmousemove = function (ev) {
+        clearSelections();
+
         let ml = ev.clientX - disX;
         let rw = renderWidth + ml;
 
+        if (isUndefined(res) || isNull(res)) return;
         // 左边界限定
         if (rw < config.defaultColumnWidth) return;
         res = rw;
-        target.style.left = `${ml + left}px`;
 
-        clearSelections();
+        target.style.left = `${ml + left}px`;
       };
 
       document.onmouseup = function () {
         $vTable.classList.remove('c--resize');
         target.style.display = 'none';
+
+        this.onmousemove = null;
+        this.onmouseup = null;
+
+        if (isUndefined(res) || isNull(res)) return;
 
         _this.column.renderWidth = res;
         // _this.$set(_this.column, 'width', res);
@@ -60,9 +68,6 @@ export default defineComponent({
 
         doLayout();
         setLocalColumns(columns);
-
-        this.onmousemove = null;
-        this.onmouseup = null;
       };
 
       return false;
