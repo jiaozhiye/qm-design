@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-02-28 23:01:43
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-13 08:44:57
+ * @Last Modified time: 2021-03-18 19:33:01
  */
 import { defineComponent, reactive } from 'vue';
 import { pickBy, intersection, isFunction } from 'lodash-es';
@@ -13,8 +13,8 @@ import { stop } from '../../../_utils/dom';
 import { t } from '../../../locale';
 import { JSXNode } from '../../../_utils/types';
 
-import config from '../config';
 import { where } from '../filter-sql';
+import config from '../config';
 
 import Resizable from './resizable';
 import AllSelection from '../selection/all';
