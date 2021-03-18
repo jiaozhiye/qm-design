@@ -9,6 +9,7 @@ import localforage from 'localforage';
 import { isBracketBalance } from '../filter-sql';
 import { hasOwn, createUidKey, createWhereSQL } from '../utils';
 import { getPrefixCls } from '../../../_utils/prefix';
+import { stop } from '../../../_utils/dom';
 import { warn } from '../../../_utils/error';
 import { t } from '../../../locale';
 import { JSXNode } from '../../../_utils/types';
@@ -327,7 +328,7 @@ export default defineComponent({
       } catch (err) {}
     },
     async removeSavedHandle(ev, key) {
-      ev.stopPropagation();
+      stop(ev);
       if (!key) return;
       const index = this.savedItems.findIndex((x) => x.value === key);
       this.savedItems.splice(index, 1);

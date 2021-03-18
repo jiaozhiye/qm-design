@@ -6,7 +6,7 @@
  */
 import { defineComponent } from 'vue';
 import { getNodeOffset } from '../utils';
-import { stop } from '../../../_utils/dom';
+import { clearSelections } from '../../../_utils/dom';
 import { JSXNode } from '../../../_utils/types';
 
 import config from '../config';
@@ -22,8 +22,6 @@ export default defineComponent({
   },
   methods: {
     resizeMousedown(ev) {
-      stop(ev);
-
       const _this = this;
       const dom = ev.target;
       const { $vTable, $$tableBody, columns, doLayout, setLocalColumns } = this.$$table;
@@ -46,10 +44,10 @@ export default defineComponent({
 
         // 左边界限定
         if (rw < config.defaultColumnWidth) return;
-
         res = rw;
-
         target.style.left = `${ml + left}px`;
+
+        clearSelections();
       };
 
       document.onmouseup = function () {
@@ -76,6 +74,6 @@ export default defineComponent({
       [`resizable`]: true,
       [`is--line`]: resizable && !bordered,
     };
-    return <div class={resizableCls} onMousedown={this.resizeMousedown} onClick={(ev) => stop(ev)} />;
+    return <div class={resizableCls} onMousedown={this.resizeMousedown} />;
   },
 });

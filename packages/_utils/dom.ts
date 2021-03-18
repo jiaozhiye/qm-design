@@ -28,6 +28,15 @@ export const stop = (ev: Event): void => ev.stopPropagation();
 // 阻止默认行为
 export const prevent = (ev: Event): void => ev.preventDefault();
 
+// 清除选中
+export const clearSelections = (): void => {
+  if (window.getSelection) {
+    window.getSelection().removeAllRanges();
+  } else {
+    (document as any).selection?.empty();
+  }
+};
+
 /**
  * @description 获取元素样式
  * @param {HTMLNode} element 元素节点

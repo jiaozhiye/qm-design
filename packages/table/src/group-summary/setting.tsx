@@ -8,6 +8,7 @@ import { defineComponent } from 'vue';
 import localforage from 'localforage';
 import { createUidKey } from '../utils';
 import { getPrefixCls } from '../../../_utils/prefix';
+import { stop } from '../../../_utils/dom';
 import { warn } from '../../../_utils/error';
 import { t } from '../../../locale';
 import { JSXNode } from '../../../_utils/types';
@@ -253,7 +254,7 @@ export default defineComponent({
     },
     // 移除保存的 汇总配置项
     async removeSavedHandle(ev, key) {
-      ev.stopPropagation();
+      stop(ev);
       if (!key) return;
       const index = this.savedItems.findIndex((x) => x.value === key);
       this.savedItems.splice(index, 1);

@@ -105,6 +105,10 @@ const keyboardMixin = {
       if (v < 0) return;
       this.$el.scrollTop = v * scrollYStore.rowHeight;
     },
+    resetTableBodyScroll() {
+      this.$el.scrollTop = 0;
+      this.$el.scrollLeft = 0;
+    },
     createInputFocus() {
       const { tableFullData, getRowKey } = this.$$table;
       if (!this.editableColumns.length || !tableFullData.length) return;

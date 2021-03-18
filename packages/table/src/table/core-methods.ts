@@ -42,6 +42,7 @@ export default {
       this.selectFirstRow();
       this.dataLoadedHandle();
       this.$$tableBody.createInputFocus();
+      this.$$tableBody.resetTableBodyScroll();
     });
   },
   // 服务端合计

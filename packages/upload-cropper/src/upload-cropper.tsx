@@ -14,6 +14,7 @@ import { useSize } from '../../hooks/useSize';
 import { download } from '../../_utils/download';
 import { getPrefixCls } from '../../_utils/prefix';
 import { isValidComponentSize } from '../../_utils/validators';
+import { stop } from '../../_utils/dom';
 import { warn } from '../../_utils/error';
 import { t } from '../../locale';
 
@@ -235,12 +236,7 @@ export default defineComponent({
       return (
         <ul class="el-upload-list el-upload-list--picture-card">
           {fileList.map((item, index) => (
-            <li
-              key={index}
-              class="el-upload-list__item"
-              style={{ height: `${calcHeight}px` }}
-              onClick={(ev: MouseEvent): void => ev.stopPropagation()}
-            >
+            <li key={index} class="el-upload-list__item" style={{ height: `${calcHeight}px` }} onClick={(ev: MouseEvent): void => stop(ev)}>
               <div>
                 <img class="el-upload-list__item-thumbnail" src={item.url} alt="" />
                 {titles[index] && <h5 class="el-upload-list__item-title">{titles[index]}</h5>}
