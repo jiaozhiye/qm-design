@@ -8,6 +8,7 @@ import { defineComponent } from 'vue';
 import localforage from 'localforage';
 import { createUidKey } from '../utils';
 import { getPrefixCls } from '../../../_utils/prefix';
+import { deepToRaw } from '../../../_utils/util';
 import { stop } from '../../../_utils/dom';
 import { warn } from '../../../_utils/error';
 import { t } from '../../../locale';
@@ -229,8 +230,8 @@ export default defineComponent({
         },
       });
       this.currentKey = uuid;
-      await localforage.setItem(this.groupSummaryKey, this.savedItems);
-      await this.saveGroupSummaryConfig(this.groupSummaryKey, this.savedItems);
+      await localforage.setItem(this.groupSummaryKey, deepToRaw(this.savedItems));
+      await this.saveGroupSummaryConfig(this.groupSummaryKey, deepToRaw(this.savedItems));
     },
     async getGroupSummaryConfig(key) {
       const { global } = this.$DESIGN;
@@ -261,8 +262,8 @@ export default defineComponent({
       if (key === this.currentKey) {
         this.currentKey = '';
       }
-      await localforage.setItem(this.groupSummaryKey, this.savedItems);
-      await this.saveGroupSummaryConfig(this.groupSummaryKey, this.savedItems);
+      await localforage.setItem(this.groupSummaryKey, deepToRaw(this.savedItems));
+      await this.saveGroupSummaryConfig(this.groupSummaryKey, deepToRaw(this.savedItems));
     },
     // 关闭
     cancelHandle() {
@@ -344,13 +345,7 @@ export default defineComponent({
           </div>
           <div class="saved line">
             <div class="form-wrap">
-              <el-input
-                class="form-item"
-                placeholder={t('qm.table.groupSummary.configText')}
-                value={form.name}
-                disabled={confirmDisabled}
-                onInput={(val) => (this.form.name = val)}
-              />
+              <el-input class="form-item" v-model={form.name} placeholder={t('qm.table.groupSummary.configText')} disabled={confirmDisabled} />
               <el-button type="primary" disabled={!form.name} style={{ marginLeft: '10px' }} onClick={() => this.saveConfigHandle()}>
                 {t('qm.table.groupSummary.saveButton')}
               </el-button>

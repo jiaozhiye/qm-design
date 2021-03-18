@@ -60,7 +60,7 @@ export default {
     if (!fetch) return;
     const { beforeFetch = () => !0, xhrAbort = !1 } = fetch;
     if (!beforeFetch(fetchParams) || xhrAbort) return;
-    console.log(`ajax 请求参数：`, fetchParams);
+    // console.log(`ajax 请求参数：`, fetchParams);
     this.showLoading = true;
     try {
       const res = await fetch.api(fetchParams);

@@ -9,6 +9,7 @@ import localforage from 'localforage';
 import { isBracketBalance } from '../filter-sql';
 import { hasOwn, createUidKey, createWhereSQL } from '../utils';
 import { getPrefixCls } from '../../../_utils/prefix';
+import { deepToRaw } from '../../../_utils/util';
 import { stop } from '../../../_utils/dom';
 import { warn } from '../../../_utils/error';
 import { t } from '../../../locale';
@@ -304,8 +305,8 @@ export default defineComponent({
         list: this.currentData.filter((x) => !!x.fieldName),
       });
       this.currentKey = uuid;
-      await localforage.setItem(this.highSearchKey, this.savedItems);
-      await this.saveHighSearchConfig(this.highSearchKey, this.savedItems);
+      await localforage.setItem(this.highSearchKey, deepToRaw(this.savedItems));
+      await this.saveHighSearchConfig(this.highSearchKey, deepToRaw(this.savedItems));
     },
     async getHighSearchConfig(key) {
       const { global } = this.$DESIGN;
@@ -335,8 +336,8 @@ export default defineComponent({
       if (key === this.currentKey) {
         this.currentKey = '';
       }
-      await localforage.setItem(this.highSearchKey, this.savedItems);
-      await this.saveHighSearchConfig(this.highSearchKey, this.savedItems);
+      await localforage.setItem(this.highSearchKey, deepToRaw(this.savedItems));
+      await this.saveHighSearchConfig(this.highSearchKey, deepToRaw(this.savedItems));
     },
     confirmHandle() {
       const { clearTableFilter, createSuperSearch, fetch } = this.$$table;
@@ -381,13 +382,7 @@ export default defineComponent({
           </div>
           <div class="saved line">
             <div class="form-wrap">
-              <el-input
-                class="form-item"
-                placeholder={t('qm.table.highSearch.configText')}
-                disabled={confirmDisabled}
-                value={form.name}
-                onInput={(val) => (this.form.name = val)}
-              />
+              <el-input class="form-item" v-model={form.name} placeholder={t('qm.table.highSearch.configText')} disabled={confirmDisabled} />
               <el-button type="primary" disabled={!form.name} style={{ marginLeft: '10px' }} onClick={() => this.saveConfigHandle()}>
                 {t('qm.table.highSearch.saveButton')}
               </el-button>

@@ -201,6 +201,7 @@ export default defineComponent({
     },
     fetchParams() {
       const orderby = createOrderBy(this.sorter);
+      console.log(this.filters, this.superFilters);
       const query = createWhereSQL(this.filters, config.showFilterType) || createWhereSQL(this.superFilters, config.showFilterType);
       const params = this.isFetch ? this.fetch.params : null;
       const sorter = orderby ? { [config.sorterFieldName]: orderby } : null;
