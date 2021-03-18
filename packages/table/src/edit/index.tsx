@@ -165,6 +165,7 @@ export default defineComponent({
       };
       return (
         <el-select
+          key={`${this.dataKey}-${prevValue}`}
           size={this.size}
           {...selectProps}
           multiple={isMultiple}

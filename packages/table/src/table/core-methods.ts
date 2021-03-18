@@ -6,7 +6,7 @@
  */
 import { get } from 'lodash-es';
 import { difference, hasOwn, throttle, getCellValue, setCellValue } from '../utils';
-import { errorCapture, isChrome, isIE, noop } from '../../../_utils/util';
+import { deepToRaw, errorCapture, isChrome, isIE, noop } from '../../../_utils/util';
 import { warn } from '../../../_utils/error';
 import config from '../config';
 
@@ -60,7 +60,7 @@ export default {
     if (!fetch) return;
     const { beforeFetch = () => !0, xhrAbort = !1 } = fetch;
     if (!beforeFetch(fetchParams) || xhrAbort) return;
-    // console.log(`ajax 请求参数：`, fetchParams);
+    console.log(`ajax 请求参数：`, fetchParams);
     this.showLoading = true;
     try {
       const res = await fetch.api(fetchParams);
@@ -207,6 +207,48 @@ export default {
         });
       }
     });
+  },
+  // 格式化 表头筛选 和 高级检索 参数
+  formatFiltersParams(filters, superFilters) {
+    const result = [];
+    // 表头筛选
+    if (Object.keys(filters).length) {
+      for (const key in filters) {
+        const type = config.showFilterType ? key.split('|')[0] : '';
+        const fieldName = config.showFilterType ? key.split('|')[1] : key;
+        const target = filters[key];
+        Object.keys(target).forEach((k) => {
+          result.push({
+            type,
+            bracketLeft: '',
+            fieldName,
+            expression: k,
+            value: target[k],
+            bracketRright: '',
+            logic: 'and',
+          });
+        });
+      }
+    }
+    // 高级检索
+    if (superFilters.length) {
+      superFilters.forEach((x) => {
+        result.push({
+          type: config.showFilterType ? x.fieldType : '', // 筛选器类型
+          bracketLeft: x.bracket_left, // 左括号
+          fieldName: x.fieldName, // 字段名
+          expression: x.expression, // 运算符号
+          value: x.condition, // 值
+          bracketRright: x.bracket_right, // 右括号
+          logic: x.logic, // 逻辑符号
+        });
+      });
+    }
+    // 移除最后的 逻辑符号
+    if (result.length) {
+      result[result.length - 1].logic = '';
+    }
+    return deepToRaw(result);
   },
   // 创建派生的 rowKeys for treeTable
   createDeriveRowKeys(tableData, key) {

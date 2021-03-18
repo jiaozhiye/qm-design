@@ -201,11 +201,12 @@ export default defineComponent({
     },
     fetchParams() {
       const orderby = createOrderBy(this.sorter);
-      console.log(this.filters, this.superFilters);
-      const query = createWhereSQL(this.filters, config.showFilterType) || createWhereSQL(this.superFilters, config.showFilterType);
+      // const query = createWhereSQL(this.filters, config.showFilterType) || createWhereSQL(this.superFilters, config.showFilterType);
+      const query = this.formatFiltersParams(this.filters, this.superFilters);
       const params = this.isFetch ? this.fetch.params : null;
       const sorter = orderby ? { [config.sorterFieldName]: orderby } : null;
-      const filter = query ? { [config.filterFieldName]: query } : null;
+      // const filter = query ? { [config.filterFieldName]: query } : null;
+      const filter = query.length ? { [config.filterFieldName]: query } : null;
       const summary = this.columnSummaryQuery ? { [config.groupSummary.summaryFieldName]: this.columnSummaryQuery, usedJH: 1 } : null;
       return {
         ...sorter,

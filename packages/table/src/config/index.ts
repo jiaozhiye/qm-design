@@ -38,7 +38,7 @@ const config = {
     textIndent: 17, // 缩进 17px
   },
   // 后台返回数据的路径
-  dataKey: 'items',
+  dataKey: 'records',
   // 后台返回总条数的 key
   totalKey: 'total',
   // 虚拟滚动的阀值
@@ -48,7 +48,7 @@ const config = {
   // 表头筛选的参数名
   filterFieldName: 'twhere',
   // 是否显示筛选字段类型
-  showFilterType: false,
+  showFilterType: true,
   // 打印纸的宽度 A4 -> 1040px
   printWidth: 1040,
   // 操作列 dataIndex
