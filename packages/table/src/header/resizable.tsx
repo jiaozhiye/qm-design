@@ -6,7 +6,7 @@
  */
 import { defineComponent } from 'vue';
 import { isUndefined, isNull } from 'lodash-es';
-import { clearSelections } from '../../../_utils/dom';
+import { prevent } from '../../../_utils/dom';
 import { getNodeOffset } from '../utils';
 import { JSXNode } from '../../../_utils/types';
 
@@ -23,6 +23,8 @@ export default defineComponent({
   },
   methods: {
     resizeMousedown(ev) {
+      prevent(ev);
+
       const _this = this;
       const dom = ev.target;
       const { $vTable, $$tableBody, columns, doLayout, setLocalColumns } = this.$$table;
@@ -40,8 +42,6 @@ export default defineComponent({
       let res = renderWidth;
 
       document.onmousemove = function (ev) {
-        clearSelections();
-
         let ml = ev.clientX - disX;
         let rw = renderWidth + ml;
 
