@@ -2,12 +2,12 @@
  * @Author: 焦质晔
  * @Date: 2021-02-09 09:03:59
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-06 09:13:58
+ * @Last Modified time: 2021-03-19 16:47:54
  */
 import { defineComponent, PropType } from 'vue';
 import { CountUp } from 'countup.js';
 import PropTypes from '../../_utils/vue-types';
-import { JSXNode, ComponentSize } from '../../_utils/types';
+import { JSXNode, ComponentSize, AnyFunction } from '../../_utils/types';
 
 import { isFunction } from 'lodash-es';
 import { useSize } from '../../hooks/useSize';
@@ -44,7 +44,7 @@ export default defineComponent({
     this.instance = null;
   },
   methods: {
-    create() {
+    create(): void {
       this.instance = new CountUp(this.$refs.countup, this.endValue, this.options) || { error: true };
       if (this.instance.error) return;
       setTimeout(() => {
@@ -53,27 +53,27 @@ export default defineComponent({
         });
       }, this.delay);
     },
-    printValue(value) {
+    printValue(value): void {
       if (this.instance && isFunction(this.instance.printValue)) {
         return this.instance.printValue(value);
       }
     },
-    start(callback) {
+    start(callback: AnyFunction<void>): void {
       if (this.instance && isFunction(this.instance.start)) {
         return this.instance.start(callback);
       }
     },
-    pauseResume() {
+    pauseResume(): void {
       if (this.instance && isFunction(this.instance.pauseResume)) {
         return this.instance.pauseResume();
       }
     },
-    reset() {
+    reset(): void {
       if (this.instance && isFunction(this.instance.reset)) {
         return this.instance.reset();
       }
     },
-    update(newEndVal) {
+    update(newEndVal): void {
       if (this.instance && isFunction(this.instance.update)) {
         return this.instance.update(newEndVal);
       }

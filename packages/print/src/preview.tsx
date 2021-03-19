@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-02-09 09:03:59
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-19 16:22:17
+ * @Last Modified time: 2021-03-19 16:51:05
  */
 import { defineComponent, PropType, reactive } from 'vue';
 import localforage from 'localforage';
@@ -275,7 +275,7 @@ export default defineComponent({
           <Setting
             setting={form.setting}
             onChange={this.settingChange}
-            onClose={(val) => {
+            onClose={(val: boolean): void => {
               this.visible = val;
             }}
           />

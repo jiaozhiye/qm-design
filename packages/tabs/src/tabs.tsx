@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-02-09 09:03:59
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-19 15:46:09
+ * @Last Modified time: 2021-03-19 16:54:26
  */
 import { defineComponent, PropType, VNode } from 'vue';
 import PropTypes from '../../_utils/vue-types';
@@ -94,10 +94,10 @@ export default defineComponent({
       modelValue,
       tabPosition,
       beforeLeave,
-      'onUpdate:modelValue': (val) => {
+      'onUpdate:modelValue': (val: string): void => {
         this.$emit('update:modelValue', val);
       },
-      onTabClick: (tab) => {
+      onTabClick: (tab): void => {
         this.doChangeHandle(tab.paneName, () => this.$emit('change', tab.paneName));
       },
     };

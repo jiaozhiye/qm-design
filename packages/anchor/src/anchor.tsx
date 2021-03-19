@@ -2,13 +2,13 @@
  * @Author: 焦质晔
  * @Date: 2021-02-09 09:03:59
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-06 10:52:35
+ * @Last Modified time: 2021-03-19 16:45:30
  */
 import { defineComponent, VNode, ComponentInternalInstance, PropType } from 'vue';
 import addEventListener from 'add-dom-event-listener';
 import scrollIntoView from 'scroll-into-view-if-needed';
 import PropTypes from '../../_utils/vue-types';
-import { ComponentSize, JSXNode } from '../../_utils/types';
+import { ComponentSize, JSXNode, Nullable } from '../../_utils/types';
 import { isNumber } from 'lodash-es';
 import { isValidComponentSize, isValidWidthUnit } from '../../_utils/validators';
 
@@ -67,9 +67,10 @@ export default defineComponent({
       // VNode -> 有 __v_isVNode 属性
       const { _: instance } = this;
       const { children } = instance.subTree;
-      const content: VNode | undefined = Array.from(children as ArrayLike<VNode>).find(({ props }) => {
-        return props?.class === `${prefixCls}__container`;
-      });
+      const content: Nullable<VNode> =
+        Array.from(children as ArrayLike<VNode>).find(({ props }) => {
+          return props?.class === `${prefixCls}__container`;
+        }) ?? null;
       if (!content) {
         return [];
       }
