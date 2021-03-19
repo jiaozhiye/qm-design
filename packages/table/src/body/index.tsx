@@ -78,7 +78,7 @@ export default defineComponent({
   },
   mounted() {
     this.event1 = addEventListener(this.$el, 'scroll', this.scrollEvent);
-    this.event2 = addEventListener(document.body, 'click', this.cancelEvent);
+    this.event2 = addEventListener(document, 'click', this.cancelEvent);
     this.event3 = addEventListener(document, 'keydown', this.keyboardEvent);
   },
   unmounted() {
