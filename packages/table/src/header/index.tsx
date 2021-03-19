@@ -184,13 +184,13 @@ export default defineComponent({
     },
     renderSorter(order) {
       const ascCls = [
-        `sort--asc-btn`,
+        `icon-svg sort--asc`,
         {
           [`sort--active`]: order === this.ascend,
         },
       ];
       const descCls = [
-        `sort--desc-btn`,
+        `icon-svg sort--desc`,
         {
           [`sort--active`]: order === this.descend,
         },
