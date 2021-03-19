@@ -337,7 +337,7 @@ export default defineComponent({
     const { visible, isActived } = this;
     const prefixCls = getPrefixCls('table');
     const filterBtnCls = [
-      `filter-btn`,
+      `cell--filter__btn`,
       {
         [`selected`]: visible,
         [`actived`]: isActived,

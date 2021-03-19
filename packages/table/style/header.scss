@@ -75,8 +75,8 @@ $prefix: '#{$qm-prefix}-table';
     height: 1.7em;
     margin-left: 2px;
     cursor: pointer;
-    .sort--asc,
-    .sort--desc {
+    &__asc,
+    &__desc {
       position: absolute;
       color: $v-icon-color;
       line-height: 1;
@@ -84,14 +84,14 @@ $prefix: '#{$qm-prefix}-table';
       svg {
         vertical-align: middle;
       }
-      &.sort--active {
+      &.actived {
         color: $v-primary-color;
       }
     }
-    .sort--asc {
+    &__asc {
       top: 0;
     }
-    .sort--desc {
+    &__desc {
       bottom: 0;
     }
   }
@@ -100,7 +100,7 @@ $prefix: '#{$qm-prefix}-table';
   .cell--filter {
     width: 20px;
     flex-shrink: 0;
-    .filter-btn {
+    &__btn {
       display: flex;
       justify-content: center;
       align-items: center;
