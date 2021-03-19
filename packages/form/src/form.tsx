@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-02-09 09:03:59
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-15 18:14:09
+ * @Last Modified time: 2021-03-19 15:38:18
  */
 import { ComponentPublicInstance, defineComponent } from 'vue';
 import scrollIntoView from 'scroll-into-view-if-needed';
@@ -16,7 +16,7 @@ import { warn } from '../../_utils/error';
 import { noop, difference, secretFormat } from './utils';
 import { FormColsMixin } from './form-cols-mixin';
 import { PublicMethodsMixin } from './public-methods-mixin';
-import { IFormType, IFormData, IFormItem, IFormDesc, ISecretType, props, ARRAY_TYPE, FORMAT_TYPE, UNFIX_TYPE } from './types';
+import { IFormType, IFormData, IFormItem, IFormDesc, IFormItemType, ISecretType, props, ARRAY_TYPE, FORMAT_TYPE, UNFIX_TYPE } from './types';
 
 import FieldsFilter from './fields-filter';
 import FormInput from './form-input';
@@ -110,11 +110,11 @@ export default defineComponent({
       return this.list.filter((x) => x.type === 'BREAK_SPACE');
     },
     blockFieldNames(): Array<Pick<IFormItem, 'fieldName' | 'label'>>[] {
-      const result = [];
+      const result: any[] = [];
       for (let i = 0, len = this.dividers.length; i < len; i++) {
         let index: number = this.list.findIndex((x) => x === this.dividers[i]);
-        let nextIndex: number = this.list.findIndex((x) => x === this.dividers[i + 1]);
-        nextIndex = nextIndex > -1 ? nextIndex : undefined;
+        let nextIndex: number | undefined = this.list.findIndex((x) => x === this.dividers[i + 1]);
+        nextIndex = (nextIndex as number) > -1 ? nextIndex : undefined;
         result.push(this.list.slice(index, nextIndex).map((x) => ({ label: x.label, fieldName: x.fieldName })));
       }
       return result;
@@ -321,7 +321,7 @@ export default defineComponent({
           labelWidth={labelWidth && getParserWidth(labelWidth)}
           prop={fieldName}
           v-slots={{
-            label: (): JSXNode => labelOptions && this.createFormItemLabel({ label, ...labelOptions }),
+            label: (): JSXNode => labelOptions && this.createFormItemLabel(Object.assign({}, { label }, labelOptions)),
           }}
         >
           <div style={{ width: '100%', ...style }}>{render(option, this)}</div>
@@ -419,7 +419,7 @@ export default defineComponent({
     scrollToField(fields: AnyObject<unknown>): void {
       const ids: string[] = Object.keys(fields);
       if (!ids.length) return;
-      scrollIntoView(document.getElementById(ids[0]), {
+      scrollIntoView(document.getElementById(ids[0]) as HTMLElement, {
         scrollMode: 'if-needed',
         block: 'nearest',
       });
@@ -448,8 +448,8 @@ export default defineComponent({
         }
         if (attr.includes('|') && Array.isArray(form[attr])) {
           let [start, end] = attr.split('|');
-          form[start] = form[attr][0];
-          form[end] = form[attr][1];
+          form[start] = (form[attr] as ValueOf<IFormData>[])[0];
+          form[end] = (form[attr] as ValueOf<IFormData>[])[1];
         }
       }
     },
@@ -598,7 +598,7 @@ export default defineComponent({
         return (
           <el-col
             key={i}
-            type={UNFIX_TYPE.includes(type) ? 'UN_FIXED' : 'FIXED'}
+            type={UNFIX_TYPE.includes(type as IFormItemType) ? 'UN_FIXED' : 'FIXED'}
             id={fieldName}
             span={selfCols * colSpan}
             style={isFilterType ? { display: !showFilterCollapse || isBlock ? 'block' : 'none' } : { display: isDisplay ? 'block' : 'none' }}

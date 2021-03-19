@@ -2,10 +2,10 @@
  * @Author: 焦质晔
  * @Date: 2021-02-09 09:03:59
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-02 16:01:33
+ * @Last Modified time: 2021-03-19 15:42:13
  */
 import { defineComponent, PropType } from 'vue';
-import { JSXNode } from '../../_utils/types';
+import { JSXNode, Nullable } from '../../_utils/types';
 
 import { sleep } from '../../_utils/util';
 import { mmToPx, pxToMm, insertBefore, isPageBreak } from './utils';
@@ -43,9 +43,7 @@ export default defineComponent({
           setting: { direction },
         },
       } = this.$$preview;
-      const paddingX = isWindowsPrinter
-        ? config.defaultDistance * 10 + config.defaultDistance * 10
-        : 0;
+      const paddingX = isWindowsPrinter ? config.defaultDistance * 10 + config.defaultDistance * 10 : 0;
       const pageWidth = direction === 'vertical' ? pageSize[0] : pageSize[1];
       return pageWidth - paddingX;
     },
@@ -57,27 +55,17 @@ export default defineComponent({
           setting: { direction },
         },
       } = this.$$preview;
-      const paddingY = isWindowsPrinter
-        ? config.defaultDistance * 10 + config.defaultDistance * 10
-        : 0;
+      const paddingY = isWindowsPrinter ? config.defaultDistance * 10 + config.defaultDistance * 10 : 0;
       const pageHeight = direction === 'vertical' ? pageSize[1] : pageSize[0];
       return pageHeight - paddingY;
     },
     workspaceWidth() {
       const { distance } = this.$$preview.form.setting;
-      return mmToPx(
-        this.pagePrintWidth -
-          (distance.left - config.defaultDistance) * 10 -
-          (distance.right - config.defaultDistance) * 10
-      );
+      return mmToPx(this.pagePrintWidth - (distance.left - config.defaultDistance) * 10 - (distance.right - config.defaultDistance) * 10);
     },
     workspaceHeight() {
       const { distance } = this.$$preview.form.setting;
-      return mmToPx(
-        this.pagePrintHeight -
-          (distance.top - config.defaultDistance) * 10 -
-          (distance.bottom - config.defaultDistance) * 10
-      );
+      return mmToPx(this.pagePrintHeight - (distance.top - config.defaultDistance) * 10 - (distance.bottom - config.defaultDistance) * 10);
     },
     scaleSize() {
       return this.$$preview.form.scale;
@@ -100,13 +88,11 @@ export default defineComponent({
         form: { printerType },
       } = this.$$preview;
       const offsetWidth = this.workspaceWidth + this.pageDistance.left + this.pageDistance.right;
-      const defaultOffsetLeft =
-        config.previewWidth - offsetWidth <= 0 ? 0 : (config.previewWidth - offsetWidth) / 2;
+      const defaultOffsetLeft = config.previewWidth - offsetWidth <= 0 ? 0 : (config.previewWidth - offsetWidth) / 2;
       const stepOffsetLeft = Math.abs(((1 - this.scaleSize) * offsetWidth) / 2);
       let offsetLeft = 0;
       if (this.scaleSize > 1) {
-        offsetLeft =
-          stepOffsetLeft > defaultOffsetLeft ? -1 * defaultOffsetLeft : -1 * stepOffsetLeft;
+        offsetLeft = stepOffsetLeft > defaultOffsetLeft ? -1 * defaultOffsetLeft : -1 * stepOffsetLeft;
       }
       if (this.scaleSize < 1) {
         offsetLeft =
@@ -176,7 +162,7 @@ export default defineComponent({
       return __html__;
     },
     createTemplateCols() {
-      let oNewTr = document.createElement('tr');
+      let oNewTr: Nullable<HTMLTableRowElement> = document.createElement('tr');
       oNewTr.setAttribute('type', 'template-cols');
       oNewTr.style.height = '0';
       oNewTr.innerHTML = this.createTdCols()
@@ -205,29 +191,19 @@ export default defineComponent({
 
       // 直接打印
       if (this.directPrint) {
-        return this.previewHtmls.push([
-          this.createTdCols(),
-          this.createLogo(),
-          ...this.elementHtmls,
-        ]);
+        return this.previewHtmls.push([this.createTdCols(), this.createLogo(), ...this.elementHtmls]);
       }
 
       // 页面高度
-      let pageHeight = setting.fixedLogo
-        ? this.workspaceHeight - config.logoHeight
-        : this.workspaceHeight;
+      let pageHeight = setting.fixedLogo ? this.workspaceHeight - config.logoHeight : this.workspaceHeight;
 
       // 临时数组
-      let tmpArr = [];
+      let tmpArr: HTMLElement[] = [];
       this.previewHtmls = [];
 
       // 针式打印机  连续打印
       if (printerType === 'stylus') {
-        this.previewHtmls.push([
-          this.createTdCols(),
-          ...(setting.fixedLogo ? [this.createLogo()] : []),
-          ...this.elementHtmls,
-        ]);
+        this.previewHtmls.push([this.createTdCols(), ...(setting.fixedLogo ? [this.createLogo()] : []), ...this.elementHtmls]);
       } else {
         let sum = 0;
         for (let i = 0, len = this.elementHeights.length; i < len; i++) {
@@ -244,11 +220,7 @@ export default defineComponent({
           if (sum <= pageHeight) {
             tmpArr.push(item);
           } else {
-            this.previewHtmls.push([
-              this.createTdCols(),
-              ...(setting.fixedLogo ? [this.createLogo()] : []),
-              ...tmpArr,
-            ]);
+            this.previewHtmls.push([this.createTdCols(), ...(setting.fixedLogo ? [this.createLogo()] : []), ...tmpArr]);
             tmpArr = [];
             sum = 0;
             i -= 1;
@@ -256,11 +228,7 @@ export default defineComponent({
 
           // 最后一页
           if (i === len - 1 && tmpArr.length) {
-            this.previewHtmls.push([
-              this.createTdCols(),
-              ...(setting.fixedLogo ? [this.createLogo()] : []),
-              ...tmpArr,
-            ]);
+            this.previewHtmls.push([this.createTdCols(), ...(setting.fixedLogo ? [this.createLogo()] : []), ...tmpArr]);
           }
         }
       }
@@ -306,7 +274,7 @@ export default defineComponent({
       return __html__;
     },
     createExportHtml() {
-      let exportHtmls = [];
+      let exportHtmls: string[] = [];
       for (let i = 0; i < this.elementHtmls.length; i++) {
         exportHtmls[i] = this.elementHtmls[i]
           .replace(/[\r\n]/g, '')
@@ -314,9 +282,7 @@ export default defineComponent({
           .replace(/(<td[^>]+>)\s+/, '$1')
           .replace(/\s+(<\/td>)/, '$1');
       }
-      return (
-        '<table>' + this.createLogo() + this.createTdCols() + exportHtmls.join('') + '</table>'
-      );
+      return '<table>' + this.createLogo() + this.createTdCols() + exportHtmls.join('') + '</table>';
     },
     // 加载完成打印模板组件，创建预览工作区
     async SHOW_PREVIEW() {
@@ -348,14 +314,7 @@ export default defineComponent({
     },
   },
   render(): JSXNode {
-    const {
-      directPrint,
-      loading,
-      templateRender: TemplateRender,
-      dataSource,
-      workspaceWidth,
-      workspaceStyle,
-    } = this;
+    const { directPrint, loading, templateRender: TemplateRender, dataSource, workspaceWidth, workspaceStyle } = this;
     const prefixCls = getPrefixCls('print-container');
     const cls = { [prefixCls]: true, 'no-visible': directPrint };
     return (

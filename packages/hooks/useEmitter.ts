@@ -5,14 +5,15 @@
  * @Last Modified time: 2021-03-15 16:58:14
  */
 import { getCurrentInstance, ComponentInternalInstance } from 'vue';
+import { Nullable } from '../_utils/types';
 
 export const useDispatch = function (componentName: string, eventName: string, params: unknown): void {
-  let vm: ComponentInternalInstance = getCurrentInstance();
+  let vm: Nullable<ComponentInternalInstance> = getCurrentInstance();
 
   vm = vm || this;
   if (!vm) return;
 
-  let parent = vm.parent || vm.root;
+  let parent: Nullable<ComponentInternalInstance> = vm.parent || vm.root;
   let name: string = (parent.type as any).componentName || parent.type.name;
 
   while (parent && (!name || name !== componentName)) {

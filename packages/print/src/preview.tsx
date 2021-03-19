@@ -2,11 +2,11 @@
  * @Author: 焦质晔
  * @Date: 2021-02-09 09:03:59
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-11 09:32:04
+ * @Last Modified time: 2021-03-19 15:03:28
  */
 import { defineComponent, PropType, reactive } from 'vue';
 import localforage from 'localforage';
-import { JSXNode, AnyObject } from '../../_utils/types';
+import { JSXNode, AnyObject, Nullable } from '../../_utils/types';
 
 import { isObject, merge } from 'lodash-es';
 import { getLodop } from './LodopFuncs';
@@ -101,7 +101,7 @@ export default defineComponent({
   async created() {
     if (!this.printerKey) return;
     try {
-      let res: AnyObject<any> = await localforage.getItem(this.printerKey);
+      let res: Nullable<AnyObject<unknown>> = await localforage.getItem(this.printerKey);
       if (!res) {
         res = await this.getPrintConfig(this.printerKey);
         if (isObject(res)) {
@@ -112,7 +112,7 @@ export default defineComponent({
         this.form = reactive(
           merge({}, this.form, {
             ...res,
-            printerName: this.printerItems.find((x) => x.text === res.printerName)?.value ?? -1,
+            printerName: this.printerItems.find((x) => x.text === res?.printerName)?.value ?? -1,
           })
         );
       }

@@ -153,9 +153,8 @@ export default defineComponent({
             onChange={(): void => onChange(form[fieldName])}
             onFocus={(): void => {
               this.$nextTick(() => {
-                const $pickerBar: Nullable<HTMLElement> = document
-                  .querySelector(`.date-picker__${fieldName}`)
-                  .querySelector('.el-picker-panel__sidebar');
+                const $pickerBar: Nullable<HTMLElement> =
+                  document.querySelector(`.date-picker__${fieldName}`)?.querySelector('.el-picker-panel__sidebar') ?? null;
                 if ($pickerBar?.nodeType === 1) {
                   this._event = addEventListener($pickerBar, 'click', shortcutClickHandle);
                 }

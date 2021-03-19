@@ -2,6 +2,7 @@ export default {
   name: 'en',
   qm: {
     button: {
+      confirmPrompt: '提示',
       confirmTitle: '确认执行删除吗？',
     },
     divider: {

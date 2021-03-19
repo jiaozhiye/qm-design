@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-02-09 09:03:59
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-15 14:27:22
+ * @Last Modified time: 2021-03-19 16:06:44
  */
 import { defineComponent, PropType } from 'vue';
 import PropTypes from '../../_utils/vue-types';
@@ -82,12 +82,12 @@ export default defineComponent({
               ({ props }, i): JSXNode => {
                 return (
                   // @ts-ignore
-                  <TabPane key={i} label={props.label} name={i.toString()}>
+                  <TabPane key={i} label={props?.label} name={i.toString()}>
                     <PrintItem
                       ref={`print-item-${i}`}
                       uniqueKey={`${uniqueKey}_tab_${i}`}
-                      dataSource={props.dataSource}
-                      templateRender={props.templateRender}
+                      dataSource={props?.dataSource}
+                      templateRender={props?.templateRender}
                       style={{ margin: 0 }}
                     />
                   </TabPane>

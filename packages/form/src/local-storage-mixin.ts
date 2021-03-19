@@ -2,12 +2,11 @@
  * @Author: 焦质晔
  * @Date: 2021-03-02 11:10:34
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-02 17:54:12
+ * @Last Modified time: 2021-03-19 16:03:48
  */
 import { reactive } from 'vue';
 import { xor, isEqual, isUndefined } from 'lodash-es';
 import { IFormItem } from './types';
-import { Nullable } from '../../_utils/types';
 
 export const LocalStorageMixin = {
   computed: {
@@ -19,7 +18,7 @@ export const LocalStorageMixin = {
     this.initLocalfields();
   },
   methods: {
-    async getTableFieldsConfig(key: string): Promise<Nullable<any[]>> {
+    async getTableFieldsConfig(key: string): Promise<unknown[] | void> {
       const { global } = this.$DESIGN;
       const fetchFn = global['getComponentConfigApi'];
       if (!fetchFn) return;
@@ -31,7 +30,7 @@ export const LocalStorageMixin = {
       } catch (err) {
         // ...
       }
-      return null;
+      return;
     },
     async saveTableColumnsConfig(key: string, value: IFormItem[]): Promise<void> {
       const { global } = this.$DESIGN;
@@ -43,10 +42,10 @@ export const LocalStorageMixin = {
         // ...
       }
     },
-    getLocalFields(): Array<IFormItem> {
+    getLocalFields(): Array<IFormItem> | void {
       if (!this.formUniqueKey) return;
       // 本地存储
-      const localFields: IFormItem[] = JSON.parse(localStorage.getItem(this.formUniqueKey));
+      const localFields: IFormItem[] = JSON.parse(localStorage.getItem(this.formUniqueKey) as string);
       // 服务端获取
       if (!localFields) {
         this.getTableFieldsConfig(this.formUniqueKey)
@@ -65,7 +64,7 @@ export const LocalStorageMixin = {
       if (diffs.length > 0) {
         return this.list.map((item) => {
           const { fieldName } = item;
-          const target: IFormItem = localFields.find((x) => x.fieldName === fieldName);
+          const target: IFormItem | undefined = localFields.find((x) => x.fieldName === fieldName);
           if (!target) {
             return item;
           }
@@ -93,7 +92,7 @@ export const LocalStorageMixin = {
           ...target,
         };
       });
-      const localFields = JSON.parse(localStorage.getItem(this.formUniqueKey));
+      const localFields = JSON.parse(localStorage.getItem(this.formUniqueKey) as string);
       if (isEqual(result, localFields)) return;
       // 本地存储
       localStorage.setItem(this.formUniqueKey, JSON.stringify(result));

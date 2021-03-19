@@ -2,11 +2,11 @@
  * @Author: 焦质晔
  * @Date: 2021-02-09 09:03:59
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-15 15:10:16
+ * @Last Modified time: 2021-03-19 15:04:53
  */
 import { defineComponent, PropType, Component } from 'vue';
 import PropTypes from '../../_utils/vue-types';
-import { JSXNode, ComponentSize } from '../../_utils/types';
+import { JSXNode, ComponentSize, Nullable } from '../../_utils/types';
 
 import { useSize } from '../../hooks/useSize';
 import { sleep, noop, isVNode } from '../../_utils/util';
@@ -67,7 +67,7 @@ export default defineComponent({
       const { SHOW_PREVIEW, DIRECT_PRINT } = this.$refs.preview.$refs.container;
       this.preview ? SHOW_PREVIEW() : DIRECT_PRINT();
     },
-    createRender(): JSXNode {
+    createRender(): Nullable<JSXNode> {
       const { $props } = this;
       const dialogProps = {
         visible: this.visible,

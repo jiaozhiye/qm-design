@@ -60,7 +60,7 @@ export default defineComponent({
       }
       this.currentValue = val.toString();
     },
-    emitEventHandle(val: number | string): void {
+    emitEventHandle(val: number | string | undefined): void {
       val = val !== '' ? Number(val) : undefined;
       this.$emit('update:modelValue', val);
       this.$emit('change', val);

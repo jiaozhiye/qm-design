@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-02-09 09:03:59
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-08 15:15:52
+ * @Last Modified time: 2021-03-19 15:50:41
  */
 import { defineComponent, PropType } from 'vue';
 import { ElMessage, ElMessageBox } from 'element-plus';
@@ -108,7 +108,7 @@ export default defineComponent({
     async handleRemove(index: number): Promise<void> {
       if (this.remove?.api) {
         try {
-          await ElMessageBox.confirm(t('qm.button.confirmTitle'), undefined, { type: 'warning' });
+          await ElMessageBox.confirm(t('qm.button.confirmTitle'), t('qm.button.confirmPrompt'), { type: 'warning' });
           const res = await this.remove.api({ ...this.fileList[index], ...this.remove.params });
           if (res.code === 200) {
             this.fileList.splice(index, 1);

@@ -72,7 +72,7 @@ export default defineComponent({
   },
   emits: ['update:visible', 'open', 'opened', 'close', 'closed', 'afterVisibleChange', 'viewportChange'],
   data() {
-    this.insideSpinCtrl = isUndefined(this.loading);
+    Object.assign(this, { insideSpinCtrl: isUndefined(this.loading) });
     return {
       spinning: this.loading,
       fullscreen: false,
@@ -190,7 +190,7 @@ export default defineComponent({
       withHeader: $props.showHeader,
       showClose: $props.showClose,
       beforeClose: this.beforeCloseHandle,
-      closeOnClickModal: $props.closeOnClickModal ?? global.closeOnClickModal ?? false,
+      closeOnClickModal: $props.closeOnClickModal ?? global?.closeOnClickModal ?? false,
       closeOnPressEscape: $props.closeOnPressEscape,
       destroyOnClose: $props.destroyOnClose,
       appendToBody: true,

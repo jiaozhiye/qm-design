@@ -107,7 +107,9 @@ export default defineComponent({
           }
           break;
         }
-        this.tabs[i + 1] = target.children.map((x) => ({ text: x.text, value: x.value })) as IDict[];
+        if (Array.isArray(target?.children)) {
+          this.tabs[i + 1] = target?.children.map((x) => ({ text: x.text, value: x.value })) as IDict[];
+        }
       }
     },
     async getItemList(): Promise<void> {
@@ -222,7 +224,7 @@ export default defineComponent({
                   onVisibleChange={(visible: boolean): void => {
                     if (!visible) return;
                     setStyle(
-                      document.querySelector(`.region-select__${fieldName}`),
+                      document.querySelector(`.region-select__${fieldName}`) as HTMLElement,
                       'minWidth',
                       `${this.$refs[`select`].$el.getBoundingClientRect().width}px`
                     );

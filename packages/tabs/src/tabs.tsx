@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-02-09 09:03:59
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-02-26 14:01:19
+ * @Last Modified time: 2021-03-19 15:46:09
  */
 import { defineComponent, PropType, VNode } from 'vue';
 import PropTypes from '../../_utils/vue-types';
@@ -50,14 +50,9 @@ export default defineComponent({
   methods: {
     renderTabPanes($slots: Array<VNode>): JSXNode[] {
       return $slots.map((vNode, index) => {
-        const { label, name, disabled, lazy } = vNode.props;
+        const { label, name, disabled, lazy } = vNode.props || {};
         return (
-          <el-tab-pane
-            label={label}
-            name={name ?? index.toString()}
-            disabled={disabled}
-            lazy={lazy ?? this.lazyLoad}
-          >
+          <el-tab-pane label={label} name={name ?? index.toString()} disabled={disabled} lazy={lazy ?? this.lazyLoad}>
             {vNode}
           </el-tab-pane>
         );
@@ -109,12 +104,8 @@ export default defineComponent({
 
     return (
       <div class={cls}>
-        {extraNode && tabPosition === 'top' ? (
-          <div class={`${prefixCls}__extra`}>{extraNode}</div>
-        ) : null}
-        <el-tabs {...wrapProps}>
-          {this.renderTabPanes(getValidSlot(this.$slots.default?.(), TAB_PANE_NAME))}
-        </el-tabs>
+        {extraNode && tabPosition === 'top' ? <div class={`${prefixCls}__extra`}>{extraNode}</div> : null}
+        <el-tabs {...wrapProps}>{this.renderTabPanes(getValidSlot(this.$slots.default?.(), TAB_PANE_NAME))}</el-tabs>
       </div>
     );
   },

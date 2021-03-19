@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-05-23 10:58:27
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-01 16:22:49
+ * @Last Modified time: 2021-03-19 15:45:43
  */
 import { Nullable } from '../../_utils/types';
 
@@ -18,7 +18,7 @@ export const getDPI = (): number[] => {
     document.body.appendChild(tmpNode);
     arrDPI[0] = parseInt(tmpNode.offsetWidth.toString());
     arrDPI[1] = parseInt(tmpNode.offsetHeight.toString());
-    tmpNode.parentNode.removeChild(tmpNode);
+    tmpNode.parentNode?.removeChild(tmpNode);
     tmpNode = null;
   }
   return arrDPI;

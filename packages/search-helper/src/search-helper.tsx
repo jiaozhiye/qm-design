@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-02-09 09:03:59
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-15 15:32:43
+ * @Last Modified time: 2021-03-19 15:25:39
  */
 import { defineComponent, PropType } from 'vue';
 import { merge, get, isFunction } from 'lodash-es';
@@ -132,7 +132,7 @@ export default defineComponent({
       } catch (e) {}
       this.loading = false;
     },
-    createTableColumns(vals = []): Record<string, unknown>[] {
+    createTableColumns(vals: Record<string, unknown>[] = []): Record<string, unknown>[] {
       return [
         {
           title: t('qm.searchHelper.orderIndex'),
@@ -157,7 +157,7 @@ export default defineComponent({
         }),
       ];
     },
-    createTopFilters(vals = []): Record<string, unknown>[] {
+    createTopFilters(vals: Record<string, unknown>[] = []): Record<string, unknown>[] {
       return [
         ...(this.filters || []),
         ...vals.map((x) => {
@@ -224,14 +224,14 @@ export default defineComponent({
     createDictList(code: string): IDict[] {
       const { global } = this.$DESIGN;
       const dictKey: string = global['dict_key'] || 'dict';
-      const $dict: Record<string, IDict[]> = JSON.parse(localStorage.getItem(dictKey)) || {};
+      const $dict: Record<string, IDict[]> = JSON.parse(localStorage.getItem(dictKey) as string) || {};
       let res: IDict[] = [];
       if ($dict && Array.isArray($dict[code])) {
         res = $dict[code].map((x) => ({ text: x.text, value: x.value }));
       }
       return res;
     },
-    createTableData(): [unknown, Record<string, unknown>] {
+    createTableData(): [unknown, Record<string, unknown>] | void {
       if (!Object.keys(this.alias).length) return;
       let others: Record<string, unknown> = {};
       let current: unknown;
@@ -247,7 +247,7 @@ export default defineComponent({
     },
     calcTableHeight(): void {
       const $size: string = this.$props.size || this.$DESIGN.size || 'default';
-      const containerHeight: number = window.innerHeight - getParentNode(this.$el, 'el-dialog')?.offsetTop * 2 - 50 - footHeight[$size];
+      const containerHeight: number = window.innerHeight - (getParentNode(this.$el, 'el-dialog')?.offsetTop || 0) * 2 - 50 - footHeight[$size];
       // 计算表格高度
       this.height = containerHeight - this.$topFilter.$el.offsetHeight - 100;
     },

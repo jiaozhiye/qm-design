@@ -2,11 +2,11 @@
  * @Author: 焦质晔
  * @Date: 2021-02-24 10:24:37
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-15 11:19:09
+ * @Last Modified time: 2021-03-19 16:05:15
  */
 import { transform, isEqual, isObject } from 'lodash-es';
 import dayjs from 'dayjs';
-import { Nullable } from '../../_utils/types';
+import { AnyObject, Nullable } from '../../_utils/types';
 
 export const noop = (): void => {};
 
@@ -15,7 +15,7 @@ export const toDate = (val: string | string[]): Date | Date[] => {
   const vals: string[] = Array.isArray(val) ? val : [val];
   const result: Date[] = vals.map((x) => {
     return x ? dayjs(x).toDate() : undefined;
-  });
+  }) as Date[];
   return Array.isArray(val) ? result : result[0];
 };
 
@@ -24,7 +24,7 @@ export const dateFormat = (val: Date | Date[], vf: string): string | string[] =>
   const vals: Date[] = Array.isArray(val) ? val : [val];
   const result: string[] = vals.map((x) => {
     return x ? dayjs(x).format(vf) : undefined;
-  });
+  }) as string[];
   return Array.isArray(val) ? result : result[0];
 };
 
@@ -82,8 +82,8 @@ export const secretFormat = (value = '', type: string): string => {
   return value;
 };
 
-export const difference = <T>(object: T, base: T): T => {
-  return transform(object, (result, value, key) => {
+export const difference = <T extends AnyObject<any>>(object: T, base: T): T => {
+  return transform(object, (result: any, value: any, key) => {
     if (!isEqual(value ?? '', base[key] ?? '')) {
       result[key] = isObject(value) && isObject(base[key]) ? difference(value, base[key]) : value;
     }
@@ -91,7 +91,7 @@ export const difference = <T>(object: T, base: T): T => {
 };
 
 export const deepFind = <T>(arr: T[], mark: string): Nullable<T> => {
-  let res: T = null;
+  let res: Nullable<T> = null;
   for (let i = 0; i < arr.length; i++) {
     if (Array.isArray((arr[i] as any).children)) {
       res = deepFind((arr[i] as any).children, mark);
@@ -118,13 +118,13 @@ export const deepMapList = <T>(list: T[], valueKey: string, textKey: string): T[
 };
 
 export const deepFindValues = <T>(arr: T[], str: string, depth = 0): T[] => {
-  const result = [];
+  const result: T[] = [];
   arr.forEach((x: any) => {
     if (x.value == str.split(',')[depth]) {
       result.push(x);
     }
     if (Array.isArray(x.children)) {
-      result.push(...deepFindValues(x.children, str, depth + 1));
+      result.push(...deepFindValues<T>(x.children, str, depth + 1));
     }
   });
   return result;

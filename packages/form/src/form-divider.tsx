@@ -2,10 +2,10 @@
  * @Author: 焦质晔
  * @Date: 2021-02-23 21:56:33
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-04 18:12:40
+ * @Last Modified time: 2021-03-19 15:50:57
  */
 import { defineComponent } from 'vue';
-import { JSXNode } from '../../_utils/types';
+import { JSXNode, AnyObject } from '../../_utils/types';
 import { noop } from './utils';
 
 import Divider from '../../divider';
@@ -19,16 +19,16 @@ export default defineComponent({
     const { blockFieldNames, view, desc, expand } = this.$$form;
     const { type, label, fieldName, id, style = {}, options = {}, collapse } = this.option;
     const { showLimit, remarkItems = [], onCollapse = noop } = collapse || {};
-    const result = [];
+    const result: AnyObject<unknown>[] = [];
     if (remarkItems.length) {
-      const blockList = blockFieldNames.find((arr) => arr[0].fieldName === fieldName) ?? [];
-      const index = showLimit ?? blockList.length - 1;
+      const blockList: AnyObject<any>[] = blockFieldNames.find((arr) => arr[0].fieldName === fieldName) ?? [];
+      const index: number = showLimit ?? blockList.length - 1;
       blockList.slice(index + 1).forEach((x) => {
-        const item = remarkItems.find((k) => k.fieldName === x.fieldName);
+        const item: AnyObject<unknown> = remarkItems.find((k) => k.fieldName === x.fieldName);
         if (!item) return;
-        let label = item.isLabel ? `${x.label}：` : '';
-        let textVal = view[x.fieldName] ?? '';
-        let descVal = desc[x.fieldName] ?? '';
+        let label: string = item.isLabel ? `${x.label}：` : '';
+        let textVal: string = view[x.fieldName] ?? '';
+        let descVal: string = desc[x.fieldName] ?? '';
         if (textVal === '') return;
         result.push({ ...x, text: `${label}${textVal} ${descVal}` });
       });

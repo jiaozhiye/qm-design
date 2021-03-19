@@ -15,6 +15,6 @@ export const useSize = (props: IProps): Record<'$size', string> => {
   const $DESIGN = useGlobalConfig();
 
   return {
-    $size: props.size || $DESIGN.size,
+    $size: props.size || $DESIGN.size || '',
   };
 };

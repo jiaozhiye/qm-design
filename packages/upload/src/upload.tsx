@@ -2,14 +2,14 @@
  * @Author: 焦质晔
  * @Date: 2021-02-09 09:03:59
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-15 16:56:44
+ * @Last Modified time: 2021-03-19 14:53:30
  */
 import { defineComponent, PropType } from 'vue';
 import { ElMessage } from 'element-plus';
 import axios from 'axios';
 
 import PropTypes from '../../_utils/vue-types';
-import { JSXNode, ComponentSize } from '../../_utils/types';
+import { JSXNode, ComponentSize, Nullable } from '../../_utils/types';
 import { useSize } from '../../hooks/useSize';
 import { download } from '../../_utils/download';
 import { isValidComponentSize } from '../../_utils/validators';
@@ -166,7 +166,7 @@ export default defineComponent({
       <el-upload
         {...wrapProps}
         v-slots={{
-          tip: (): JSXNode =>
+          tip: (): Nullable<JSXNode> =>
             !$props.isOnlyButton ? (
               <div class="el-upload__tip" style="line-height: 1.5">
                 {(fileTypes.length ? `${t('qm.upload.tooltip', { type: fileTypes.join(',') })}，` : '') +

@@ -201,7 +201,7 @@ export default defineComponent({
     // 设置搜索帮助的值
     const resetSearchHelperValue = async (list: Record<string, unknown>[] = [], val: string): Promise<void> => {
       const alias: Record<string, string> = await this.createFieldAlias();
-      const records = list.filter((data) => data[alias[fieldName]]?.toString().toLowerCase().includes(val.toLowerCase()));
+      const records = list.filter((data) => (data[alias[fieldName]] as any)?.toString().toLowerCase().includes(val.toLowerCase()));
       if (records.length === 1) {
         return closeSearchHelper(false, records[0], alias);
       }
