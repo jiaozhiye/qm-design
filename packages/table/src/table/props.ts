@@ -98,6 +98,7 @@ const columnItem = {
  *   helper: PropTypes.shape({
  *     filters: PropTypes.object,
  *     table: PropTypes.object,
+ *     remoteMatch: PropTypes.bool,
  *     fieldAliasMap: PropTypes.func,
  *     beforeOpen: PropTypes.func,
  *     opened: PropTypes.func,

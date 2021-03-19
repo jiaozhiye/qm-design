@@ -332,6 +332,8 @@ export default defineComponent({
         this.store.addToUpdated(row);
         onChange({ [this.dataKey]: val }, row);
         this.$$table.dataChangeHandle();
+        // 更新状态变量
+        this._is_change = !1;
       };
       const closeHelperHandle = (visible, data) => {
         if (isObject(data)) {
@@ -400,8 +402,6 @@ export default defineComponent({
           return closeHelperHandle(false, records[0]);
         }
         openHelperPanel(val);
-        // 清空输入框
-        setHelperValues('');
       };
       const openHelperPanel = (val) => {
         // 打开的前置钩子
@@ -430,9 +430,12 @@ export default defineComponent({
         'onUpdate:visible': (val) => {
           this.shVisible = val;
         },
-        onClosed: () => {
+        onClose: () => {
           const { closed = noop } = helper;
           this.shDeriveValue = {};
+          if (this._is_change) {
+            setHelperValues('');
+          }
           closed(row);
         },
       };
@@ -447,6 +450,7 @@ export default defineComponent({
         modelValue: prevValue,
         'onUpdate:modelValue': (val) => {
           setCellValue(row, dataIndex, val);
+          this._is_change = !0;
         },
       };
       return (
