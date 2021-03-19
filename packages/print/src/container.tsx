@@ -2,9 +2,9 @@
  * @Author: 焦质晔
  * @Date: 2021-02-09 09:03:59
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-19 15:42:13
+ * @Last Modified time: 2021-03-19 16:16:56
  */
-import { defineComponent, PropType } from 'vue';
+import { defineComponent, PropType, CSSProperties } from 'vue';
 import { JSXNode, Nullable } from '../../_utils/types';
 
 import { sleep } from '../../_utils/util';
@@ -14,6 +14,13 @@ import { warn } from '../../_utils/error';
 import config from './config';
 
 import Spin from '../../spin';
+
+type IDistance = {
+  left: number;
+  top: number;
+  right: number;
+  bottom: number;
+};
 
 export default defineComponent({
   name: 'Container',
@@ -29,13 +36,13 @@ export default defineComponent({
     };
   },
   computed: {
-    templateEl() {
+    templateEl(): HTMLElement {
       return this.$el.querySelector('.origin-template').children[0];
     },
-    previewEl() {
+    previewEl(): HTMLElement {
       return this.$el.querySelector('.workspace');
     },
-    pagePrintWidth() {
+    pagePrintWidth(): number {
       const {
         pageSize,
         isWindowsPrinter,
@@ -43,11 +50,11 @@ export default defineComponent({
           setting: { direction },
         },
       } = this.$$preview;
-      const paddingX = isWindowsPrinter ? config.defaultDistance * 10 + config.defaultDistance * 10 : 0;
-      const pageWidth = direction === 'vertical' ? pageSize[0] : pageSize[1];
+      const paddingX: number = isWindowsPrinter ? config.defaultDistance * 10 + config.defaultDistance * 10 : 0;
+      const pageWidth: number = direction === 'vertical' ? pageSize[0] : pageSize[1];
       return pageWidth - paddingX;
     },
-    pagePrintHeight() {
+    pagePrintHeight(): number {
       const {
         pageSize,
         isWindowsPrinter,
@@ -55,22 +62,22 @@ export default defineComponent({
           setting: { direction },
         },
       } = this.$$preview;
-      const paddingY = isWindowsPrinter ? config.defaultDistance * 10 + config.defaultDistance * 10 : 0;
-      const pageHeight = direction === 'vertical' ? pageSize[1] : pageSize[0];
+      const paddingY: number = isWindowsPrinter ? config.defaultDistance * 10 + config.defaultDistance * 10 : 0;
+      const pageHeight: number = direction === 'vertical' ? pageSize[1] : pageSize[0];
       return pageHeight - paddingY;
     },
-    workspaceWidth() {
+    workspaceWidth(): number {
       const { distance } = this.$$preview.form.setting;
       return mmToPx(this.pagePrintWidth - (distance.left - config.defaultDistance) * 10 - (distance.right - config.defaultDistance) * 10);
     },
-    workspaceHeight() {
+    workspaceHeight(): number {
       const { distance } = this.$$preview.form.setting;
       return mmToPx(this.pagePrintHeight - (distance.top - config.defaultDistance) * 10 - (distance.bottom - config.defaultDistance) * 10);
     },
-    scaleSize() {
+    scaleSize(): number {
       return this.$$preview.form.scale;
     },
-    pageDistance() {
+    pageDistance(): IDistance {
       const {
         form: {
           setting: { distance },
@@ -83,14 +90,14 @@ export default defineComponent({
         bottom: mmToPx(distance.bottom * 10),
       };
     },
-    workspaceStyle() {
+    workspaceStyle(): CSSProperties {
       const {
         form: { printerType },
       } = this.$$preview;
-      const offsetWidth = this.workspaceWidth + this.pageDistance.left + this.pageDistance.right;
-      const defaultOffsetLeft = config.previewWidth - offsetWidth <= 0 ? 0 : (config.previewWidth - offsetWidth) / 2;
-      const stepOffsetLeft = Math.abs(((1 - this.scaleSize) * offsetWidth) / 2);
-      let offsetLeft = 0;
+      const offsetWidth: number = this.workspaceWidth + this.pageDistance.left + this.pageDistance.right;
+      const defaultOffsetLeft: number = config.previewWidth - offsetWidth <= 0 ? 0 : (config.previewWidth - offsetWidth) / 2;
+      const stepOffsetLeft: number = Math.abs(((1 - this.scaleSize) * offsetWidth) / 2);
+      let offsetLeft: number = 0;
       if (this.scaleSize > 1) {
         offsetLeft = stepOffsetLeft > defaultOffsetLeft ? -1 * defaultOffsetLeft : -1 * stepOffsetLeft;
       }
@@ -113,15 +120,15 @@ export default defineComponent({
         opacity: this.loading ? 0 : 1,
       };
     },
-    isManualPageBreak() {
+    isManualPageBreak(): boolean {
       return this.elementHtmls.some((x) => isPageBreak(x));
     },
   },
   watch: {
-    workspaceHeight() {
+    workspaceHeight(): void {
       this.createWorkspace();
     },
-    [`$$preview.form.setting.fixedLogo`]() {
+    [`$$preview.form.setting.fixedLogo`](): void {
       this.createWorkspace();
     },
   },
@@ -136,11 +143,11 @@ export default defineComponent({
     }
   },
   methods: {
-    createPageBreak() {
+    createPageBreak(): string {
       return `<tr type="page-break" style="page-break-after: always;"></tr>`;
     },
-    createLogo() {
-      const __html__ = [
+    createLogo(): string {
+      const __html__: string[] = [
         `<tr style="height: ${config.logoHeight}px;">`,
         `<td colspan="12" align="left">`,
         `<img src="/static/img/logo_l.png" border="0" height="26" style="margin-left: 10px;" />`,
@@ -152,8 +159,8 @@ export default defineComponent({
       ];
       return __html__.join('');
     },
-    createTdCols() {
-      let __html__ = '<tr style="height: 0;">';
+    createTdCols(): string {
+      let __html__: string = '<tr style="height: 0;">';
       // 24 栅格列
       for (let i = 0; i < 24; i++) {
         __html__ += `<td width="${100 / 24}%" style="width: ${100 / 24}%; padding: 0;"></td>`;
@@ -161,7 +168,7 @@ export default defineComponent({
       __html__ += '</tr>';
       return __html__;
     },
-    createTemplateCols() {
+    createTemplateCols(): void {
       let oNewTr: Nullable<HTMLTableRowElement> = document.createElement('tr');
       oNewTr.setAttribute('type', 'template-cols');
       oNewTr.style.height = '0';
@@ -171,18 +178,18 @@ export default defineComponent({
       insertBefore(oNewTr, this.templateEl);
       oNewTr = null;
     },
-    createNodeStyle() {
-      const allTableTrs = this.templateEl.children;
+    createNodeStyle(): void {
+      const allTableTrs: HTMLTableRowElement[] = this.templateEl.children;
       for (let i = 0; i < allTableTrs.length; i++) {
-        let type = allTableTrs[i].getAttribute('type');
+        let type: Nullable<string> = allTableTrs[i].getAttribute('type');
         if (type === 'template-cols') continue;
-        let height = allTableTrs[i].clientHeight;
+        let height: number = allTableTrs[i].clientHeight;
         allTableTrs[i].style.height = height + 'px';
         this.elementHeights.push(height);
         this.elementHtmls.push(allTableTrs[i].outerHTML);
       }
     },
-    createWorkspace() {
+    createWorkspace(): void {
       if (!this.elementHtmls.length) return;
 
       const {
@@ -195,11 +202,11 @@ export default defineComponent({
       }
 
       // 页面高度
-      let pageHeight = setting.fixedLogo ? this.workspaceHeight - config.logoHeight : this.workspaceHeight;
+      let pageHeight: number = setting.fixedLogo ? this.workspaceHeight - config.logoHeight : this.workspaceHeight;
 
       // 临时数组
       let tmpArr: HTMLElement[] = [];
-      this.previewHtmls = [];
+      this.previewHtmls = [] as unknown[];
 
       // 针式打印机  连续打印
       if (printerType === 'stylus') {
@@ -251,17 +258,17 @@ export default defineComponent({
       // 预览
       this.createPreviewDom();
     },
-    createPreviewDom() {
+    createPreviewDom(): void {
       const { currentPage } = this.$$preview;
-      let __html__ = `<table cellspacing="0" cellpadding="0" border="0" class="${this.templateEl.className}">`;
+      let __html__: string = `<table cellspacing="0" cellpadding="0" border="0" class="${this.templateEl.className}">`;
       __html__ += this.previewHtmls[currentPage - 1]?.join('') ?? '';
       __html__ += `</table>`;
       this.previewEl.innerHTML = __html__;
       // 滚动条返回顶部
       this.previewEl.parentNode.scrollTop = 0;
     },
-    createPrintHtml(printPageNumber) {
-      let __html__ = `<table cellspacing="0" cellpadding="0" border="0" class="${this.templateEl.className}">`;
+    createPrintHtml(printPageNumber): string {
+      let __html__: string = `<table cellspacing="0" cellpadding="0" border="0" class="${this.templateEl.className}">`;
       if (typeof printPageNumber !== 'undefined') {
         let curData = [...this.previewHtmls[printPageNumber - 1]];
         __html__ += curData.join('');
@@ -273,7 +280,7 @@ export default defineComponent({
       __html__ += `</table>`;
       return __html__;
     },
-    createExportHtml() {
+    createExportHtml(): string {
       let exportHtmls: string[] = [];
       for (let i = 0; i < this.elementHtmls.length; i++) {
         exportHtmls[i] = this.elementHtmls[i]
@@ -285,7 +292,7 @@ export default defineComponent({
       return '<table>' + this.createLogo() + this.createTdCols() + exportHtmls.join('') + '</table>';
     },
     // 加载完成打印模板组件，创建预览工作区
-    async SHOW_PREVIEW() {
+    async SHOW_PREVIEW(): Promise<void> {
       if (this.templateEl?.tagName !== 'TABLE') {
         return this.throwError();
       }
@@ -296,7 +303,7 @@ export default defineComponent({
       this.createWorkspace();
       this.loading = !1;
     },
-    async DIRECT_PRINT() {
+    async DIRECT_PRINT(): Promise<void> {
       if (this.templateEl?.tagName !== 'TABLE') {
         return this.throwError();
       }
@@ -309,7 +316,7 @@ export default defineComponent({
       await sleep(0);
       this.$$preview.doClose();
     },
-    throwError() {
+    throwError(): void {
       warn('qm-print', '[PrintTemplate] 打印模板组件的根元素必须是 `table` 节点');
     },
   },

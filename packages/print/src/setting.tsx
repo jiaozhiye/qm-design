@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-02-09 09:03:59
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-03 15:14:47
+ * @Last Modified time: 2021-03-19 16:24:04
  */
 import { defineComponent, PropType } from 'vue';
 import { JSXNode } from '../../_utils/types';
@@ -174,7 +174,7 @@ export default defineComponent({
         },
       ];
     },
-    async confirmHandle() {
+    async confirmHandle(): Promise<void> {
       const [err, data] = await this.$refs[`form`].GET_FORM_DATA();
       if (err) return;
       this.$emit('change', {
@@ -192,7 +192,7 @@ export default defineComponent({
       });
       this.cancelHandle();
     },
-    cancelHandle() {
+    cancelHandle(): void {
       this.$emit('close', false);
     },
   },

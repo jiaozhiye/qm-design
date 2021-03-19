@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-02-09 09:03:59
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-19 15:03:28
+ * @Last Modified time: 2021-03-19 16:22:17
  */
 import { defineComponent, PropType, reactive } from 'vue';
 import localforage from 'localforage';
@@ -20,6 +20,11 @@ import PrintMixin from './core-methods';
 import Container from './container';
 import Setting from './setting';
 import Dialog from '../../dialog';
+
+type IDict = {
+  text: string;
+  value: string | number;
+};
 
 export default defineComponent({
   name: 'Preview',
@@ -63,15 +68,15 @@ export default defineComponent({
     $$container() {
       return this.$refs[`container`];
     },
-    printerTypeItems() {
+    printerTypeItems(): IDict[] {
       return [
         { text: '激光打印机', value: 'laser' },
         { text: '针式打印机', value: 'stylus' },
       ];
     },
-    printerItems() {
+    printerItems(): IDict[] {
       const LODOP = getLodop();
-      const result = [{ text: '默认打印机', value: -1 }];
+      const result: IDict[] = [{ text: '默认打印机', value: -1 }];
       try {
         const iPrinterCount = LODOP.GET_PRINTER_COUNT();
         for (let i = 0; i < iPrinterCount; i++) {
@@ -82,19 +87,19 @@ export default defineComponent({
       }
       return result;
     },
-    isWindowsPrinter() {
+    isWindowsPrinter(): boolean {
       const {
         printerItems,
         form: { printerName },
       } = this;
       // Windows 内置打印机
-      const regExp = /OneNote|Microsoft|Fax/;
+      const regExp: RegExp = /OneNote|Microsoft|Fax/;
       return !regExp.test(printerItems.find((x) => x.value === printerName).text);
     },
-    pageSize() {
+    pageSize(): number[] {
       return this.form.setting.pageSize.split('*').map((x) => Number(x));
     },
-    printerKey() {
+    printerKey(): string {
       return this.uniqueKey ? `print_${this.uniqueKey}` : '';
     },
   },
@@ -119,20 +124,20 @@ export default defineComponent({
     } catch (err) {}
   },
   methods: {
-    settingChange(val) {
+    settingChange(val): void {
       this.form.setting = val;
     },
-    printerTypeChange(val) {
+    printerTypeChange(val: string): void {
       this.form.setting.pageSize = val === 'stylus' ? '241*280' : '210*297';
     },
-    pageChangeHandle(val) {
+    pageChangeHandle(val: number): void {
       this.currentPage = val;
       this.$$container.createPreviewDom();
     },
-    exportClickHandle() {
+    exportClickHandle(): void {
       this.doExport(this.$$container.createExportHtml());
     },
-    async printClickHandle() {
+    async printClickHandle(): Promise<void> {
       this.doPrint(this.$$container.createPrintHtml(this.printPage));
       // 存储配置信息
       try {
@@ -144,7 +149,7 @@ export default defineComponent({
         await this.savePrintConfig(this.printerKey, printConfig);
       } catch (err) {}
     },
-    async getPrintConfig(key) {
+    async getPrintConfig(key: string): Promise<void> {
       const { global } = this.$DESIGN;
       const fetchFn = global['getComponentConfigApi'];
       if (!fetchFn) return;
@@ -154,9 +159,8 @@ export default defineComponent({
           return res.data;
         }
       } catch (err) {}
-      return null;
     },
-    async savePrintConfig(key, value) {
+    async savePrintConfig(key: string, value): Promise<void> {
       const { global } = this.$DESIGN;
       const fetchFn = global['saveComponentConfigApi'];
       if (!fetchFn) return;
@@ -164,7 +168,7 @@ export default defineComponent({
         await fetchFn({ [key]: value });
       } catch (err) {}
     },
-    doClose() {
+    doClose(): void {
       this.$emit('close', !0);
     },
   },
