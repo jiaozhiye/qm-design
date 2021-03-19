@@ -9,9 +9,9 @@ import { ComponentSize, AnyObject } from './types';
 export interface InstallOptions {
   size: ComponentSize;
   zIndex: number;
+  global?: AnyObject<unknown>;
   locale?: any;
   i18n?: (...args: any[]) => string;
-  global?: AnyObject<any>;
 }
 
 let $DESIGN = {} as InstallOptions;

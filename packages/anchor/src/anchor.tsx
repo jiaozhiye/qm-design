@@ -67,15 +67,18 @@ export default defineComponent({
       // VNode -> 有 __v_isVNode 属性
       const { _: instance } = this;
       const { children } = instance.subTree;
-      const content: VNode = Array.from(children as ArrayLike<VNode>).find(({ props }) => {
-        return props.class === `${prefixCls}__container`;
+      const content: VNode | undefined = Array.from(children as ArrayLike<VNode>).find(({ props }) => {
+        return props?.class === `${prefixCls}__container`;
       });
+      if (!content) {
+        return [];
+      }
       return getInstanceFromSlot(content, ANCHOR_ITEM_NAME);
     },
     createDistances(): Array<number> {
       return !this.labelList?.length
         ? this.anchorItemInstances.map((x) => getOffsetTopDistance(x.ctx.$el, this.$refs[`scroll`]))
-        : this.labelList.map((x) => getOffsetTopDistance(document.getElementById(x.id), this.$refs[`scroll`]));
+        : this.labelList.map((x) => getOffsetTopDistance(document.getElementById(x.id) as HTMLElement, this.$refs[`scroll`]));
     },
     findCurrentIndex(t: number): number {
       const top: number = Math.abs(t);

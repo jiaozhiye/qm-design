@@ -125,7 +125,7 @@ export const errorCapture = async (asyncFn: AnyFunction<any>, ...params: any[]):
  * @param {object} defaultProps 默认值
  * @returns
  */
-export const initDefaultProps = <T>(
+export const initDefaultProps = <T extends Record<string, unknown>>(
   propTypes: T,
   defaultProps: {
     [P in keyof T]?: unknown;
@@ -133,7 +133,7 @@ export const initDefaultProps = <T>(
 ): T => {
   Object.keys(defaultProps).forEach((k) => {
     if (propTypes[k]) {
-      propTypes[k].def(defaultProps[k]);
+      (propTypes[k] as any).def(defaultProps[k]);
     } else {
       throw new Error(`not have ${k} prop`);
     }

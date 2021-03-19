@@ -45,7 +45,7 @@ export const getStyle = (element: HTMLElement, styleName: string): Nullable<stri
   try {
     const style = element.style[styleName];
     if (style) return style;
-    const computed = document.defaultView.getComputedStyle(element, '');
+    const computed = document.defaultView?.getComputedStyle(element, '');
     return computed ? computed[styleName] : '';
   } catch (e) {
     return element.style[styleName];

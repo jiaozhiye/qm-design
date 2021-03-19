@@ -45,7 +45,7 @@ export default defineComponent({
       type: [Number, String] as PropType<number | string>,
       default: 'auto',
       validator: (val: string | number): boolean => {
-        return isNumber(val) || isValidWidthUnit(val) || 'auto' || 'none';
+        return isNumber(val) || isValidWidthUnit(val) || val === 'auto' || val === 'none';
       },
     },
     top: {
@@ -71,7 +71,7 @@ export default defineComponent({
   },
   emits: ['update:visible', 'open', 'opened', 'close', 'closed', 'afterVisibleChange', 'viewportChange'],
   data() {
-    this.insideSpinCtrl = isUndefined(this.loading);
+    Object.assign(this, { insideSpinCtrl: isUndefined(this.loading) });
     return {
       spinning: this.loading,
       fullscreen: false,
@@ -199,7 +199,7 @@ export default defineComponent({
       showClose: $props.showClose,
       fullscreen,
       beforeClose: this.beforeCloseHandle,
-      closeOnClickModal: $props.closeOnClickModal ?? global.closeOnClickModal ?? false,
+      closeOnClickModal: $props.closeOnClickModal ?? global?.closeOnClickModal ?? false,
       closeOnPressEscape: $props.closeOnPressEscape,
       destroyOnClose: $props.destroyOnClose,
       lockScroll: true,

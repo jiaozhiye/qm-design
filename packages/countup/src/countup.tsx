@@ -28,7 +28,6 @@ export default defineComponent({
     options: PropTypes.object.def({}),
   },
   data() {
-    this.instance = null;
     return {};
   },
   watch: {

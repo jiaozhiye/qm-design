@@ -75,7 +75,7 @@ const components = [
   QmSearchHelper,
 ];
 
-const install = (app: App, opt: InstallOptions, global: AnyObject<any> = {}): void => {
+const install = (app: App, opt: InstallOptions, global: AnyObject<unknown> = {}): void => {
   // use ElementPlus
   app.use(ElementPlus, Object.assign({}, { locale: lang }, defaultInstallOpt, opt));
 
