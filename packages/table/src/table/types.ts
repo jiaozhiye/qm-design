@@ -56,6 +56,7 @@ export type IEditerReturn = {
   helper?: {
     filters?: AnyObject<any>;
     table?: AnyObject<any>;
+    remoteMatch?: boolean;
     fieldAliasMap?: AnyFunction<Record<string, string>>;
     beforeOpen?: AnyFunction<void | Promise<void> | boolean>;
     opened?: AnyFunction<void>;
