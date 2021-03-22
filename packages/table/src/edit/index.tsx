@@ -353,16 +353,16 @@ export default defineComponent({
           if (before?.then) {
             before
               .then(() => {
-                this.shVisible = visible;
+                doClose();
                 setHelperValues(current, others);
               })
               .catch(() => {});
           } else if (before !== false) {
-            this.shVisible = visible;
+            doClose();
             setHelperValues(current, others);
           }
         } else {
-          this.shVisible = visible;
+          doClose();
         }
       };
       const setHelperFilterValues = (val) => {
@@ -420,7 +420,11 @@ export default defineComponent({
           this.shVisible = !0;
         }
       };
+      const doClose = () => {
+        this.$refs[`sh-dialog-${this.dataKey}`].DO_CLOSE();
+      };
       const dialogProps = {
+        ref: `sh-dialog-${this.dataKey}`,
         visible: this.shVisible,
         title: t('qm.searchHelper.text'),
         width: helper?.width ?? '60%',
