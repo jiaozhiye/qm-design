@@ -2,11 +2,11 @@
  * @Author: 焦质晔
  * @Date: 2021-02-09 09:03:59
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-19 16:51:05
+ * @Last Modified time: 2021-03-22 16:15:26
  */
 import { defineComponent, PropType, reactive } from 'vue';
 import localforage from 'localforage';
-import { JSXNode, AnyObject, Nullable } from '../../_utils/types';
+import { JSXNode } from '../../_utils/types';
 
 import { isObject, merge } from 'lodash-es';
 import { getLodop } from './LodopFuncs';
@@ -106,7 +106,7 @@ export default defineComponent({
   async created() {
     if (!this.printerKey) return;
     try {
-      let res: Nullable<AnyObject<unknown>> = await localforage.getItem(this.printerKey);
+      let res: any = await localforage.getItem(this.printerKey);
       if (!res) {
         res = await this.getPrintConfig(this.printerKey);
         if (isObject(res)) {
@@ -149,7 +149,7 @@ export default defineComponent({
         await this.savePrintConfig(this.printerKey, printConfig);
       } catch (err) {}
     },
-    async getPrintConfig(key: string): Promise<void> {
+    async getPrintConfig(key: string): Promise<unknown[] | void> {
       const { global } = this.$DESIGN;
       const fetchFn = global['getComponentConfigApi'];
       if (!fetchFn) return;

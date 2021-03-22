@@ -2,13 +2,14 @@
  * @Author: 焦质晔
  * @Date: 2020-05-20 09:36:38
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-12 09:23:22
+ * @Last Modified time: 2021-03-22 14:24:14
  */
 import { defineComponent } from 'vue';
 import { maxBy, minBy, sumBy, isObject } from 'lodash-es';
 import { groupBy, getCellValue, setCellValue } from '../utils';
 import { t } from '../../../locale';
-import { JSXNode, AnyObject } from '../../../_utils/types';
+import { JSXNode, AnyObject, Nullable } from '../../../_utils/types';
+import { IColumn, IFetch, IRecord } from '../table/types';
 
 import config from '../config';
 import VTable from '../table';
@@ -49,7 +50,7 @@ export default defineComponent({
     }
   },
   methods: {
-    formatColumn(dataIndex) {
+    formatColumn(dataIndex: string): Partial<IColumn> {
       const column = this.columns.find((x) => x.dataIndex === dataIndex);
       return {
         title: column.title,
@@ -57,9 +58,11 @@ export default defineComponent({
         dictItems: column.dictItems ?? [],
       };
     },
-    createvTableFetch() {
+    createvTableFetch(): Nullable<IFetch> {
       const { isFetch, fetchParams, fetch } = this.$$table;
-      if (!isFetch) return null;
+      if (!isFetch) {
+        return null;
+      }
       const params = Object.assign({}, fetchParams, {
         [config.sorterFieldName]: undefined,
         [config.groupSummary.summaryFieldName]: this.summary.map((x) => `${x.formula}|${x.summary}`).join(','),
@@ -76,7 +79,7 @@ export default defineComponent({
       });
       return Object.assign({}, fetch, { params, xhrAbort: !1 });
     },
-    createvTableColumns(groupColumns, summaryColumns) {
+    createvTableColumns(groupColumns: IColumn[], summaryColumns: Array<IColumn & { formula: string }>): IColumn[] {
       return [
         {
           title: '序号',
@@ -93,7 +96,7 @@ export default defineComponent({
         })),
         ...summaryColumns.map((x) => {
           let groupSummary = this.columns.find((k) => k.dataIndex === x.dataIndex)?.groupSummary;
-          let summation: AnyObject<unknown> = groupSummary ? { summation: isObject(groupSummary) ? groupSummary : {} } : null;
+          let summation: Nullable<AnyObject<unknown>> = groupSummary ? { summation: isObject(groupSummary) ? groupSummary : {} } : null;
           if (x.dataIndex === config.groupSummary.total.value) {
             summation = { dataIndex: config.groupSummary.recordTotalIndex, summation: { render: () => this.$$table.total } };
           }
@@ -104,13 +107,13 @@ export default defineComponent({
         }),
       ];
     },
-    createvTableData(list) {
+    createvTableData(list: IRecord[]): IRecord[] {
       const result = groupBy(
         list,
         this.group.map((x) => x.group)
       );
       // =================
-      let res = [];
+      let res: IRecord[] = [];
       result.forEach((arr) => {
         let record = {};
         this.vColumns.forEach((x) => {

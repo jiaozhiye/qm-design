@@ -2,14 +2,14 @@
  * @Author: 焦质晔
  * @Date: 2020-03-23 12:51:24
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-08 12:41:54
+ * @Last Modified time: 2021-03-22 10:54:14
  */
 import { isUndefined } from 'lodash-es';
 import config from '../config';
 
 const keyboardMixin = {
   methods: {
-    keyboardEvent(ev) {
+    keyboardEvent(ev: KeyboardEvent): void {
       const { keyCode } = ev;
       // Esc
       if (keyCode === 27) {
@@ -80,11 +80,13 @@ const keyboardMixin = {
       //   this.scrollXToColumn(dataIndex);
       // }
     },
-    rowInViewport(rowKey, index) {
+    rowInViewport(rowKey: string, index: number): boolean {
       const { scrollYStore, allRowKeys } = this.$$table;
       const { rowHeight, visibleSize } = scrollYStore;
       const v = isUndefined(index) ? allRowKeys.findIndex((x) => x === rowKey) : index;
-      if (v < 0) return;
+      if (v < 0) {
+        return !1;
+      }
       const st = v * rowHeight;
       // 不在 tableBody 视口范围
       if (st < this.$el.scrollTop || st > this.$el.scrollTop + (visibleSize - 2) * rowHeight) {
@@ -92,24 +94,24 @@ const keyboardMixin = {
       }
       return !0;
     },
-    scrollXToColumn(dataIndex, index) {
+    scrollXToColumn(dataIndex: string, index: number): void {
       const { leftFixedColumns } = this.$$table;
       const v = isUndefined(index) ? this.flattenColumns.findIndex((x) => x.dataIndex === dataIndex) : index;
       if (v < 0) return;
       const fixedWidth = leftFixedColumns.map((x) => x.width || x.renderWidth || config.defaultColumnWidth).reduce((prev, curr) => prev + curr, 0);
       this.$el.scrollLeft = this.$vTableBody.querySelectorAll('tbody > tr > td')[v].offsetLeft - fixedWidth;
     },
-    scrollYToRecord(rowKey, index) {
+    scrollYToRecord(rowKey: string, index: number): void {
       const { scrollYStore, allRowKeys } = this.$$table;
       const v = isUndefined(index) ? allRowKeys.findIndex((x) => x === rowKey) : index;
       if (v < 0) return;
       this.$el.scrollTop = v * scrollYStore.rowHeight;
     },
-    resetTableBodyScroll() {
+    resetTableBodyScroll(): void {
       this.$el.scrollTop = 0;
       this.$el.scrollLeft = 0;
     },
-    createInputFocus() {
+    createInputFocus(): void {
       const { tableFullData, getRowKey } = this.$$table;
       if (!this.editableColumns.length || !tableFullData.length) return;
       const firstRecord = tableFullData[0];

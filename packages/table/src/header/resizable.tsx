@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-03-07 19:04:14
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-11 20:27:56
+ * @Last Modified time: 2021-03-22 14:53:54
  */
 import { defineComponent } from 'vue';
 import { isUndefined, isNull } from 'lodash-es';
@@ -22,11 +22,11 @@ export default defineComponent({
     },
   },
   methods: {
-    resizeMousedown(ev) {
+    resizeMousedown(ev: MouseEvent): boolean {
       prevent(ev);
 
       const _this = this;
-      const dom = ev.target;
+      const dom = ev.target as HTMLElement;
       const { $vTable, $$tableBody, columns, doLayout, setLocalColumns } = this.$$table;
       const target = this.$resizableBar;
 

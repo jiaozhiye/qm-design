@@ -2,9 +2,23 @@
  * @Author: 焦质晔
  * @Date: 2021-03-08 11:04:35
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-11 18:38:36
+ * @Last Modified time: 2021-03-22 12:53:24
  */
 import { reactive } from 'vue';
+
+type IStoreItem = {
+  x: string;
+  y: string;
+  text: string;
+};
+
+type IStore = {
+  required: IStoreItem[];
+  validate: IStoreItem[];
+  inserted: IStoreItem[];
+  updated: IStoreItem[];
+  removed: IStoreItem[];
+};
 
 class Store {
   state = reactive({
@@ -13,7 +27,7 @@ class Store {
     inserted: [],
     updated: [],
     removed: [],
-  });
+  } as IStore);
 
   addToRequired = (data) => {
     const index = this.state.required.findIndex((item) => item.x === data.x && item.y === data.y);
@@ -86,7 +100,7 @@ class Store {
   destroye = () => {
     // 释放内存
     for (const key in this) {
-      this[key] = null;
+      (this as any)[key] = null;
     }
   };
 }

@@ -2,12 +2,13 @@
  * @Author: 焦质晔
  * @Date: 2020-03-17 10:29:47
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-11 20:07:42
+ * @Last Modified time: 2021-03-22 16:18:05
  */
 import { defineComponent, reactive } from 'vue';
 import Draggable from 'vuedraggable';
 import classnames from 'classnames';
 import { JSXNode } from '../../../_utils/types';
+import { IColumn, IFixed } from '../table/types';
 import { getPrefixCls } from '../../../_utils/prefix';
 import { noop } from '../../../_utils/util';
 import { t } from '../../../locale';
@@ -28,43 +29,43 @@ export default defineComponent({
     };
   },
   computed: {
-    realColumns() {
+    realColumns(): IColumn[] {
       return [...this.leftFixedColumns, ...this.mainColumns, ...this.rightFixedColumns];
     },
-    showButtonText() {
+    showButtonText(): boolean {
       const { global } = this.$DESIGN;
       return !(this.$$table.onlyShowIcon ?? global['table_onlyShowIcon'] ?? !1);
     },
   },
   watch: {
-    columns() {
+    columns(): void {
       this.createColumns();
     },
   },
-  created() {
+  created(): void {
     this.createColumns();
   },
   methods: {
-    createColumns() {
+    createColumns(): void {
       this.leftFixedColumns = this.columns.filter((column) => column.fixed === 'left');
       this.rightFixedColumns = this.columns.filter((column) => column.fixed === 'right');
       this.mainColumns = this.columns.filter((column) => !column.fixed);
     },
-    fixedChangeHandle(column, dir) {
+    fixedChangeHandle(column: IColumn, dir: IFixed): void {
       column.fixed = dir;
       this.createColumns();
       this.changeHandle();
     },
-    cancelFixedHandle(column) {
+    cancelFixedHandle(column: IColumn): void {
       delete column.fixed;
       this.createColumns();
       this.changeHandle();
     },
-    changeHandle() {
+    changeHandle(): void {
       const { columnsChange = noop } = this.$$table;
       columnsChange(this.realColumns);
     },
-    renderListItem(column, type) {
+    renderListItem(column: IColumn, type: string): JSXNode {
       const cls = [`iconfont`, `icon-menu`, `handle`, [`${type}-handle`]];
       const checkboxProps = {
         modelValue: !column.hidden,
@@ -98,7 +99,7 @@ export default defineComponent({
         </li>
       );
     },
-    renderColumnFilter() {
+    renderColumnFilter(): JSXNode {
       const { leftFixedColumns, mainColumns, rightFixedColumns } = this;
 
       const leftDragProps = {

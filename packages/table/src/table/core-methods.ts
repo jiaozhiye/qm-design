@@ -2,21 +2,22 @@
  * @Author: 焦质晔
  * @Date: 2020-03-01 15:20:02
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-13 10:45:04
+ * @Last Modified time: 2021-03-22 16:31:11
  */
 import { get } from 'lodash-es';
 import { difference, hasOwn, throttle, getCellValue, setCellValue } from '../utils';
 import { deepToRaw, errorCapture, isChrome, isIE, noop } from '../../../_utils/util';
 import { warn } from '../../../_utils/error';
 import config from '../config';
+import { IRecord, ISuperFilter } from './types';
 
 const isWebkit = isChrome();
 const throttleScrollYDuration = isIE() ? 20 : 10;
 
 export default {
   // 创建表格数据
-  createTableData(list) {
-    const resetRowData = (arr) => {
+  createTableData(list: IRecord[]): void {
+    const resetRowData = (arr: IRecord[]): IRecord[] => {
       return arr.map((record, index) => {
         if (Array.isArray(record.children) && record.children.length) {
           record.children = resetRowData(record.children);
@@ -46,7 +47,7 @@ export default {
     });
   },
   // 服务端合计
-  createServerSummation(data) {
+  createServerSummation(data): void {
     if (!this.isServerSummation) return;
     this.flattenColumns
       .filter((x) => !!x.summation?.dataKey)
@@ -55,7 +56,7 @@ export default {
       });
   },
   // ajax 获取数据
-  async getTableData() {
+  async getTableData(): Promise<void> {
     const { fetch, fetchParams } = this;
     if (!fetch) return;
     const { beforeFetch = () => !0, xhrAbort = !1 } = fetch;
@@ -86,7 +87,7 @@ export default {
     this.showLoading = false;
   },
   // 加载表格数据
-  loadTableData() {
+  loadTableData(): Promise<void> {
     const { height, maxHeight, ellipsis } = this;
 
     // 是否开启虚拟滚动
@@ -107,36 +108,38 @@ export default {
     return this.computeScrollLoad();
   },
   // 设置是否开启虚拟滚动
-  createScrollYLoad() {
+  createScrollYLoad(): boolean {
     const dataList = !this.webPagination ? this.tableFullData : this.pageTableData;
     return dataList.length > config.virtualScrollY;
   },
   // 创建分页索引
-  createPageIndex(index) {
+  createPageIndex(index: number): number {
     return !this.isFetch ? index : (this.pagination.currentPage - 1) * this.pagination.pageSize + index;
   },
   // 设置数据总数
-  setRecordsTotal(total) {
+  setRecordsTotal(total: number): void {
     this.total = typeof total === 'undefined' ? this.tableFullData.length : total;
   },
   // 处理渲染数据
-  handleTableData() {
+  handleTableData(): void {
     const { scrollYLoad, scrollYStore, webPagination, tableFullData, pageTableData } = this;
     const dataList = !webPagination ? tableFullData : pageTableData;
     // 处理显示数据
     this.tableData = scrollYLoad ? dataList.slice(scrollYStore.startIndex, scrollYStore.startIndex + scrollYStore.renderSize) : dataList;
   },
   // 纵向 Y 可视渲染事件处理
-  triggerScrollYEvent(ev) {
+  triggerScrollYEvent(ev: Event): void {
+    const target = ev.target as HTMLElement;
+    if (!target) return;
     // webkit 浏览器使用最佳的渲染方式
     if (isWebkit) {
-      this.loadScrollYData(ev.target.scrollTop);
+      this.loadScrollYData(target.scrollTop);
     } else {
-      throttle(this.loadScrollYData, throttleScrollYDuration)(ev.target.scrollTop);
+      throttle(this.loadScrollYData, throttleScrollYDuration)(target.scrollTop);
     }
   },
   // 纵向 Y 可视渲染处理
-  loadScrollYData(scrollTop = 0) {
+  loadScrollYData(scrollTop = 0): void {
     const { tableFullData, scrollYStore } = this;
     const { startIndex, renderSize, offsetSize, visibleSize, rowHeight } = scrollYStore;
     const toVisibleIndex = Math.ceil(scrollTop / rowHeight);
@@ -168,7 +171,7 @@ export default {
     }
   },
   // 更新纵向 Y 可视渲染上下剩余空间大小
-  updateScrollYSpace(isReset) {
+  updateScrollYSpace(isReset: boolean): void {
     const { scrollYStore, tableFullData, $$tableBody } = this;
 
     const $tableBody = $$tableBody.$el.querySelector('.qm-table--body');
@@ -187,13 +190,13 @@ export default {
     }
   },
   // 更新 Y 方向数据
-  updateScrollYData() {
+  updateScrollYData(): void {
     this.handleTableData();
     this.updateScrollYSpace();
   },
   // 计算可视渲染相关数据
-  computeScrollLoad() {
-    return new Promise<void>((resolve, reject) => {
+  computeScrollLoad(): Promise<void> {
+    return new Promise((resolve, reject) => {
       if (!this.scrollYLoad) {
         // 不是虚拟滚动
         resolve();
@@ -209,8 +212,8 @@ export default {
     });
   },
   // 格式化 表头筛选 和 高级检索 参数
-  formatFiltersParams(filters, superFilters) {
-    const result = [];
+  formatFiltersParams(filters, superFilters): ISuperFilter[] {
+    const result: ISuperFilter[] = [];
     // 表头筛选
     if (Object.keys(filters).length) {
       for (const key in filters) {
@@ -251,19 +254,19 @@ export default {
     return deepToRaw(result);
   },
   // 创建派生的 rowKeys for treeTable
-  createDeriveRowKeys(tableData, key) {
+  createDeriveRowKeys(tableData: IRecord[], key: string): Record<string, unknown>[] {
     return tableData.map((x, i) => {
-      const rowKey = this.getRowKey(x, i);
-      const item = { rowKey };
+      const rowKey: string = this.getRowKey(x, i);
+      const item: Record<string, unknown> = { rowKey };
       if (x.children) {
-        (item as any).children = this.createDeriveRowKeys(x.children, rowKey);
+        item.children = this.createDeriveRowKeys(x.children, rowKey);
       }
       return key ? Object.assign({}, item, { parentRowKey: key }) : item;
     });
   },
   // 获取所有后代节点 rowKeys
-  getAllChildRowKeys(deriveRowKeys) {
-    const results = [];
+  getAllChildRowKeys(deriveRowKeys): string[] {
+    const results: string[] = [];
     for (let i = 0; i < deriveRowKeys.length; i++) {
       if (Array.isArray(deriveRowKeys[i].children)) {
         results.push(...this.getAllChildRowKeys(deriveRowKeys[i].children));
@@ -273,8 +276,8 @@ export default {
     return results;
   },
   // 获取祖先节点 rowKeys
-  findParentRowKeys(deriveRowKeys, key) {
-    const results = [];
+  findParentRowKeys(deriveRowKeys, key): string[] {
+    const results: string[] = [];
     deriveRowKeys.forEach((x) => {
       if (x.children) {
         results.push(...this.findParentRowKeys(x.children, key));
@@ -289,15 +292,15 @@ export default {
     return results;
   },
   // 数据加载事件
-  dataLoadedHandle() {
+  dataLoadedHandle(): void {
     this.$emit('dataLoaded', [...this.tableFullData]);
   },
   // 数据变化事件
-  dataChangeHandle() {
+  dataChangeHandle(): void {
     this.$emit('dataChange', [...this.tableFullData]);
   },
   // 分页事件
-  pagerChangeHandle({ currentPage, pageSize }) {
+  pagerChangeHandle({ currentPage, pageSize }): void {
     this.pagination.currentPage = currentPage;
     this.pagination.pageSize = pageSize;
     if (!this.webPagination) return;
@@ -307,29 +310,29 @@ export default {
     this.loadTableData();
   },
   // 创建内存分页的列表数据
-  createLimitData() {
+  createLimitData(): void {
     if (!this.webPagination) return;
     const { currentPage, pageSize } = this.pagination;
     this.pageTableData = this.tableFullData.slice((currentPage - 1) * pageSize, currentPage * pageSize);
   },
   // 设置高级检索的条件
-  createSuperSearch(val) {
+  createSuperSearch(val): void {
     this.superFilters = val;
   },
   // 设置列汇总条件
-  createColumnSummary() {
+  createColumnSummary(): string {
     return this.flattenColumns
       .filter((x) => x.summation?.dataKey)
       .map((x) => `sum|${x.dataIndex}`)
       .join(',');
   },
   // 是否仅有分页参数产生变化
-  onlyPaginationChange(next, prev) {
+  onlyPaginationChange(next, prev): boolean {
     const diff = Object.keys(difference(next, prev));
     return diff.length === 1 && (diff.includes('currentPage') || diff.includes('pageSize'));
   },
   // 默认选中首行数据
-  selectFirstRow(bool = false) {
+  selectFirstRow(bool = false): void {
     const { rowSelection, tableFullData } = this;
     const { type, defaultSelectFirstRow = bool } = rowSelection || {};
     if (type !== 'radio' || !defaultSelectFirstRow || !tableFullData.length) return;
@@ -338,47 +341,47 @@ export default {
     this.selectionKeys = [rowKey];
   },
   // 返回到第一页
-  toFirstPage() {
+  toFirstPage(): void {
     this.pagerChangeHandle({ ...this.pagination, currentPage: 1 });
   },
   // 清空列选中
-  clearRowSelection() {
+  clearRowSelection(): void {
     this.selectionKeys = [];
   },
   // 清空行高亮
-  clearRowHighlight() {
+  clearRowHighlight(): void {
     this.highlightKey = '';
   },
   // 清空表头排序
-  clearTableSorter() {
+  clearTableSorter(): void {
     this.$refs[`tableHeader`]?.clearTheadSorter();
   },
   // 清空表头筛选
-  clearTableFilter() {
+  clearTableFilter(): void {
     this.$refs[`tableHeader`]?.clearTheadFilter();
   },
   // 清空高级检索的条件
-  clearSuperSearch() {
+  clearSuperSearch(): void {
     this.createSuperSearch([]);
   },
   // 清空列汇总条件
-  clearColumnSummary() {
+  clearColumnSummary(): void {
     this.columnSummaryQuery = '';
   },
   // 清空表格各种操作记录
-  clearTableLog() {
+  clearTableLog(): void {
     this.store.clearAllLog();
   },
   // 移除选择列数据
-  removeSelectionKey(rowKey) {
+  removeSelectionKey(rowKey: string): void {
     this.selectionKeys = this.selectionKeys.filter((x) => x !== rowKey);
   },
   // 移除展开行数据
-  removeExpandableKey(rowKey) {
+  removeExpandableKey(rowKey: string): void {
     this.rowExpandedKeys = this.rowExpandedKeys.filter((x) => x !== rowKey);
   },
   // 析构方法
-  destroy() {
+  destroy(): void {
     this.removeEvents();
     this.store.destroye();
   },

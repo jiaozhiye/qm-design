@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-12-23 13:13:25
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-11 20:20:19
+ * @Last Modified time: 2021-03-22 14:08:46
  */
 import { utils, write } from 'xlsx';
 
@@ -19,7 +19,7 @@ const ExcellentExport = (function () {
     sliceSize = sliceSize || 512;
 
     const byteCharacters = window.atob(b64Data);
-    const byteArrays = [];
+    const byteArrays: Uint8Array[] = [];
 
     let offset;
     for (offset = 0; offset < byteCharacters.length; offset += sliceSize) {
@@ -189,8 +189,8 @@ const ExcellentExport = (function () {
   */
   const convert = function (options, sheets) {
     const workbook = {
-      SheetNames: [],
-      Sheets: {},
+      SheetNames: [] as string[],
+      Sheets: {} as any,
     };
 
     if (!options.format) {

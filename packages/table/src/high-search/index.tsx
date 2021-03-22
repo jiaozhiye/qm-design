@@ -2,12 +2,13 @@
  * @Author: 焦质晔
  * @Date: 2020-05-19 15:58:23
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-11 20:54:30
+ * @Last Modified time: 2021-03-22 14:54:27
  */
 import { defineComponent } from 'vue';
 import { getPrefixCls } from '../../../_utils/prefix';
 import { t } from '../../../locale';
 import { JSXNode } from '../../../_utils/types';
+import { IColumn } from '../table/types';
 import config from '../config';
 
 import Dialog from '../../../dialog';
@@ -23,10 +24,10 @@ export default defineComponent({
     };
   },
   methods: {
-    clickHandle() {
+    clickHandle(): void {
       this.visible = true;
     },
-    closeHandle(val) {
+    closeHandle(val: boolean): void {
       this.visible = val;
     },
   },
@@ -45,7 +46,7 @@ export default defineComponent({
         this.visible = val;
       },
     };
-    const columns = this.columns.filter(
+    const columns: IColumn[] = this.columns.filter(
       (x) => !['__expandable__', '__selection__', 'index', 'pageIndex', config.operationColumn].includes(x.dataIndex)
     );
     return (

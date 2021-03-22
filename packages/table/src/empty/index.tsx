@@ -2,9 +2,9 @@
  * @Author: 焦质晔
  * @Date: 2020-03-08 14:47:28
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-11 20:14:55
+ * @Last Modified time: 2021-03-22 13:42:04
  */
-import { defineComponent } from 'vue';
+import { defineComponent, CSSProperties } from 'vue';
 import { getPrefixCls } from '../../../_utils/prefix';
 import { JSXNode } from '../../../_utils/types';
 
@@ -14,7 +14,7 @@ export default defineComponent({
   name: 'EmptyContent',
   inject: ['$$table'],
   computed: {
-    styles() {
+    styles(): CSSProperties {
       const { layout } = this.$$table;
       return {
         top: `${layout.headerHeight}px`,

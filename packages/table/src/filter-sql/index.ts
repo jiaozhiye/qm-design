@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-07-11 10:51:46
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-11 09:08:01
+ * @Last Modified time: 2021-03-22 14:15:21
  */
 import sf from './lib/filter_string';
 import vr from './lib/variables_replacement';
@@ -22,7 +22,7 @@ export const array_format = sf.array_format;
 export const isBracketBalance = vr.isBracketBalance;
 
 export const where = (array, query) => {
-  const result = [];
+  const result: string[] = [];
 
   // Replace AND and OR to && and ||
   query = sf.replace_symbols(query);

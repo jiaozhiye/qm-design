@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-02-28 23:01:43
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-18 19:33:01
+ * @Last Modified time: 2021-03-22 16:26:30
  */
 import { defineComponent, reactive } from 'vue';
 import { pickBy, intersection, isFunction } from 'lodash-es';
@@ -12,6 +12,7 @@ import { isEmpty } from '../../../_utils/util';
 import { stop } from '../../../_utils/dom';
 import { t } from '../../../locale';
 import { JSXNode } from '../../../_utils/types';
+import { IColumn, IDerivedColumn, IFilter, ISorter } from '../table/types';
 
 import { where } from '../filter-sql';
 import config from '../config';
@@ -41,27 +42,27 @@ export default defineComponent({
     };
   },
   computed: {
-    isClientSorter() {
+    isClientSorter(): boolean {
       return !this.$$table.isFetch;
     },
-    isClientFilter() {
+    isClientFilter(): boolean {
       return !this.$$table.isFetch;
     },
   },
   watch: {
-    filters(val) {
+    filters(val: IFilter): void {
       this.filterHandle();
       // if (this.isClientFilter) return;
       this.$$table.filters = this.formatFilterValue(val);
     },
-    sorter(val) {
+    sorter(val: ISorter) {
       this.sorterHandle();
       // if (this.isClientSorter) return;
       this.$$table.sorter = this.formatSorterValue(val);
     },
   },
   methods: {
-    renderColgroup() {
+    renderColgroup(): JSXNode {
       const {
         layout: { gutterWidth },
         scrollY,
@@ -76,7 +77,7 @@ export default defineComponent({
         </colgroup>
       );
     },
-    renderRows(columnRows) {
+    renderRows(columnRows: Array<IColumn[]>): JSXNode[] {
       const { scrollY, isIE, rightFixedColumns } = this.$$table;
       const cls = [
         `gutter`,
@@ -86,17 +87,17 @@ export default defineComponent({
       ];
       const stys = !isIE
         ? {
-            right: !!rightFixedColumns.length ? 0 : null,
+            right: !!rightFixedColumns.length ? 0 : '',
           }
         : null;
       return columnRows.map((columns, rowIndex) => (
         <tr key={rowIndex} class="header--row">
           {columns.map((column, cellIndex) => this.renderColumn(column, columns, rowIndex, cellIndex))}
-          {scrollY && <th class={cls} style={stys}></th>}
+          {scrollY && <th class={cls} style={{ ...stys }}></th>}
         </tr>
       ));
     },
-    renderColumn(column, columns, rowIndex, cellIndex) {
+    renderColumn(column: IColumn, columns: IColumn[], rowIndex: number, cellIndex: number): JSXNode {
       const {
         getStickyLeft,
         getStickyRight,
@@ -118,7 +119,7 @@ export default defineComponent({
         required,
         lastFixedLeft,
         firstFixedRight,
-      } = column;
+      } = column as IDerivedColumn;
       // 表头对齐方式
       const align = theadAlign || tbodyAlign;
       const cls = [
@@ -139,8 +140,8 @@ export default defineComponent({
       ];
       const stys = !isIE
         ? {
-            left: fixed === 'left' ? `${getStickyLeft(dataIndex)}px` : null,
-            right: fixed === 'right' ? `${getStickyRight(dataIndex) + (scrollY ? gutterWidth : 0)}px` : null,
+            left: fixed === 'left' ? `${getStickyLeft(dataIndex)}px` : '',
+            right: fixed === 'right' ? `${getStickyRight(dataIndex) + (scrollY ? gutterWidth : 0)}px` : '',
           }
         : null;
       const isResizable = resizable && !['__expandable__', '__selection__'].includes(dataIndex);
@@ -154,8 +155,8 @@ export default defineComponent({
         </th>
       );
     },
-    renderCell(column) {
-      const { dataIndex, type, sorter, title, description } = column;
+    renderCell(column: IColumn): JSXNode {
+      const { dataIndex, type, sorter, title, description } = column as IDerivedColumn;
       const { selectionKeys } = this.$$table;
       if (dataIndex === '__selection__' && type === 'checkbox') {
         return (
@@ -164,7 +165,7 @@ export default defineComponent({
           </div>
         );
       }
-      const vNodes = [];
+      const vNodes: JSXNode[] = [];
       vNodes.push(
         <div class="cell" title={title}>
           {title}
@@ -182,7 +183,7 @@ export default defineComponent({
       }
       return vNodes;
     },
-    renderSorter(order) {
+    renderSorter(order: string): JSXNode {
       const ascCls = [
         `icon-svg cell--sorter__asc`,
         {
@@ -206,10 +207,10 @@ export default defineComponent({
         </div>
       );
     },
-    renderFilter(column) {
+    renderFilter(column: IColumn): JSXNode {
       return <THeadFilter column={column} filters={this.filters} />;
     },
-    thClickHandle(ev, column) {
+    thClickHandle(ev: MouseEvent, column: IColumn): void {
       const { multipleSort } = this.$$table;
       const { sorter, dataIndex } = column;
       if (sorter) {
@@ -226,12 +227,12 @@ export default defineComponent({
       }
     },
     // 表头排序
-    sorterHandle() {
+    sorterHandle(): void {
       if (!this.isClientSorter) return;
       this.clientSorter();
     },
     // 客户端排序
-    clientSorter() {
+    clientSorter(): void {
       const validSorter = pickBy(this.sorter);
       for (let key in validSorter) {
         let column = this.flattenColumns.find((column) => column.dataIndex === key);
@@ -242,12 +243,12 @@ export default defineComponent({
       }
     },
     // 还原排序数据
-    doResetHandle() {
+    doResetHandle(): void {
       const { tableFullData, tableOriginData } = this.$$table;
       this.$$table.tableFullData = intersection(tableOriginData, tableFullData);
     },
     // 排序算法
-    doSortHandle(column, order) {
+    doSortHandle(column: IColumn, order: string): void {
       const { dataIndex, sorter } = column;
       if (isFunction(sorter)) {
         this.$$table.tableFullData.sort(sorter);
@@ -264,12 +265,12 @@ export default defineComponent({
       this.$$table.tableFullData = reactive([...this.$$table.tableFullData]);
     },
     // 表头筛选
-    filterHandle() {
+    filterHandle(): void {
       if (!this.isClientFilter) return;
       this.clientFilter();
     },
     // 客户端筛选
-    clientFilter() {
+    clientFilter(): void {
       const { tableOriginData, superFilters } = this.$$table;
       const sql = !superFilters.length ? createWhereSQL(this.filters) : createWhereSQL(superFilters);
       this.$$table.tableFullData = sql !== '' ? where(tableOriginData, sql) : [...tableOriginData];
@@ -277,7 +278,7 @@ export default defineComponent({
       this.sorterHandle();
     },
     // 格式化排序参数
-    formatSorterValue(sorter) {
+    formatSorterValue(sorter: ISorter): ISorter {
       const result = {};
       for (let key in sorter) {
         if (sorter[key] === null) continue;
@@ -286,7 +287,7 @@ export default defineComponent({
       return result;
     },
     // 格式化筛选参数
-    formatFilterValue(filters) {
+    formatFilterValue(filters: IFilter): IFilter {
       const result = {};
       for (let key in filters) {
         if (!key.includes('|')) continue;
@@ -302,31 +303,33 @@ export default defineComponent({
       return result;
     },
     // 清空表头排序
-    clearTheadSorter() {
+    clearTheadSorter(): void {
       this.sorter = {};
     },
     // 清空表头筛选
-    clearTheadFilter() {
+    clearTheadFilter(): void {
       this.filters = {};
     },
     // 处理固定列
-    setFixedColumns(columnRows) {
+    setFixedColumns(columnRows: Array<IDerivedColumn[]>): void {
       columnRows.forEach((columns, depth) => {
-        const leftFixedColumns = [];
-        const rightFixedColumns = [];
+        const leftFixedColumns: IColumn[] = [];
+        const rightFixedColumns: IColumn[] = [];
         columns.forEach((x) => {
           hasOwn(x, 'lastFixedLeft') && delete x.lastFixedLeft;
           hasOwn(x, 'firstFixedRight') && delete x.firstFixedRight;
           x.fixed === 'left' && leftFixedColumns.push(x);
           x.fixed === 'right' && rightFixedColumns.push(x);
         });
-        const lastColumn = leftFixedColumns[leftFixedColumns.length - 1];
-        const firstColumn = rightFixedColumns[0];
+        const lastColumn: IDerivedColumn = leftFixedColumns[leftFixedColumns.length - 1];
+        const firstColumn: IDerivedColumn = rightFixedColumns[0];
         if (lastColumn) {
-          lastColumn.lastFixedLeft = depth === 0 ? !0 : deepFindColumn(this.tableColumns, lastColumn.parentDataIndex).lastFixedLeft;
+          lastColumn.lastFixedLeft =
+            depth === 0 ? !0 : (deepFindColumn(this.tableColumns, lastColumn.parentDataIndex as string) as IDerivedColumn).lastFixedLeft;
         }
         if (firstColumn) {
-          firstColumn.firstFixedRight = depth === 0 ? !0 : deepFindColumn(this.tableColumns, firstColumn.parentDataIndex).firstFixedRight;
+          firstColumn.firstFixedRight =
+            depth === 0 ? !0 : (deepFindColumn(this.tableColumns, firstColumn.parentDataIndex as string) as IDerivedColumn).firstFixedRight;
         }
       });
     },
@@ -344,7 +347,7 @@ export default defineComponent({
     this.setFixedColumns(columnRows);
     return (
       <div class={`${prefixCls}--header-wrapper`}>
-        <table class={`${prefixCls}--header`} cellspacing="0" cellpadding="0" style={{ width: tableBodyWidth ? `${tableBodyWidth}px` : null }}>
+        <table class={`${prefixCls}--header`} cellspacing="0" cellpadding="0" style={{ width: tableBodyWidth ? `${tableBodyWidth}px` : '' }}>
           {this.renderColgroup()}
           <thead>{this.renderRows(columnRows)}</thead>
         </table>

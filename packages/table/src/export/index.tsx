@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-02-02 15:58:17
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-12 09:23:55
+ * @Last Modified time: 2021-03-22 16:22:59
  */
 import { defineComponent } from 'vue';
 import dayjs from 'dayjs';
@@ -13,6 +13,8 @@ import { deepToRaw } from '../../../_utils/util';
 import { getPrefixCls } from '../../../_utils/prefix';
 import { t } from '../../../locale';
 import { download } from '../../../_utils/download';
+import { IColumn, IDerivedColumn, IFetch, IRecord } from '../table/types';
+import { JSXNode, Nullable, AnyObject } from '../../../_utils/types';
 
 import config from '../config';
 import JsonToExcel from './jsonToExcel';
@@ -28,28 +30,28 @@ export default defineComponent({
     };
   },
   computed: {
-    headColumns() {
+    headColumns(): IColumn[] {
       return deepToRaw(filterTableColumns(this.tableColumns, ['__expandable__', '__selection__', config.operationColumn]));
     },
-    flatColumns() {
+    flatColumns(): IColumn[] {
       return deepToRaw(filterTableColumns(this.flattenColumns, ['__expandable__', '__selection__', config.operationColumn]));
     },
-    exportFetch() {
+    exportFetch(): Nullable<IFetch> {
       return this.$$table.exportExcel.fetch ?? null;
     },
-    fields() {
+    fields(): AnyObject<unknown> {
       const target = {};
       this.flatColumns.forEach((x) => {
         target[x.title] = x.dataIndex;
       });
       return target;
     },
-    disabledState() {
+    disabledState(): boolean {
       return !this.$$table.total || this.exporting;
     },
   },
   methods: {
-    createDataList(list) {
+    createDataList(list: IRecord[]) {
       return list.map((x, i) => {
         let item = { ...x, index: i, pageIndex: i };
         this.flatColumns.forEach((column, index) => {
@@ -59,7 +61,7 @@ export default defineComponent({
         return item;
       });
     },
-    createFetchParams(fetch) {
+    createFetchParams(fetch: IFetch & { total: number }): Nullable<{ fetch: IFetch }> {
       if (!fetch) {
         return null;
       }
@@ -76,7 +78,7 @@ export default defineComponent({
         },
       };
     },
-    async exportHandle(fileName) {
+    async exportHandle(fileName: string): Promise<void> {
       const { fetchParams } = this.$$table;
       this.exporting = !0;
       try {
@@ -95,13 +97,13 @@ export default defineComponent({
       } catch (err) {}
       this.exporting = !1;
     },
-    localExportHandle(fileName) {
+    localExportHandle(fileName: string): void {
       const tableHTML = this._toTable(convertToRows(this.headColumns), this.flatColumns);
       const blob = ExcellentExport.excel(tableHTML);
       download(blob, fileName);
       this.recordExportLog();
     },
-    _toTable(columnRows, flatColumns) {
+    _toTable(columnRows: Array<IDerivedColumn[]>, flatColumns: IColumn[]) {
       const { tableFullData, showHeader, showFooter, $refs } = this.$$table;
       const summationRows = flatColumns.some((x) => !!x.summation) ? $refs[`tableFooter`].summationRows : [];
       let html = `<table width="100%" border="0" cellspacing="0" cellpadding="0">`;
@@ -156,23 +158,23 @@ export default defineComponent({
       html += '</table>';
       return html;
     },
-    renderCell(row, rowIndex, column, columnIndex) {
+    renderCell(row: IRecord, rowIndex: number, column: IColumn, columnIndex: number) {
       const { dataIndex, precision, render, extraRender } = column;
       const text = getCellValue(row, dataIndex);
       let result = this.$$table.$$tableBody.renderText(text, column, row);
       if (isFunction(render)) {
-        result = render(text, row, column, rowIndex, columnIndex);
+        result = render?.(text, row, column, rowIndex, columnIndex);
       }
       if (isFunction(extraRender)) {
-        result = extraRender(text, row, column, rowIndex, columnIndex);
+        result = extraRender?.(text, row, column, rowIndex, columnIndex);
       }
       // 处理 number 类型
-      if (precision >= 0 && result !== '') {
+      if (precision && precision >= 0 && result !== '') {
         result = Number(result);
       }
       return result;
     },
-    recordExportLog() {
+    recordExportLog(): void {
       const { global } = this.$DESIGN;
       const fetchFn = global['getComponentConfigApi'];
       if (!fetchFn) return;
@@ -181,7 +183,7 @@ export default defineComponent({
       } catch (err) {}
     },
   },
-  render() {
+  render(): JSXNode {
     const { tableFullData, spanMethod } = this.$$table;
     const { fields, fileName, fetch, exportFetch, disabledState } = this;
     const prefixCls = getPrefixCls('table');

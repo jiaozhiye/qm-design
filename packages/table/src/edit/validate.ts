@@ -2,16 +2,17 @@
  * @Author: 焦质晔
  * @Date: 2020-03-05 10:27:24
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-11 18:28:41
+ * @Last Modified time: 2021-03-22 11:06:55
  */
 import { isFunction } from 'lodash-es';
 import { isEmpty } from '../../../_utils/util';
 import { warn } from '../../../_utils/error';
+import { IRule } from '../table/types';
 
 const validateMixin = {
   methods: {
     // 表格中的表单校验
-    createFieldValidate(rules, val, rowKey, columnKey) {
+    createFieldValidate(rules: IRule[], val: unknown, rowKey: string, columnKey: string): void {
       if (!Array.isArray(rules)) {
         return warn('Table', '可编辑单元格的校验规则 `rules` 配置不正确');
       }
@@ -22,7 +23,7 @@ const validateMixin = {
         if (x.required && isEmpty(val)) {
           this.store.addToRequired({ x: rowKey, y: columnKey, text: x.message });
         }
-        if (isFunction(x.validator) && !x.validator(val)) {
+        if (isFunction(x.validator) && !x.validator?.(val)) {
           this.store.addToValidate({ x: rowKey, y: columnKey, text: x.message });
         }
       });

@@ -9,31 +9,31 @@ import { formatNumber } from '../utils';
 
 const formatMixin = {
   methods: {
-    dateFormat(val) {
+    dateFormat(val: string): string {
       const res = val ? dayjs(val).format('YYYY-MM-DD') : '';
       return !res.startsWith('1900-01-01') ? res : '';
     },
-    datetimeFormat(val) {
+    datetimeFormat(val: string): string {
       const res = val ? dayjs(val).format('YYYY-MM-DD HH:mm:ss') : '';
       return !res.startsWith('1900-01-01') ? res : '';
     },
-    dateShortTimeFormat(val) {
+    dateShortTimeFormat(val: string): string {
       const res = val ? dayjs(val).format('YYYY-MM-DD HH:mm') : '';
       return !res.startsWith('1900-01-01') ? res : '';
     },
-    financeFormat(val) {
-      return formatNumber(val);
+    financeFormat(val: string | number): string {
+      return formatNumber(val.toString());
     },
-    [`secret-nameFormat`](val) {
+    [`secret-nameFormat`](val: string): string {
       return val.replace(/^([\u4e00-\u9fa5]{1}).+$/, '$1**');
     },
-    [`secret-phoneFormat`](val) {
+    [`secret-phoneFormat`](val: string): string {
       return val.replace(/^(\d{3}).+(\d{4})$/, '$1****$2');
     },
-    [`secret-IDnumber`](val) {
+    [`secret-IDnumber`](val: string): string {
       return val.replace(/^(\d{3}).+(\w{4})$/, '$1***********$2');
     },
-    [`secret-bankNumber`](val) {
+    [`secret-bankNumber`](val: string): string {
       return val.replace(/^(\d{4}).+(\w{3})$/, '$1************$2');
     },
   },

@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-03-12 08:17:08
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-12 09:23:13
+ * @Last Modified time: 2021-03-22 16:23:11
  */
 import { defineComponent } from 'vue';
 import { get, isFunction } from 'lodash-es';
@@ -10,11 +10,12 @@ import { ElMessage } from 'element-plus';
 import { utils, write } from 'xlsx';
 import dayjs from 'dayjs';
 import PropTypes from '../../../_utils/vue-types';
+import { JSXNode, AnyObject } from '../../../_utils/types';
+import { IRecord } from '../table/types';
 
 import { getCellValue } from '../utils';
 import { download } from '../../../_utils/download';
 import { t } from '../../../locale';
-import { JSXNode } from '../../../_utils/types';
 
 const XLSX = {
   utils,
@@ -53,11 +54,11 @@ export default defineComponent({
   },
   computed: {
     // unique identifier
-    idName() {
+    idName(): string {
       var now = new Date().getTime();
       return 'export_' + now;
     },
-    wbopts() {
+    wbopts(): AnyObject<any> {
       return {
         bookType: this.fileType,
         bookSST: false, // 是否生成Shared String Table，官方解释是，如果开启生成速度会下降，但在低版本IOS设备上有更好的兼容性
@@ -66,7 +67,7 @@ export default defineComponent({
     },
   },
   methods: {
-    async generate() {
+    async generate(): Promise<void> {
       if (isFunction(this.beforeGenerate)) {
         await this.beforeGenerate();
       }
@@ -83,7 +84,8 @@ export default defineComponent({
         this.loading = !1;
       }
       if (!data.length) {
-        return ElMessage.warning(t('qm.table.export.noData'));
+        ElMessage.warning(t('qm.table.export.noData'));
+        return;
       }
       if (this.formatHandle) {
         data = this.formatHandle(data);
@@ -92,7 +94,7 @@ export default defineComponent({
       // 执行导出
       this.export(this.getSheetData([json]), this.fileName ?? `${dayjs().format('YYYYMMDDHHmmss')}.xlsx`);
     },
-    getSheetData(data) {
+    getSheetData(data: Array<IRecord[]>): unknown {
       this.clearWorkbook();
       data.forEach((el, index) => {
         const sheetName = `${this.workSheet}${index + 1}`;
@@ -101,20 +103,20 @@ export default defineComponent({
       });
       return XLSX.write(this.workbook, this.wbopts);
     },
-    async export(data, filename) {
+    async export(data: unknown, filename: string): Promise<void> {
       if (!data) {
         return this.$emit('error');
       }
-      let blob = this.sheetToBlob(data);
+      let blob: Blob = this.sheetToBlob(data);
       if (isFunction(this.beforeFinish)) {
         await this.beforeFinish();
       }
       download(blob, filename);
       this.$emit('success');
     },
-    getProcessedJson(data, header) {
+    getProcessedJson(data: IRecord[], header: Record<string, string>): IRecord[] {
       let keys = this.getKeys(data, header);
-      let newData = [];
+      let newData: IRecord[] = [];
       data.forEach((item) => {
         let newItem = {};
         for (let label in keys) {
@@ -125,7 +127,7 @@ export default defineComponent({
       });
       return newData;
     },
-    getKeys(data, header) {
+    getKeys(data: IRecord[], header: Record<string, string>): Record<string, string> {
       if (header) {
         return header;
       }
@@ -135,11 +137,11 @@ export default defineComponent({
       }
       return keys;
     },
-    clearWorkbook() {
+    clearWorkbook(): void {
       this.workbook.SheetNames = [];
       this.workbook.Sheets = {};
     },
-    sheetToBlob(data) {
+    sheetToBlob(data: unknown): Blob {
       function s2ab(s) {
         var buf = new ArrayBuffer(s.length);
         var view = new Uint8Array(buf);

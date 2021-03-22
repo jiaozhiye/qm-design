@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-03-22 14:34:21
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-14 01:40:28
+ * @Last Modified time: 2021-03-22 16:19:19
  */
 import { defineComponent } from 'vue';
 import dayjs from 'dayjs';
@@ -11,7 +11,8 @@ import { getCellValue, setCellValue, deepFindColumn, toDate, dateFormat } from '
 import { noop } from '../../../_utils/util';
 import { t } from '../../../locale';
 import { warn } from '../../../_utils/error';
-import { JSXNode } from '../../../_utils/types';
+import { JSXNode, Nullable } from '../../../_utils/types';
+import { IColumn, IEditerReturn, IRecord, IRule } from '../table/types';
 
 import Checkbox from '../checkbox';
 import InputText from './InputText';
@@ -36,37 +37,37 @@ export default defineComponent({
     store() {
       return this.$$table.store;
     },
-    size() {
+    size(): string {
       return this.$$table.tableSize !== 'mini' ? 'small' : 'mini';
     },
-    options() {
+    options(): IEditerReturn {
       return this.column.editRender(this.record, this.column);
     },
-    editable() {
+    editable(): boolean {
       const { editable, disabled } = this.options;
       return (editable || isEqual(this.clicked, [this.rowKey, this.columnKey])) && !disabled;
     },
-    dataKey() {
+    dataKey(): string {
       return `${this.rowKey}|${this.columnKey}`;
     },
-    currentKey() {
+    currentKey(): string {
       return this.clicked.length === 2 ? `${this.clicked[0]}|${this.clicked[1]}` : '';
     },
-    passValidate() {
+    passValidate(): boolean {
       return ![...this.store.state.required, ...this.store.state.validate].some(({ x, y }) => x === this.rowKey && y === this.columnKey);
     },
-    requiredText() {
+    requiredText(): string {
       return this.store.state.required.find(({ x, y }) => x === this.rowKey && y === this.columnKey)?.text;
     },
-    validateText() {
+    validateText(): string {
       return this.store.state.validate.find(({ x, y }) => x === this.rowKey && y === this.columnKey)?.text;
     },
-    isEditing() {
+    isEditing(): boolean {
       return this.editable || !this.passValidate || this.shVisible || this.shMatching;
     },
   },
   watch: {
-    clicked() {
+    clicked(): void {
       if (!this.editable) return;
       const { type } = this.options;
       const { currentKey } = this;
@@ -78,11 +79,11 @@ export default defineComponent({
     },
   },
   methods: {
-    createFieldValidate(rules, val) {
+    createFieldValidate(rules: IRule[], val: unknown): void {
       const { rowKey, columnKey } = this;
       this.$$table.createFieldValidate(rules, val, rowKey, columnKey);
     },
-    textHandle(row, column) {
+    textHandle(row: IRecord, column: IColumn): JSXNode {
       const { dataIndex } = column;
       const { extra = {}, rules = [], onInput = noop, onChange = noop, onEnter = noop } = this.options;
       const prevValue = getCellValue(row, dataIndex);
@@ -117,7 +118,7 @@ export default defineComponent({
         />
       );
     },
-    numberHandle(row, column) {
+    numberHandle(row: IRecord, column: IColumn): JSXNode {
       const { dataIndex, precision } = column;
       const { extra = {}, rules = [], onInput = noop, onChange = noop, onEnter = noop } = this.options;
       const prevValue = getCellValue(row, dataIndex);
@@ -153,7 +154,7 @@ export default defineComponent({
         />
       );
     },
-    selectHandle(row, column, isMultiple) {
+    selectHandle(row: IRecord, column: IColumn, isMultiple: boolean): JSXNode {
       const { dataIndex } = column;
       const { extra = {}, rules = [], items = [], onChange = noop } = this.options;
       const prevValue = getCellValue(row, dataIndex);
@@ -186,10 +187,10 @@ export default defineComponent({
         </el-select>
       );
     },
-    [`select-multipleHandle`](row, column) {
+    [`select-multipleHandle`](row: IRecord, column: IColumn): JSXNode {
       return this.selectHandle(row, column, !0);
     },
-    dateHandle(row, column, isDateTime) {
+    dateHandle(row: IRecord, column: IColumn, isDateTime: boolean): JSXNode {
       const { dataIndex } = column;
       const { extra = {}, rules = [], onChange = noop } = this.options;
       const prevValue = getCellValue(row, dataIndex);
@@ -220,10 +221,10 @@ export default defineComponent({
         />
       );
     },
-    datetimeHandle(row, column) {
+    datetimeHandle(row: IRecord, column: IColumn): JSXNode {
       return this.dateHandle(row, column, !0);
     },
-    timeHandle(row, column) {
+    timeHandle(row: IRecord, column: IColumn): JSXNode {
       const { dataIndex } = column;
       const { extra = {}, rules = [], onChange = noop } = this.options;
       const timeFormat = 'HH:mm:ss';
@@ -252,7 +253,7 @@ export default defineComponent({
         />
       );
     },
-    checkboxHandle(row, column) {
+    checkboxHandle(row: IRecord, column: IColumn): JSXNode {
       const { dataIndex } = column;
       const { extra = {}, onChange = noop } = this.options;
       const { trueValue = '1', falseValue = '0', text = '', disabled } = extra;
@@ -278,7 +279,7 @@ export default defineComponent({
         />
       );
     },
-    switchHandle(row, column) {
+    switchHandle(row: IRecord, column: IColumn): JSXNode {
       const { dataIndex } = column;
       const { extra = {}, onChange = noop } = this.options;
       const { trueValue = '1', falseValue = '0', disabled } = extra;
@@ -304,7 +305,7 @@ export default defineComponent({
         />
       );
     },
-    [`search-helperHandle`](row, column) {
+    [`search-helperHandle`](row: IRecord, column: IColumn): JSXNode {
       const { dataIndex, precision } = column;
       const { extra = {}, helper, rules = [], onClick = noop, onChange = noop } = this.options;
       const createFieldAliasMap = () => {
@@ -323,7 +324,7 @@ export default defineComponent({
             setCellValue(row, otherDataIndex, otherValue, otherColumn?.precision);
             const otherOptions = otherColumn?.editRender?.(row, otherColumn);
             if (!Array.isArray(otherOptions?.rules)) continue;
-            this.$$table.createFieldValidate(otherOptions.rules, otherValue, this.rowKey, otherDataIndex);
+            this.$$table.createFieldValidate(otherOptions?.rules, otherValue, this.rowKey, otherDataIndex);
           }
         }
         // 修改当前单元格的值
@@ -371,7 +372,7 @@ export default defineComponent({
         alias.forEach((x) => (inputParams[x] = val));
         return inputParams;
       };
-      const getHelperData = (val) => {
+      const getHelperData = (val): Promise<IRecord[]> => {
         const { table, initialValue = {}, beforeFetch = (k) => k } = helper;
         return new Promise(async (resolve, reject) => {
           this.shMatching = !0;
@@ -393,7 +394,7 @@ export default defineComponent({
           this.shMatching = !1;
         });
       };
-      const resetHelperValue = (list = [], val) => {
+      const resetHelperValue = (list: IRecord[] = [], val) => {
         const alias = createFieldAliasMap();
         const records = list.filter((data) => {
           return getCellValue(data, alias[dataIndex]).toString().includes(val);
@@ -466,7 +467,7 @@ export default defineComponent({
             onChange={(val) => {
               if (val && remoteMatch) {
                 return getHelperData(val)
-                  .then((list: Record<string, unknown>[]) => resetHelperValue(list, val))
+                  .then((list) => resetHelperValue(list, val))
                   .catch(() => setHelperValues(''));
               }
               setHelperValues(val);
@@ -501,7 +502,7 @@ export default defineComponent({
       );
     },
     // 设置日期控件的禁用状态
-    setDisabledDate(oDate, [minDateTime, maxDateTime]) {
+    setDisabledDate(oDate: Date, [minDateTime, maxDateTime]): boolean {
       const min = minDateTime ? dayjs(minDateTime).toDate().getTime() : 0;
       const max = maxDateTime ? dayjs(maxDateTime).toDate().getTime() : 0;
       if (min && max) {
@@ -515,7 +516,7 @@ export default defineComponent({
       }
       return false;
     },
-    renderEditCell() {
+    renderEditCell(): Nullable<JSXNode> {
       const { type } = this.options;
       const render = this[`${type}Handle`];
       if (!render) {
@@ -536,7 +537,7 @@ export default defineComponent({
         </div>
       );
     },
-    renderCell() {
+    renderCell(): JSXNode {
       const { record, column } = this;
       const text = getCellValue(record, column.dataIndex);
       return <span class="cell--text">{this.$$body.renderText(text, column, record)}</span>;

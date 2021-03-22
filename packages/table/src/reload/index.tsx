@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-03-29 14:18:07
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-11 20:31:45
+ * @Last Modified time: 2021-03-22 15:13:33
  */
 import { defineComponent } from 'vue';
 import { getPrefixCls } from '../../../_utils/prefix';
@@ -13,7 +13,7 @@ export default defineComponent({
   name: 'Reload',
   inject: ['$$table'],
   methods: {
-    clickHandle() {
+    clickHandle(): void {
       this.$$table.getTableData();
     },
   },

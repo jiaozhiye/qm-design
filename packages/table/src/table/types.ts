@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-03-06 15:11:01
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-15 12:48:49
+ * @Last Modified time: 2021-03-22 15:49:51
  */
 import { AnyFunction, AnyObject, JSXNode, Nullable } from '../../../_utils/types';
 
@@ -36,6 +36,30 @@ export type IDictDeep = IDict & {
   children?: Array<IDict> | Nullable<undefined>;
 };
 
+export type IRule = {
+  required?: boolean;
+  message?: string;
+  validator?: AnyFunction<boolean>;
+};
+
+export type IFilter = {
+  [key: string]: any;
+};
+
+export type ISorter = {
+  [key: string]: string;
+};
+
+export type ISuperFilter = {
+  type: string;
+  bracketLeft: string;
+  fieldName: string;
+  expression: string;
+  value: unknown;
+  bracketRright: string;
+  logic: string;
+};
+
 export type IEditerReturn = {
   type: IEditerType;
   items?: Array<IDict>;
@@ -63,11 +87,7 @@ export type IEditerReturn = {
     beforeClose?: AnyFunction<void | Promise<void> | boolean>;
     closed?: AnyFunction<void>;
   };
-  rules?: Array<{
-    required?: boolean;
-    message?: string;
-    validator?: AnyFunction<boolean>;
-  }>;
+  rules?: IRule[];
   onInput?: AnyFunction<void>;
   onChange?: AnyFunction<void>;
   onEnter?: AnyFunction<void>;
@@ -89,6 +109,7 @@ export type IColumn = {
   title: string;
   description?: string;
   width?: number | string;
+  renderWidth?: number | null;
   fixed?: IFixed;
   align?: IAlign;
   theadAlign?: IAlign;
@@ -121,4 +142,18 @@ export type IColumn = {
       };
   render?: AnyFunction<JSXNode>;
   extraRender?: AnyFunction<string | number>;
+};
+
+export type IDerivedColumn = IColumn & {
+  type?: string;
+  level?: number;
+  colSpan?: number;
+  rowSpan?: number;
+  parentDataIndex?: string;
+  firstFixedRight?: boolean;
+  lastFixedLeft?: boolean;
+};
+
+export type IRecord<T = any> = {
+  [key: string]: T;
 };

@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-03-08 13:54:33
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-11 20:29:15
+ * @Last Modified time: 2021-03-22 15:03:02
  */
 import { defineComponent } from 'vue';
 import { getPrefixCls } from '../../../_utils/prefix';
@@ -26,10 +26,10 @@ export default defineComponent({
       layout: $props.layout || 'prev, pager, next, jumper, sizes',
       pageSizes: $props.pageSizeOptions || pageSizeOptions,
       background: true,
-      onCurrentChange: (val) => {
+      onCurrentChange: (val: number): void => {
         this.$emit('current-change', { currentPage: val, pageSize: $props.pageSize });
       },
-      onSizeChange: (val) => {
+      onSizeChange: (val: number): void => {
         this.$emit('size-change', { currentPage: $props.currentPage, pageSize: val });
       },
     };

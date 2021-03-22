@@ -2,19 +2,20 @@
  * @Author: 焦质晔
  * @Date: 2021-03-08 08:28:55
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-11 20:37:28
+ * @Last Modified time: 2021-03-22 15:29:35
  */
 import { get, set, transform, intersection, isEqual, isObject } from 'lodash-es';
 import dayjs from 'dayjs';
 import { hasOwn } from '../../../_utils/util';
-import { AnyFunction } from '../../../_utils/types';
+import { AnyFunction, AnyObject, Nullable } from '../../../_utils/types';
 import { stringify, array_format } from '../filter-sql';
+import { IColumn, IDerivedColumn, IRecord } from '../table/types';
 
 export { hasOwn };
 
 // 展平 columns
-export const columnsFlatMap = (columns) => {
-  const result = [];
+export const columnsFlatMap = (columns: IColumn[]): IColumn[] => {
+  const result: IColumn[] = [];
   columns.forEach((column) => {
     if (column.children) {
       result.push(...columnsFlatMap(column.children));
@@ -26,7 +27,7 @@ export const columnsFlatMap = (columns) => {
 };
 
 // 筛选 columns
-export const createFilterColumns = (columns) => {
+export const createFilterColumns = (columns: IColumn[]): IColumn[] => {
   return columns.filter((column) => {
     if (column.children) {
       column.children = createFilterColumns(column.children);
@@ -36,10 +37,10 @@ export const createFilterColumns = (columns) => {
 };
 
 // 深度遍历 columns
-export const deepMapColumns = (columns, callback: AnyFunction<void>) => {
+export const deepMapColumns = (columns: IColumn[], callback?: AnyFunction<void>): IColumn[] => {
   return columns.map((column) => {
     if (column.children) {
-      column.children.forEach((subColumn) => {
+      column.children.forEach((subColumn: IDerivedColumn) => {
         subColumn.parentDataIndex = column.dataIndex;
         if (column.fixed) {
           subColumn.fixed = column.fixed;
@@ -56,8 +57,8 @@ export const deepMapColumns = (columns, callback: AnyFunction<void>) => {
 };
 
 // 所有 columns
-export const getAllColumns = (columns) => {
-  const result = [];
+export const getAllColumns = (columns: IColumn[]): IColumn[] => {
+  const result: IColumn[] = [];
   columns.forEach((column) => {
     result.push(column);
     if (column.children) {
@@ -68,11 +69,11 @@ export const getAllColumns = (columns) => {
 };
 
 // 深度查找 column by dataIndex
-export const deepFindColumn = (columns, mark) => {
-  let result = null;
+export const deepFindColumn = (columns: IColumn[], mark: string): Nullable<IColumn> => {
+  let result: Nullable<IColumn> = null;
   for (let i = 0; i < columns.length; i++) {
     if (columns[i].children) {
-      result = deepFindColumn(columns[i].children, mark);
+      result = deepFindColumn(columns[i].children as IColumn[], mark);
     }
     if (result) {
       return result;
@@ -85,7 +86,7 @@ export const deepFindColumn = (columns, mark) => {
 };
 
 // 查找最后一级的第一个 column
-export const findFirstColumn = (column) => {
+export const findFirstColumn = (column: IColumn): IColumn => {
   const childColumns = column.children;
   if (childColumns) {
     if (childColumns[0].children) {
@@ -97,7 +98,7 @@ export const findFirstColumn = (column) => {
 };
 
 // 查找最后一级的最后一个 column
-export const findLastColumn = (column) => {
+export const findLastColumn = (column: IColumn): IColumn => {
   const childColumns = column.children;
   if (childColumns) {
     if (childColumns[childColumns.length - 1].children) {
@@ -109,16 +110,20 @@ export const findLastColumn = (column) => {
 };
 
 // 根据条件过滤 columns
-export const filterTableColumns = (columns, marks) => {
+export const filterTableColumns = (columns: IColumn[], marks: string[]): IColumn[] => {
   return columns.filter((x) => !marks.includes(x.dataIndex));
 };
 
 // 深度查找 rowKey
-export const deepFindRowKey = (rowKeys, mark) => {
-  let result = null;
+type IRowKey = {
+  rowKey: string;
+  children?: IRowKey[] | undefined;
+};
+export const deepFindRowKey = (rowKeys: IRowKey[], mark: string): Nullable<IRowKey> => {
+  let result: Nullable<IRowKey> = null;
   for (let i = 0; i < rowKeys.length; i++) {
     if (rowKeys[i].children) {
-      result = deepFindRowKey(rowKeys[i].children, mark);
+      result = deepFindRowKey(rowKeys[i].children as IRowKey[], mark);
     }
     if (result) {
       return result;
@@ -131,9 +136,9 @@ export const deepFindRowKey = (rowKeys, mark) => {
 };
 
 // 所有 rowKey
-export const getAllRowKeys = (data, getRowKey, disabled?: AnyFunction<boolean>) => {
-  const result = [];
-  data.forEach((record) => {
+export const getAllRowKeys = (list: IRecord[], getRowKey: AnyFunction<string>, disabled?: AnyFunction<boolean>): string[] => {
+  const result: string[] = [];
+  list.forEach((record) => {
     if (disabled?.(record)) return;
     result.push(getRowKey(record, record.index));
     if (record.children) {
@@ -144,9 +149,9 @@ export const getAllRowKeys = (data, getRowKey, disabled?: AnyFunction<boolean>) 
 };
 
 // 展平 tableData
-export const tableDataFlatMap = (data) => {
-  const result = [];
-  data.forEach((record) => {
+export const tableDataFlatMap = (list: IRecord[]): IRecord[] => {
+  const result: IRecord[] = [];
+  list.forEach((record) => {
     result.push(record);
     if (record.children) {
       result.push(...tableDataFlatMap(record.children));
@@ -156,7 +161,7 @@ export const tableDataFlatMap = (data) => {
 };
 
 // 表头分组
-export const convertToRows = (originColumns) => {
+export const convertToRows = (originColumns: IColumn[]): IColumn[][] => {
   let maxLevel = 1;
 
   const traverse = (column, parent) => {
@@ -184,19 +189,19 @@ export const convertToRows = (originColumns) => {
     }
   };
 
-  originColumns.forEach((column) => {
+  originColumns.forEach((column: IDerivedColumn) => {
     column.level = 1;
     traverse(column, null);
   });
 
-  const rows = [];
+  const rows: IColumn[][] = [];
   for (let i = 0; i < maxLevel; i++) {
     rows.push([]);
   }
 
   const allColumns = getAllColumns(originColumns);
 
-  allColumns.forEach((column) => {
+  allColumns.forEach((column: IDerivedColumn & { level: number }) => {
     if (!column.children) {
       column.rowSpan = maxLevel - column.level + 1;
     } else {
@@ -209,9 +214,9 @@ export const convertToRows = (originColumns) => {
 };
 
 // 获取元素相对于 目标祖先元素 的位置
-export const getNodeOffset = (el, container, rest = { left: 0, top: 0 }) => {
+export const getNodeOffset = (el: Nullable<HTMLElement>, container: HTMLElement, rest = { left: 0, top: 0 }) => {
   if (el) {
-    const parentElem = el.parentNode;
+    const parentElem = el.parentNode as Nullable<HTMLElement>;
     rest.top += el.offsetTop;
     rest.left += el.offsetLeft;
     if (parentElem && parentElem !== document.documentElement && parentElem !== document.body) {
@@ -219,14 +224,14 @@ export const getNodeOffset = (el, container, rest = { left: 0, top: 0 }) => {
       rest.left -= parentElem.scrollLeft;
     }
     if (container && (el === container || el.offsetParent === container) ? 0 : el.offsetParent) {
-      return getNodeOffset(el.offsetParent, container, rest);
+      return getNodeOffset(el.offsetParent as HTMLElement, container, rest);
     }
   }
   return rest;
 };
 
 // 格式化 DOM 元素高度
-export const parseHeight = (height) => {
+export const parseHeight = (height: number | string): number => {
   if (typeof height === 'number') {
     return height;
   }
@@ -234,13 +239,12 @@ export const parseHeight = (height) => {
     if (/^\d+(?:px)?$/.test(height)) {
       return Number.parseInt(height, 10);
     }
-    return Number(height);
   }
-  return null;
+  return Number(height);
 };
 
 // 比对两个对象的差异
-export const difference = (object, base) => {
+export const difference = <T extends AnyObject<any>>(object: T, base: T): T => {
   return transform(object, (result, value, key) => {
     if (!isEqual(value, base[key])) {
       result[key] = isObject(value) && isObject(base[key]) ? difference(value, base[key]) : value;
@@ -249,19 +253,19 @@ export const difference = (object, base) => {
 };
 
 // 判断数组的包含
-export const isArrayContain = (targetArr, arr) => {
+export const isArrayContain = (targetArr: unknown[], arr: unknown[]): boolean => {
   return intersection(targetArr, arr).length === arr.length;
 };
 
 // 获取格式化后的数据
-export const getCellValue = (record, dataIndex) => {
+export const getCellValue = (record: IRecord, dataIndex: string): any => {
   return get(record, dataIndex) ?? '';
 };
 
 // 设置单元格的数据
-export const setCellValue = (record, dataIndex, val, precision?: number) => {
+export const setCellValue = (record: IRecord, dataIndex: string, val: unknown, precision?: number): void => {
   val = val ?? '';
-  if (precision >= 0 && val !== '') {
+  if (precision && precision >= 0 && val !== '') {
     val = Number(val).toFixed(precision);
   }
   set(record, dataIndex, val);
@@ -287,8 +291,8 @@ export const debounce = (fn: any, delay = 0): AnyFunction<void> => {
 };
 
 // 数字格式化
-export const formatNumber = (value = '') => {
-  value += '';
+export const formatNumber = (value: number | string): string => {
+  value = value.toString();
   const list = value.split('.');
   const prefix = list[0].charAt(0) === '-' ? '-' : '';
   let num = prefix ? list[0].slice(1) : list[0];
@@ -304,20 +308,20 @@ export const formatNumber = (value = '') => {
 };
 
 // 数值类型校验
-export const validateNumber = (val) => {
+export const validateNumber = (val: string): boolean => {
   const regExp = /^-?(0|[1-9][0-9]*)(\.[0-9]*)?$/;
   return (!Number.isNaN(val) && regExp.test(val)) || val === '' || val === '-';
 };
 
 // 字符串转数值类型
-export const stringToNumber = (input) => {
+export const stringToNumber = (input: string): number | '' => {
   if (!validateNumber(input)) return '';
   input = input === '-' ? '' : input;
   return input ? Number(input) : '';
 };
 
 // 转日期对象
-export const toDate = (val: string): Date => {
+export const toDate = (val: string): Date | undefined => {
   return val ? dayjs(val).toDate() : undefined;
 };
 
@@ -327,7 +331,7 @@ export const dateFormat = (val: Date, vf: string): string => {
 };
 
 // 生成 uuid key
-export const createUidKey = (key = '') => {
+export const createUidKey = (key = ''): string => {
   const uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (c) => {
     const r = (Math.random() * 16) | 0;
     const v = c == 'x' ? r : (r & 0x3) | 0x8;
@@ -337,8 +341,8 @@ export const createUidKey = (key = '') => {
 };
 
 // 生成排序的 sql 片段
-export const createOrderBy = (sorter) => {
-  const result = [];
+export const createOrderBy = (sorter: AnyObject<any>): string => {
+  const result: string[] = [];
   Object.keys(sorter).forEach((dataIndex) => {
     if (sorter[dataIndex] !== null) {
       result.push(`${dataIndex}|${sorter[dataIndex]}`);
@@ -348,7 +352,7 @@ export const createOrderBy = (sorter) => {
 };
 
 // 生成查询条件的 sql 片段
-export const createWhereSQL = (filters, showType = false) => {
+export const createWhereSQL = (filters: any, showType = false): string => {
   let __query__ = ``;
   if (!Array.isArray(filters)) {
     const cutStep = 5;
@@ -384,9 +388,9 @@ export const createWhereSQL = (filters, showType = false) => {
 };
 
 // 多列分组聚合
-export const groupBy = (array = [], props = []) => {
+export const groupBy = (array: IRecord[] = [], props: string[] = []): any[] => {
   const fn = (x) => {
-    const res = [];
+    const res: unknown[] = [];
     props.forEach((k) => res.push(getCellValue(x, k)));
     return res;
   };

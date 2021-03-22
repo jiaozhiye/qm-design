@@ -7,13 +7,14 @@
 import { defineComponent } from 'vue';
 import { getPrefixCls } from '../../../_utils/prefix';
 import { t } from '../../../locale';
+import { JSXNode } from '../../../_utils/types';
 
 export default defineComponent({
   name: 'Alert',
   props: ['total', 'selectionKeys'],
   inject: ['$$table'],
   methods: {
-    clearHandle() {
+    clearHandle(): void {
       // 清空列选中
       this.$$table.clearRowSelection();
       // 清空行高亮
@@ -26,7 +27,7 @@ export default defineComponent({
       this.$$table.clearSuperSearch();
     },
   },
-  render() {
+  render(): JSXNode {
     const { total, rowSelection, selectionKeys } = this.$$table;
     const prefixCls = getPrefixCls('table');
     const cls = {

@@ -2,9 +2,9 @@
  * @Author: 焦质晔
  * @Date: 2020-02-28 23:01:43
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-12 09:22:59
+ * @Last Modified time: 2021-03-22 16:08:42
  */
-import { defineComponent, reactive } from 'vue';
+import { defineComponent, reactive, CSSProperties } from 'vue';
 import addEventListener from 'add-dom-event-listener';
 import { isEqual, isFunction, isObject } from 'lodash-es';
 import { parseHeight, getCellValue, deepFindRowKey, isArrayContain } from '../utils';
@@ -12,7 +12,8 @@ import { getPrefixCls } from '../../../_utils/prefix';
 import { noop } from '../../../_utils/util';
 import { contains } from '../../../_utils/dom';
 import { warn } from '../../../_utils/error';
-import { JSXNode } from '../../../_utils/types';
+import { JSXNode, Nullable } from '../../../_utils/types';
+import { IColumn, IDict, IRecord } from '../table/types';
 
 import config from '../config';
 import formatMixin from './format';
@@ -42,18 +43,18 @@ export default defineComponent({
     };
   },
   computed: {
-    $vTableBody() {
+    $vTableBody(): HTMLElement {
       return this.$el.querySelector('.qm-table--body');
     },
-    bodyWidth() {
+    bodyWidth(): Nullable<string> {
       const { layout, scrollY } = this.$$table;
       const { tableBodyWidth, gutterWidth } = layout;
       return tableBodyWidth ? `${tableBodyWidth - (scrollY ? gutterWidth : 0)}px` : null;
     },
-    wrapStyle() {
+    wrapStyle(): CSSProperties {
       const { layout, height, minHeight, maxHeight, fullHeight, autoHeight } = this.$$table;
       const { headerHeight, viewportHeight, footerHeight } = layout;
-      const result = {};
+      const result: CSSProperties = {};
       if (minHeight) {
         Object.assign(result, { minHeight: `${parseHeight(minHeight) - headerHeight - footerHeight}px` });
       }
@@ -65,14 +66,14 @@ export default defineComponent({
       }
       return result;
     },
-    editableColumns() {
+    editableColumns(): IColumn[] {
       return this.flattenColumns.filter((x) => isFunction(x.editRender));
     },
-    firstDataIndex() {
+    firstDataIndex(): string {
       const effectColumns = this.flattenColumns.filter((x) => !['__expandable__', '__selection__', config.operationColumn].includes(x.dataIndex));
       return effectColumns.length ? effectColumns[0].dataIndex : '';
     },
-    isDraggable() {
+    isDraggable(): boolean {
       return this.$$table.rowDraggable;
     },
   },
@@ -87,10 +88,10 @@ export default defineComponent({
     this.event3.remove();
   },
   methods: {
-    scrollEvent(ev) {
+    scrollEvent(ev: Event): void {
       const { scrollYLoad, scrollY, layout, triggerScrollYEvent, $refs } = this.$$table;
-      const scrollYWidth = scrollY ? layout.gutterWidth : 0;
-      const { scrollTop: st, scrollLeft: sl } = ev.target;
+      const scrollYWidth: number = scrollY ? layout.gutterWidth : 0;
+      const { scrollTop: st, scrollLeft: sl } = ev.target as HTMLElement;
       if (sl !== this.prevSL) {
         if ($refs[`tableHeader`]) {
           $refs[`tableHeader`].$el.scrollLeft = sl;
@@ -107,36 +108,39 @@ export default defineComponent({
       this.prevST = st;
       this.prevSL = sl;
     },
-    cancelEvent(ev) {
-      const { target, currentTarget } = ev;
+    cancelEvent(ev: MouseEvent): void {
+      const target = ev.target as HTMLElement;
+      const currentTarget = ev.currentTarget as HTMLElement;
       if (target === currentTarget) return;
       if (target.className === 'cell--text' || contains(target, this.$vTableBody)) return;
       this.setClickedValues([]);
     },
-    renderBodyXSpace() {
+    renderBodyXSpace(): JSXNode {
       return <div class="body--x-space" style={{ width: this.bodyWidth }} />;
     },
-    renderBodyYSpace() {
+    renderBodyYSpace(): JSXNode {
       return <div class="body--y-space" />;
     },
-    renderColgroup() {
+    renderColgroup(): JSXNode {
       return (
         <colgroup>
-          {this.flattenColumns.map((column) => {
-            const { dataIndex, width, renderWidth } = column;
-            return <col key={dataIndex} style={{ width: `${width || renderWidth}px`, minWidth: `${width || renderWidth}px` }} />;
-          })}
+          {this.flattenColumns.map(
+            (column: IColumn): JSXNode => {
+              const { dataIndex, width, renderWidth } = column;
+              return <col key={dataIndex} style={{ width: `${width || renderWidth}px`, minWidth: `${width || renderWidth}px` }} />;
+            }
+          )}
         </colgroup>
       );
     },
-    renderRows(list, depth = 0) {
+    renderRows(list: IRecord[], depth: number = 0): JSXNode[] {
       const { getRowKey, rowSelection, expandable, rowExpandedKeys } = this.$$table;
-      const rows = [];
+      const rows: JSXNode[] = [];
       list.forEach((row) => {
         // 行记录 索引
-        const rowIndex = row.index;
+        const rowIndex: number = row.index;
         // 行记录 rowKey
-        const rowKey = getRowKey(row, rowIndex);
+        const rowKey: string = getRowKey(row, rowIndex);
         // 普通行
         rows.push(this.renderRow(row, depth));
         // 展开行
@@ -164,12 +168,12 @@ export default defineComponent({
       });
       return rows;
     },
-    renderRow(row, depth = 0) {
+    renderRow(row: IRecord, depth: number = 0): JSXNode {
       const { getRowKey, selectionKeys, highlightKey } = this.$$table;
       // 行记录 索引
-      const rowIndex = row.index;
+      const rowIndex: number = row.index;
       // 行记录 rowKey
-      const rowKey = getRowKey(row, rowIndex);
+      const rowKey: string = getRowKey(row, rowIndex);
       const cls = [
         `body--row`,
         {
@@ -183,9 +187,9 @@ export default defineComponent({
         </tr>
       );
     },
-    renderColumn(column, columnIndex, row, rowIndex, rowKey, depth) {
+    renderColumn(column: IColumn, columnIndex: number, row: IRecord, rowIndex: number, rowKey: string, depth: number): Nullable<JSXNode> {
       const { leftFixedColumns, rightFixedColumns, getStickyLeft, getStickyRight, ellipsis, sorter, isIE } = this.$$table;
-      const { dataIndex, fixed, align, className } = column;
+      const { dataIndex, fixed, align, className = '' } = column;
       const { rowspan, colspan } = this.getSpan(row, column, rowIndex, columnIndex);
       const isEllipsis = ellipsis || column.ellipsis;
       if (!rowspan || !colspan) {
@@ -207,8 +211,8 @@ export default defineComponent({
       ];
       const stys = !isIE
         ? {
-            left: fixed === 'left' ? `${getStickyLeft(dataIndex)}px` : null,
-            right: fixed === 'right' ? `${getStickyRight(dataIndex)}px` : null,
+            left: fixed === 'left' ? `${getStickyLeft(dataIndex)}px` : '',
+            right: fixed === 'right' ? `${getStickyRight(dataIndex)}px` : '',
           }
         : null;
       const trExtraStys = this.rowStyle ? (isFunction(this.rowStyle) ? this.rowStyle(row, rowIndex) : this.rowStyle) : null;
@@ -228,7 +232,7 @@ export default defineComponent({
         </td>
       );
     },
-    renderCell(column, row, rowIndex, columnIndex, rowKey, depth) {
+    renderCell(column: IColumn, row: IRecord, rowIndex: number, columnIndex: number, rowKey: string, depth: number): JSXNode {
       const { expandable, selectionKeys, isTreeTable } = this.$$table;
       const { dataIndex, editRender, render } = column;
       const text = getCellValue(row, dataIndex);
@@ -246,7 +250,7 @@ export default defineComponent({
         return <CellEdit ref={`${rowKey}-${dataIndex}`} column={column} record={row} rowKey={rowKey} columnKey={dataIndex} clicked={this.clicked} />;
       }
       // Content Node
-      const vNodeText = isFunction(render) ? render(text, row, column, rowIndex, columnIndex) : this.renderText(text, column, row);
+      const vNodeText = isFunction(render) ? render?.(text, row, column, rowIndex, columnIndex) : this.renderText(text, column, row);
       // Tree Expandable + vNodeText
       if (isTreeTable && dataIndex === this.firstDataIndex) {
         return [
@@ -257,11 +261,11 @@ export default defineComponent({
       }
       return vNodeText;
     },
-    renderText(text, column, row) {
+    renderText(text: string, column: IColumn, row: IRecord): string {
       const { dictItems, precision, formatType, editRender } = column;
-      const dicts = dictItems || editRender?.(row, column)?.items || [];
+      const dicts: IDict[] = dictItems || editRender?.(row, column)?.items || [];
       const target = dicts.find((x) => x.value == text);
-      let result = target?.text ?? text ?? '';
+      let result: string = target?.text ?? text ?? '';
       // 数据是数组的情况
       if (Array.isArray(text)) {
         result = text
@@ -272,7 +276,7 @@ export default defineComponent({
           .join(',');
       }
       // 处理数值精度
-      if (precision >= 0 && result !== '') {
+      if (precision && precision >= 0 && result !== '') {
         result = Number(result).toFixed(precision);
       }
       // 处理换行符
@@ -288,10 +292,10 @@ export default defineComponent({
       }
       return result;
     },
-    renderIndent(level) {
+    renderIndent(level: number): Nullable<JSXNode> {
       return level ? <span class={`cell--indent indent-level-${level}`} style={{ paddingLeft: `${level * config.treeTable.textIndent}px` }} /> : null;
     },
-    getSpan(row, column, rowIndex, columnIndex) {
+    getSpan(row: IRecord, column: IColumn, rowIndex: number, columnIndex: number) {
       let rowspan = 1;
       let colspan = 1;
       const fn = this.$$table.spanMethod;
@@ -307,11 +311,11 @@ export default defineComponent({
       }
       return { rowspan, colspan };
     },
-    cellClickHandle(ev, row, column) {
+    cellClickHandle(ev: MouseEvent, row: IRecord, column: IColumn): void {
       const { getRowKey, rowSelection = {}, selectionKeys, rowHighlight, isTreeTable } = this.$$table;
       const { dataIndex } = column;
       if (['__expandable__', config.operationColumn].includes(dataIndex)) return;
-      const rowKey = getRowKey(row, row.index);
+      const rowKey: string = getRowKey(row, row.index);
       // 设置 clicked 坐标
       this.setClickedValues([rowKey, dataIndex]);
       // 判断单元格是否可编辑
@@ -344,29 +348,29 @@ export default defineComponent({
       // 行单击
       this.$$table.$emit('rowClick', row, column, ev);
     },
-    cellDbclickHandle(ev, row, column) {
+    cellDbclickHandle(ev: MouseEvent, row: IRecord, column: IColumn): void {
       const { dataIndex } = column;
       if (['__expandable__', '__selection__', config.operationColumn].includes(dataIndex)) return;
       this.$$table.$emit('rowDblclick', row, column, ev);
     },
-    setClickedValues(arr) {
+    setClickedValues(arr: string[]): void {
       if (isEqual(arr, this.clicked)) return;
       this.clicked = arr;
     },
-    setSelectionKeys(arr) {
+    setSelectionKeys(arr: string[]): void {
       this.$$table.selectionKeys = arr;
     },
-    setTreeSelectionKeys(key, arr) {
+    setTreeSelectionKeys(key: string, arr: string[]): void {
       // on(选中)  off(取消)
       const state = !arr.includes(key) ? 'on' : 'off';
       const selectedKeys = this.createTreeSelectionKeys(key, arr, state);
       this.setSelectionKeys(selectedKeys);
     },
-    createTreeSelectionKeys(key, arr, state) {
+    createTreeSelectionKeys(key: string, arr: string[], state: string): string[] {
       const { deriveRowKeys, getAllChildRowKeys, findParentRowKeys } = this.$$table;
       const target = deepFindRowKey(deriveRowKeys, key);
       // 后代节点 rowKeys
-      const childRowKeys = getAllChildRowKeys(target.children ?? []);
+      const childRowKeys = getAllChildRowKeys(target?.children || []);
       // 祖先节点 rowKeys
       const parentRowKeys = findParentRowKeys(deriveRowKeys, key);
       // 处理后代节点
@@ -378,10 +382,7 @@ export default defineComponent({
       // 处理祖先节点
       parentRowKeys.forEach((x) => {
         const target = deepFindRowKey(deriveRowKeys, x);
-        const isContain = isArrayContain(
-          arr,
-          target.children.map((k) => k.rowKey)
-        );
+        const isContain = isArrayContain(arr, target?.children?.map((k) => k.rowKey) || []);
         if (isContain) {
           arr = [...arr, x];
         } else {
@@ -390,10 +391,10 @@ export default defineComponent({
       });
       return arr;
     },
-    setHighlightKey(key) {
+    setHighlightKey(key: string): void {
       this.$$table.highlightKey = key;
     },
-    isTreeNode(row) {
+    isTreeNode(row: IRecord): boolean {
       return Array.isArray(row.children) && row.children.length > 0;
     },
   },
@@ -410,11 +411,11 @@ export default defineComponent({
         tag: 'tbody',
         type: 'transition-group',
       },
-      'onUpdate:modelValue': (list) => {
-        const records = [];
-        tableFullData.forEach((row) => {
+      'onUpdate:modelValue': (list: IRecord[]): void => {
+        const records: IRecord[] = [];
+        tableFullData.forEach((row: IRecord): void => {
           if (tableData.includes(row)) {
-            records.push(list.shift());
+            records.push(list.shift() as IRecord);
           } else {
             records.push(row);
           }

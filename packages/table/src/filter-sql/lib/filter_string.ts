@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-07-11 10:24:35
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-11 09:11:26
+ * @Last Modified time: 2021-03-22 14:15:39
  */
 const conjuctions = ['&&', '||', 'AND', 'OR', 'and', 'or', 'like', 'likes', 'in', 'nin', 'LIKE', 'LIKES', 'IN', 'NIN'];
 
@@ -10,7 +10,7 @@ export default {
   // This method will return an array of separated operations depending of the conjuctions
   operations: function (string) {
     const str = string.split(' ');
-    const ops = [];
+    const ops: any[] = [];
     let count = 0;
 
     ops[count] = [];

@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-03-09 13:18:43
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-13 15:20:22
+ * @Last Modified time: 2021-03-22 16:24:14
  */
 import { defineComponent } from 'vue';
 import { cloneDeep } from 'lodash-es';
@@ -11,7 +11,8 @@ import { validateNumber, stringToNumber, toDate, dateFormat } from '../utils';
 import { getPrefixCls } from '../../../_utils/prefix';
 import { t } from '../../../locale';
 import { warn } from '../../../_utils/error';
-import { JSXNode } from '../../../_utils/types';
+import { JSXNode, Nullable } from '../../../_utils/types';
+import { IColumn } from '../table/types';
 
 import Radio from '../radio';
 import Checkbox from '../checkbox';
@@ -28,14 +29,14 @@ export default defineComponent({
     };
   },
   computed: {
-    size() {
+    size(): string {
       return this.$$table.tableSize !== 'mini' ? 'small' : 'mini';
     },
-    dataKey() {
+    dataKey(): string {
       const { dataIndex, filter } = this.column;
       return Object.keys(this.filterValues)[0] || `${filter.type}|${dataIndex}`;
     },
-    isFilterEmpty() {
+    isFilterEmpty(): boolean {
       let res = !0; // 假设是空
       for (let key in this.filterValues[this.dataKey]) {
         if (!isEmpty(this.filterValues[this.dataKey][key])) {
@@ -45,7 +46,7 @@ export default defineComponent({
       }
       return res;
     },
-    isActived() {
+    isActived(): boolean {
       let res = !1; // 假设非激活状态
       for (let key in this.filters[this.dataKey]) {
         if (!isEmpty(this.filters[this.dataKey][key])) {
@@ -57,13 +58,13 @@ export default defineComponent({
     },
   },
   watch: {
-    filters() {
+    filters(): void {
       // 非激活状态(此筛选项数据为空) -> 恢复初始值
       if (!this.isActived) {
         this.filterValues = this.initialFilterValue();
       }
     },
-    visible(val) {
+    visible(val: boolean): void {
       if (!val) return;
       const { type } = this.column.filter;
       if (type === 'text' || type === 'number') {
@@ -74,17 +75,17 @@ export default defineComponent({
     },
   },
   methods: {
-    initialFilterValue() {
+    initialFilterValue(): Record<string, unknown> {
       const { dataIndex, filter } = this.column;
       return { [`${filter.type}|${dataIndex}`]: undefined };
     },
-    popperVisibleHandle(visible) {
+    popperVisibleHandle(visible: boolean): void {
       const { dataKey } = this;
       if (visible && this.filters[dataKey]) {
         this.filterValues[dataKey] = cloneDeep(this.filters[dataKey]);
       }
     },
-    doFinish() {
+    doFinish(): void {
       const { dataKey } = this;
       // 筛选值为空，移除该筛选属性
       if (this.isFilterEmpty) {
@@ -103,15 +104,16 @@ export default defineComponent({
       this.$$header.filters = Object.assign({}, cloneDeep(this.filters), cloneDeep(this.filterValues));
       this.visible = false;
     },
-    doReset() {
+    doReset(): void {
       if (this.isFilterEmpty && !this.isActived) {
-        return (this.visible = false);
+        this.visible = false;
+        return;
       }
       // 恢复初始值
       this.filterValues = this.initialFilterValue();
       this.doFinish();
     },
-    renderContent() {
+    renderContent(): Nullable<JSXNode> {
       const { type } = this.column.filter;
       const renderFormItem = this[`${type}Handle`];
       if (!renderFormItem) {
@@ -125,7 +127,7 @@ export default defineComponent({
         </div>
       );
     },
-    renderFormButton() {
+    renderFormButton(): JSXNode {
       return (
         <dl style="margin-top: 10px">
           <el-button type="primary" size={this.size} onClick={this.doFinish}>
@@ -137,7 +139,7 @@ export default defineComponent({
         </dl>
       );
     },
-    textHandle(column) {
+    textHandle(column: IColumn): JSXNode {
       const { title } = column;
       const { dataKey } = this;
       const inputProps = {
@@ -161,7 +163,7 @@ export default defineComponent({
         />
       );
     },
-    textareaHandle(column) {
+    textareaHandle(column: IColumn): JSXNode {
       const { title } = column;
       const { dataKey } = this;
       const inputProps = {
@@ -187,7 +189,7 @@ export default defineComponent({
         />
       );
     },
-    numberHandle(column) {
+    numberHandle(column: IColumn): JSXNode {
       const { dataKey } = this;
       const inputPropsFn = (mark: string) => ({
         modelValue: this.filterValues[dataKey]?.[mark],
@@ -232,12 +234,12 @@ export default defineComponent({
         </ul>
       );
     },
-    radioHandle(column) {
+    radioHandle(column: IColumn): JSXNode {
       const { filter } = column;
       const { dataKey } = this;
       return (
         <ul>
-          {filter.items.map((x) => {
+          {filter?.items?.map((x) => {
             const radioProps = {
               modelValue: this.filterValues[dataKey]?.[`==`] ?? null,
               'onUpdate:modelValue': (val) => {
@@ -245,7 +247,7 @@ export default defineComponent({
               },
             };
             return (
-              <li>
+              <li key={x.value}>
                 <Radio {...radioProps} trueValue={x.value} falseValue={null} label={x.text} disabled={x.disabled} />
               </li>
             );
@@ -253,15 +255,13 @@ export default defineComponent({
         </ul>
       );
     },
-    checkboxHandle(column) {
-      const {
-        filter: { items = [] },
-      } = column;
+    checkboxHandle(column: IColumn): JSXNode {
+      const { filter } = column;
       const { dataKey } = this;
       const results = this.filterValues[dataKey]?.[`in`] ?? [];
       return (
         <ul>
-          {items.map((x) => {
+          {filter?.items?.map((x) => {
             const prevValue = results.includes(x.value) ? x.value : null;
             const checkboxProps = {
               modelValue: prevValue,
@@ -271,7 +271,7 @@ export default defineComponent({
               },
             };
             return (
-              <li>
+              <li key={x.value}>
                 <Checkbox {...checkboxProps} trueValue={x.value} falseValue={null} label={x.text} disabled={x.disabled} />
               </li>
             );
@@ -279,7 +279,7 @@ export default defineComponent({
         </ul>
       );
     },
-    dateHandle(column) {
+    dateHandle(column: IColumn): JSXNode {
       const { dataKey } = this;
       const datePropsFn = (mark: string) => ({
         modelValue: toDate(this.filterValues[dataKey]?.[mark]),
@@ -333,7 +333,7 @@ export default defineComponent({
       );
     },
   },
-  render() {
+  render(): JSXNode {
     const { visible, isActived } = this;
     const prefixCls = getPrefixCls('table');
     const filterBtnCls = [

@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-03-26 11:44:24
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-11 20:31:14
+ * @Last Modified time: 2021-03-22 16:28:26
  */
 import { defineComponent } from 'vue';
 import { flatten, groupBy, map, spread, mergeWith, isFunction } from 'lodash-es';
@@ -12,6 +12,7 @@ import { getPrefixCls } from '../../../_utils/prefix';
 import { t } from '../../../locale';
 import { download } from '../../../_utils/download';
 import { JSXNode } from '../../../_utils/types';
+import { IColumn, IDerivedColumn, IRecord } from '../table/types';
 
 import config from '../config';
 
@@ -58,18 +59,18 @@ export default defineComponent({
     return {};
   },
   computed: {
-    headColumns() {
+    headColumns(): IColumn[] {
       return deepToRaw(filterTableColumns(this.tableColumns, ['__expandable__', '__selection__', config.operationColumn]));
     },
-    flatColumns() {
+    flatColumns(): IColumn[] {
       return deepToRaw(filterTableColumns(this.flattenColumns, ['__expandable__', '__selection__', config.operationColumn]));
     },
   },
   methods: {
-    createChunkColumnRows(chunkColumns, tableColumns) {
-      let res = [];
+    createChunkColumnRows(chunkColumns, tableColumns): any[] {
+      let res: any[] = [];
       chunkColumns.forEach((columns) => {
-        let tmp = [];
+        let tmp: any[] = [];
         columns.forEach((column) => {
           if (column.level === 1) {
             tmp.push(column);
@@ -84,15 +85,15 @@ export default defineComponent({
       });
       return res;
     },
-    deepCreateColumn(item, columns) {
-      const parent = Object.assign({}, deepFindColumn(columns, item.parentDataIndex));
-      parent.children = [item];
-      if (parent.level > 1) {
+    deepCreateColumn(column: IDerivedColumn, columns: IColumn[]): IDerivedColumn {
+      const parent = Object.assign({}, deepFindColumn(columns, column.parentDataIndex as string)) as IDerivedColumn;
+      parent.children = [column];
+      if (parent.level && parent.level > 1) {
         return this.deepCreateColumn(parent, columns);
       }
       return parent;
     },
-    mergeColumns(columns) {
+    mergeColumns(columns: IColumn[]): IColumn[] {
       const keys = [...new Set(columns.map((x) => x.dataIndex))];
       return keys.map((x) => {
         const res = columns.filter((k) => k.dataIndex === x);
@@ -103,7 +104,7 @@ export default defineComponent({
         }
       });
     },
-    doMerge(columns, mark) {
+    doMerge(columns: IColumn[], mark: string): IColumn[] {
       return map(
         groupBy(flatten(columns), mark),
         spread((...rest) => {
@@ -115,14 +116,14 @@ export default defineComponent({
         })
       );
     },
-    createChunkColumns(columns) {
-      let res = [];
-      let tmp = [];
+    createChunkColumns(columns: IColumn[]): IColumn[][] {
+      let res: any[] = [];
+      let tmp: any[] = [];
       let sum = 0;
       let i = 0;
       for (; i < columns.length; ) {
         const column = columns[i];
-        const w = column.width || column.renderWidth || config.defaultColumnWidth;
+        const w = Number(column.width || column.renderWidth || config.defaultColumnWidth);
         sum += w;
         if (sum <= config.printWidth) {
           tmp.push(column);
@@ -145,10 +146,10 @@ export default defineComponent({
       }
       return res;
     },
-    printHandle() {
+    printHandle(): void {
       const opts = { filename: 'print', type: 'html', isDownload: false };
       this.downloadFile(opts, this.toHtml()).then(({ content, blob }) => {
-        let printFrame = document.createElement('iframe');
+        let printFrame: any = document.createElement('iframe');
         printFrame.setAttribute('frameborder', '0');
         printFrame.setAttribute('width', '100%');
         printFrame.setAttribute('height', '0');
@@ -173,7 +174,7 @@ export default defineComponent({
         }
       });
     },
-    toHtml() {
+    toHtml(): string {
       const chunkFlatColumns = this.createChunkColumns([...this.flatColumns]);
       const chunkColumnRows = this.createChunkColumnRows(chunkFlatColumns, this.headColumns);
       let html = [
@@ -192,7 +193,7 @@ export default defineComponent({
       }
       return html + `</body></html>`;
     },
-    _toTable(columnRows, flatColumns) {
+    _toTable(columnRows: Array<IDerivedColumn[]>, flatColumns: IColumn[]): string {
       const { tableFullData, $refs } = this.$$table;
       const summationRows = flatColumns.some((x) => !!x.summation) ? $refs[`tableFooter`].summationRows : [];
       let html = `<table class="table--print" width="100%" border="0" cellspacing="0" cellpadding="0">`;
@@ -248,7 +249,7 @@ export default defineComponent({
       html += '</table>';
       return html;
     },
-    _toLogo() {
+    _toLogo(): string {
       const baseUrl = window.location.origin;
       return `
         <table class="no-border" width="100%" border="0" cellspacing="0" cellpadding="0">
@@ -267,21 +268,21 @@ export default defineComponent({
       const { filename, type, isDownload } = opts;
       const name = `${filename}.${type}`;
       if (window.Blob) {
-        const blob = new Blob([content], { type: `text/${type}` });
+        const blob: Blob = new Blob([content], { type: `text/${type}` });
         if (!isDownload) {
           return Promise.resolve({ type, content, blob });
         }
         download(blob, name);
       }
     },
-    renderCell(row, rowIndex, column, columnIndex) {
+    renderCell(row: IRecord, rowIndex: number, column: IColumn, columnIndex: number): unknown {
       const { dataIndex, render, extraRender } = column;
       const text = getCellValue(row, dataIndex);
       if (isFunction(extraRender)) {
-        return extraRender(text, row, column, rowIndex, columnIndex);
+        return extraRender?.(text, row, column, rowIndex, columnIndex);
       }
       if (isFunction(render)) {
-        return render(text, row, column, rowIndex, columnIndex);
+        return render?.(text, row, column, rowIndex, columnIndex);
       }
       return this.$$table.$$tableBody.renderText(text, column, row);
     },

@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-03-06 21:30:12
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-11 20:32:26
+ * @Last Modified time: 2021-03-22 15:15:41
  */
 import { defineComponent } from 'vue';
 import { intersection, xor } from 'lodash-es';
@@ -17,20 +17,20 @@ export default defineComponent({
   props: ['selectionKeys'],
   inject: ['$$table'],
   computed: {
-    filterAllRowKeys() {
+    filterAllRowKeys(): string[] {
       const { tableFullData, getRowKey, rowSelection } = this.$$table;
       const { disabled = noop } = rowSelection;
       return getAllRowKeys(tableFullData, getRowKey, disabled);
     },
-    indeterminate() {
+    indeterminate(): boolean {
       return this.selectionKeys.length > 0 && intersection(this.selectionKeys, this.filterAllRowKeys).length < this.filterAllRowKeys.length;
     },
-    selectable() {
+    selectable(): boolean {
       return !this.indeterminate && this.selectionKeys.length > 0;
     },
   },
   methods: {
-    changeHandle(val) {
+    changeHandle(val: boolean): void {
       const { selectionKeys, filterAllRowKeys } = this;
       this.$$table.selectionKeys = val ? [...new Set([...selectionKeys, ...filterAllRowKeys])] : xor(selectionKeys, filterAllRowKeys);
     },

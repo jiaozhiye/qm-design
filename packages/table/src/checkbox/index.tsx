@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-03-06 01:13:44
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-11 20:05:03
+ * @Last Modified time: 2021-03-22 13:15:31
  */
 import { defineComponent } from 'vue';
 import PropTypes from '../../../_utils/vue-types';
@@ -30,7 +30,7 @@ export default defineComponent({
     };
   },
   watch: {
-    modelValue() {
+    modelValue(): void {
       this.updateModel();
     },
   },
@@ -38,10 +38,10 @@ export default defineComponent({
     this.updateModel();
   },
   methods: {
-    change(event) {
+    change(ev): void {
       if (this.disabled || this.readonly) return;
 
-      const checked = event.target.checked;
+      const checked = ev.target.checked;
       this.currentValue = checked;
 
       const value = checked ? this.trueValue : this.falseValue;
@@ -49,13 +49,13 @@ export default defineComponent({
       this.$emit('update:modelValue', value);
       this.$emit('change', value);
     },
-    updateModel() {
+    updateModel(): void {
       this.currentValue = this.modelValue === this.trueValue;
     },
-    onBlur() {
+    onBlur(): void {
       this.focusInner = false;
     },
-    onFocus() {
+    onFocus(): void {
       this.focusInner = true;
     },
   },

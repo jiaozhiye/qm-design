@@ -2,11 +2,12 @@
  * @Author: 焦质晔
  * @Date: 2021-02-09 09:03:59
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-17 20:21:28
+ * @Last Modified time: 2021-03-22 16:03:49
  */
-import { defineComponent } from 'vue';
+import { CSSProperties, defineComponent } from 'vue';
 import { isEqual } from 'lodash-es';
-import { JSXNode } from '../../../_utils/types';
+import { JSXNode, Nullable } from '../../../_utils/types';
+import { IColumn, IRecord } from './types';
 
 import baseProps from './props';
 import Store from '../store';
@@ -145,16 +146,16 @@ export default defineComponent({
     $$tableBody() {
       return this.$refs[`tableBody`];
     },
-    tableColumns() {
+    tableColumns(): IColumn[] {
       return this.createTableColumns(this.columns);
     },
-    flattenColumns() {
+    flattenColumns(): IColumn[] {
       return columnsFlatMap(this.tableColumns);
     },
-    allColumns() {
+    allColumns(): IColumn[] {
       return getAllColumns(this.tableColumns);
     },
-    allRowKeys() {
+    allRowKeys(): string[] {
       return getAllRowKeys(this.tableFullData, this.getRowKey);
     },
     deriveRowKeys() {
@@ -163,43 +164,43 @@ export default defineComponent({
     tableChange() {
       return [this.pagination, this.filters, this.sorter, { currentDataSource: [...this.tableFullData], allDataSource: [...this.tableOriginData] }];
     },
-    leftFixedColumns() {
+    leftFixedColumns(): IColumn[] {
       return this.flattenColumns.filter((column) => column.fixed === 'left');
     },
-    rightFixedColumns() {
+    rightFixedColumns(): IColumn[] {
       return this.flattenColumns.filter((column) => column.fixed === 'right');
     },
-    showFooter() {
+    showFooter(): boolean {
       return this.flattenColumns.some((x) => !!x.summation);
     },
-    showPagination() {
+    showPagination(): boolean {
       return this.isFetch || this.webPagination;
     },
-    isHeadSorter() {
+    isHeadSorter(): boolean {
       return this.flattenColumns.some((column) => column.sorter);
     },
-    isHeadFilter() {
+    isHeadFilter(): boolean {
       return this.flattenColumns.some((column) => column.filter);
     },
-    isServerSummation() {
+    isServerSummation(): boolean {
       return this.flattenColumns.some((x) => !!x.summation?.dataKey);
     },
-    isSuperSearch() {
+    isSuperSearch(): boolean {
       return this.showSuperSearch && this.isHeadFilter;
     },
-    isGroupSummary() {
+    isGroupSummary(): boolean {
       return this.flattenColumns.some((column) => !!column.groupSummary);
     },
-    isTableEmpty() {
+    isTableEmpty(): boolean {
       return !this.tableData.length;
     },
-    isTreeTable() {
+    isTreeTable(): boolean {
       return this.tableFullData.some((x) => Array.isArray(x.children) && x.children.length);
     },
-    isFetch() {
+    isFetch(): boolean {
       return !!this.fetch;
     },
-    fetchParams() {
+    fetchParams(): Record<string, unknown> {
       const orderby = createOrderBy(this.sorter);
       // const query = createWhereSQL(this.filters, config.showFilterType) || createWhereSQL(this.superFilters, config.showFilterType);
       const query = this.formatFiltersParams(this.filters, this.superFilters);
@@ -216,25 +217,25 @@ export default defineComponent({
         ...this.pagination,
       };
     },
-    bordered() {
+    bordered(): boolean {
       return this.border || this.isGroup;
     },
-    tableSize() {
+    tableSize(): string {
       const { $size } = useSize(this.$props);
       Object.assign(this.scrollYStore, { rowHeight: config.rowHeightMaps[$size] });
       return $size;
     },
-    shouldUpdateHeight() {
+    shouldUpdateHeight(): boolean {
       return this.height || this.maxHeight || this.isTableEmpty;
     },
-    fullHeight() {
-      const pagerHeight = this.showPagination ? 40 : 0;
+    fullHeight(): Nullable<number> {
+      const pagerHeight: number = this.showPagination ? 40 : 0;
       if (this.isFullScreen && this.shouldUpdateHeight) {
         return window.innerHeight - 30 - this.$refs[`topper`].offsetHeight - pagerHeight;
       }
       return null;
     },
-    tableStyles() {
+    tableStyles(): CSSProperties {
       const { fullHeight, autoHeight } = this;
       const height = parseHeight(this.height);
       const minHeight = parseHeight(this.minHeight);
@@ -256,14 +257,14 @@ export default defineComponent({
     },
   },
   watch: {
-    dataSource(next) {
+    dataSource(next: IRecord[]): void {
       if (isEqual(next, this.tableFullData)) return;
       this.clearTableSorter();
       this.clearTableFilter();
       this.clearSuperSearch();
       this.createTableData(next);
     },
-    tableFullData() {
+    tableFullData(): void {
       // 处理内存分页
       this.createLimitData();
       // 加载表格数据
@@ -273,30 +274,30 @@ export default defineComponent({
       // 触发 dataChange 事件
       debounce(this.dataChangeHandle)();
     },
-    columns(next) {
+    columns(next: IColumn[]): void {
       this.setLocalColumns(next);
     },
-    tableColumns() {
+    tableColumns(): void {
       this.doLayout();
     },
-    filters() {
+    filters(): void {
       this.$emit('change', ...this.tableChange);
     },
-    sorter() {
+    sorter(): void {
       this.$emit('change', ...this.tableChange);
     },
     pagination: {
-      handler() {
+      handler(): void {
         this.$emit('change', ...this.tableChange);
       },
       deep: true,
     },
-    [`fetch.params`]() {
+    [`fetch.params`](): void {
       this.clearTableSorter();
       this.clearTableFilter();
       this.clearSuperSearch();
     },
-    fetchParams(next, prev) {
+    fetchParams(next, prev): void {
       const isOnlyPageChange = this.onlyPaginationChange(next, prev);
       if (!isOnlyPageChange) {
         this.isFetch && debounce(this.clearRowSelection)();
@@ -307,14 +308,14 @@ export default defineComponent({
         this.isFetch && debounce(this.getTableData)();
       }
     },
-    selectionKeys(next, prev) {
+    selectionKeys(next: string[], prev: string[]): void {
       if (!this.rowSelection || isEqual(next, prev)) return;
       const { onChange = noop } = this.rowSelection;
       // 设置选中的行数据
       this.createSelectionRows(next);
       onChange(next, this.selectionRows);
     },
-    [`rowSelection.selectedRowKeys`](next) {
+    [`rowSelection.selectedRowKeys`](next: string[]): void {
       if (this.rowSelection.type === 'radio') {
         this.$$tableBody.setClickedValues(next.length ? [next[0], '__selection__'] : []);
       }
@@ -323,42 +324,42 @@ export default defineComponent({
         this.rowExpandedKeys = this.createRowExpandedKeys();
       }
     },
-    [`expandable.expandedRowKeys`]() {
+    [`expandable.expandedRowKeys`](): void {
       this.rowExpandedKeys = this.createRowExpandedKeys();
     },
-    [`treeStructure.expandedRowKeys`]() {
+    [`treeStructure.expandedRowKeys`](): void {
       this.rowExpandedKeys = this.createRowExpandedKeys();
     },
-    rowExpandedKeys(next, prev) {
+    rowExpandedKeys(next: string[], prev: string[]): void {
       if (!this.expandable || isEqual(next, prev)) return;
       const { onChange = noop } = this.expandable;
       const expandedRows = tableDataFlatMap(this.tableFullData).filter((record) => next.includes(this.getRowKey(record, record.index)));
       onChange(next, expandedRows);
     },
-    highlightKey(next) {
+    highlightKey(next: string): void {
       if (!this.rowHighlight) return;
       const { onChange = noop } = this.rowHighlight;
       const currentRow = tableDataFlatMap(this.tableFullData).find((record) => this.getRowKey(record, record.index) === next);
       onChange(next, currentRow || null);
     },
-    [`rowHighlight.currentRowKey`](next) {
+    [`rowHighlight.currentRowKey`](next: string): void {
       this.$$tableBody.setClickedValues(!isEmpty(next) ? [next, 'index'] : []);
       this.highlightKey = this.rowHighlight?.currentRowKey ?? this.highlightKey;
     },
-    [`layout.viewportHeight`](next) {
+    [`layout.viewportHeight`](next: number): void {
       const visibleYSize = Math.ceil(next / this.scrollYStore.rowHeight);
       const renderSize = isChrome() ? visibleYSize + 3 : visibleYSize + 5;
       Object.assign(this.scrollYStore, { visibleSize: visibleYSize, offsetSize: visibleYSize, renderSize });
     },
-    scrollYLoad(next) {
+    scrollYLoad(next: boolean): void {
       this.$nextTick(() => {
         !next ? this.updateScrollYSpace(!0) : this.loadScrollYData(this.$$tableBody.prevST);
       });
     },
-    scrollX(next) {
+    scrollX(next: boolean): void {
       this.isPingRight = next;
     },
-    loading(next) {
+    loading(next: boolean): void {
       this.showLoading = next;
     },
   },
@@ -391,7 +392,7 @@ export default defineComponent({
     ...layoutMethods,
     ...interfaceMethods,
     ...renderMethods,
-    getRowKey(row: Record<string, any>, index: number): string {
+    getRowKey(row: IRecord, index: number): string {
       const { rowKey } = this;
       const key: string = typeof rowKey === 'function' ? rowKey(row, index) : row[rowKey];
       if (key === undefined) {

@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-03-06 12:05:16
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-11 20:32:47
+ * @Last Modified time: 2021-03-22 15:17:37
  */
 import { defineComponent } from 'vue';
 import { deepFindRowKey, isArrayContain } from '../utils';
@@ -17,36 +17,33 @@ export default defineComponent({
   props: ['selectionKeys', 'column', 'record', 'rowKey'],
   inject: ['$$table'],
   computed: {
-    selectionType() {
+    selectionType(): string {
       return this.column.type;
     },
   },
   methods: {
-    setRowSelection(val) {
+    setRowSelection(val: string): void {
       if (this.selectionKeys.includes(val)) return;
       this.$$table.selectionKeys = [val];
     },
-    toggleRowSelection(val) {
+    toggleRowSelection(val: string): void {
       this.$$table.selectionKeys = !this.selectionKeys.includes(val)
         ? [...new Set([...this.selectionKeys, val])]
         : this.selectionKeys.filter((x) => x !== val);
     },
-    createIndeterminate(key) {
+    createIndeterminate(key: string): boolean {
       const { rowSelection, deriveRowKeys, getAllChildRowKeys, isTreeTable } = this.$$table;
       const { checkStrictly = !0 } = rowSelection;
-      if (!(isTreeTable && !checkStrictly)) return;
+      if (!(isTreeTable && !checkStrictly)) {
+        return !1;
+      }
       // true -> 子节点非全部选中，至少有一个后代节点在 selectionKeys 中
       const target = deepFindRowKey(deriveRowKeys, key);
-      const childRowKeys = getAllChildRowKeys(target.children ?? []);
-      const isContain = Array.isArray(target.children)
-        ? isArrayContain(
-            this.selectionKeys,
-            target.children.map((x) => x.rowKey)
-          )
-        : !0;
+      const childRowKeys = getAllChildRowKeys(target?.children ?? []);
+      const isContain = Array.isArray(target?.children) ? isArrayContain(this.selectionKeys, target?.children.map((x) => x.rowKey) || []) : !0;
       return !isContain && childRowKeys.some((x) => this.selectionKeys.includes(x));
     },
-    renderRadio() {
+    renderRadio(): JSXNode {
       const { record, rowKey } = this;
       const {
         rowSelection: { disabled = noop },
@@ -66,7 +63,7 @@ export default defineComponent({
         />
       );
     },
-    renderCheckbox() {
+    renderCheckbox(): JSXNode {
       const { record, rowKey } = this;
       const {
         rowSelection: { disabled = noop },

@@ -2,30 +2,31 @@
  * @Author: 焦质晔
  * @Date: 2020-03-05 10:27:24
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-08 09:12:08
+ * @Last Modified time: 2021-03-22 13:31:12
  */
-import { deepMapColumns, createFilterColumns, deepFindColumn, findFirstColumn, findLastColumn } from '../utils';
+import { deepMapColumns, createFilterColumns, deepFindColumn, findFirstColumn, findLastColumn, parseHeight } from '../utils';
 import config from '../config';
+import { IColumn } from '../table/types';
 
 const columnsMixin = {
   methods: {
-    createTableColumns(columns) {
-      const baseColumns = deepMapColumns(columns, null);
-      const expandableColumn = this.createExpandableColumn(this.expandable);
-      const selectionColumn = this.createSelectionColumn(this.rowSelection);
+    createTableColumns(columns: IColumn[]): IColumn[] {
+      const baseColumns = deepMapColumns(columns, undefined);
+      const expandableColumn: IColumn = this.createExpandableColumn(this.expandable);
+      const selectionColumn: IColumn = this.createSelectionColumn(this.rowSelection);
       return createFilterColumns([...(expandableColumn ? [expandableColumn] : []), ...(selectionColumn ? [selectionColumn] : []), ...baseColumns]);
     },
-    updateColumnsWidth() {
-      const tableWidth = this.$vTable.clientWidth;
-      const scrollYWidth = this.scrollY ? this.layout.gutterWidth : 0;
+    updateColumnsWidth(): void {
+      const tableWidth: number = this.$vTable.clientWidth;
+      const scrollYWidth: number = this.scrollY ? this.layout.gutterWidth : 0;
       const { defaultColumnWidth } = config;
 
       // 没有指定宽度的列
-      const flexColumns = this.flattenColumns.filter((column) => typeof column.width !== 'number');
+      const flexColumns: IColumn[] = this.flattenColumns.filter((column: IColumn) => typeof column.width !== 'number');
       // 表格最小宽度
       let bodyMinWidth = 0;
 
-      this.flattenColumns.forEach((column) => {
+      this.flattenColumns.forEach((column: IColumn) => {
         if (typeof column.width === 'number') {
           column.renderWidth = null;
         }
@@ -33,8 +34,8 @@ const columnsMixin = {
 
       if (flexColumns.length > 0) {
         // 获取表格的最小宽度
-        this.flattenColumns.forEach((column) => {
-          bodyMinWidth += column.width || defaultColumnWidth;
+        this.flattenColumns.forEach((column: IColumn) => {
+          bodyMinWidth += Number(column.width) || defaultColumnWidth;
         });
 
         // 最小宽度小于容器宽度 -> 没有横向滚动条
@@ -76,8 +77,8 @@ const columnsMixin = {
         // 表格内容宽度
         this.layout.tableBodyWidth = Math.max(bodyMinWidth, tableWidth);
       } else {
-        this.flattenColumns.forEach((column) => {
-          column.renderWidth = column.width || defaultColumnWidth;
+        this.flattenColumns.forEach((column: IColumn) => {
+          column.renderWidth = Number(column.width) || defaultColumnWidth;
           bodyMinWidth += column.renderWidth;
         });
 
@@ -90,29 +91,29 @@ const columnsMixin = {
       // 表格宽度
       this.layout.tableWidth = tableWidth;
     },
-    getStickyLeft(key) {
+    getStickyLeft(key: string): number {
       // 说明是表头分组的上层元素，递归查找最下层的第一个后代元素
-      if (this.flattenColumns.findIndex((x) => x.dataIndex === key) < 0) {
-        key = findFirstColumn(deepFindColumn(this.tableColumns, key)).dataIndex;
+      if (this.flattenColumns.findIndex((x: IColumn) => x.dataIndex === key) < 0) {
+        key = findFirstColumn(deepFindColumn(this.tableColumns, key) as IColumn).dataIndex;
       }
       let l = 0;
       for (let i = 0; i < this.flattenColumns.length; i++) {
-        const column = this.flattenColumns[i];
+        const column: IColumn = this.flattenColumns[i];
         if (column.dataIndex === key) break;
-        l += column.width || column.renderWidth;
+        l += parseHeight(column.width || column.renderWidth || 0);
       }
       return l;
     },
-    getStickyRight(key) {
+    getStickyRight(key: string): number {
       // 说明是表头分组的上层元素，递归查找最下层的最后一个后代元素
-      if (this.flattenColumns.findIndex((x) => x.dataIndex === key) < 0) {
-        key = findLastColumn(deepFindColumn(this.tableColumns, key)).dataIndex;
+      if (this.flattenColumns.findIndex((x: IColumn) => x.dataIndex === key) < 0) {
+        key = findLastColumn(deepFindColumn(this.tableColumns, key) as IColumn).dataIndex;
       }
       let r = 0;
       for (let i = this.flattenColumns.length - 1; i >= 0; i--) {
-        const column = this.flattenColumns[i];
+        const column: IColumn = this.flattenColumns[i];
         if (column.dataIndex === key) break;
-        r += column.width || column.renderWidth;
+        r += parseHeight(column.width || column.renderWidth || 0);
       }
       return r;
     },

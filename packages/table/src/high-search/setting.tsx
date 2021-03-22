@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-07-12 16:26:19
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-11 20:58:40
+ * @Last Modified time: 2021-03-22 15:01:13
  */
 import { defineComponent } from 'vue';
 import localforage from 'localforage';
@@ -14,6 +14,7 @@ import { stop } from '../../../_utils/dom';
 import { warn } from '../../../_utils/error';
 import { t } from '../../../locale';
 import { JSXNode } from '../../../_utils/types';
+import { IColumn, IDict, IRecord } from '../table/types';
 import config from '../config';
 
 import VTable from '../table';
@@ -48,21 +49,21 @@ export default defineComponent({
     $$vTable() {
       return this.$refs[`search`];
     },
-    highSearchKey() {
+    highSearchKey(): string {
       return this.$$table.uniqueKey ? `search_${this.$$table.uniqueKey}` : '';
     },
-    filterColumns() {
+    filterColumns(): IColumn[] {
       return this.columns.filter((column) => !!column.filter);
     },
-    query() {
+    query(): string {
       return createWhereSQL(this.currentData);
     },
-    confirmDisabled() {
+    confirmDisabled(): boolean {
       return !(this.query && isBracketBalance(this.query));
     },
   },
   watch: {
-    currentKey(next) {
+    currentKey(next: string): void {
       if (next) {
         this.list = this.savedItems.find((x) => x.value === next).list;
       } else {
@@ -70,7 +71,7 @@ export default defineComponent({
       }
     },
   },
-  async created() {
+  async created(): Promise<void> {
     if (!this.highSearchKey) return;
     let res = await localforage.getItem(this.highSearchKey);
     if (!res) {
@@ -85,10 +86,10 @@ export default defineComponent({
     }
   },
   methods: {
-    findColumn(dataIndex) {
+    findColumn(dataIndex: string): void {
       return this.searchColumns.find((x) => x.dataIndex === dataIndex);
     },
-    createVTableColumns() {
+    createVTableColumns(): IColumn[] {
       return [
         {
           title: '操作',
@@ -220,10 +221,10 @@ export default defineComponent({
         },
       ];
     },
-    isMultipleSelect(type) {
+    isMultipleSelect(type: string): boolean {
       return ['in', 'nin'].includes(type);
     },
-    getConditionType(type, isMultiple) {
+    getConditionType(type: string, isMultiple: boolean): string {
       let __type__ = '';
       switch (type) {
         case 'number':
@@ -243,8 +244,8 @@ export default defineComponent({
       }
       return __type__;
     },
-    getExpressionHandle(type) {
-      let result = [];
+    getExpressionHandle(type: string): IDict[] {
+      let result: IDict[] = [];
       switch (type) {
         case 'date':
         case 'number':
@@ -277,10 +278,10 @@ export default defineComponent({
       }
       return result;
     },
-    insertRowsHandle() {
+    insertRowsHandle(): void {
       this.$$vTable.INSERT_RECORDS({ logic: 'and' });
     },
-    toggleBracket(row, column) {
+    toggleBracket(row: IRecord, column: IColumn): void {
       const { dataIndex } = column;
       if (!row[`fieldName`]) return;
       if (dataIndex === 'bracket_left') {
@@ -290,10 +291,10 @@ export default defineComponent({
         row[dataIndex] = !row[dataIndex] ? ')' : '';
       }
     },
-    toggleHandle(key) {
+    toggleHandle(key: string): void {
       this.currentKey = key !== this.currentKey ? key : '';
     },
-    async saveConfigHandle() {
+    async saveConfigHandle(): Promise<void> {
       if (!this.highSearchKey) {
         return warn('Table', '必须设置组件参数 `uniqueKey` 才能保存');
       }
@@ -308,7 +309,7 @@ export default defineComponent({
       await localforage.setItem(this.highSearchKey, deepToRaw(this.savedItems));
       await this.saveHighSearchConfig(this.highSearchKey, deepToRaw(this.savedItems));
     },
-    async getHighSearchConfig(key) {
+    async getHighSearchConfig(key: string): Promise<unknown[] | void> {
       const { global } = this.$DESIGN;
       const fetchFn = global['getComponentConfigApi'];
       if (!fetchFn) return;
@@ -318,9 +319,8 @@ export default defineComponent({
           return res.data;
         }
       } catch (err) {}
-      return null;
     },
-    async saveHighSearchConfig(key, value) {
+    async saveHighSearchConfig(key: string, value: unknown): Promise<void> {
       const { global } = this.$DESIGN;
       const fetchFn = global['saveComponentConfigApi'];
       if (!fetchFn) return;
@@ -328,7 +328,7 @@ export default defineComponent({
         await fetchFn({ [key]: value });
       } catch (err) {}
     },
-    async removeSavedHandle(ev, key) {
+    async removeSavedHandle(ev: MouseEvent, key: string): Promise<void> {
       stop(ev);
       if (!key) return;
       const index = this.savedItems.findIndex((x) => x.value === key);
@@ -339,7 +339,7 @@ export default defineComponent({
       await localforage.setItem(this.highSearchKey, deepToRaw(this.savedItems));
       await this.saveHighSearchConfig(this.highSearchKey, deepToRaw(this.savedItems));
     },
-    confirmHandle() {
+    confirmHandle(): void {
       const { clearTableFilter, createSuperSearch, fetch } = this.$$table;
       this.loading = !0;
       if (hasOwn(fetch ?? {}, 'xhrAbort')) {
@@ -350,7 +350,7 @@ export default defineComponent({
       this.$nextTick(() => this.$$table.$refs[`tableHeader`]?.filterHandle());
       setTimeout(() => this.cancelHandle(), 200);
     },
-    cancelHandle() {
+    cancelHandle(): void {
       this.loading = !1;
       this.$emit('close', false);
     },

@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-03-20 10:18:05
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-11 20:24:38
+ * @Last Modified time: 2021-03-22 14:19:53
  */
 import { defineComponent } from 'vue';
 import addEventListener from 'add-dom-event-listener';
@@ -19,15 +19,15 @@ export default defineComponent({
     };
   },
   computed: {
-    title() {
+    title(): string {
       return !this.isFull ? t('qm.table.screen.full') : t('qm.table.screen.cancelFull');
     },
   },
   methods: {
-    clickHandle() {
+    clickHandle(): void {
       this.$$table.isFullScreen = this.isFull = !this.isFull;
     },
-    keyboardHandle(ev) {
+    keyboardHandle(ev: KeyboardEvent): void {
       if (!this.isFull) return;
       // Esc 取消
       if (ev.keyCode === 27) {

@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-05-19 16:19:58
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-11 21:01:05
+ * @Last Modified time: 2021-03-22 16:25:45
  */
 import { defineComponent } from 'vue';
 import localforage from 'localforage';
@@ -13,6 +13,7 @@ import { stop } from '../../../_utils/dom';
 import { warn } from '../../../_utils/error';
 import { t } from '../../../locale';
 import { JSXNode } from '../../../_utils/types';
+import { IColumn, IDict } from '../table/types';
 
 import config from '../config';
 import VTable from '../table';
@@ -62,10 +63,10 @@ export default defineComponent({
     $tableSummary() {
       return this.$refs.summary;
     },
-    groupSummaryKey() {
+    groupSummaryKey(): string {
       return this.$$table.uniqueKey ? `summary_${this.$$table.uniqueKey}` : '';
     },
-    confirmDisabled() {
+    confirmDisabled(): boolean {
       const { groupTableData, summaryTableData } = this;
       const isGroup = groupTableData.length && groupTableData.every((x) => Object.values(x).every((k) => k !== ''));
       const isSummary = summaryTableData.length && summaryTableData.every((x) => Object.values(x).every((k) => k !== ''));
@@ -73,7 +74,7 @@ export default defineComponent({
     },
   },
   watch: {
-    currentKey(next) {
+    currentKey(next: string): void {
       if (next) {
         const { group, summary } = this.savedItems.find((x) => x.value === next).list;
         this.groupList = group;
@@ -84,7 +85,7 @@ export default defineComponent({
       }
     },
   },
-  async created() {
+  async created(): Promise<void> {
     if (!this.groupSummaryKey) return;
     let res = await localforage.getItem(this.groupSummaryKey);
     if (!res) {
@@ -99,10 +100,7 @@ export default defineComponent({
     }
   },
   methods: {
-    findColumn(columns, dataIndex) {
-      return columns.find((x) => x.dataIndex === dataIndex);
-    },
-    createGroupColumns() {
+    createGroupColumns(): IColumn[] {
       return [
         {
           title: '操作',
@@ -141,7 +139,7 @@ export default defineComponent({
         },
       ];
     },
-    createSummaryColumns() {
+    createSummaryColumns(): IColumn[] {
       return [
         {
           title: '操作',
@@ -198,24 +196,24 @@ export default defineComponent({
         },
       ];
     },
-    setGroupDisabled() {
+    setGroupDisabled(): IDict[] {
       return this.groupItems.map((x) => ({
         ...x,
         disabled: this.groupTableData.findIndex((k) => k.group === x.value) > -1,
       }));
     },
-    setSummaryDisabled() {
+    setSummaryDisabled(): IDict[] {
       return this.summaryItems.map((x) => ({
         ...x,
         disabled: this.summaryTableData.findIndex((k) => k.summary === x.value) > -1,
       }));
     },
     // 切换配置信息
-    toggleHandle(key) {
+    toggleHandle(key: string): void {
       this.currentKey = key !== this.currentKey ? key : '';
     },
     // 保存配置
-    async saveConfigHandle() {
+    async saveConfigHandle(): Promise<void> {
       if (!this.groupSummaryKey) {
         return warn('Table', '必须设置组件参数 `uniqueKey` 才能保存');
       }
@@ -233,7 +231,7 @@ export default defineComponent({
       await localforage.setItem(this.groupSummaryKey, deepToRaw(this.savedItems));
       await this.saveGroupSummaryConfig(this.groupSummaryKey, deepToRaw(this.savedItems));
     },
-    async getGroupSummaryConfig(key) {
+    async getGroupSummaryConfig(key: string): Promise<unknown[] | void> {
       const { global } = this.$DESIGN;
       const fetchFn = global['getComponentConfigApi'];
       if (!fetchFn) return;
@@ -243,9 +241,8 @@ export default defineComponent({
           return res.data;
         }
       } catch (err) {}
-      return null;
     },
-    async saveGroupSummaryConfig(key, value) {
+    async saveGroupSummaryConfig(key: string, value: unknown): Promise<void> {
       const { global } = this.$DESIGN;
       const fetchFn = global['saveComponentConfigApi'];
       if (!fetchFn) return;
@@ -254,7 +251,7 @@ export default defineComponent({
       } catch (err) {}
     },
     // 移除保存的 汇总配置项
-    async removeSavedHandle(ev, key) {
+    async removeSavedHandle(ev: MouseEvent, key: string): Promise<void> {
       stop(ev);
       if (!key) return;
       const index = this.savedItems.findIndex((x) => x.value === key);
@@ -266,11 +263,11 @@ export default defineComponent({
       await this.saveGroupSummaryConfig(this.groupSummaryKey, deepToRaw(this.savedItems));
     },
     // 关闭
-    cancelHandle() {
+    cancelHandle(): void {
       this.$emit('close', false);
     },
     // 显示汇总
-    confirmHandle() {
+    confirmHandle(): void {
       this.visible = true;
     },
   },
