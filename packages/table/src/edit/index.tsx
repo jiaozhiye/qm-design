@@ -180,11 +180,10 @@ export default defineComponent({
             this.$$table.dataChangeHandle();
           }}
           disabled={extra.disabled}
-        >
-          {items.map((x) => (
-            <el-option key={x.value} label={x.text} value={x.value} disabled={x.disabled} />
-          ))}
-        </el-select>
+          v-slots={{
+            default: (): JSXNode[] => items.map((x) => <el-option key={x.value} label={x.text} value={x.value} disabled={x.disabled} />),
+          }}
+        />
       );
     },
     [`select-multipleHandle`](row: IRecord, column: IColumn): JSXNode {

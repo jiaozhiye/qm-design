@@ -5,7 +5,7 @@
  * @Last Modified time: 2021-03-15 13:00:54
  */
 import { defineComponent } from 'vue';
-import { AnyObject, JSXNode, Nullable } from '../../_utils/types';
+import { JSXNode, Nullable, AnyObject } from '../../_utils/types';
 import { IDict } from './types';
 
 import { get } from 'lodash-es';
@@ -152,11 +152,10 @@ export default defineComponent({
               this.$nextTick(() => this.$refs[type].blur());
             }
           }}
-        >
-          {this.itemList.map((x) => (
-            <el-option key={x.value} label={x.text} value={x.value} disabled={x.disabled} />
-          ))}
-        </el-select>
+          v-slots={{
+            default: (): JSXNode[] => this.itemList.map((x) => <el-option key={x.value} label={x.text} value={x.value} disabled={x.disabled} />),
+          }}
+        />
         {descOptions && this.$$form.createFormItemDesc({ fieldName, ...descOptions })}
       </el-form-item>
     );
