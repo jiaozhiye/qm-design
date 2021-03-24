@@ -4,9 +4,10 @@
  * @Last Modified by: 焦质晔
  * @Last Modified time: 2021-03-22 15:29:35
  */
+import { VNode } from 'vue';
 import { get, set, transform, intersection, isEqual, isObject } from 'lodash-es';
 import dayjs from 'dayjs';
-import { hasOwn } from '../../../_utils/util';
+import { hasOwn, isVNode } from '../../../_utils/util';
 import { AnyFunction, AnyObject, Nullable } from '../../../_utils/types';
 import { stringify, array_format } from '../filter-sql';
 import { IColumn, IDerivedColumn, IRecord } from '../table/types';
@@ -328,6 +329,21 @@ export const toDate = (val: string): Date | undefined => {
 // 转日期格式
 export const dateFormat = (val: Date, vf: string): string => {
   return val ? dayjs(val).format(vf) : '';
+};
+
+// 获取 VNode 中的文本
+export const getVNodeText = <T extends string | number>(val: VNode | T): T[] => {
+  const result: T[] = [];
+  if (isVNode(val)) {
+    if (Array.isArray(val.children)) {
+      val.children.forEach((c) => result.push(...getVNodeText(c as any)));
+    } else if (val.children) {
+      result.push(val.children as T);
+    }
+  } else {
+    result.push(val);
+  }
+  return result;
 };
 
 // 生成 uuid key

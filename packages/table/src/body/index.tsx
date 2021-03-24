@@ -7,9 +7,9 @@
 import { defineComponent, reactive, CSSProperties } from 'vue';
 import addEventListener from 'add-dom-event-listener';
 import { isEqual, isFunction, isObject } from 'lodash-es';
-import { parseHeight, getCellValue, deepFindRowKey, isArrayContain } from '../utils';
+import { parseHeight, getCellValue, getVNodeText, deepFindRowKey, isArrayContain } from '../utils';
 import { getPrefixCls } from '../../../_utils/prefix';
-import { noop } from '../../../_utils/util';
+import { noop, isVNode } from '../../../_utils/util';
 import { contains } from '../../../_utils/dom';
 import { warn } from '../../../_utils/error';
 import { JSXNode, Nullable } from '../../../_utils/types';
@@ -220,7 +220,7 @@ export default defineComponent({
       return (
         <td
           key={dataIndex}
-          title={isEllipsis && this.renderText(getCellValue(row, dataIndex), column, row)}
+          title={isEllipsis && this.getCellTitle(column, row, rowIndex, columnIndex)}
           rowspan={rowspan}
           colspan={colspan}
           class={cls}
@@ -245,12 +245,12 @@ export default defineComponent({
         // Selection -> 受控组件
         return <Selection selectionKeys={selectionKeys} column={column} record={row} rowKey={rowKey} />;
       }
-      if (isFunction(editRender)) {
+      if (editRender) {
         // CellEdit -> UI 组件，无状态组件
         return <CellEdit ref={`${rowKey}-${dataIndex}`} column={column} record={row} rowKey={rowKey} columnKey={dataIndex} clicked={this.clicked} />;
       }
       // Content Node
-      const vNodeText = isFunction(render) ? render?.(text, row, column, rowIndex, columnIndex) : this.renderText(text, column, row);
+      const vNodeText = render ? render(text, row, column, rowIndex, columnIndex) : this.renderText(text, column, row);
       // Tree Expandable + vNodeText
       if (isTreeTable && dataIndex === this.firstDataIndex) {
         return [
@@ -310,6 +310,25 @@ export default defineComponent({
         }
       }
       return { rowspan, colspan };
+    },
+    getCellTitle(column: IColumn, row: IRecord, rowIndex: number, columnIndex: number): string {
+      const { dataIndex, render } = column;
+      if (['__expandable__', '__selection__', config.operationColumn].includes(dataIndex)) {
+        return '';
+      }
+      let title: string = '';
+      const text = getCellValue(row, dataIndex);
+      if (render) {
+        const result = render(text, row, column, rowIndex, columnIndex);
+        if (isVNode(result)) {
+          title = getVNodeText(result).join('');
+        } else {
+          title = result as string;
+        }
+      } else {
+        title = this.renderText(text, column, row);
+      }
+      return title;
     },
     cellClickHandle(ev: MouseEvent, row: IRecord, column: IColumn): void {
       const { getRowKey, rowSelection = {}, selectionKeys, rowHighlight, isTreeTable } = this.$$table;

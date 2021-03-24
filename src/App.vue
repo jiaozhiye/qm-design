@@ -407,6 +407,7 @@ export default defineComponent({
             type: 'number',
           },
           summation: {
+            sumBySelection: true,
             unit: '元',
           },
           render: (text, row) => {

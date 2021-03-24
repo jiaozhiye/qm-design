@@ -18,7 +18,7 @@ export default defineComponent({
   inject: ['$$table'],
   computed: {
     summationRows(): Record<string, string>[] {
-      const { tableFullData, summaries } = this.$$table;
+      const { tableFullData, selectionKeys, summaries, getRowKey } = this.$$table;
       const summationColumns = this.flattenColumns.filter((x) => typeof x.summation !== 'undefined');
       // 结果
       const res = {};
@@ -26,9 +26,18 @@ export default defineComponent({
         const {
           dataIndex,
           precision,
-          summation: { unit = '', onChange = noop },
+          summation: { sumBySelection, unit = '', onChange = noop },
         } = column;
-        const values = tableFullData.map((x) => Number(getCellValue(x, dataIndex)));
+        let values: number[] = [];
+        // 可选择列动态合计
+        if (!sumBySelection) {
+          values = tableFullData.map((x) => Number(getCellValue(x, dataIndex)));
+        } else {
+          values = selectionKeys.map((x) => {
+            const record = this.$$table.selectionRows.find((row) => getRowKey(row, row.index) === x);
+            return record ? Number(getCellValue(record, dataIndex)) : 0;
+          });
+        }
         // 累加求和
         let result = values.reduce((prev, curr) => {
           const value = Number(curr);

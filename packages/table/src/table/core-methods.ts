@@ -34,16 +34,16 @@ export default {
     // 设置表格数据
     this.tableFullData = [...results];
     this.tableOriginData = [...results];
-    // 设置选择列
-    this.selectionKeys = this.createSelectionKeys();
-    // 设置展开行
-    this.rowExpandedKeys = this.createRowExpandedKeys();
     // 行选中 & 自动获得焦点
     this.$nextTick(() => {
+      // 设置选择列
+      this.selectionKeys = this.createSelectionKeys();
+      // 设置展开行
+      this.rowExpandedKeys = this.createRowExpandedKeys();
       this.selectFirstRow();
-      this.dataLoadedHandle();
       this.$$tableBody.createInputFocus();
       this.$$tableBody.resetTableBodyScroll();
+      this.dataLoadedHandle();
     });
   },
   // 服务端合计

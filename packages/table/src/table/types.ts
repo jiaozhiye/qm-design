@@ -128,6 +128,7 @@ export type IColumn = {
   editRender?: AnyFunction<IEditerReturn>;
   dictItems?: Array<IDict>;
   summation?: {
+    sumBySelection?: boolean;
     dataKey?: string;
     unit?: string;
     render?: AnyFunction<JSXNode>;
@@ -140,7 +141,7 @@ export type IColumn = {
         unit?: string;
         render?: AnyFunction<JSXNode>;
       };
-  render?: AnyFunction<JSXNode>;
+  render?: AnyFunction<JSXNode | string | number>;
   extraRender?: AnyFunction<string | number>;
 };
 
