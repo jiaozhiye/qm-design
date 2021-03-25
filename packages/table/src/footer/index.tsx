@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-03-01 23:54:20
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-22 14:18:18
+ * @Last Modified time: 2021-03-25 11:16:03
  */
 import { defineComponent } from 'vue';
 import { formatNumber, setCellValue, getCellValue } from '../utils';
@@ -39,7 +39,7 @@ export default defineComponent({
           });
         }
         // 累加求和
-        let result = values.reduce((prev, curr) => {
+        let result: number | string = values.reduce((prev, curr) => {
           const value = Number(curr);
           if (!Number.isNaN(value)) {
             return prev + curr;
@@ -50,7 +50,7 @@ export default defineComponent({
         if (Object.keys(summaries).includes(dataIndex)) {
           result = getCellValue(summaries, dataIndex);
         }
-        result = precision >= 0 ? result.toFixed(precision) : result;
+        result = precision >= 0 ? (result as number).toFixed(precision) : result;
         // 设置合计值
         setCellValue(res, dataIndex, `${formatNumber(result)} ${unit}`);
         // 触发事件
