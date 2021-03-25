@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-02-28 23:01:43
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-22 16:08:42
+ * @Last Modified time: 2021-03-25 15:32:21
  */
 import { defineComponent, reactive, CSSProperties } from 'vue';
 import addEventListener from 'add-dom-event-listener';
@@ -10,10 +10,10 @@ import { isEqual, isFunction, isObject } from 'lodash-es';
 import { parseHeight, getCellValue, getVNodeText, deepFindRowKey, isArrayContain } from '../utils';
 import { getPrefixCls } from '../../../_utils/prefix';
 import { noop, isVNode } from '../../../_utils/util';
-import { contains } from '../../../_utils/dom';
 import { warn } from '../../../_utils/error';
 import { JSXNode, Nullable } from '../../../_utils/types';
 import { IColumn, IDict, IRecord } from '../table/types';
+import ClickOutside from '../../../directives/click-outside';
 
 import config from '../config';
 import formatMixin from './format';
@@ -33,6 +33,7 @@ export default defineComponent({
       $$body: this,
     };
   },
+  directives: { ClickOutside },
   mixins: [keyboardMixin, formatMixin],
   emits: ['rowClick', 'rowDblclick', 'rowEnter'],
   data() {
@@ -79,13 +80,11 @@ export default defineComponent({
   },
   mounted() {
     this.event1 = addEventListener(this.$el, 'scroll', this.scrollEvent);
-    this.event2 = addEventListener(document, 'click', this.cancelEvent);
-    this.event3 = addEventListener(document, 'keydown', this.keyboardEvent);
+    this.event2 = addEventListener(document, 'keydown', this.keyboardEvent);
   },
   unmounted() {
     this.event1.remove();
     this.event2.remove();
-    this.event3.remove();
   },
   methods: {
     scrollEvent(ev: Event): void {
@@ -108,11 +107,7 @@ export default defineComponent({
       this.prevST = st;
       this.prevSL = sl;
     },
-    cancelEvent(ev: MouseEvent): void {
-      const target = ev.target as HTMLElement;
-      const currentTarget = ev.currentTarget as HTMLElement;
-      if (target === currentTarget) return;
-      if (target.className === 'cell--text' || contains(target, this.$vTableBody)) return;
+    cancelClickEvent(): void {
       this.setClickedValues([]);
     },
     renderBodyXSpace(): JSXNode {
@@ -446,7 +441,13 @@ export default defineComponent({
       <div class={`${prefixCls}--body-wrapper`} style={{ ...wrapStyle }}>
         {this.renderBodyYSpace()}
         {this.renderBodyXSpace()}
-        <table class={`${prefixCls}--body`} cellspacing="0" cellpadding="0" style={{ width: bodyWidth }}>
+        <table
+          class={`${prefixCls}--body`}
+          cellspacing="0"
+          cellpadding="0"
+          style={{ width: bodyWidth }}
+          v-click-outside={() => this.cancelClickEvent()}
+        >
           {this.renderColgroup()}
           {!isDraggable ? (
             <tbody>{this.renderRows(tableData)}</tbody>

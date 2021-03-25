@@ -2,9 +2,10 @@
  * @Author: 焦质晔
  * @Date: 2020-03-23 12:51:24
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-22 10:54:14
+ * @Last Modified time: 2021-03-25 15:41:18
  */
 import { isUndefined } from 'lodash-es';
+import { prevent } from '../../../_utils/dom';
 import config from '../config';
 
 const keyboardMixin = {
@@ -21,7 +22,7 @@ const keyboardMixin = {
       const { rowSelection, rowHighlight } = this.$$table;
       // Enter
       if (keyCode === 13) {
-        ev.preventDefault();
+        prevent(ev);
         if (rowSelection?.type === 'radio' || rowHighlight) {
           const { tableData, getRowKey, selectionKeys, highlightKey } = this.$$table;
           const rowKey = selectionKeys[0] ?? highlightKey ?? null;
@@ -31,7 +32,7 @@ const keyboardMixin = {
       }
       // 上  下
       if (keyCode === 38 || keyCode === 40) {
-        ev.preventDefault();
+        prevent(ev);
         const { allRowKeys, tableFullData, getRowKey } = this.$$table;
         const total = allRowKeys.length;
         let index = allRowKeys.findIndex((x) => x === this.clicked[0]);
@@ -57,11 +58,13 @@ const keyboardMixin = {
           this.setClickedValues([rowKey, this.clicked[1]]);
         }
       }
-      // 可编辑单元格
-      if (!this.editableColumns.length) return;
       // Tab
       if (keyCode === 9) {
-        ev.preventDefault();
+        prevent(ev);
+        // 非可编辑单元格
+        if (!this.editableColumns.length) {
+          return this.setClickedValues([]);
+        }
         const total = this.editableColumns.length;
         let index = this.editableColumns.findIndex((x) => x.dataIndex === this.clicked[1]);
         const yIndex = ++index % total;
@@ -71,7 +74,7 @@ const keyboardMixin = {
       }
       // 左  右
       // if (keyCode === 37 || keyCode === 39) {
-      //   ev.preventDefault();
+      //   prevent(ev);
       //   const total = this.editableColumns.length;
       //   let index = this.editableColumns.findIndex(x => x.dataIndex === this.clicked[1]);
       //   let yIndex = keyCode === 37 ? (--index + total) % total : ++index % total;

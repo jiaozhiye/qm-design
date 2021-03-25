@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-02-23 21:56:33
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-03 19:18:24
+ * @Last Modified time: 2021-03-25 13:53:10
  */
 import { defineComponent } from 'vue';
 import { JSXNode } from '../../_utils/types';
@@ -64,10 +64,9 @@ export default defineComponent({
           onChange={onChange}
           onKeydown={(ev: KeyboardEvent) => {
             if (ev.keyCode !== 13) return;
-            setTimeout(() => {
-              onEnter(form[fieldName] ?? '');
-              this.$$form.formItemValidate(fieldName);
-            });
+            const val = (ev.target as any).value;
+            onEnter(val ? Number(val) : val);
+            this.$$form.formItemValidate(fieldName);
           }}
         />
         {descOptions && this.$$form.createFormItemDesc({ fieldName, ...descOptions })}
