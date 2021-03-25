@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-03-22 14:34:21
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-22 16:19:19
+ * @Last Modified time: 2021-03-25 10:04:39
  */
 import { defineComponent } from 'vue';
 import dayjs from 'dayjs';
@@ -28,6 +28,7 @@ export default defineComponent({
   inject: ['$$table', '$$body'],
   data() {
     return {
+      itemList: [], // select options
       shDeriveValue: {},
       shVisible: false, // 是否显示搜索帮助面板
       shMatching: false, // 是否正在匹配数据回显
@@ -157,6 +158,7 @@ export default defineComponent({
     selectHandle(row: IRecord, column: IColumn, isMultiple: boolean): JSXNode {
       const { dataIndex } = column;
       const { extra = {}, rules = [], items = [], onChange = noop } = this.options;
+      this.itemList = items;
       const prevValue = getCellValue(row, dataIndex);
       const selectProps = {
         modelValue: prevValue,
@@ -166,7 +168,6 @@ export default defineComponent({
       };
       return (
         <el-select
-          key={`${this.dataKey}-${prevValue}`}
           size={this.size}
           {...selectProps}
           multiple={isMultiple}
@@ -181,7 +182,7 @@ export default defineComponent({
           }}
           disabled={extra.disabled}
           v-slots={{
-            default: (): JSXNode[] => items.map((x) => <el-option key={x.value} label={x.text} value={x.value} disabled={x.disabled} />),
+            default: (): JSXNode[] => this.itemList.map((x) => <el-option key={x.value} label={x.text} value={x.value} disabled={x.disabled} />),
           }}
         />
       );

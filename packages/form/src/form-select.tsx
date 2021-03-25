@@ -2,13 +2,13 @@
  * @Author: 焦质晔
  * @Date: 2021-02-23 21:56:33
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-15 13:00:54
+ * @Last Modified time: 2021-03-25 10:20:15
  */
 import { defineComponent } from 'vue';
 import { JSXNode, Nullable, AnyObject } from '../../_utils/types';
 import { IDict } from './types';
 
-import { get } from 'lodash-es';
+import { get, cloneDeep } from 'lodash-es';
 import { t } from '../../locale';
 import { noop } from './utils';
 import { getParserWidth } from '../../_utils/util';
@@ -20,9 +20,10 @@ export default defineComponent({
   inject: ['$$form'],
   props: ['option', 'multiple'],
   data() {
+    // 原始数据
+    Object.assign(this, { originItemList: [] });
     return {
       itemList: [],
-      originItemList: [], // 原始数据
     };
   },
   computed: {
@@ -41,7 +42,7 @@ export default defineComponent({
       handler(next: Array<IDict>): void {
         if (this.isFetch) return;
         this.itemList = next ?? [];
-        this.originItemList = [...this.itemList];
+        this.originItemList = cloneDeep(this.itemList);
       },
       immediate: true,
     },
@@ -77,7 +78,7 @@ export default defineComponent({
       if (res.code === 200) {
         const dataList = !datakey ? res.data : get(res.data, datakey, []);
         this.itemList = dataList.map((x) => ({ value: x[valueKey], text: x[textKey] }));
-        this.originItemList = [...this.itemList];
+        this.originItemList = cloneDeep(this.itemList);
       }
     },
   },
@@ -134,11 +135,6 @@ export default defineComponent({
           clearable={clearable}
           disabled={disabled}
           style={{ ...style }}
-          onChange={(val: string): void => {
-            onChange(val, this.createViewText(val));
-            if (!filterable) return;
-            this.filterMethodHandle('');
-          }}
           filterMethod={(queryString: string): void => {
             if (!filterable) return;
             const res: Array<IDict> = this.filterMethodHandle(queryString, openPyt);
@@ -151,6 +147,14 @@ export default defineComponent({
               // 失去焦点，自动带值
               this.$nextTick(() => this.$refs[type].blur());
             }
+          }}
+          onVisibleChange={(visible: boolean): void => {
+            if (filterable && visible) {
+              this.filterMethodHandle('');
+            }
+          }}
+          onChange={(val: string): void => {
+            onChange(val, this.createViewText(val));
           }}
           v-slots={{
             default: (): JSXNode[] => this.itemList.map((x) => <el-option key={x.value} label={x.text} value={x.value} disabled={x.disabled} />),

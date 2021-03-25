@@ -591,6 +591,16 @@ export default defineComponent({
   render(): VNode {
     return (
       <>
+        <qm-form
+          uniqueKey="jzy_filter"
+          formType="search"
+          list={this.formList}
+          initialValue={{}}
+          onFinish={this.finish}
+          fieldsChange={(list) => {
+            this.formList = list;
+          }}
+        ></qm-form>
         <div style="margin: 10px;">
           <qm-table
             ref="table"
