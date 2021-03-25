@@ -266,6 +266,7 @@ export default defineComponent({
             initialValue={initialValue}
             list={topFilters}
             isCollapse={showFilterCollapse}
+            isAutoFocus={!1}
             onChange={this.filterChangeHandle}
             onCollapseChange={this.collapseHandle}
           />

@@ -421,6 +421,10 @@ export const props = {
     type: Boolean,
     default: true,
   },
+  isAutoFocus: {
+    type: Boolean,
+    default: true,
+  },
   isSearchBtn: {
     type: Boolean,
     default: true,

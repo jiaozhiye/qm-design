@@ -254,6 +254,7 @@ export default defineComponent({
       }
     },
     async createInputFocus(): Promise<void> {
+      if (!this.isAutoFocus) return;
       await sleep(10);
       const { type, fieldName } = this.list.filter((x) => x.fieldName && !x.hidden)[0] || {};
       if ((type === 'INPUT' || type === 'INPUT_NUMBER') && fieldName) {

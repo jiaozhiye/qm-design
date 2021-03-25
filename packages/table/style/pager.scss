@@ -9,4 +9,9 @@ $prefix: '#{$qm-prefix}-table';
 .#{$prefix}-pager {
   margin-top: $v-module-distance;
   text-align: right;
+  .el-pagination__jump {
+    .el-input__inner {
+      line-height: 1;
+    }
+  }
 }
