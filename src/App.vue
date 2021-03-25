@@ -531,9 +531,9 @@ export default defineComponent({
     };
   },
   mounted() {
-    // setTimeout(() => {
-    //   this.$refs.qweqwe.SET_FIELDS_VALUE({ a: ['9', '10'], f: '320000,320101,320502,3' });
-    // }, 3000);
+    setTimeout(() => {
+      this.$refs.qweqwe.SET_FIELDS_VALUE({ a: ['9', '10'], f: '320000,320101,320502,3' });
+    }, 2000);
   },
   methods: {
     clickHandle(k) {
@@ -591,16 +591,19 @@ export default defineComponent({
   render(): VNode {
     return (
       <>
-        <qm-form
-          uniqueKey="jzy_filter"
-          formType="search"
-          list={this.formList}
-          initialValue={{}}
-          onFinish={this.finish}
-          fieldsChange={(list) => {
-            this.formList = list;
-          }}
-        ></qm-form>
+        <div style="margin: 10px;">
+          <qm-form
+            ref="qweqwe"
+            uniqueKey="jzy_filter"
+            formType="search"
+            list={this.formList}
+            initialValue={{}}
+            onFinish={this.finish}
+            fieldsChange={(list) => {
+              this.formList = list;
+            }}
+          />
+        </div>
         <div style="margin: 10px;">
           <qm-table
             ref="table"

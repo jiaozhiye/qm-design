@@ -2,10 +2,10 @@
  * @Author: 焦质晔
  * @Date: 2020-03-26 11:44:24
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-22 16:28:26
+ * @Last Modified time: 2021-03-25 10:30:19
  */
 import { defineComponent } from 'vue';
-import { flatten, groupBy, map, spread, mergeWith, isFunction } from 'lodash-es';
+import { flatten, groupBy, map, spread, mergeWith } from 'lodash-es';
 import { convertToRows, deepFindColumn, filterTableColumns, getCellValue } from '../utils';
 import { deepToRaw } from '../../../_utils/util';
 import { getPrefixCls } from '../../../_utils/prefix';
