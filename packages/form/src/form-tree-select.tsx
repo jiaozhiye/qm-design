@@ -36,10 +36,17 @@ export default defineComponent({
     fetchParams(): Nullable<AnyObject<unknown>> {
       return this.isFetch ? this.option.request.params ?? {} : null;
     },
+    formItemValue(): string | string[] {
+      const { fieldName } = this.option;
+      return this.$$form.form[fieldName];
+    },
   },
   watch: {
     fetchParams(): void {
       this.getItemList();
+    },
+    formItemValue(next: string | string[]): void {
+      this.$refs[`tree`].setCheckedKeys(next);
     },
   },
   created() {
@@ -162,7 +169,6 @@ export default defineComponent({
                     if (!multiple) return;
                     const val: string = this.deepFindValue(this.itemList, tag).value;
                     form[fieldName] = form[fieldName].filter((x) => x !== val);
-                    this.$refs[`tree`].setCheckedKeys(form[fieldName]);
                     onChange(form[fieldName], null);
                   }}
                   onClick={(): void => {
@@ -172,7 +178,6 @@ export default defineComponent({
                   }}
                   onClear={(): void => {
                     form[fieldName] = !multiple ? undefined : [];
-                    this.$refs[`tree`].setCheckedKeys(form[fieldName]);
                     onChange(form[fieldName], null);
                   }}
                 />
