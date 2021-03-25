@@ -2,13 +2,15 @@
  * @Author: 焦质晔
  * @Date: 2021-02-08 19:28:31
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-19 16:43:04
+ * @Last Modified time: 2021-03-25 09:56:53
  */
-import { Ref, toRaw, Fragment, Comment, Text, VNode } from 'vue';
+import { Ref, toRaw, isVNode, Fragment, Comment, Text, VNode } from 'vue';
 import { isObject, isArray, hasOwn, camelize } from '@vue/shared';
 import { isNumber, debounce, throttle } from 'lodash-es';
 import isServer from './isServer';
 import { AnyFunction, AnyObject } from './types';
+
+const TEMPLATE = 'template';
 
 export const isIE = (): boolean => {
   return !isServer && /MSIE|Trident/.test(navigator.userAgent);
@@ -28,12 +30,28 @@ export const isFirefox = (): boolean => {
 
 export { isVNode } from 'vue';
 
-export const isEmptyElement = (c: VNode): boolean => {
-  return c.type === Comment || (c.type === Fragment && !c.children?.length) || (c.type === Text && (c.children as string).trim() === '');
+export const isFragment = (c: VNode): boolean => {
+  return c && c.type === Fragment;
+};
+
+export const isText = (c: VNode): boolean => {
+  return c && c.type === Text;
+};
+
+export const isComment = (c: VNode): boolean => {
+  return c && c.type === Comment;
+};
+
+export const isTemplate = (c: VNode): boolean => {
+  return c && c.type === TEMPLATE;
 };
 
 export const isValidElement = (c: VNode): boolean => {
-  return c && (c as any).__v_isVNode && typeof c.type !== 'symbol'; // remove text node
+  return c && isVNode(c) && typeof c.type !== 'symbol'; // remove text node
+};
+
+export const isEmptyElement = (c: VNode): boolean => {
+  return isComment(c) || (isFragment(c) && !c.children?.length) || (isText(c) && (c.children as string).trim() === '');
 };
 
 export const filterEmptyElement = (children: Array<VNode> = []): Array<VNode> => {
