@@ -12,7 +12,7 @@ import config from '../config';
 
 export default defineComponent({
   name: 'Pager',
-  props: ['size', 'total', 'currentPage', 'pageSize', 'layout', 'pagerCount', 'pageSizeOptions', 'extraRender'],
+  props: ['size', 'total', 'currentPage', 'pageSize', 'layout', 'pagerCount', 'pageSizeOptions'],
   emits: ['current-change', 'size-change'],
   render(): JSXNode {
     const { $props } = this;

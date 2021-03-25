@@ -220,7 +220,7 @@ export default defineComponent({
       return (
         <td
           key={dataIndex}
-          title={isEllipsis && this.getCellTitle(column, row, rowIndex, columnIndex)}
+          title={isEllipsis && this.renderCellTitle(column, row, rowIndex, columnIndex)}
           rowspan={rowspan}
           colspan={colspan}
           class={cls}
@@ -311,7 +311,7 @@ export default defineComponent({
       }
       return { rowspan, colspan };
     },
-    getCellTitle(column: IColumn, row: IRecord, rowIndex: number, columnIndex: number): string {
+    renderCellTitle(column: IColumn, row: IRecord, rowIndex: number, columnIndex: number): string {
       const { dataIndex, render } = column;
       if (['__expandable__', '__selection__', config.operationColumn].includes(dataIndex)) {
         return '';

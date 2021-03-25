@@ -159,14 +159,10 @@ export default defineComponent({
       return html;
     },
     renderCell(row: IRecord, rowIndex: number, column: IColumn, columnIndex: number) {
-      const { dataIndex, precision, render, extraRender } = column;
-      const text = getCellValue(row, dataIndex);
-      let result = this.$$table.$$tableBody.renderText(text, column, row);
-      if (isFunction(render)) {
-        result = render?.(text, row, column, rowIndex, columnIndex);
-      }
-      if (isFunction(extraRender)) {
-        result = extraRender?.(text, row, column, rowIndex, columnIndex);
+      const { dataIndex, precision, extraRender } = column;
+      let result = this.$$table.$$tableBody.renderCellTitle(column, row, rowIndex, columnIndex);
+      if (extraRender) {
+        result = extraRender(getCellValue(row, dataIndex), row, column, rowIndex, columnIndex);
       }
       // 处理 number 类型
       if (precision && precision >= 0 && result !== '') {

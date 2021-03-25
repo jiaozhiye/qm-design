@@ -276,15 +276,12 @@ export default defineComponent({
       }
     },
     renderCell(row: IRecord, rowIndex: number, column: IColumn, columnIndex: number): unknown {
-      const { dataIndex, render, extraRender } = column;
-      const text = getCellValue(row, dataIndex);
-      if (isFunction(extraRender)) {
-        return extraRender?.(text, row, column, rowIndex, columnIndex);
+      const { dataIndex, extraRender } = column;
+      let result = this.$$table.$$tableBody.renderCellTitle(column, row, rowIndex, columnIndex);
+      if (extraRender) {
+        result = extraRender(getCellValue(row, dataIndex), row, column, rowIndex, columnIndex);
       }
-      if (isFunction(render)) {
-        return render?.(text, row, column, rowIndex, columnIndex);
-      }
-      return this.$$table.$$tableBody.renderText(text, column, row);
+      return result;
     },
   },
   render(): JSXNode {
