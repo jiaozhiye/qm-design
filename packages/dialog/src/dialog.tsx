@@ -2,15 +2,16 @@
  * @Author: 焦质晔
  * @Date: 2021-02-09 09:03:59
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-15 09:11:22
+ * @Last Modified time: 2021-03-26 14:47:42
  */
 import { defineComponent, PropType, CSSProperties } from 'vue';
 import addEventListener from 'add-dom-event-listener';
 import classnames from 'classnames';
+import { isNumber, isUndefined } from 'lodash-es';
+import { setStyle } from '../../_utils/dom';
 import PropTypes from '../../_utils/vue-types';
 import { JSXNode, Nullable, AnyFunction, ComponentSize } from '../../_utils/types';
 
-import { isNumber, isUndefined } from 'lodash-es';
 import { isValidComponentSize, isValidWidthUnit } from '../../_utils/validators';
 import { useSize } from '../../hooks/useSize';
 import { useGlobalConfig } from '../../hooks/useGlobalConfig';
@@ -18,7 +19,7 @@ import { getParserWidth } from '../../_utils/util';
 import { getPrefixCls } from '../../_utils/prefix';
 import { stop } from '../../_utils/dom';
 import { t } from '../../locale';
-
+import Draggable from './draggable';
 import Spin from '../../spin';
 
 const trueNoop = (): boolean => !0;
@@ -27,6 +28,7 @@ export default defineComponent({
   name: 'QmDialog',
   componentName: 'QmDialog',
   inheritAttrs: false,
+  directives: { Draggable },
   props: {
     visible: PropTypes.bool.def(false),
     title: PropTypes.string,
@@ -78,7 +80,7 @@ export default defineComponent({
     };
   },
   computed: {
-    disTop() {
+    disTop(): string {
       if (this.fullscreen || isNaN(Number.parseInt(this.height))) {
         return this.top;
       }
@@ -130,9 +132,13 @@ export default defineComponent({
       this.removeStopEvent();
       this.$emit('closed');
       this.$emit('afterVisibleChange', false);
+      // 恢复默认弹出位置
+      this.$nextTick(() => {
+        setStyle(this.$refs[`dialog`].dialogRef, { marginTop: this.disTop, marginLeft: 'auto', marginRight: 'auto' });
+      });
     },
     setDialogStyle(): void {
-      this.$refs[`dialog`].dialogRef.style.height = this.dialogHeight;
+      setStyle(this.$refs[`dialog`].dialogRef, 'height', this.dialogHeight);
     },
     addStopEvent(): void {
       this.stopEvent = addEventListener(this.$refs[`dialog`].dialogRef.parentNode, 'click', stop);
@@ -142,6 +148,9 @@ export default defineComponent({
     },
     handleClick(): void {
       this.fullscreen = !this.fullscreen;
+      if (this.fullscreen) {
+        setStyle(this.$refs[`dialog`].dialogRef, { marginLeft: 'auto', marginRight: 'auto' });
+      }
       this.$emit('viewportChange', this.fullscreen ? 'fullscreen' : 'default');
     },
     beforeCloseHandle(cb: AnyFunction<void>): void {
@@ -160,7 +169,7 @@ export default defineComponent({
     renderHeader(): JSXNode {
       const { title, fullscreen, showFullScreen } = this;
       return (
-        <div class="dialog-title">
+        <div class="dialog-title" v-draggable>
           <span class="title">{title}</span>
           {showFullScreen && (
             <span title={fullscreen ? t('qm.dialog.cancelFullScreen') : t('qm.dialog.fullScreen')} class="fullscreen" onClick={this.handleClick}>

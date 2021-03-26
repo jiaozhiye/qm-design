@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-02-09 09:03:59
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-02-26 23:27:02
+ * @Last Modified time: 2021-03-26 13:14:01
  */
 import { defineComponent, PropType } from 'vue';
 import PropTypes from '../../_utils/vue-types';
@@ -69,7 +69,7 @@ export default defineComponent({
     },
   },
   render(): JSXNode {
-    const { ajaxing, isDisabled, confirm, type, round, circle, icon, $attrs } = this;
+    const { ajaxing, isDisabled, confirm, type, round, circle, icon, loading, $attrs } = this;
 
     const ajaxClick = isFunction(this.click) ? { onClick: this.clickHandler } : null;
     const { $size } = useSize(this.$props);
@@ -80,7 +80,7 @@ export default defineComponent({
       round,
       circle,
       icon,
-      loading: ajaxing,
+      loading: ajaxing || loading,
       disabled: isDisabled,
     };
 

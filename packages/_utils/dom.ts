@@ -2,8 +2,9 @@
  * @Author: 焦质晔
  * @Date: 2021-02-08 19:28:20
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-13 09:05:08
+ * @Last Modified time: 2021-03-26 14:26:28
  */
+import { CSSProperties } from 'vue';
 import { camelize, isObject } from '@vue/shared';
 import isServer from './isServer';
 import { Nullable } from './types';
@@ -59,7 +60,7 @@ export const getStyle = (element: HTMLElement, styleName: string): Nullable<stri
  * @param {string} value css 属性的值
  * @returns
  */
-export const setStyle = (element: HTMLElement, styleName: CSSStyleDeclaration | string, value?: string): void => {
+export const setStyle = (element: HTMLElement, styleName: CSSProperties | string, value?: string): void => {
   if (isServer || !element || !styleName) return;
   if (isObject(styleName)) {
     Object.keys(styleName).forEach((prop) => {
@@ -77,7 +78,7 @@ export const setStyle = (element: HTMLElement, styleName: CSSStyleDeclaration | 
  * @param {string} styleName css 属性名称
  * @returns
  */
-export const removeStyle = (element: HTMLElement, styleName: CSSStyleDeclaration | string): void => {
+export const removeStyle = (element: HTMLElement, styleName: CSSProperties | string): void => {
   if (isServer || !element || !styleName) return;
   if (isObject(styleName)) {
     Object.keys(styleName).forEach((prop) => {

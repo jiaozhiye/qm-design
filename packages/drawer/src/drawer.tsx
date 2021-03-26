@@ -2,15 +2,15 @@
  * @Author: 焦质晔
  * @Date: 2021-02-09 09:03:59
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-15 09:12:04
+ * @Last Modified time: 2021-03-26 14:36:34
  */
 import { CSSProperties, defineComponent, PropType } from 'vue';
 import addEventListener from 'add-dom-event-listener';
 import classnames from 'classnames';
+import { isNumber, isUndefined } from 'lodash-es';
 import PropTypes from '../../_utils/vue-types';
 import { AnyFunction, ComponentSize, JSXNode } from '../../_utils/types';
 
-import { isNumber, isUndefined } from 'lodash-es';
 import { isValidComponentSize, isValidWidthUnit } from '../../_utils/validators';
 import { useSize } from '../../hooks/useSize';
 import { useGlobalConfig } from '../../hooks/useGlobalConfig';
