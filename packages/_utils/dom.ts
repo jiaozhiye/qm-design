@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-02-08 19:28:20
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-26 14:26:28
+ * @Last Modified time: 2021-03-27 14:45:48
  */
 import { CSSProperties } from 'vue';
 import { camelize, isObject } from '@vue/shared';
@@ -172,7 +172,7 @@ export const getParentNode = (el: HTMLElement, selector: string): Nullable<HTMLE
   let parent = el;
 
   while (parent) {
-    if (parent.classList.contains(selector)) {
+    if (parent.classList?.contains(selector)) {
       return parent;
     }
     parent = parent.parentNode as HTMLElement;

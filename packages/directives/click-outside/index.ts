@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-02-08 19:28:35
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-02-26 14:11:12
+ * @Last Modified time: 2021-03-27 15:05:35
  */
 import { isFunction } from 'lodash-es';
 import { on } from '../../_utils/dom';
@@ -63,28 +63,28 @@ function createDocumentHandler(el: HTMLElement, binding: DirectiveBinding): Docu
       return;
     }
     if (isFunction(binding.value)) {
-      return binding.value();
+      return binding.value(mouseDownTarget, mouseUpTarget);
     }
     if (Array.isArray(binding.value) && isFunction(binding.value[0])) {
-      return binding.value[0]();
+      return binding.value[0](mouseDownTarget, mouseUpTarget);
     }
   };
 }
 
 const ClickOutside: ObjectDirective = {
-  beforeMount(el, binding) {
+  beforeMount(el: HTMLElement, binding) {
     nodeList.set(el, {
       documentHandler: createDocumentHandler(el, binding),
       bindingFn: binding.value,
     });
   },
-  updated(el, binding) {
+  updated(el: HTMLElement, binding) {
     nodeList.set(el, {
       documentHandler: createDocumentHandler(el, binding),
       bindingFn: binding.value,
     });
   },
-  unmounted(el) {
+  unmounted(el: HTMLElement) {
     nodeList.delete(el);
   },
 };

@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-02-09 09:03:59
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-26 14:47:42
+ * @Last Modified time: 2021-03-27 14:56:49
  */
 import { defineComponent, PropType, CSSProperties } from 'vue';
 import addEventListener from 'add-dom-event-listener';
@@ -133,15 +133,15 @@ export default defineComponent({
       this.$emit('closed');
       this.$emit('afterVisibleChange', false);
       // 恢复默认弹出位置
-      this.$nextTick(() => {
+      if (this.$refs[`dialog`]?.dialogRef) {
         setStyle(this.$refs[`dialog`].dialogRef, { marginTop: this.disTop, marginLeft: 'auto', marginRight: 'auto' });
-      });
+      }
     },
     setDialogStyle(): void {
       setStyle(this.$refs[`dialog`].dialogRef, 'height', this.dialogHeight);
     },
     addStopEvent(): void {
-      this.stopEvent = addEventListener(this.$refs[`dialog`].dialogRef.parentNode, 'click', stop);
+      this.stopEvent = addEventListener(this.$refs[`dialog`].dialogRef.parentNode, 'mousedown', stop);
     },
     removeStopEvent(): void {
       this.stopEvent?.remove();

@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-02-28 23:01:43
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-25 15:32:21
+ * @Last Modified time: 2021-03-27 15:08:50
  */
 import { defineComponent, reactive, CSSProperties } from 'vue';
 import addEventListener from 'add-dom-event-listener';
@@ -10,6 +10,7 @@ import { isEqual, isFunction, isObject } from 'lodash-es';
 import { parseHeight, getCellValue, getVNodeText, deepFindRowKey, isArrayContain } from '../utils';
 import { getPrefixCls } from '../../../_utils/prefix';
 import { noop, isVNode } from '../../../_utils/util';
+import { getParentNode } from '../../../_utils/dom';
 import { warn } from '../../../_utils/error';
 import { JSXNode, Nullable } from '../../../_utils/types';
 import { IColumn, IDict, IRecord } from '../table/types';
@@ -107,7 +108,8 @@ export default defineComponent({
       this.prevST = st;
       this.prevSL = sl;
     },
-    cancelClickEvent(): void {
+    cancelClickEvent($down: HTMLElement, $up: HTMLElement): void {
+      if (!!getParentNode($up, 'table-editable__popper')) return;
       this.setClickedValues([]);
     },
     renderBodyXSpace(): JSXNode {
@@ -446,7 +448,7 @@ export default defineComponent({
           cellspacing="0"
           cellpadding="0"
           style={{ width: bodyWidth }}
-          v-click-outside={() => this.cancelClickEvent()}
+          v-click-outside={($down, $up) => this.cancelClickEvent($down, $up)}
         >
           {this.renderColgroup()}
           {!isDraggable ? (

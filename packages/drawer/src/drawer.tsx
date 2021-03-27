@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-02-09 09:03:59
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-26 14:36:34
+ * @Last Modified time: 2021-03-27 14:50:53
  */
 import { CSSProperties, defineComponent, PropType } from 'vue';
 import addEventListener from 'add-dom-event-listener';
@@ -122,7 +122,7 @@ export default defineComponent({
       this.$emit('afterVisibleChange', false);
     },
     addStopEvent(): void {
-      this.stopEvent = addEventListener(this.$refs[`drawer`].drawerRef.parentNode, 'click', stop);
+      this.stopEvent = addEventListener(this.$refs[`drawer`].drawerRef.parentNode, 'mousedown', stop);
     },
     removeStopEvent(): void {
       this.stopEvent?.remove();

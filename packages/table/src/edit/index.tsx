@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-03-22 14:34:21
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-25 10:04:39
+ * @Last Modified time: 2021-03-27 13:27:13
  */
 import { defineComponent } from 'vue';
 import dayjs from 'dayjs';
@@ -169,6 +169,7 @@ export default defineComponent({
       return (
         <el-select
           size={this.size}
+          popper-class={'table-editable__popper'}
           {...selectProps}
           multiple={isMultiple}
           collapseTags={isMultiple}
@@ -204,6 +205,7 @@ export default defineComponent({
         <el-date-picker
           size={this.size}
           type={!isDateTime ? 'date' : 'datetime'}
+          popper-class={'table-editable__popper'}
           {...dateProps}
           style={{ width: '100%' }}
           disabledDate={(oDate) => {
@@ -238,6 +240,7 @@ export default defineComponent({
       return (
         <el-time-picker
           size={this.size}
+          popper-class={'table-editable__popper'}
           {...timeProps}
           format={timeFormat}
           style={{ width: '100%' }}
