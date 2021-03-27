@@ -205,14 +205,14 @@
 
 ### helper
 
-| 参数          | 说明                                                                            | 类型                                         | 默认值 |
-| ------------- | ------------------------------------------------------------------------------- | -------------------------------------------- | ------ |
-| filters       | 顶部筛选条件配置，参考 TopFilter 组件，必要参数                                 | array                                        | -      |
-| table         | 列表组件配置，[配置项](#table)，必要参数                                        | array                                        | -      |
-| fieldAliasMap | 表单字段与回传数据字段的映射，[配置项](#alias)， 必要参数                       | func                                         | -      |
-| beforeOpen    | 打开搜索帮助的前置钩子，若返回 false 或者返回 Promise 且被 reject，则阻止打开   | function(cell, row, column)                  | -      |
-| beforeClose   | 关闭搜索帮助的前置钩子，，若返回 false 或者返回 Promise 且被 reject，则阻止关闭 | function(searchHelperRow, cell, row, column) | -      |
-| closed        | 关闭搜索帮助的后置钩子                                                          | function(row)                                | -      |
+| 参数          | 说明                                                                          | 类型                                         | 默认值 |
+| ------------- | ----------------------------------------------------------------------------- | -------------------------------------------- | ------ |
+| filters       | 顶部筛选条件配置，参考 TopFilter 组件，必要参数                               | array                                        | -      |
+| table         | 列表组件配置，[配置项](#table)，必要参数                                      | array                                        | -      |
+| fieldAliasMap | 表单字段与回传数据字段的映射，[配置项](#alias)， 必要参数                     | func                                         | -      |
+| beforeOpen    | 打开搜索帮助的前置钩子，若返回 false 或者返回 Promise 且被 reject，则阻止打开 | function(cell, row, column)                  | -      |
+| beforeClose   | 关闭搜索帮助的前置钩子，若返回 false 或者返回 Promise 且被 reject，则阻止关闭 | function(searchHelperRow, cell, row, column) | -      |
+| closed        | 关闭搜索帮助的后置钩子                                                        | function(row)                                | -      |
 
 ### rule
 
