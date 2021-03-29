@@ -29,7 +29,7 @@ import coreMethods from './core-methods';
 import interfaceMethods from './interface-methods';
 import renderMethods from './render-table';
 
-const EMITS = ['change', 'dataChange', 'dataLoaded'];
+const EMITS: string[] = ['change', 'dataChange', 'dataLoaded'];
 
 export default defineComponent({
   name: 'QmTable',
