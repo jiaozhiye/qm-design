@@ -26,7 +26,7 @@ import CaretDownIcon from '../icon/caretdown';
 
 export default defineComponent({
   name: 'TableHeader',
-  props: ['tableColumns', 'flattenColumns', 'sortDirections'],
+  props: ['tableColumns', 'flattenColumns'],
   provide() {
     return {
       $$header: this,
@@ -37,8 +37,8 @@ export default defineComponent({
     return {
       filters: {},
       sorter: {},
-      ascend: this.sortDirections[0],
-      descend: this.sortDirections[1],
+      ascend: config.sortDirections[0],
+      descend: config.sortDirections[1],
     };
   },
   computed: {

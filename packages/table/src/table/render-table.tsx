@@ -51,7 +51,6 @@ export default {
       isHeadSorter,
       isHeadFilter,
       isTableEmpty,
-      sortDirections,
       scrollX,
       scrollY,
       scrollYLoad,
@@ -102,7 +101,6 @@ export default {
       ref: 'tableHeader',
       tableColumns,
       flattenColumns,
-      sortDirections,
     };
     const tableBodyProps = {
       ref: 'tableBody',

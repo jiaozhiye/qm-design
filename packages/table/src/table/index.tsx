@@ -69,6 +69,8 @@ export default defineComponent({
       filters: {},
       // 表头排序
       sorter: {},
+      // 服务端合计
+      summaries: {},
       // 分页
       pagination: {
         currentPage: this.paginationConfig?.currentPage || config.pagination.currentPage,
@@ -97,8 +99,6 @@ export default defineComponent({
         visibleSize: 0,
         rowHeight: 0,
       },
-      // 支持的排序方式
-      sortDirections: ['ascend', 'descend'],
       // 表格布局相关参数
       layout: {
         // 滚动条宽度
@@ -135,8 +135,6 @@ export default defineComponent({
       isIE: isIE(),
       // 全屏样式
       isFullScreen: false,
-      // 服务端合计
-      summaries: {},
     };
   },
   computed: {

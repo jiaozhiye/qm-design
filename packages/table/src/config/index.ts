@@ -16,6 +16,8 @@ const config = {
     small: 35,
     mini: 31,
   },
+  // 排序方式
+  sortDirections: ['ascend', 'descend'],
   // 分页
   pagination: {
     currentPage: 1,
