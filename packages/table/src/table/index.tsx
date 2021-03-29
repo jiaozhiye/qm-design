@@ -11,7 +11,7 @@ import { IColumn, IRecord } from './types';
 
 import baseProps from './props';
 import Store from '../store';
-import { isChrome, isIE, noop } from '../../../_utils/util';
+import { isChrome, isIE, deepToRaw, noop } from '../../../_utils/util';
 import { useSize } from '../../../hooks/useSize';
 import { isEmpty } from '../../../_utils/util';
 import { getScrollBarWidth } from '../../../_utils/scrollbar-width';
@@ -47,6 +47,8 @@ export default defineComponent({
   emits: EMITS,
   data() {
     Object.assign(this, {
+      // 原始列
+      originColumns: [],
       // 原始数据
       tableOriginData: [],
       // 内存分页，每页显示的数据
@@ -362,7 +364,9 @@ export default defineComponent({
     },
   },
   created() {
+    this.originColumns = deepToRaw(this.columns);
     this.columnSummaryQuery = this.createColumnSummary();
+    // 获取表格数据
     if (!this.isFetch) {
       this.createTableData(this.dataSource);
     } else {

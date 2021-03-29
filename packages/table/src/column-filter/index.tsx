@@ -5,6 +5,7 @@
  * @Last Modified time: 2021-03-22 16:18:05
  */
 import { defineComponent, reactive } from 'vue';
+import { cloneDeep } from 'lodash-es';
 import Draggable from 'vuedraggable';
 import classnames from 'classnames';
 import { JSXNode } from '../../../_utils/types';
@@ -64,6 +65,10 @@ export default defineComponent({
     changeHandle(): void {
       const { columnsChange = noop } = this.$$table;
       columnsChange(this.realColumns);
+    },
+    resetColumnsHandle(): void {
+      const { columnsChange = noop } = this.$$table;
+      columnsChange(cloneDeep(this.$$table.originColumns));
     },
     renderListItem(column: IColumn, type: string): JSXNode {
       const cls = [`iconfont`, `icon-menu`, `handle`, [`${type}-handle`]];
@@ -152,6 +157,12 @@ export default defineComponent({
 
       return (
         <div class="column-filter--wrap">
+          <div class="reset">
+            <el-button type="text" onClick={this.resetColumnsHandle}>
+              {t('qm.table.columnFilter.reset')}
+            </el-button>
+          </div>
+          <div class="divider" />
           <div class="left">
             <Draggable
               {...leftDragProps}

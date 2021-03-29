@@ -87,6 +87,7 @@ export default {
       },
       columnFilter: {
         text: '列定义',
+        reset: '重置',
         draggable: '拖动排序',
         fixedLeft: '固定左侧',
         fixedRight: '固定右侧',

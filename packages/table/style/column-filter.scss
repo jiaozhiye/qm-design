@@ -40,6 +40,13 @@ $prefix: '#{$qm-prefix}-table';
       }
     }
   }
+  .reset {
+    text-align: right;
+    .el-button {
+      padding: 2px 0;
+      min-height: auto;
+    }
+  }
   .left {
     li {
       padding-right: 15px;
