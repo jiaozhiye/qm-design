@@ -218,7 +218,7 @@ export default defineComponent({
       }
       this.cancelHandle(this.result);
     },
-    cancelHandle(data): void {
+    cancelHandle(data?: AnyObject<any>): void {
       this.$emit('close', false, data, this.alias);
     },
     createDictList(code: string): IDict[] {
