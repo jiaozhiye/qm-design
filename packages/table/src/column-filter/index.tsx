@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-03-17 10:29:47
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-22 16:18:05
+ * @Last Modified time: 2021-03-29 15:36:51
  */
 import { defineComponent, reactive } from 'vue';
 import { cloneDeep } from 'lodash-es';
@@ -68,7 +68,8 @@ export default defineComponent({
     },
     resetColumnsHandle(): void {
       const { columnsChange = noop } = this.$$table;
-      columnsChange(cloneDeep(this.$$table.originColumns));
+      const realColumns = cloneDeep(this.$$table.originColumns);
+      columnsChange(reactive(realColumns));
     },
     renderListItem(column: IColumn, type: string): JSXNode {
       const cls = [`iconfont`, `icon-menu`, `handle`, [`${type}-handle`]];
