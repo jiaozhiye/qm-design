@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-02-09 09:03:59
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-22 16:03:49
+ * @Last Modified time: 2021-03-30 10:00:30
  */
 import { CSSProperties, defineComponent } from 'vue';
 import { isEqual } from 'lodash-es';
@@ -11,6 +11,7 @@ import { IColumn, IRecord } from './types';
 
 import baseProps from './props';
 import Store from '../store';
+import TableManager from '../manager';
 import { isChrome, isIE, deepToRaw, noop } from '../../../_utils/util';
 import { useSize } from '../../../hooks/useSize';
 import { isEmpty } from '../../../_utils/util';
@@ -364,6 +365,7 @@ export default defineComponent({
     },
   },
   created() {
+    TableManager.register(this.getTableInstance().uid, this.getTableInstance());
     this.originColumns = deepToRaw(this.columns);
     this.columnSummaryQuery = this.createColumnSummary();
     // 获取表格数据
@@ -383,10 +385,12 @@ export default defineComponent({
     this.createResizeState();
   },
   activated() {
+    TableManager.focus(this.getTableInstance().uid);
     this.scrollYLoad && this.loadScrollYData(0);
     this.calcTableHeight();
   },
   unmounted() {
+    TableManager.deregister(this.getTableInstance().uid);
     this.destroy();
   },
   methods: {

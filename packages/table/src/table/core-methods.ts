@@ -2,8 +2,9 @@
  * @Author: 焦质晔
  * @Date: 2020-03-01 15:20:02
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-22 16:31:11
+ * @Last Modified time: 2021-03-30 09:56:43
  */
+import { ComponentInternalInstance } from 'vue';
 import { get } from 'lodash-es';
 import { difference, hasOwn, throttle, getCellValue, setCellValue } from '../utils';
 import { deepToRaw, errorCapture, isChrome, isIE, noop } from '../../../_utils/util';
@@ -332,13 +333,19 @@ export default {
     return diff.length === 1 && (diff.includes('currentPage') || diff.includes('pageSize'));
   },
   // 默认选中首行数据
-  selectFirstRow(bool = false): void {
+  selectFirstRow(bool?: boolean): void {
     const { rowSelection, tableFullData } = this;
-    const { type, defaultSelectFirstRow = bool } = rowSelection || {};
-    if (type !== 'radio' || !defaultSelectFirstRow || !tableFullData.length) return;
+    const { type, defaultSelectFirstRow } = rowSelection || {};
+    const isSelectFirstRow: boolean = defaultSelectFirstRow || bool || false;
+    if (type !== 'radio' || !isSelectFirstRow || !tableFullData.length) return;
     const rowKey = this.getRowKey(tableFullData[0], tableFullData[0].index);
     this.$$tableBody.setClickedValues([rowKey, '__selection__']);
     this.selectionKeys = [rowKey];
+  },
+  // 获取组件实例
+  getTableInstance(): ComponentInternalInstance {
+    const { _: instance } = this;
+    return instance;
   },
   // 返回到第一页
   toFirstPage(): void {

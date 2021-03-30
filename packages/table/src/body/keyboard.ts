@@ -2,16 +2,18 @@
  * @Author: 焦质晔
  * @Date: 2020-03-23 12:51:24
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-25 15:41:18
+ * @Last Modified time: 2021-03-30 10:01:34
  */
 import { isUndefined } from 'lodash-es';
 import { prevent } from '../../../_utils/dom';
+import TableManager from '../manager';
 import config from '../config';
 
 const keyboardMixin = {
   methods: {
     keyboardEvent(ev: KeyboardEvent): void {
       const { keyCode } = ev;
+      if (this.$$table.getTableInstance().uid !== TableManager.getFocusInstance()?.id) return;
       // Esc
       if (keyCode === 27) {
         this.setClickedValues([]);

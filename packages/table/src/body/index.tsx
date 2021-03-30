@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-02-28 23:01:43
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-27 15:08:50
+ * @Last Modified time: 2021-03-30 10:25:01
  */
 import { defineComponent, reactive, CSSProperties } from 'vue';
 import addEventListener from 'add-dom-event-listener';
@@ -14,6 +14,7 @@ import { getParentNode } from '../../../_utils/dom';
 import { warn } from '../../../_utils/error';
 import { JSXNode, Nullable } from '../../../_utils/types';
 import { IColumn, IDict, IRecord } from '../table/types';
+import TableManager from '../manager';
 import ClickOutside from '../../../directives/click-outside';
 
 import config from '../config';
@@ -77,6 +78,12 @@ export default defineComponent({
     },
     isDraggable(): boolean {
       return this.$$table.rowDraggable;
+    },
+  },
+  watch: {
+    clicked(next: string[]): void {
+      if (!next.length) return;
+      TableManager.focus(this.$$table.getTableInstance().uid);
     },
   },
   mounted() {
