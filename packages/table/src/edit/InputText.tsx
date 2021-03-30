@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-08-11 08:19:36
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-11 20:13:44
+ * @Last Modified time: 2021-03-30 10:40:13
  */
 import { defineComponent } from 'vue';
 import PropTypes from '../../../_utils/vue-types';
@@ -12,7 +12,7 @@ import { JSXNode } from '../../../_utils/types';
 
 export default defineComponent({
   name: 'InputText',
-  emits: ['update:modelValue', 'change', 'input', 'dblclick', 'keyDown'],
+  emits: ['update:modelValue', 'change', 'input', 'dblclick', 'keydown'],
   props: {
     modelValue: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
     size: PropTypes.string,
@@ -89,8 +89,8 @@ export default defineComponent({
         onDblclick={(ev) => {
           this.$emit('dblclick', ev);
         }}
-        onKeyDown={(ev) => {
-          this.$emit('keyDown', ev);
+        onKeydown={(ev) => {
+          this.$emit('keydown', ev);
         }}
         v-slots={{
           append: this.$slots[`append`]?.() ? (): JSXNode => this.$slots[`append`]() : null,

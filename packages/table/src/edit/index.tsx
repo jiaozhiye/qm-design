@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-03-22 14:34:21
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-27 13:27:13
+ * @Last Modified time: 2021-03-30 10:44:10
  */
 import { defineComponent } from 'vue';
 import dayjs from 'dayjs';
@@ -479,13 +479,13 @@ export default defineComponent({
               }
               setHelperValues(val);
             }}
-            onDblclick={() => {
+            onDblclick={(ev) => {
               if (extra.disabled) return;
-              isObject(helper) && openHelperPanel(prevValue);
+              isObject(helper) && openHelperPanel(ev.target.value);
             }}
             onKeydown={(ev) => {
               if (ev.keyCode === 13) {
-                this.$refs[`search-helper-${this.dataKey}`].blur();
+                isObject(helper) && openHelperPanel(ev.target.value);
               }
             }}
             v-slots={{
