@@ -37,6 +37,7 @@ export default {
       yearrangePlaceholder: ['开始年份', '结束年份'],
       datePickers: ['今天', '昨天', '一周前', '一个月前'],
       dateRangePickers: ['最近一周', '最近一个月', '最近三个月', '最近六个月'],
+      citySelectType: ['按省份', '按城市'],
     },
     download: {
       error: '文件下载失败！',
