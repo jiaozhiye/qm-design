@@ -48,7 +48,7 @@ export default defineComponent({
         if (isUndefined(res) || isNull(res)) return;
         // 左边界限定
         if (rw < config.defaultColumnWidth) return;
-        res = rw;
+        res = Number.parseInt(rw);
 
         target.style.left = `${ml + left}px`;
       };
