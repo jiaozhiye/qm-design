@@ -107,7 +107,7 @@ export default defineComponent({
     this.$$form.setViewValue(fieldName, textVal);
 
     const wrapProps = {
-      modelValue: this.itemList.length ? form[fieldName] : undefined,
+      modelValue: form[fieldName],
       'onUpdate:modelValue': (val: string): void => {
         form[fieldName] = val;
       },
@@ -143,7 +143,6 @@ export default defineComponent({
               form[fieldName] = res[0].value;
               // 触发 change 事件
               onChange(form[fieldName], res[0].text);
-              this.filterMethodHandle('');
               // 失去焦点，自动带值
               this.$nextTick(() => this.$refs[type].blur());
             }
