@@ -183,6 +183,7 @@ $prefix: '#{$qm-prefix}-form';
         flex-wrap: wrap;
         margin-bottom: 4px;
         .tag {
+          list-style: none;
           line-height: 1.75;
           font-size: $font-size-sm;
           padding: 0 8px;

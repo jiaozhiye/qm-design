@@ -101,16 +101,29 @@ export default defineComponent({
           };
         });
     },
-    renderCity(): JSXNode {
-      const { form } = this.$$form;
-      const { fieldName } = this.option;
+    renderType(): JSXNode {
+      return (
+        <el-radio-group v-model={this.select_type} size="mini">
+          <el-radio-button label="0">{t('qm.form.citySelectType')[0]}</el-radio-button>
+          <el-radio-button label="1">{t('qm.form.citySelectType')[1]}</el-radio-button>
+        </el-radio-group>
+      );
+    },
+    renderLetter(): JSXNode[] {
+      return citySelectLetter.map((x) => (
+        <li key={x.value} class={{ tag: !0, actived: x.value === this.letter_id }} onClick={() => this.scrollHandle(x.value)}>
+          {x.text}
+        </li>
+      ));
+    },
+    renderCity(val: string): JSXNode[] {
       const cites: ICity[] = this.select_type === '0' ? this.createProvince() : this.createCity();
       return cites.map((x) => (
         <>
           <dt id={x.l}>{x.n}：</dt>
           <dd>
             {x.children?.map((k) => (
-              <li key={k.c} class={{ actived: k.c === form[fieldName] }} onClick={() => this.clickHadnle(k.c)}>
+              <li key={k.c} class={{ actived: k.c === val }} onClick={() => this.clickHadnle(k.c)}>
                 {k.n}
               </li>
             ))}
@@ -136,6 +149,7 @@ export default defineComponent({
       disabled,
       onChange = noop,
     } = this.option;
+
     const prefixCls = getPrefixCls('city-select');
 
     let textValue: string = this.createTextValue(form[fieldName]);
@@ -198,12 +212,7 @@ export default defineComponent({
             <div class="container" style={{ ...style }}>
               <div class="city-drop">
                 <div class="city-drop-toper">
-                  <div class="city-drop-toper__type">
-                    <el-radio-group v-model={this.select_type} size="mini">
-                      <el-radio-button label="0">{t('qm.form.citySelectType')[0]}</el-radio-button>
-                      <el-radio-button label="1">{t('qm.form.citySelectType')[1]}</el-radio-button>
-                    </el-radio-group>
-                  </div>
+                  <div class="city-drop-toper__type">{this.renderType()}</div>
                   <div class="city-drop-toper__search">
                     <el-select
                       size="mini"
@@ -216,15 +225,9 @@ export default defineComponent({
                     />
                   </div>
                 </div>
-                <div class="city-drop-letter">
-                  {citySelectLetter.map((x) => (
-                    <div key={x.value} class={{ tag: !0, actived: x.value === this.letter_id }} onClick={() => this.scrollHandle(x.value)}>
-                      {x.text}
-                    </div>
-                  ))}
-                </div>
+                <div class="city-drop-letter">{this.renderLetter()}</div>
                 <div ref="scroll" class="city-drop-list">
-                  <dl>{this.renderCity()}</dl>
+                  <dl>{this.renderCity(form[fieldName])}</dl>
                 </div>
               </div>
             </div>
