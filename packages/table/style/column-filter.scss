@@ -18,6 +18,9 @@ $prefix: '#{$qm-prefix}-table';
   em {
     margin-right: 4px;
   }
+  span {
+    vertical-align: middle;
+  }
 }
 
 .column-filter--wrap {

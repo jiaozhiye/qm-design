@@ -231,7 +231,7 @@ export default defineComponent({
               <em class="icon-svg">
                 <SorterIcon />
               </em>
-              {showButtonText && t('qm.table.columnFilter.text')}
+              <span>{showButtonText && t('qm.table.columnFilter.text')}</span>
             </span>
           ),
         }}
