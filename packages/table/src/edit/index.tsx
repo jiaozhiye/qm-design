@@ -72,9 +72,15 @@ export default defineComponent({
       if (!this.editable) return;
       const { type } = this.options;
       const { currentKey } = this;
-      if ((type === 'text' || type === 'number' || type === 'search-helper') && currentKey) {
-        setTimeout(() => {
-          this.$refs[`${type}-${currentKey}`]?.select();
+      if (!currentKey) return;
+      if (type === 'text' || type === 'number' || type === 'search-helper') {
+        this.$nextTick(() => {
+          this.$refs[`${type}-${currentKey}`].select?.();
+        });
+      }
+      if (type === 'select' || type === 'select-multiple') {
+        this.$nextTick(() => {
+          this.$refs[`${type}-${currentKey}`].focus?.();
         });
       }
     },
@@ -86,7 +92,7 @@ export default defineComponent({
     },
     textHandle(row: IRecord, column: IColumn): JSXNode {
       const { dataIndex } = column;
-      const { extra = {}, rules = [], onInput = noop, onChange = noop, onEnter = noop } = this.options;
+      const { type, extra = {}, rules = [], onInput = noop, onChange = noop, onEnter = noop } = this.options;
       const prevValue = getCellValue(row, dataIndex);
       const inputProps = {
         modelValue: prevValue,
@@ -96,7 +102,7 @@ export default defineComponent({
       };
       return (
         <InputText
-          ref={`text-${this.dataKey}`}
+          ref={`${type}-${this.dataKey}`}
           size={this.size}
           {...inputProps}
           maxlength={extra.maxlength}
@@ -121,7 +127,7 @@ export default defineComponent({
     },
     numberHandle(row: IRecord, column: IColumn): JSXNode {
       const { dataIndex, precision } = column;
-      const { extra = {}, rules = [], onInput = noop, onChange = noop, onEnter = noop } = this.options;
+      const { type, extra = {}, rules = [], onInput = noop, onChange = noop, onEnter = noop } = this.options;
       const prevValue = getCellValue(row, dataIndex);
       const inputProps = {
         modelValue: prevValue,
@@ -131,7 +137,7 @@ export default defineComponent({
       };
       return (
         <InputNumber
-          ref={`number-${this.dataKey}`}
+          ref={`${type}-${this.dataKey}`}
           size={this.size}
           {...inputProps}
           precision={precision}
@@ -157,7 +163,7 @@ export default defineComponent({
     },
     selectHandle(row: IRecord, column: IColumn, isMultiple: boolean): JSXNode {
       const { dataIndex } = column;
-      const { extra = {}, rules = [], items = [], onChange = noop } = this.options;
+      const { type, extra = {}, rules = [], items = [], onChange = noop } = this.options;
       this.itemList = items;
       const prevValue = getCellValue(row, dataIndex);
       const selectProps = {
@@ -168,6 +174,7 @@ export default defineComponent({
       };
       return (
         <el-select
+          ref={`${type}-${this.dataKey}`}
           size={this.size}
           popper-class={'table-editable__popper'}
           {...selectProps}
