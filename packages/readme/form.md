@@ -60,7 +60,8 @@
 | MULTIPLE_CASCADER    | 级联选择器多选         |
 | SELECT               | 下拉选择器             |
 | MULTIPLE_SELECT      | 下拉选择器，多选       |
-| REGION_SELECT        | 地区选择，支持街道     |
+| REGION_SELECT        | 地区选择器，支持街道   |
+| CITY_SELECT          | 城市选择器             |
 | SWITCH               | 开关类型               |
 | RADIO                | 单选按钮               |
 | CHECKBOX             | 复选框                 |

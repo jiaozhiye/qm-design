@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-02-24 13:02:36
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-16 16:51:42
+ * @Last Modified time: 2021-03-31 09:32:00
  */
 import { CSSProperties, PropType } from 'vue';
 import PropTypes from '../../_utils/vue-types';
@@ -43,6 +43,7 @@ export type IFormItemType =
   | 'SELECT'
   | 'MULTIPLE_SELECT'
   | 'REGION_SELECT'
+  | 'CITY_SELECT'
   | 'SWITCH'
   | 'RADIO'
   | 'CHECKBOX'

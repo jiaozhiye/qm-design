@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-02-09 09:03:59
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-19 15:38:18
+ * @Last Modified time: 2021-03-31 09:34:14
  */
 import { ComponentPublicInstance, defineComponent } from 'vue';
 import scrollIntoView from 'scroll-into-view-if-needed';
@@ -27,6 +27,7 @@ import FormTreeSelect from './form-tree-select';
 import FormCascader from './form-cascader';
 import FormSelect from './form-select';
 import FormRegionSelect from './form-region-select';
+import FormCitySelect from './form-city-select';
 import FormSwitch from './form-switch';
 import FormRadio from './form-radio';
 import FromCheckbox from './form-checkbox';
@@ -366,6 +367,9 @@ export default defineComponent({
     },
     REGION_SELECT(option: IFormItem): JSXNode {
       return <FormRegionSelect ref={option.fieldName} option={option} />;
+    },
+    CITY_SELECT(option: IFormItem): JSXNode {
+      return <FormCitySelect ref={option.fieldName} option={option} />;
     },
     SWITCH(option: IFormItem): JSXNode {
       return <FormSwitch ref={option.fieldName} option={option} />;
