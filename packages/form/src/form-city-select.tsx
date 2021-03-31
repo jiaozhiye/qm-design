@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-03-31 09:27:45
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-31 16:09:29
+ * @Last Modified time: 2021-03-31 16:16:51
  */
 import { defineComponent } from 'vue';
 import scrollIntoView from 'scroll-into-view-if-needed';
@@ -51,7 +51,6 @@ export default defineComponent({
     return {
       select_type: '0', // 0 -> 按省份    1 -> 按城市
       letter_id: '',
-      itemList: [], // 省市区，不包含街道
       visible: false,
     };
   },
