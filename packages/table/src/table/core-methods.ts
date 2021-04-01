@@ -351,6 +351,13 @@ export default {
   toFirstPage(): void {
     this.pagerChangeHandle({ ...this.pagination, currentPage: 1 });
   },
+  // 前往最后一页
+  toLastPage(): void {
+    const { currentPage, pageSize } = this.pagination;
+    const pageCount: number = Math.ceil(this.total / pageSize);
+    if (!this.webPagination || currentPage >= pageCount) return;
+    this.pagerChangeHandle({ currentPage: pageCount, pageSize });
+  },
   // 清空列选中
   clearRowSelection(): void {
     this.selectionKeys = [];

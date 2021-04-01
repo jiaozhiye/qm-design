@@ -130,7 +130,10 @@ export default {
     // 滚动条定位
     if (rows.length > 0) {
       const lastRowKey = this.getRowKey(rows[rows.length - 1], rows[rows.length - 1].index);
-      this.$nextTick(() => this.$$tableBody.scrollYToRecord(lastRowKey));
+      this.$nextTick(() => {
+        this.toLastPage();
+        this.$$tableBody.scrollYToRecord(lastRowKey);
+      });
     }
   },
   // 删除数据
