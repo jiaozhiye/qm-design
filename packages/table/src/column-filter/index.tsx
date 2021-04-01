@@ -163,7 +163,6 @@ export default defineComponent({
               {t('qm.table.columnFilter.reset')}
             </el-button>
           </div>
-          <div class="divider" />
           <div class="left">
             <Draggable
               {...leftDragProps}
