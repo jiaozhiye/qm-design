@@ -533,6 +533,7 @@ export default defineComponent({
       ],
       selection: {
         type: 'checkbox',
+        filterable: true,
         selectedRowKeys: this.selectedKeys,
         disabled: (row) => {
           return row.id === 3;

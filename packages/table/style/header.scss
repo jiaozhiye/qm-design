@@ -67,6 +67,19 @@ $prefix: '#{$qm-prefix}-table';
     }
   }
 
+  /* 全选 */
+  .cell--selection {
+    display: flex;
+    align-items: center;
+    .extra {
+      padding: 2px;
+      margin-left: 2px;
+      font-size: $v-font-size-mini;
+      color: $v-icon-color;
+      cursor: pointer;
+    }
+  }
+
   /* 排序 */
   .cell--sorter {
     position: relative;

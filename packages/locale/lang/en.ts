@@ -86,6 +86,11 @@ export default {
         selected: '已选择 {total} 项',
         clear: '清空',
       },
+      selection: {
+        all: '全选所有',
+        invert: '反选所有',
+        clear: '清空所有',
+      },
       columnFilter: {
         text: '列定义',
         reset: '重置',
