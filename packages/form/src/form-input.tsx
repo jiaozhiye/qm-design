@@ -38,10 +38,10 @@ export default defineComponent({
     },
     // 格式化搜索帮助接口参数 tds
     formatParams(val: AnyObject<unknown>): AnyObject<unknown> {
-      const { name, getServerConfig, beforeFetch = (k) => k } = this.option.searchHelper;
+      const { name, fieldsDefine, getServerConfig, beforeFetch = (k) => k } = this.option.searchHelper;
       val = beforeFetch(val);
       // tds 搜索条件的参数规范
-      if (name && isFunction(getServerConfig)) {
+      if (name && fieldsDefine && getServerConfig) {
         val = { name, condition: val };
       }
       return val;
