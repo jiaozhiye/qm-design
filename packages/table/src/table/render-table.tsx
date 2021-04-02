@@ -77,6 +77,7 @@ export default {
     const wrapperCls = {
       [`${prefixCls}--wrapper`]: true,
       [`${prefixCls}--maximize`]: isFullScreen,
+      [`${prefixCls}--default`]: tableSize === 'default',
       [`${prefixCls}--medium`]: tableSize === 'medium',
       [`${prefixCls}--small`]: tableSize === 'small',
       [`${prefixCls}--mini`]: tableSize === 'mini',

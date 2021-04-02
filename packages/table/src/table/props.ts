@@ -129,8 +129,10 @@ export default {
   rowKey: PropTypes.oneOfType([PropTypes.string, PropTypes.func]).def('uid'),
   // 表格尺寸
   size: {
-    type: String as PropType<ComponentSize>,
-    validator: isValidComponentSize,
+    type: String as PropType<'default' | ComponentSize>,
+    validator: (val: string): boolean => {
+      return val === 'default' || isValidComponentSize(val);
+    },
   },
   // 表格的高度
   height: {

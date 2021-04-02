@@ -55,7 +55,7 @@ const keyboardMixin = {
           if (!this.rowInViewport(rowKey, xIndex)) {
             keyCode === 38
               ? this.scrollYToRecord(rowKey, xIndex)
-              : this.scrollYToRecord(rowKey, xIndex - (this.$$table.scrollYStore.visibleSize - 2));
+              : this.scrollYToRecord(rowKey, xIndex - (this.$$table.scrollYStore.visibleSize - 1));
           }
           this.setClickedValues([rowKey, this.clicked[1]]);
         }

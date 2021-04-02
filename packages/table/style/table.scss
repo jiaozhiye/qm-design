@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-03-01 23:27:04
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-13 14:55:23
+ * @Last Modified time: 2021-04-02 11:55:19
  */
 @import './common.scss';
 
@@ -22,12 +22,6 @@ $prefix: '#{$qm-prefix}-table';
 
 %MiniColumnHeight {
   height: $v-table-row-height-mini;
-}
-
-%CellEllipsis {
-  .cell {
-    @include text-overflow-cut;
-  }
 }
 
 .#{$prefix}--wrapper {
@@ -66,16 +60,6 @@ $prefix: '#{$qm-prefix}-table';
   &__actions {
     display: flex;
     align-items: center;
-  }
-}
-
-.#{$prefix}--borders {
-  .table-border-top,
-  .table-border-right,
-  .table-border-bottom,
-  .table-border-left {
-    position: absolute;
-    background-color: $v-primary-color;
   }
 }
 
@@ -196,6 +180,15 @@ $prefix: '#{$qm-prefix}-table';
     &.col--right:not(.header--column) {
       text-align: right;
     }
+    .cell {
+      white-space: pre-wrap;
+      padding: 0 $v-module-distance;
+      .cell--indent {
+        float: left;
+        height: 1px;
+        visibility: hidden;
+      }
+    }
   }
 
   // 自定义
@@ -262,6 +255,7 @@ $prefix: '#{$qm-prefix}-table';
     .footer--column {
       border-bottom: 1px solid $v-table-border-color;
       border-right: 1px solid $v-table-border-color;
+      @extend %boxSizing;
     }
   }
 
@@ -272,21 +266,8 @@ $prefix: '#{$qm-prefix}-table';
     }
     .header--column,
     .body--column,
-    .body--expanded-column,
-    .footer--column {
+    .body--expanded-column {
       border-bottom: 1px solid $v-table-border-color;
-    }
-  }
-
-  .cell {
-    word-break: break-all;
-    /* 保留空白字符 */
-    white-space: pre !important;
-    padding: 0 $v-module-distance;
-    .cell--indent {
-      float: left;
-      height: 1px;
-      visibility: hidden;
     }
   }
 
@@ -348,14 +329,10 @@ $prefix: '#{$qm-prefix}-table';
   .body--expanded-column,
   .footer--column {
     &.col--ellipsis {
-      @extend %DefaultColumnHeight;
-      @extend %CellEllipsis;
-    }
-  }
-  &.virtual--y {
-    .col--ellipsis {
       .cell {
-        max-height: $v-table-row-height-default;
+        @include text-overflow-cut;
+        word-break: break-all;
+        white-space: pre;
       }
     }
   }

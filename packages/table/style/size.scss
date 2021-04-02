@@ -2,11 +2,29 @@
  * @Author: 焦质晔
  * @Date: 2020-05-30 14:13:37
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-11 19:18:08
+ * @Last Modified time: 2021-04-02 11:20:56
  */
 $prefix: '#{$qm-prefix}-table';
 
 .#{$prefix} {
+  &--default {
+    font-size: $v-font-size;
+    .#{$prefix}__alert {
+      height: 40px;
+    }
+    .header--column,
+    .body--column,
+    .body--expanded-column,
+    .footer--column {
+      &.col--ellipsis {
+        @extend %DefaultColumnHeight;
+      }
+      &:not(.col--ellipsis) {
+        padding: #{floor(($v-table-row-height-default - $v-table-row-line-height) / 2)} 0;
+      }
+    }
+  }
+
   &--medium {
     font-size: $v-font-size-medium;
     .#{$prefix}__alert {
@@ -23,13 +41,6 @@ $prefix: '#{$qm-prefix}-table';
         padding: #{floor(($v-table-row-height-medium - $v-table-row-line-height) / 2)} 0;
       }
     }
-    &.virtual--y {
-      .col--ellipsis {
-        .cell {
-          max-height: $v-table-row-height-medium;
-        }
-      }
-    }
   }
 
   &--small {
@@ -43,19 +54,9 @@ $prefix: '#{$qm-prefix}-table';
     .footer--column {
       &.col--ellipsis {
         @extend %SmallColumnHeight;
-        .cell {
-          max-height: $v-table-row-height-small;
-        }
       }
       &:not(.col--ellipsis) {
         padding: #{floor(($v-table-row-height-small - $v-table-row-line-height) / 2)} 0;
-      }
-    }
-    &.virtual--y {
-      .col--ellipsis {
-        .cell {
-          max-height: $v-table-row-height-small;
-        }
       }
     }
   }
@@ -71,19 +72,9 @@ $prefix: '#{$qm-prefix}-table';
     .footer--column {
       &.col--ellipsis {
         @extend %MiniColumnHeight;
-        .cell {
-          max-height: $v-table-row-height-mini;
-        }
       }
       &:not(.col--ellipsis) {
         padding: #{floor(($v-table-row-height-mini - $v-table-row-line-height) / 2)} 0;
-      }
-    }
-    &.virtual--y {
-      .col--ellipsis {
-        .cell {
-          max-height: $v-table-row-height-mini;
-        }
       }
     }
     .cell--edit {
