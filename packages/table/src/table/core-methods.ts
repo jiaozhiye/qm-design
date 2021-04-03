@@ -24,7 +24,6 @@ export default {
           record.children = resetRowData(record.children);
         }
         // 数据索引
-        // this.$set(record, 'index', index);
         record.index = index;
         // 分页索引
         record.pageIndex = this.createPageIndex(index);

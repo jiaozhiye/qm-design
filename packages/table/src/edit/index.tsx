@@ -393,7 +393,7 @@ export default defineComponent({
           try {
             const res = await table.fetch.api(params);
             if (res.code === 200) {
-              const list = get(res.data, table.fetch.dataKey) ?? (Array.isArray(res.data) ? res.data : []);
+              const list = Array.isArray(res.data) ? res.data : get(res.data, table.fetch.dataKey) ?? [];
               resolve(list);
             } else {
               reject();

@@ -117,7 +117,6 @@ export default {
         setCellValue(row, dataIndex, getCellValue(row, dataIndex));
       });
       // 数据索引
-      // this.$set(row, 'index', curIndex);
       row.index = curIndex;
       // 分页索引
       row.pageIndex = this.createPageIndex(curIndex);

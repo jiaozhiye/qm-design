@@ -89,9 +89,6 @@ export default defineComponent({
     };
   },
   computed: {
-    $topFilter(): unknown {
-      return this.$refs[`top-filter`];
-    },
     disabled(): boolean {
       return !this.result;
     },
@@ -193,7 +190,8 @@ export default defineComponent({
       this.loading = true;
       const res = await this.fetch.api(this.fetch.params);
       if (res.code === 200) {
-        this.tableList = get(res.data, this.fetch.dataKey) ?? (Array.isArray(res.data) ? res.data : []);
+        this.$refs[`table`].CLEAR_TABLE_DATA();
+        this.tableList = Array.isArray(res.data) ? res.data : get(res.data, this.fetch.dataKey) ?? [];
       }
       this.loading = false;
     },
@@ -249,7 +247,7 @@ export default defineComponent({
       const $size: string = this.$props.size || this.$DESIGN.size || 'default';
       const containerHeight: number = window.innerHeight - (getParentNode(this.$el, 'el-dialog')?.offsetTop || 0) * 2 - 50 - footHeight[$size];
       // 计算表格高度
-      this.height = containerHeight - this.$topFilter.$el.offsetHeight - 100;
+      this.height = containerHeight - this.$refs[`top-filter`].$el.offsetHeight - 100;
     },
   },
   render(): JSXNode {
@@ -271,6 +269,7 @@ export default defineComponent({
             onCollapseChange={this.collapseHandle}
           />
           <Table
+            ref="table"
             {...tableProps}
             // @ts-ignore
             height={height}

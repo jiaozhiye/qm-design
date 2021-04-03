@@ -74,7 +74,7 @@ export default defineComponent({
         try {
           const res = await table.fetch.api(params);
           if (res.code === 200) {
-            const list: Record<string, unknown>[] = get(res.data, table.fetch.dataKey) ?? (Array.isArray(res.data) ? res.data : []);
+            const list: Record<string, unknown>[] = Array.isArray(res.data) ? res.data : get(res.data, table.fetch.dataKey) ?? [];
             return resolve(list);
           }
         } catch (err) {}
