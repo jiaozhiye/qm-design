@@ -180,7 +180,7 @@ export default defineComponent({
     },
   },
   render(): JSXNode {
-    const { tableFullData, spanMethod } = this.$$table;
+    const { tableFullData } = this.$$table;
     const { fields, fileName, fetch, exportFetch, disabledState } = this;
     const prefixCls = getPrefixCls('table');
     const exportFileName = fileName ?? `${dayjs().format('YYYYMMDDHHmmss')}.xlsx`;
@@ -196,7 +196,7 @@ export default defineComponent({
         this.recordExportLog();
       },
     };
-    const isJsonToExcel = !(exportFetch || (isFunction(spanMethod) && exportFileType === 'xls'));
+    const isJsonToExcel = !(exportFetch || exportFileType === 'xls');
     const cls = {
       [`${prefixCls}-export`]: true,
       disabled: disabledState,
