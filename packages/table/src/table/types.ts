@@ -94,9 +94,14 @@ export type IEditerReturn = {
   onClick?: AnyFunction<void>;
 };
 
+export type IFetchParams = AnyObject<unknown> & {
+  currentPage: number;
+  pageSize: number;
+};
+
 export type IFetch = {
   api: AnyFunction<Promise<any>>;
-  params?: AnyObject<any>;
+  params?: IFetchParams;
   beforeFetch?: AnyFunction<boolean>;
   xhrAbort?: boolean;
   stopToFirst?: boolean;
@@ -153,6 +158,12 @@ export type IDerivedColumn = IColumn & {
   parentDataIndex?: string;
   firstFixedRight?: boolean;
   lastFixedLeft?: boolean;
+};
+
+export type IDerivedRowKey = {
+  rowKey: string | number;
+  parentRowKey?: string;
+  children?: IDerivedRowKey[];
 };
 
 export type IRecord<T = any> = {

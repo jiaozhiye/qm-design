@@ -10,7 +10,7 @@ import { difference, hasOwn, throttle, getCellValue, setCellValue } from '../uti
 import { deepToRaw, errorCapture, isChrome, isIE, noop } from '../../../_utils/util';
 import { warn } from '../../../_utils/error';
 import config from '../config';
-import { IRecord, ISuperFilter } from './types';
+import { IRecord, ISuperFilter, IDerivedRowKey } from './types';
 
 const isWebkit = isChrome();
 const throttleScrollYDuration = isIE() ? 20 : 10;
@@ -254,10 +254,10 @@ export default {
     return deepToRaw(result);
   },
   // 创建派生的 rowKeys for treeTable
-  createDeriveRowKeys(tableData: IRecord[], key: string): Record<string, unknown>[] {
+  createDeriveRowKeys(tableData: IRecord[], key: string): IDerivedRowKey[] {
     return tableData.map((x, i) => {
-      const rowKey: string = this.getRowKey(x, i);
-      const item: Record<string, unknown> = { rowKey };
+      const rowKey = this.getRowKey(x, i);
+      const item: IDerivedRowKey = { rowKey };
       if (x.children) {
         item.children = this.createDeriveRowKeys(x.children, rowKey);
       }

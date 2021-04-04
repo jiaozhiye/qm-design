@@ -7,7 +7,7 @@
 import { CSSProperties, defineComponent } from 'vue';
 import { isEqual } from 'lodash-es';
 import { JSXNode, Nullable } from '../../../_utils/types';
-import { IColumn, IRecord } from './types';
+import { IColumn, IDerivedRowKey, IFetchParams, IRecord } from './types';
 
 import baseProps from './props';
 import Store from '../store';
@@ -159,7 +159,7 @@ export default defineComponent({
     allRowKeys(): string[] {
       return getAllRowKeys(this.tableFullData, this.getRowKey);
     },
-    deriveRowKeys() {
+    deriveRowKeys(): IDerivedRowKey[] {
       return this.createDeriveRowKeys(this.tableFullData, null);
     },
     tableChange() {
@@ -201,7 +201,7 @@ export default defineComponent({
     isFetch(): boolean {
       return !!this.fetch;
     },
-    fetchParams(): Record<string, unknown> {
+    fetchParams(): IFetchParams {
       const orderby = createOrderBy(this.sorter);
       // const query = createWhereSQL(this.filters, config.showFilterType) || createWhereSQL(this.superFilters, config.showFilterType);
       const query = this.formatFiltersParams(this.filters, this.superFilters);
@@ -298,7 +298,7 @@ export default defineComponent({
       this.clearTableFilter();
       this.clearSuperSearch();
     },
-    fetchParams(next, prev): void {
+    fetchParams(next: IFetchParams, prev: IFetchParams): void {
       const isOnlyPageChange = this.onlyPaginationChange(next, prev);
       if (!isOnlyPageChange) {
         this.isFetch && debounce(this.clearRowSelection)();
@@ -398,12 +398,12 @@ export default defineComponent({
     ...layoutMethods,
     ...interfaceMethods,
     ...renderMethods,
-    getRowKey(row: IRecord, index: number): string {
+    getRowKey(row: IRecord, index: number): string | number {
       const { rowKey } = this;
-      const key: string = typeof rowKey === 'function' ? rowKey(row, index) : row[rowKey];
+      const key: string | number = typeof rowKey === 'function' ? rowKey(row, index) : row[rowKey];
       if (key === undefined) {
         warn('Table', 'Each record in table should have a unique `key` prop, or set `rowKey` to an unique primary key.');
-        return index.toString();
+        return index;
       }
       return key;
     },
