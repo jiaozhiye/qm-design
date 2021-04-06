@@ -259,6 +259,7 @@ export default defineComponent({
   },
   watch: {
     dataSource(next: IRecord[]): void {
+      // 不能使用 prev，会导致数据直接 push 不更新的 bug
       if (isEqual(next, this.tableFullData)) return;
       this.clearTableSorter();
       this.clearTableFilter();
