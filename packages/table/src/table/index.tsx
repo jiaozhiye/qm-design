@@ -258,8 +258,8 @@ export default defineComponent({
     },
   },
   watch: {
-    dataSource(next: IRecord[], prev: IRecord[]): void {
-      if (isEqual(next, prev)) return;
+    dataSource(next: IRecord[]): void {
+      if (isEqual(next, this.tableFullData)) return;
       this.clearTableSorter();
       this.clearTableFilter();
       this.clearSuperSearch();
