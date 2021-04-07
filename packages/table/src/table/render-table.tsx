@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-02-29 22:17:28
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-12 09:26:41
+ * @Last Modified time: 2021-04-07 12:29:50
  */
 import { getPrefixCls } from '../../../_utils/prefix';
 import { JSXNode } from '../../../_utils/types';
@@ -54,12 +54,11 @@ export default {
       scrollX,
       scrollY,
       scrollYLoad,
+      isFetch,
       isPingLeft,
       isPingRight,
       leftFixedColumns,
       rightFixedColumns,
-      fetch,
-      fetchParams,
       pagination,
       paginationConfig,
       total,
@@ -132,14 +131,6 @@ export default {
           tableColumns,
           flattenColumns,
           fileName: exportExcel.fileName,
-          fetch: !!fetch
-            ? {
-                api: fetch.api,
-                params: fetchParams,
-                dataKey: fetch.dataKey,
-                total,
-              }
-            : null,
         }
       : null;
     const pagerProps = {
@@ -167,7 +158,7 @@ export default {
             {/* 全屏 */}
             {showFullScreen && <FullScreen />}
             {/* 刷新 */}
-            {showRefresh && !!fetch && <Reload />}
+            {showRefresh && isFetch && <Reload />}
             {/* 打印 */}
             {tablePrint && <PrintTable {...printProps} />}
             {/* 导出 */}

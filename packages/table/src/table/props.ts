@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-02-28 23:04:58
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-04-01 12:51:24
+ * @Last Modified time: 2021-04-06 18:08:17
  */
 import { PropType } from 'vue';
 import PropTypes from '../../../_utils/vue-types';
@@ -243,6 +243,7 @@ export default {
       api: PropTypes.func.isRequired, // api 接口
       params: PropTypes.object, // 接口参数
     }),
+    cellStyle: PropTypes.bool, // 是否给单元格添加样式
   }),
   // 表格打印
   tablePrint: PropTypes.shape({

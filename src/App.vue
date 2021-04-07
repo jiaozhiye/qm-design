@@ -607,6 +607,21 @@ export default defineComponent({
     finish(val) {
       console.log(val);
     },
+    spanMethod({ row, column, rowIndex, columnIndex }) {
+      if (column.dataIndex === 'date') {
+        if (rowIndex % 2 === 0) {
+          return {
+            rowspan: 2,
+            colspan: 1,
+          };
+        } else {
+          return {
+            rowspan: 0,
+            colspan: 0,
+          };
+        }
+      }
+    },
   },
   render(): VNode {
     return (
@@ -632,6 +647,7 @@ export default defineComponent({
             columns={this.columns}
             fetch={this.fetch}
             rowKey={(row) => row.id}
+            spanMethod={this.spanMethod}
             rowSelection={this.selection}
             tablePrint={this.tablePrint}
             exportExcel={this.exportExcel}

@@ -127,7 +127,9 @@ export default {
       export: {
         fileName: '导出数据',
         text: '导出',
+        closeButton: '关闭',
         noData: '数据为空，无法导出！',
+        settingTitle: '导出设置',
       },
       print: {
         text: '打印',

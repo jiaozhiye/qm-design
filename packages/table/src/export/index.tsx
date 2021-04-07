@@ -2,11 +2,11 @@
  * @Author: 焦质晔
  * @Date: 2020-02-02 15:58:17
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-22 16:22:59
+ * @Last Modified time: 2021-04-07 11:57:52
  */
 import { defineComponent } from 'vue';
+import { get } from 'lodash-es';
 import dayjs from 'dayjs';
-import { isFunction } from 'lodash-es';
 
 import { getCellValue, setCellValue, convertToRows, filterTableColumns } from '../utils';
 import { deepToRaw } from '../../../_utils/util';
@@ -14,18 +14,33 @@ import { getPrefixCls } from '../../../_utils/prefix';
 import { t } from '../../../locale';
 import { download } from '../../../_utils/download';
 import { IColumn, IDerivedColumn, IFetch, IRecord } from '../table/types';
-import { JSXNode, Nullable, AnyObject } from '../../../_utils/types';
+import { JSXNode, AnyObject, Nullable } from '../../../_utils/types';
 
 import config from '../config';
-import JsonToExcel from './jsonToExcel';
-import ExcellentExport from './tableToExcel';
+import exportMixin from './mixin';
+
+import Dialog from '../../../dialog';
+import ExportSetting from './setting';
+
+type IOptions = {
+  fileName: string;
+  fileType: 'xlsx' | 'csv';
+  sheetName: string;
+  exportType: 'all' | 'selected' | 'custom';
+  startIndex: number;
+  endIndex: number;
+  footSummation: boolean;
+  useStyle: boolean;
+};
 
 export default defineComponent({
   name: 'Export',
-  props: ['tableColumns', 'flattenColumns', 'fileName', 'fetch'],
+  props: ['tableColumns', 'flattenColumns', 'fileName'],
   inject: ['$$table'],
+  mixins: [exportMixin],
   data() {
     return {
+      visible: false,
       exporting: false,
     };
   },
@@ -39,44 +54,55 @@ export default defineComponent({
     exportFetch(): Nullable<IFetch> {
       return this.$$table.exportExcel.fetch ?? null;
     },
-    fields(): AnyObject<unknown> {
-      const target = {};
-      this.flatColumns.forEach((x) => {
-        target[x.title] = x.dataIndex;
-      });
-      return target;
-    },
     disabledState(): boolean {
       return !this.$$table.total || this.exporting;
     },
   },
   methods: {
-    createDataList(list: IRecord[]) {
+    createDataList(list: IRecord[]): IRecord[] {
       return list.map((x, i) => {
-        let item = { ...x, index: i, pageIndex: i };
+        let item: AnyObject<any> = { ...x, index: i, pageIndex: i };
         this.flatColumns.forEach((column, index) => {
           const { dataIndex } = column;
+          if (dataIndex === 'index' || dataIndex === 'pageIndex') return;
           setCellValue(item, dataIndex, this.renderCell(item, item.index, column, index));
         });
         return item;
       });
     },
-    createFetchParams(fetch: IFetch & { total: number }): Nullable<{ fetch: IFetch }> {
-      if (!fetch) {
-        return null;
+    async getTableData(options: IOptions): Promise<void> {
+      const { fileType, exportType, startIndex = 1, endIndex } = options;
+      const { fetch, fetchParams, total, tableFullData, selectionKeys, getRowKey } = this.$$table;
+      let tableList = [];
+
+      if (!!fetch) {
+        this.exporting = !0;
+        const { api, dataKey } = fetch;
+        try {
+          const res = await api({ ...fetchParams, currentPage: 1, pageSize: total });
+          if (res.code === 200) {
+            tableList = this.createDataList(Array.isArray(res.data) ? res.data : get(res.data, dataKey) ?? []);
+          }
+        } catch (err) {}
+        this.exporting = !1;
+      } else {
+        tableList = tableFullData;
       }
-      const { api, dataKey, total } = fetch;
-      return {
-        fetch: {
-          api,
-          params: {
-            ...this.$$table.fetchParams,
-            currentPage: 1,
-            pageSize: total,
-          },
-          dataKey,
-        },
-      };
+
+      if (exportType === 'selected') {
+        tableList = tableList.filter((row: IRecord) => selectionKeys.includes(getRowKey(row, row.index)));
+      }
+      if (exportType === 'custom') {
+        tableList = tableList.slice(startIndex - 1, endIndex ? endIndex : undefined);
+      }
+      if (fileType === 'xlsx') {
+        this.exportXLSX(options, tableList);
+      }
+      if (fileType === 'csv') {
+        this.exportCSV(options, this._toTable(options, convertToRows(this.headColumns), this.flatColumns, tableList));
+      }
+
+      this.recordExportLog();
     },
     async exportHandle(fileName: string): Promise<void> {
       const { fetchParams } = this.$$table;
@@ -97,14 +123,9 @@ export default defineComponent({
       } catch (err) {}
       this.exporting = !1;
     },
-    localExportHandle(fileName: string): void {
-      const tableHTML = this._toTable(convertToRows(this.headColumns), this.flatColumns);
-      const blob = ExcellentExport.excel(tableHTML);
-      download(blob, fileName);
-      this.recordExportLog();
-    },
-    _toTable(columnRows: Array<IDerivedColumn[]>, flatColumns: IColumn[]) {
-      const { tableFullData, showHeader, showFooter, $refs } = this.$$table;
+    _toTable(options: IOptions, columnRows: Array<IDerivedColumn[]>, flatColumns: IColumn[], dataList: IRecord[]): string {
+      const { footSummation } = options;
+      const { showHeader, showFooter, $refs } = this.$$table;
       const summationRows = flatColumns.some((x) => !!x.summation) ? $refs[`tableFooter`].summationRows : [];
       let html = `<table width="100%" border="0" cellspacing="0" cellpadding="0">`;
       html += `<colgroup>${flatColumns
@@ -122,8 +143,8 @@ export default defineComponent({
           `</thead>`,
         ].join('');
       }
-      if (tableFullData.length) {
-        html += `<tbody>${tableFullData
+      if (dataList.length) {
+        html += `<tbody>${dataList
           .map(
             (row) =>
               `<tr>${flatColumns
@@ -138,7 +159,7 @@ export default defineComponent({
           )
           .join('')}</tbody>`;
       }
-      if (showFooter) {
+      if (showFooter && footSummation) {
         html += [
           `<tfoot>`,
           summationRows
@@ -158,7 +179,7 @@ export default defineComponent({
       html += '</table>';
       return html;
     },
-    renderCell(row: IRecord, rowIndex: number, column: IColumn, columnIndex: number) {
+    renderCell(row: IRecord, rowIndex: number, column: IColumn, columnIndex: number): string | number {
       const { dataIndex, precision, extraRender } = column;
       let result = this.$$table.$$tableBody.renderCellTitle(column, row, rowIndex, columnIndex);
       if (extraRender) {
@@ -180,41 +201,48 @@ export default defineComponent({
     },
   },
   render(): JSXNode {
-    const { tableFullData } = this.$$table;
-    const { fields, fileName, fetch, exportFetch, disabledState } = this;
-    const prefixCls = getPrefixCls('table');
+    const { visible, fileName, exportFetch, disabledState } = this;
     const exportFileName = fileName ?? `${dayjs().format('YYYYMMDDHHmmss')}.xlsx`;
     const exportFileType = exportFileName.slice(exportFileName.lastIndexOf('.') + 1).toLowerCase();
-    const toExcelProps = {
-      initialValue: tableFullData,
-      fields,
-      fileType: exportFileType,
-      fileName: exportFileName,
-      ...this.createFetchParams(fetch),
-      formatHandle: this.createDataList,
-      onSuccess: () => {
-        this.recordExportLog();
+    const prefixCls = getPrefixCls('table');
+    const wrapProps = {
+      visible,
+      title: t('qm.table.export.settingTitle'),
+      width: '600px',
+      loading: false,
+      showFullScreen: false,
+      destroyOnClose: true,
+      containerStyle: { paddingBottom: '52px' },
+      'onUpdate:visible': (val: boolean): void => {
+        this.visible = val;
       },
     };
-    const isJsonToExcel = !(exportFetch || exportFileType === 'xls');
+    const settingProps = {
+      fileName: exportFileName.slice(0, exportFileName.lastIndexOf('.')),
+      fileType: exportFileType,
+      useStyle: this.$$table.exportExcel.cellStyle ? 1 : 0,
+    };
     const cls = {
       [`${prefixCls}-export`]: true,
       disabled: disabledState,
     };
     return (
-      <span
-        class={cls}
-        title={t('qm.table.export.text')}
-        onClick={() => {
-          if (disabledState) return;
-          if (isJsonToExcel) {
-            return this.$refs[`json-to-excel`].DO_EXPORT();
-          }
-          exportFetch ? this.exportHandle(exportFileName) : this.localExportHandle(exportFileName);
-        }}
-      >
-        {isJsonToExcel ? <JsonToExcel ref="json-to-excel" {...toExcelProps} /> : <i class="iconfont icon-download" />}
-      </span>
+      <>
+        <span
+          class={cls}
+          title={t('qm.table.export.text')}
+          onClick={(): void => {
+            if (disabledState) return;
+            exportFetch ? this.exportHandle(exportFileName) : (this.visible = !0);
+          }}
+        >
+          <i class="iconfont icon-download" />
+        </span>
+        <Dialog {...wrapProps}>
+          {/* @ts-ignore */}
+          <ExportSetting defaultValue={settingProps} onClose={() => (this.visible = !1)} onChange={(data) => this.getTableData(data)} />
+        </Dialog>
+      </>
     );
   },
 });

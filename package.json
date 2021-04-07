@@ -36,13 +36,13 @@
     "countup.js": "^2.0.7",
     "dayjs": "^1.10.4",
     "element-plus": "^1.0.2-beta.36",
+    "exceljs": "^4.2.1",
     "localforage": "^1.9.0",
     "lodash-es": "^4.17.20",
     "resize-observer-polyfill": "^1.5.1",
     "scroll-into-view-if-needed": "^2.2.26",
     "vue": "^3.0.7",
-    "vuedraggable": "^4.0.1",
-    "xlsx": "^0.16.9"
+    "vuedraggable": "^4.0.1"
   },
   "devDependencies": {
     "@babel/cli": "^7.12.0",
