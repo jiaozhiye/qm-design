@@ -5,7 +5,7 @@
  * @Last Modified time: 2021-04-07 17:21:00
  */
 import { defineComponent, reactive } from 'vue';
-import { cloneDeep } from 'lodash-es';
+import { cloneDeep, isUndefined } from 'lodash-es';
 import Draggable from 'vuedraggable';
 import classnames from 'classnames';
 import { JSXNode } from '../../../_utils/types';
@@ -74,7 +74,33 @@ export default defineComponent({
     },
     changeHandle(): void {
       const { columnsChange = noop } = this.$$table;
-      columnsChange(this.realColumns);
+      const resultColumns: IColumn[] = [];
+      this.realColumns.forEach((column: IColumn) => {
+        const { colSpan, dataIndex } = column;
+        if (colSpan === 0) return;
+        if (colSpan === 1) {
+          return resultColumns.push(column);
+        }
+        const groupIndex = this.colGroups.findIndex((group) => group.map((x) => x.dataIndex).includes(dataIndex));
+        if (groupIndex === -1) {
+          return resultColumns.push(column);
+        }
+        resultColumns.push(
+          ...this.colGroups[groupIndex].map(({ dataIndex }, index) => {
+            const target: IColumn = this.realColumns.find((x) => x.dataIndex === dataIndex);
+            if (index > 0) {
+              if (!isUndefined(column.hidden)) {
+                target.hidden = column.hidden;
+              }
+              if (!isUndefined(column.fixed)) {
+                target.fixed = column.fixed;
+              }
+            }
+            return target;
+          })
+        );
+      });
+      columnsChange(reactive(resultColumns));
     },
     resetColumnsHandle(): void {
       const { columnsChange = noop } = this.$$table;
