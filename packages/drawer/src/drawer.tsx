@@ -122,7 +122,7 @@ export default defineComponent({
       this.$emit('afterVisibleChange', false);
     },
     addStopEvent(): void {
-      this.stopEvent = addEventListener(this.$refs[`drawer`].drawerRef.parentNode, 'mousedown', stop);
+      this.stopEvent = addEventListener(document.body, 'mousedown', stop);
     },
     removeStopEvent(): void {
       this.stopEvent?.remove();

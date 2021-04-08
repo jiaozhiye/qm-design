@@ -141,7 +141,7 @@ export default defineComponent({
       setStyle(this.$refs[`dialog`].dialogRef, 'height', this.dialogHeight);
     },
     addStopEvent(): void {
-      this.stopEvent = addEventListener(this.$refs[`dialog`].dialogRef.parentNode, 'mousedown', stop);
+      this.stopEvent = addEventListener(document.body, 'mousedown', stop);
     },
     removeStopEvent(): void {
       this.stopEvent?.remove();

@@ -65,7 +65,7 @@ export default defineComponent({
         this.flatColumns.forEach((column, index) => {
           const { dataIndex } = column;
           if (dataIndex === 'index' || dataIndex === 'pageIndex') return;
-          setCellValue(item, dataIndex, this.renderCell(item, item.index, column, index));
+          setCellValue(item, dataIndex, getCellValue(item, dataIndex));
         });
         return item;
       });
@@ -167,7 +167,8 @@ export default defineComponent({
               (row) =>
                 `<tr>${flatColumns
                   .map((column, index) => {
-                    let text = getCellValue(row, column.dataIndex);
+                    const { dataIndex, summation } = column;
+                    const text = summation?.render ? summation.render(dataList) : getCellValue(row, dataIndex);
                     return `<td>${index === 0 && text === '' ? t('qm.table.config.summaryText') : text}</td>`;
                   })
                   .join('')}</tr>`

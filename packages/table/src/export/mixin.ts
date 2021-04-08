@@ -185,8 +185,9 @@ const exportMixin = {
         summationRows.forEach((row: IRecord, rowIndex: number) => {
           const colFoot: AnyObject<string> = {};
           columns.forEach((column: IColumn, columnIndex: number) => {
-            const text = getCellValue(row, column.dataIndex);
-            colFoot[column.dataIndex] = columnIndex === 0 && text === '' ? t('qm.table.config.summaryText') : text;
+            const { dataIndex, summation } = column;
+            const text = summation?.render ? summation.render(dataList) : getCellValue(row, dataIndex);
+            colFoot[dataIndex] = columnIndex === 0 && text === '' ? t('qm.table.config.summaryText') : text;
           });
           footList.push(colFoot);
         });
