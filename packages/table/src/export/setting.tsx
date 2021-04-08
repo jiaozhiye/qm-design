@@ -43,12 +43,12 @@ export default defineComponent({
       return [
         {
           type: 'INPUT',
-          label: '文件名',
+          label: t('qm.table.export.fileName'),
           fieldName: 'fileName',
         },
         {
           type: 'SELECT',
-          label: '文件类型',
+          label: t('qm.table.export.fileType'),
           fieldName: 'fileType',
           options: {
             itemList: [
@@ -59,7 +59,7 @@ export default defineComponent({
         },
         {
           type: 'INPUT',
-          label: '标题',
+          label: t('qm.table.export.sheetName'),
           fieldName: 'sheetName',
         },
         {
@@ -71,9 +71,9 @@ export default defineComponent({
             fieldName: 'exportType',
             options: {
               itemList: [
-                { text: '全部', value: 'all' },
-                { text: '导出选中', value: 'selected', disabled: this.$$table.rowSelection?.type !== 'checkbox' },
-                { text: '自定义', value: 'custom' },
+                { text: t('qm.table.export.all'), value: 'all' },
+                { text: t('qm.table.export.selected'), value: 'selected', disabled: this.$$table.rowSelection?.type !== 'checkbox' },
+                { text: t('qm.table.export.custom'), value: 'custom' },
               ],
             },
             onChange: (val: string): void => {
@@ -87,7 +87,7 @@ export default defineComponent({
         },
         {
           type: 'CHECKBOX',
-          label: '底部合计',
+          label: t('qm.table.export.footSummation'),
           fieldName: 'footSummation',
           options: {
             trueValue: 1,
@@ -96,7 +96,7 @@ export default defineComponent({
         },
         {
           type: 'CHECKBOX',
-          label: '使用样式',
+          label: t('qm.table.export.useStyle'),
           fieldName: 'useStyle',
           options: {
             trueValue: 1,
