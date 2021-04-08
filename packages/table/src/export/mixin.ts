@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-04-06 13:37:24
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-04-07 13:08:53
+ * @Last Modified time: 2021-04-07 15:53:51
  */
 import { Workbook } from 'exceljs';
 import { isFunction } from 'lodash-es';
@@ -105,14 +105,15 @@ const exportMixin = {
       } = this.$$table;
       const { getSpan } = $$tableBody;
       const { flatColumns: columns, headColumns } = this;
-      const colgroups = convertToRows(headColumns);
+      const colGroups = convertToRows(headColumns);
       const colList: unknown[] = [];
       const footList: unknown[] = [];
       const sheetCols: ISheetCol[] = [];
       const sheetMerges: ISheetMerge[] = [];
       let beforeRowCount = 0;
-      const colHead: AnyObject<string> = {};
 
+      // 处理表头
+      const colHead: AnyObject<string> = {};
       columns.forEach((column: IColumn) => {
         const { dataIndex, title, width, renderWidth } = column;
         colHead[dataIndex] = title;
@@ -122,30 +123,37 @@ const exportMixin = {
         });
       });
 
-      // 处理表头
       if (showHeader) {
         // 处理分组
         if (isGroup) {
-          colgroups.forEach((cols: IColumn[], rIndex: number) => {
-            const groupHead: AnyObject<any> = {};
-            columns.forEach((column: IColumn) => {
-              groupHead[column.dataIndex] = null;
-            });
+          colGroups.forEach((cols: IColumn[], rowIndex: number) => {
+            const groupHead: AnyObject<string> = {};
             cols.forEach((column: IColumn & { colSpan: number; rowSpan: number }) => {
               const { colSpan, rowSpan } = column;
               const validColumn: IColumn = getValidColumn(column);
               const columnIndex: number = columns.findIndex(({ dataIndex }) => dataIndex === validColumn.dataIndex);
               groupHead[validColumn.dataIndex] = column.title;
-              if (colSpan > 1 || rowSpan > 1) {
+              // 处理列合并
+              if (colSpan !== 0 && (colSpan > 1 || rowSpan > 1)) {
                 sheetMerges.push({
-                  s: { r: rIndex, c: columnIndex },
-                  e: { r: rIndex + rowSpan - 1, c: columnIndex + colSpan - 1 },
+                  s: { r: rowIndex, c: columnIndex },
+                  e: { r: rowIndex + rowSpan - 1, c: columnIndex + colSpan - 1 },
                 });
               }
             });
             colList.push(groupHead);
           });
         } else {
+          columns.forEach((column: IColumn & { colSpan: number; rowSpan: number }, columnIndex: number) => {
+            const { colSpan, rowSpan } = column;
+            // 处理列合并
+            if (colSpan > 1 || rowSpan > 1) {
+              sheetMerges.push({
+                s: { r: beforeRowCount, c: columnIndex },
+                e: { r: beforeRowCount + rowSpan - 1, c: columnIndex + colSpan - 1 },
+              });
+            }
+          });
           colList.push(colHead);
         }
         beforeRowCount += colList.length;
@@ -153,7 +161,7 @@ const exportMixin = {
 
       // 处理数据
       const rowList = dataList.map((row: IRecord, rowIndex: number) => {
-        const rest: AnyObject<any> = {};
+        const colBody: AnyObject<string | number> = {};
         columns.forEach((column: IColumn, columnIndex: number) => {
           // 处理合并
           if (isFunction(spanMethod)) {
@@ -165,9 +173,9 @@ const exportMixin = {
               });
             }
           }
-          rest[column.dataIndex] = this.renderCell(row, rowIndex, column, columnIndex);
+          colBody[column.dataIndex] = this.renderCell(row, rowIndex, column, columnIndex);
         });
-        return rest;
+        return colBody;
       });
       beforeRowCount += rowList.length;
 
@@ -175,12 +183,12 @@ const exportMixin = {
       const summationRows = columns.some((column: IColumn) => !!column.summation) ? this.$$table.$refs[`tableFooter`].summationRows : [];
       if (showFooter && footSummation) {
         summationRows.forEach((row: IRecord, rowIndex: number) => {
-          const item: AnyObject<any> = {};
+          const colFoot: AnyObject<string> = {};
           columns.forEach((column: IColumn, columnIndex: number) => {
             const text = getCellValue(row, column.dataIndex);
-            item[column.dataIndex] = columnIndex === 0 && text === '' ? t('qm.table.config.summaryText') : text;
+            colFoot[column.dataIndex] = columnIndex === 0 && text === '' ? t('qm.table.config.summaryText') : text;
           });
-          footList.push(item);
+          footList.push(colFoot);
         });
       }
 

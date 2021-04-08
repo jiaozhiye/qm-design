@@ -79,6 +79,7 @@
 | description  | 列描述信息                                     | string                                                             | -      |
 | width        | 列宽度/最小宽度                                | number                                                             | -      |
 | fixed        | 列固定（IE 下无效）                            | left \| right                                                      | -      |
+| colSpan      | 表头列合并,设置为 0 时，不渲染                 | number                                                             | -      |
 | align        | 设置列的对齐方式                               | left \| center \| right                                            | left   |
 | theadAlign   | 设置表头的对齐方式                             | left \| center \| right                                            | left   |
 | hidden       | 是否隐藏列                                     | boolean                                                            | false  |

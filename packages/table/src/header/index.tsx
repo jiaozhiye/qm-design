@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-02-28 23:01:43
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-22 16:26:30
+ * @Last Modified time: 2021-04-07 14:16:00
  */
 import { defineComponent, reactive } from 'vue';
 import { pickBy, intersection, isFunction } from 'lodash-es';
@@ -11,7 +11,7 @@ import { getPrefixCls } from '../../../_utils/prefix';
 import { isEmpty } from '../../../_utils/util';
 import { stop } from '../../../_utils/dom';
 import { t } from '../../../locale';
-import { JSXNode } from '../../../_utils/types';
+import { JSXNode, Nullable } from '../../../_utils/types';
 import { IColumn, IDerivedColumn, IFilter, ISorter } from '../table/types';
 
 import { where } from '../filter-sql';
@@ -97,7 +97,7 @@ export default defineComponent({
         </tr>
       ));
     },
-    renderColumn(column: IColumn, columns: IColumn[], rowIndex: number, cellIndex: number): JSXNode {
+    renderColumn(column: IColumn, columns: IColumn[], rowIndex: number, cellIndex: number): Nullable<JSXNode> {
       const {
         getStickyLeft,
         getStickyRight,
@@ -120,7 +120,9 @@ export default defineComponent({
         lastFixedLeft,
         firstFixedRight,
       } = column as IDerivedColumn;
-      // 表头对齐方式
+      if (colSpan === 0) {
+        return null;
+      }
       const align = theadAlign || tbodyAlign;
       const cls = [
         `header--column`,

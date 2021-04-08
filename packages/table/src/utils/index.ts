@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-03-08 08:28:55
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-22 15:29:35
+ * @Last Modified time: 2021-04-07 16:05:05
  */
 import { VNode } from 'vue';
 import { get, set, transform, intersection, isEqual, isObject } from 'lodash-es';
@@ -186,7 +186,7 @@ export const convertToRows = (originColumns: IColumn[]): IColumn[][] => {
       });
       column.colSpan = colSpan;
     } else {
-      column.colSpan = 1;
+      column.colSpan = column.colSpan ?? 1;
     }
   };
 
@@ -202,13 +202,13 @@ export const convertToRows = (originColumns: IColumn[]): IColumn[][] => {
 
   const allColumns = getAllColumns(originColumns);
 
-  allColumns.forEach((column: IDerivedColumn & { level: number }) => {
+  allColumns.forEach((column: IDerivedColumn) => {
     if (!column.children) {
-      column.rowSpan = maxLevel - column.level + 1;
+      column.rowSpan = maxLevel - (column.level as number) + 1;
     } else {
       column.rowSpan = 1;
     }
-    rows[column.level - 1].push(column);
+    rows[(column.level as number) - 1].push(column);
   });
 
   return rows;

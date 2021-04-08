@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-03-17 10:29:47
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-29 15:36:51
+ * @Last Modified time: 2021-04-07 17:21:00
  */
 import { defineComponent, reactive } from 'vue';
 import { cloneDeep } from 'lodash-es';
@@ -22,6 +22,7 @@ export default defineComponent({
   props: ['columns'],
   inject: ['$$table'],
   data() {
+    Object.assign(this, { colGroups: [] }); // 表头跨列分组
     return {
       visible: false,
       leftFixedColumns: [],
@@ -45,12 +46,21 @@ export default defineComponent({
   },
   created(): void {
     this.createColumns();
+    this.createColGroups();
   },
   methods: {
     createColumns(): void {
       this.leftFixedColumns = this.columns.filter((column) => column.fixed === 'left');
       this.rightFixedColumns = this.columns.filter((column) => column.fixed === 'right');
       this.mainColumns = this.columns.filter((column) => !column.fixed);
+    },
+    createColGroups(): void {
+      this.columns.forEach((column, i) => {
+        const { colSpan } = column;
+        if (colSpan > 1 && this.columns.slice(i + 1, i + colSpan).every(({ colSpan }) => colSpan === 0)) {
+          this.colGroups.push(this.columns.slice(i, i + colSpan));
+        }
+      });
     },
     fixedChangeHandle(column: IColumn, dir: IFixed): void {
       column.fixed = dir;
@@ -72,6 +82,10 @@ export default defineComponent({
       columnsChange(reactive(realColumns));
     },
     renderListItem(column: IColumn, type: string): JSXNode {
+      const { colSpan } = column;
+      if (colSpan === 0) {
+        return <li key={column.dataIndex} style={{ display: 'none' }} />;
+      }
       const cls = [`iconfont`, `icon-menu`, `handle`, [`${type}-handle`]];
       const checkboxProps = {
         modelValue: !column.hidden,

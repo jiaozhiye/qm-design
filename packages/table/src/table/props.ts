@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-02-28 23:04:58
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-04-06 18:08:17
+ * @Last Modified time: 2021-04-07 14:11:44
  */
 import { PropType } from 'vue';
 import PropTypes from '../../../_utils/vue-types';
@@ -14,6 +14,7 @@ const columnItem = {
   dataIndex: PropTypes.string.isRequired,
   title: PropTypes.string.isRequired, // 列标题
   description: PropTypes.string, // 列描述
+  colSpan: PropTypes.number, // 表头列合并,设置为 0 时，不渲染
   width: PropTypes.number, // 列宽度/最小宽度
   fixed: PropTypes.oneOf(['left', 'right']), // 列固定（IE 下无效）
   align: PropTypes.oneOf(['left', 'center', 'right']), // 设置列的对齐方式

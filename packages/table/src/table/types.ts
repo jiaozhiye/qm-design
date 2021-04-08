@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-03-06 15:11:01
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-22 15:49:51
+ * @Last Modified time: 2021-04-07 16:03:02
  */
 import { AnyFunction, AnyObject, JSXNode, Nullable } from '../../../_utils/types';
 
@@ -113,6 +113,8 @@ export type IColumn = {
   dataIndex: string;
   title: string;
   description?: string;
+  colSpan?: number;
+  rowSpan?: number;
   width?: number | string;
   renderWidth?: number | null;
   fixed?: IFixed;
@@ -153,8 +155,6 @@ export type IColumn = {
 export type IDerivedColumn = IColumn & {
   type?: string;
   level?: number;
-  colSpan?: number;
-  rowSpan?: number;
   parentDataIndex?: string;
   firstFixedRight?: boolean;
   lastFixedLeft?: boolean;
