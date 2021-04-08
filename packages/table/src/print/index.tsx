@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-03-26 11:44:24
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-25 10:30:19
+ * @Last Modified time: 2021-04-08 16:39:35
  */
 import { defineComponent } from 'vue';
 import { flatten, groupBy, map, spread, mergeWith } from 'lodash-es';
@@ -207,7 +207,15 @@ export default defineComponent({
           columnRows
             .map(
               (columns) =>
-                `<tr>${columns.map((column) => `<th colspan="${column.colSpan}" rowspan="${column.rowSpan}">${column.title}</th>`).join('')}</tr>`
+                `<tr>${columns
+                  .map((column) => {
+                    const { rowSpan, colSpan } = column;
+                    if (colSpan === 0) {
+                      return null;
+                    }
+                    return `<th colspan="${colSpan}" rowspan="${rowSpan}">${column.title}</th>`;
+                  })
+                  .join('')}</tr>`
             )
             .join(''),
           `</thead>`,
