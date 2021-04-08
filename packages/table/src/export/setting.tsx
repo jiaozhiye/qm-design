@@ -2,10 +2,11 @@
  * @Author: 焦质晔
  * @Date: 2021-04-07 08:23:32
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-04-07 11:43:19
+ * @Last Modified time: 2021-04-08 16:19:23
  */
 import { defineComponent } from 'vue';
 import dayjs from 'dayjs';
+import { sleep } from '../../../_utils/util';
 import { t } from '../../../locale';
 import { JSXNode } from '../../../_utils/types';
 
@@ -19,6 +20,7 @@ export default defineComponent({
   inject: ['$$table'],
   data() {
     return {
+      loading: false,
       initialValue: this.getInitialvalue(),
       formList: this.createFormList(),
     };
@@ -111,17 +113,20 @@ export default defineComponent({
     async confirmHandle(): Promise<void> {
       const [err, data] = await this.$refs[`form`].GET_FORM_DATA();
       if (err) return;
+      this.loading = !0;
       for (let key in data) {
         if (key === 'footSummation' || key === 'useStyle') {
           data[key] = !!data[key];
         }
       }
       this.$emit('change', data);
+      await sleep(500);
+      this.loading = !1;
       this.cancelHandle();
     },
   },
   render(): JSXNode {
-    const { initialValue, formList } = this;
+    const { initialValue, formList, loading } = this;
     return (
       <div>
         <Form
@@ -146,7 +151,7 @@ export default defineComponent({
           }}
         >
           <el-button onClick={() => this.cancelHandle()}>{t('qm.table.export.closeButton')}</el-button>
-          <el-button type="primary" onClick={() => this.confirmHandle()}>
+          <el-button type="primary" loading={loading} onClick={() => this.confirmHandle()}>
             {t('qm.table.export.text')}
           </el-button>
         </div>

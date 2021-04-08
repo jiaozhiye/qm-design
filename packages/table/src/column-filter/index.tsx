@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-03-17 10:29:47
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-04-07 17:21:00
+ * @Last Modified time: 2021-04-08 15:26:57
  */
 import { defineComponent, reactive } from 'vue';
 import { cloneDeep, isUndefined } from 'lodash-es';
@@ -94,6 +94,8 @@ export default defineComponent({
               }
               if (!isUndefined(column.fixed)) {
                 target.fixed = column.fixed;
+              } else if (target.fixed) {
+                delete target.fixed;
               }
             }
             return target;
