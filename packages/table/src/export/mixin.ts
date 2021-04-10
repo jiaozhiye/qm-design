@@ -2,9 +2,9 @@
  * @Author: 焦质晔
  * @Date: 2021-04-06 13:37:24
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-04-07 15:53:51
+ * @Last Modified time: 2021-04-09 10:47:46
  */
-import { Workbook } from 'exceljs';
+import ExcelJS from 'exceljs';
 import { isFunction } from 'lodash-es';
 import { getCellValue, convertToRows, deepFindColumn } from '../utils';
 import { download } from '../../../_utils/download';
@@ -195,7 +195,7 @@ const exportMixin = {
 
       const exportMethod = () => {
         const { fileName, sheetName, useStyle } = options;
-        const workbook = new Workbook();
+        const workbook = new ExcelJS.Workbook();
         const sheet = workbook.addWorksheet(sheetName);
         sheet.columns = sheetCols;
         if (showHeader) {
