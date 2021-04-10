@@ -124,7 +124,7 @@ const exportMixin = {
       });
 
       if (showHeader) {
-        // 处理分组
+        // 表头分组
         if (isGroup) {
           colGroups.forEach((cols: IColumn[], rowIndex: number) => {
             const groupHead: AnyObject<string> = {};
