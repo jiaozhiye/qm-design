@@ -10,7 +10,7 @@ import PropTypes from '../../_utils/vue-types';
 import { addResizeListener, removeResizeListener } from '../../_utils/resize-event';
 import { JSXNode, ComponentSize, AnyObject } from '../../_utils/types';
 import { noop, debounce } from '../../_utils/util';
-import { getParentNode } from '../../_utils/dom';
+import { getParentNode, setStyle } from '../../_utils/dom';
 import { isValidComponentSize } from '../../_utils/validators';
 import { warn } from '../../_utils/error';
 import { t } from '../../locale';
@@ -245,7 +245,8 @@ export default defineComponent({
     },
     calcTableHeight(): void {
       const $size: string = this.$props.size || this.$DESIGN.size || 'default';
-      const containerHeight: number = window.innerHeight - (getParentNode(this.$el, 'el-dialog')?.offsetTop || 0) * 2 - 50 - footHeight[$size];
+      setStyle(this.$el.parentNode, 'paddingBottom', `${footHeight[$size]}px`);
+      const containerHeight: number = window.innerHeight - (getParentNode(this.$el, 'el-dialog')?.offsetTop || 0) * 2 - footHeight[$size] * 2;
       // 计算表格高度
       this.height = containerHeight - this.$refs[`top-filter`].$el.offsetHeight - 100;
     },
@@ -293,6 +294,7 @@ export default defineComponent({
             padding: '10px 15px',
             background: '#fff',
             textAlign: 'right',
+            boxSizing: 'border-box',
           }}
         >
           <el-button onClick={() => this.cancelHandle()}>{t('qm.searchHelper.close')}</el-button>
