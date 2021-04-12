@@ -266,7 +266,7 @@ export const getCellValue = (record: IRecord, dataIndex: string): any => {
 // 设置单元格的数据
 export const setCellValue = (record: IRecord, dataIndex: string, val: unknown, precision?: number): void => {
   val = val ?? '';
-  if (precision && precision >= 0 && val !== '') {
+  if ((precision as number) >= 0 && val !== '') {
     val = Number(val).toFixed(precision);
   }
   set(record, dataIndex, val);

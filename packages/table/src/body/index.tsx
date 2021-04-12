@@ -280,7 +280,7 @@ export default defineComponent({
           .join(',');
       }
       // 处理数值精度
-      if (precision && precision >= 0 && result !== '') {
+      if ((precision as number) >= 0 && result !== '') {
         result = Number(result).toFixed(precision);
       }
       // 处理换行符
