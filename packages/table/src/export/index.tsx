@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-02-02 15:58:17
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-04-08 16:40:49
+ * @Last Modified time: 2021-04-12 15:12:09
  */
 import { defineComponent } from 'vue';
 import { get } from 'lodash-es';
@@ -189,14 +189,10 @@ export default defineComponent({
       return html;
     },
     renderCell(row: IRecord, rowIndex: number, column: IColumn, columnIndex: number): string | number {
-      const { dataIndex, precision, extraRender } = column;
+      const { dataIndex, extraRender } = column;
       let result = this.$$table.$$tableBody.renderCellTitle(column, row, rowIndex, columnIndex);
       if (extraRender) {
         result = extraRender(getCellValue(row, dataIndex), row, column, rowIndex, columnIndex);
-      }
-      // 处理 number 类型
-      if (precision && precision >= 0 && result !== '') {
-        result = Number(result);
       }
       return result;
     },

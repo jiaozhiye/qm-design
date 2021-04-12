@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-02-28 23:01:43
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-30 10:25:01
+ * @Last Modified time: 2021-04-12 15:11:47
  */
 import { defineComponent, reactive, CSSProperties } from 'vue';
 import addEventListener from 'add-dom-event-listener';
@@ -291,7 +291,7 @@ export default defineComponent({
         if (!render) {
           warn('Table', '字段的格式化类型 `formatType` 配置不正确');
         } else {
-          result = render(text);
+          result = render(result);
         }
       }
       return result;
