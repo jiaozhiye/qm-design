@@ -98,7 +98,6 @@ export default defineComponent({
         ElMessage.error(res.msg);
       }
       if (this.isOnlyButton) {
-        this.removeFileHandle(null, []);
         this.clearFiles();
       }
       this.stopLoading();

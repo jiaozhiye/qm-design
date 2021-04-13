@@ -472,7 +472,10 @@ export default defineComponent({
       this.excuteFormValue(this.form);
       return new Promise((resolve, reject) => {
         this.$refs[`form`].validate((valid, fields) => {
-          if (!valid) {
+          const shChanged: boolean = this.formItemList
+            .filter((x: IFormItem) => x.type === 'INPUT')
+            .some((x: IFormItem) => this.$$(x.fieldName)?._is_change);
+          if (!valid || shChanged) {
             reject(fields);
             if (!this.isFilterType) {
               this.scrollToField(fields);
