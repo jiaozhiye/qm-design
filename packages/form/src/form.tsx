@@ -477,10 +477,8 @@ export default defineComponent({
             .some((x: IFormItem) => this.$$(x.fieldName)?._is_change);
           if (!valid || shChanged) {
             reject(fields);
-            if (!this.isFilterType) {
-              this.scrollToField(fields);
-            } else {
-              this.collapse = true;
+            if (!valid) {
+              !this.isFilterType ? this.scrollToField(fields) : (this.collapse = true);
             }
           } else {
             resolve(this.form);
