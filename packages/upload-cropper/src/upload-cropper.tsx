@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-02-09 09:03:59
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-19 15:50:41
+ * @Last Modified time: 2021-04-13 09:03:48
  */
 import { defineComponent, PropType } from 'vue';
 import { ElMessage, ElMessageBox } from 'element-plus';
@@ -112,13 +112,11 @@ export default defineComponent({
           const res = await this.remove.api({ ...this.fileList[index], ...this.remove.params });
           if (res.code === 200) {
             this.fileList.splice(index, 1);
-            this.clearFiles();
             this.remove.callback?.();
           }
         } catch (err) {}
       } else {
         this.fileList.splice(index, 1);
-        this.clearFiles();
       }
     },
     changeHandler(file, files): void {
@@ -182,6 +180,9 @@ export default defineComponent({
         if (res.code === 200) {
           this.fileList.push({ name: this.file.name, url: res.data || '' });
           this.$emit('success', res.data);
+        } else {
+          this.clearFiles();
+          this.$message.error(res.msg);
         }
       } catch (err) {
         this.clearFiles();

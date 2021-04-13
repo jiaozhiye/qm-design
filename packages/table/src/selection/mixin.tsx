@@ -4,12 +4,10 @@
  * @Last Modified by: 焦质晔
  * @Last Modified time: 2021-03-22 16:29:06
  */
-import { uniqWith } from 'lodash-es';
 import { deepFindRowKey, tableDataFlatMap, isArrayContain } from '../utils';
 import { t } from '../../../locale';
 import { Nullable } from '../../../_utils/types';
 import { IDerivedColumn } from '../table/types';
-
 import config from '../config';
 
 const selectionMixin = {
@@ -48,9 +46,16 @@ const selectionMixin = {
       return arr;
     },
     createSelectionRows(selectedKeys: string[]): void {
-      const { tableFullData, tableData, selectionRows, getRowKey, isFetch } = this;
+      const { tableFullData, selectionRows, getRowKey, isFetch } = this;
+      const selectionRowKeys = selectionRows.map((row) => getRowKey(row, row.index));
       const uniqRecords = isFetch
-        ? uniqWith([...selectionRows, ...tableData], (a, b) => getRowKey(a, a.index) === getRowKey(b, b.index))
+        ? [
+            ...selectionRows,
+            ...tableFullData.filter((row) => {
+              let rowKey = getRowKey(row, row.index);
+              return selectedKeys.includes(rowKey) && !selectionRowKeys.includes(rowKey);
+            }),
+          ]
         : tableFullData;
       this.selectionRows = tableDataFlatMap(uniqRecords).filter((row) => selectedKeys.includes(getRowKey(row, row.index)));
     },

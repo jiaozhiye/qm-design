@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-02-09 09:03:59
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-19 14:53:30
+ * @Last Modified time: 2021-04-13 08:48:56
  */
 import { defineComponent, PropType } from 'vue';
 import { ElMessage } from 'element-plus';
@@ -86,12 +86,20 @@ export default defineComponent({
     removeFileHandle(file, fileList): void {
       this.fileList = fileList;
     },
+    clearFiles(): void {
+      this.$refs[`upload`].clearFiles();
+    },
     successHandle(res, file, fileList): void {
       if (res.code === 200) {
         this.fileList = [...this.fileList, { name: file.name, url: res.data || '' }];
         this.$emit('success', res.data);
       } else {
+        this.clearFiles();
         ElMessage.error(res.msg);
+      }
+      if (this.isOnlyButton) {
+        this.removeFileHandle(null, []);
+        this.clearFiles();
       }
       this.stopLoading();
     },
@@ -138,6 +146,7 @@ export default defineComponent({
     const { fileTypes, fileList, fileSize, loading, type = 'primary', round, circle, icon = 'iconfont icon-upload', disabled, $props } = this;
     const { $size } = useSize(this.$props);
     const wrapProps = {
+      ref: 'upload',
       action: $props.actionUrl,
       headers: $props.headers,
       data: $props.params,
