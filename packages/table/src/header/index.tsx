@@ -157,15 +157,15 @@ export default defineComponent({
         </th>
       );
     },
-    renderCell(column: IColumn): JSXNode {
+    renderCell(column: IColumn): Nullable<JSXNode> {
       const { dataIndex, type, sorter, title, description } = column as IDerivedColumn;
-      const { selectionKeys } = this.$$table;
+      const { selectionKeys, rowSelection } = this.$$table;
       if (dataIndex === '__selection__' && type === 'checkbox') {
-        return (
-          <div class="cell">
+        return !rowSelection?.hideSelectAll ? (
+          <div class="v-cell">
             <AllSelection selectionKeys={selectionKeys} />
           </div>
-        );
+        ) : null;
       }
       const vNodes: JSXNode[] = [];
       vNodes.push(
