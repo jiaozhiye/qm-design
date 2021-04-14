@@ -51,13 +51,13 @@ const selectionMixin = {
       const uniqRecords = isFetch
         ? [
             ...selectionRows,
-            ...tableFullData.filter((row) => {
+            ...tableDataFlatMap(tableFullData).filter((row) => {
               let rowKey = getRowKey(row, row.index);
               return selectedKeys.includes(rowKey) && !selectionRowKeys.includes(rowKey);
             }),
           ]
-        : tableFullData;
-      this.selectionRows = tableDataFlatMap(uniqRecords).filter((row) => selectedKeys.includes(getRowKey(row, row.index)));
+        : tableDataFlatMap(tableFullData);
+      this.selectionRows = uniqRecords.filter((row) => selectedKeys.includes(getRowKey(row, row.index)));
     },
     // 选择列已选中 keys
     createSelectionKeys(keys: string[]): string[] {
