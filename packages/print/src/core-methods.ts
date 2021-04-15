@@ -115,11 +115,13 @@ export default {
       if (printerType === 'laser') {
         // 纵向
         if (setting.direction === 'vertical') {
-          LODOP.SET_PRINT_PAGESIZE(1, pageSize[0] * 10, pageSize[1] * 10, '');
+          // LODOP.SET_PRINT_PAGESIZE(1, pageSize[0] * 10, pageSize[1] * 10, '');
+          LODOP.SET_PRINT_PAGESIZE(1);
         }
         // 横向
         if (setting.direction === 'horizontal') {
-          LODOP.SET_PRINT_PAGESIZE(2, pageSize[0] * 10, pageSize[1] * 10, '');
+          // LODOP.SET_PRINT_PAGESIZE(2, pageSize[0] * 10, pageSize[1] * 10, '');
+          LODOP.SET_PRINT_PAGESIZE(2);
           LODOP.SET_SHOW_MODE('LANDSCAPE_DEFROTATED', 1);
         }
       }
