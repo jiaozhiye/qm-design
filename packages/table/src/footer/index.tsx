@@ -26,11 +26,13 @@ export default defineComponent({
         const {
           dataIndex,
           precision,
-          summation: { sumBySelection, unit = '', onChange = noop },
+          summation: { sumBySelection, displayWhenNotSelect, unit = '', onChange = noop },
         } = column;
+        // 未选择时，显示合计结果
+        const notSelectAndDisplay: boolean = !selectionKeys.length && displayWhenNotSelect;
         let values: number[] = [];
         // 可选择列动态合计
-        if (!sumBySelection) {
+        if (!sumBySelection || notSelectAndDisplay) {
           values = tableFullData.map((x) => Number(getCellValue(x, dataIndex)));
         } else {
           values = selectionKeys.map((x) => {
@@ -47,7 +49,8 @@ export default defineComponent({
           return prev;
         }, 0);
         // 服务端合计
-        if (Object.keys(summaries).includes(dataIndex)) {
+        const isServerSummation: boolean = Object.keys(summaries).includes(dataIndex);
+        if (isServerSummation && (!sumBySelection || notSelectAndDisplay)) {
           result = getCellValue(summaries, dataIndex);
         }
         result = precision >= 0 ? (result as number).toFixed(precision) : result;

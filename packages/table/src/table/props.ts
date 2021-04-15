@@ -58,6 +58,7 @@ const columnItem = {
   // 底部合计
   summation: PropTypes.shape({
     sumBySelection: PropTypes.bool, // 是否通过选择列合计
+    displayWhenNotSelect: PropTypes.bool, // 未选择时，显示合计结果
     dataKey: PropTypes.string, // 服务端合计的数据字段名(路径)
     unit: PropTypes.string, // 合计字段的单位
     render: PropTypes.func, // 自定义渲染方法
