@@ -162,7 +162,7 @@ export default defineComponent({
       const { selectionKeys, rowSelection } = this.$$table;
       if (dataIndex === '__selection__' && type === 'checkbox') {
         return !rowSelection?.hideSelectAll ? (
-          <div class="v-cell">
+          <div class="cell">
             <AllSelection selectionKeys={selectionKeys} />
           </div>
         ) : null;
