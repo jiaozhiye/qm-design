@@ -167,3 +167,8 @@ $prefix: '#{$qm-prefix}-table';
     }
   }
 }
+
+.head-selection--popper {
+  padding: 0 !important;
+  min-width: auto !important;
+}

@@ -40,6 +40,9 @@ export default defineComponent({
     selectable(): boolean {
       return !this.indeterminate && this.selectionKeys.length > 0;
     },
+    size(): string {
+      return this.$$table.tableSize !== 'mini' ? 'small' : 'mini';
+    },
   },
   methods: {
     changeHandle(val: boolean): void {
@@ -57,14 +60,14 @@ export default defineComponent({
     },
   },
   render(): JSXNode {
-    const { isFilterable } = this;
+    const { isFilterable, size } = this;
     const prefixCls = getPrefixCls('table');
     return (
       <div class="cell--selection">
         <Checkbox indeterminate={this.indeterminate} modelValue={this.selectable} onChange={this.changeHandle} />
         {isFilterable && (
           <el-popover
-            popper-class={`${prefixCls}__popper is-pure`}
+            popper-class={`${prefixCls}__popper head-selection--popper`}
             v-model={[this.visible, 'visible']}
             width="auto"
             trigger="click"
@@ -83,19 +86,17 @@ export default defineComponent({
               ),
             }}
           >
-            <div>
-              <ul class="el-dropdown-menu--small">
-                <li class="el-dropdown-menu__item" onClick={() => this.selectAllHandle()}>
-                  {t('qm.table.selection.all')}
-                </li>
-                <li class="el-dropdown-menu__item" onClick={() => this.invertHandle()}>
-                  {t('qm.table.selection.invert')}
-                </li>
-                <li class="el-dropdown-menu__item" onClick={() => this.clearAllHandle()}>
-                  {t('qm.table.selection.clear')}
-                </li>
-              </ul>
-            </div>
+            <ul class={`el-dropdown-menu--${size}`}>
+              <li class="el-dropdown-menu__item" onClick={() => this.selectAllHandle()}>
+                {t('qm.table.selection.all')}
+              </li>
+              <li class="el-dropdown-menu__item" onClick={() => this.invertHandle()}>
+                {t('qm.table.selection.invert')}
+              </li>
+              <li class="el-dropdown-menu__item" onClick={() => this.clearAllHandle()}>
+                {t('qm.table.selection.clear')}
+              </li>
+            </ul>
           </el-popover>
         )}
       </div>
