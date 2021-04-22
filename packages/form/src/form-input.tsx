@@ -24,6 +24,7 @@ export default defineComponent({
   inject: ['$$form'],
   props: ['option'],
   data() {
+    Object.assign(this, { _is_change: false });
     return {
       visible: false,
       deriveValue: {},
@@ -160,7 +161,6 @@ export default defineComponent({
         if (aliasKeys.includes(fieldName)) {
           searchHelperChangeHandle(form[fieldName]);
         }
-        this._is_change = !1;
       }
       const { closed = noop } = searchHelper;
       closed(data);
@@ -171,6 +171,7 @@ export default defineComponent({
     const searchHelperChangeHandle = (val: string): void => {
       const others: Record<string, ValueOf<IFormData>> = {};
       this.extraKeys.forEach((key) => (others[key] = form[key]));
+      this._is_change = !1;
       onChange(val, Object.keys(others).length ? others : null);
     };
 
