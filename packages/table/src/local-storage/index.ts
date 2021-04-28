@@ -41,7 +41,9 @@ const localStorageMixin = {
       if (!localColumns) {
         this.getTableColumnsConfig(this.uniqueKey)
           .then((result) => {
-            if (!result) return;
+            if (!result) {
+              return this.setLocalColumns(this.columns);
+            }
             localStorage.setItem(this.uniqueKey, JSON.stringify(result));
             this.initLocalColumns();
           })
