@@ -154,9 +154,10 @@ export default defineComponent({
   }
 
   .page-logo {
-    margin: 20px 20px 10px 0;
-    height: 40px;
-    background: #e9e9e9;
+    margin: 20px 10px 10px 0;
+    height: 50px;
+    background: url(../assets/img/logo.png) no-repeat;
+    background-size: contain;
   }
 
   .side-nav {
