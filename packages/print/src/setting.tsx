@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-02-09 09:03:59
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-19 16:24:04
+ * @Last Modified time: 2021-05-03 16:09:13
  */
 import { defineComponent, PropType } from 'vue';
 import { JSXNode } from '../../_utils/types';
@@ -221,9 +221,9 @@ export default defineComponent({
             textAlign: 'right',
           }}
         >
-          <el-button onClick={() => this.cancelHandle()}>{t('qm.print.close')}</el-button>
+          <el-button onClick={() => this.cancelHandle()}>{t('qm.dialog.close')}</el-button>
           <el-button type="primary" onClick={() => this.confirmHandle()}>
-            {t('qm.print.confirm')}
+            {t('qm.dialog.confirm')}
           </el-button>
         </div>
       </div>

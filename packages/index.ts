@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-02-08 16:39:21
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-11 11:05:32
+ * @Last Modified time: 2021-05-03 12:19:42
  */
 import type { App } from 'vue';
 import { ComponentSize, AnyObject } from './_utils/types';
@@ -30,6 +30,7 @@ import QmSplitPane from './split-pane';
 import QmCountup from './countup';
 import QmTable from './table';
 import QmSearchHelper from './search-helper';
+import QmCropper from './cropper';
 
 import { use as locale, i18n } from './locale';
 import { version } from './version';
@@ -73,6 +74,7 @@ const components = [
   QmCountup,
   QmTable,
   QmSearchHelper,
+  QmCropper,
 ];
 
 const install = (app: App, opt: InstallOptions, global: AnyObject<unknown> = {}): void => {
@@ -116,6 +118,7 @@ export {
   QmCountup,
   QmTable,
   QmSearchHelper,
+  QmCropper,
   version,
   install,
   locale,

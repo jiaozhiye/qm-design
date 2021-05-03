@@ -158,8 +158,8 @@ export default defineComponent({
           fieldName: 'c',
           label: '表单项3',
           upload: {
-            actionUrl: '/api/file/oss/upload',
-            fixedSize: [5, 3],
+            actionUrl: 'http://127.0.0.1:3000/api/design/upload',
+            fixedSize: [1.5, 1],
             isCalcHeight: true,
             limit: 1,
             params: {},
@@ -178,14 +178,14 @@ export default defineComponent({
           //   return <el-input v-model={ctx.form[fieldName]} />;
           // },
         },
-        {
-          type: 'DATE',
-          fieldName: 'e',
-          label: '表单项5',
-          options: {
-            dateType: 'week',
-          },
-        },
+        // {
+        //   type: 'DATE',
+        //   fieldName: 'e',
+        //   label: '表单项5',
+        //   options: {
+        //     dateType: 'week',
+        //   },
+        // },
       ],
       printDataList: [],
       content: '',

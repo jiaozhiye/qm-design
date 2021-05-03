@@ -12,6 +12,8 @@ export default {
     dialog: {
       fullScreen: '全屏',
       cancelFullScreen: '取消全屏',
+      close: '关 闭',
+      confirm: '确 定',
     },
     form: {
       search: '搜 索',
@@ -57,22 +59,22 @@ export default {
       uploadError: '图片上传失败！',
       downError: '图片下载失败！',
       text: '上传图片',
+      zoomIn: '放大',
+      zoomOut: '缩小',
+      rotatePlus: '顺时针',
+      rotateSubtract: '逆时针',
     },
     print: {
       preview: '打印预览',
       pageSetting: '页面设置',
       printError: '打印失败！',
       exportError: '导出失败！',
-      close: '关 闭',
-      confirm: '确 定',
     },
     split: {
       resize: '拖动改变大小',
     },
     searchHelper: {
       text: '搜索帮助',
-      close: '关 闭',
-      confirm: '确 定',
       orderIndex: '序号',
     },
     table: {

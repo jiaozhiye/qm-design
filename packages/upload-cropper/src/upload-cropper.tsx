@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-02-09 09:03:59
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-04-13 09:03:48
+ * @Last Modified time: 2021-05-03 19:32:33
  */
 import { defineComponent, PropType } from 'vue';
 import { ElMessage, ElMessageBox } from 'element-plus';
@@ -18,8 +18,7 @@ import { stop } from '../../_utils/dom';
 import { warn } from '../../_utils/error';
 import { t } from '../../locale';
 
-import canvasCompress from './compress';
-import CropperPanel from './CropperPanel.vue';
+import CropperPreview from './cropper-preview';
 import Dialog from '../../dialog';
 
 type IFile = {
@@ -72,7 +71,7 @@ export default defineComponent({
       fileList: this.initialValue,
       previewVisible: false,
       cropperVisible: false,
-      isLoading: false,
+      loading: false,
     };
   },
   computed: {
@@ -96,9 +95,6 @@ export default defineComponent({
   mounted() {
     this.uploadWrap = this.$refs[`upload`].$el.querySelector('.el-upload');
     this.setUploadWrapHeight();
-  },
-  updated() {
-    this.$refs[`uploadCropper`]?.Update();
   },
   methods: {
     handlePreview(index: number): void {
@@ -131,6 +127,7 @@ export default defineComponent({
     },
     uploadHandler(data): void {
       this.fileData = data;
+      this.loading = true;
       this.doUpload();
     },
     closeHandler(): void {
@@ -155,17 +152,8 @@ export default defineComponent({
     async upload(options): Promise<void> {
       const { params, headers } = this.$props;
       const formData = new FormData();
-      let blob: Blob = this.file.raw;
-      if (this.fileData) {
-        // @ts-ignore
-        let base64 = await canvasCompress({
-          img: this.fileData,
-          type: 'jpg',
-          fillColor: '#fff',
-          width: 1200,
-        });
-        blob = this.dataURItoBlob(base64.img);
-      }
+      // Blob
+      const blob: Blob = this.fileData ? this.fileData : this.file.raw;
       // 有的后台需要传文件名，不然会报错
       formData.append('file', blob, this.file.name);
       // 处理请求的额外参数
@@ -190,25 +178,10 @@ export default defineComponent({
         ElMessage.error(t('qm.uploadCropper.uploadError'));
       }
       this.cropperVisible = false;
-      this.isLoading = false;
+      this.loading = false;
     },
     setUploadWrapHeight(): void {
       this.uploadWrap.style.height = `${this.calcHeight}px`;
-    },
-    // base64 转成 bolb 对象
-    dataURItoBlob(base64Data): Blob {
-      let byteString;
-      if (base64Data.split(',')[0].indexOf('base64') >= 0) {
-        byteString = atob(base64Data.split(',')[1]);
-      } else {
-        byteString = unescape(base64Data.split(',')[1]);
-      }
-      let mimeString = base64Data.split(',')[0].split(':')[1].split(';')[0];
-      let ia = new Uint8Array(byteString.length);
-      for (let i = 0; i < byteString.length; i++) {
-        ia[i] = byteString.charCodeAt(i);
-      }
-      return new Blob([ia], { type: mimeString });
     },
     async downloadHandle(index): Promise<void> {
       try {
@@ -297,8 +270,9 @@ export default defineComponent({
     const cropperDialogProps = {
       visible: this.cropperVisible,
       title: t('qm.uploadCropper.cropper'),
-      width: '830px',
+      width: '850px',
       destroyOnClose: true,
+      containerStyle: { paddingBottom: '52px' },
       'onUpdate:visible': (val: boolean): void => {
         this.cropperVisible = val;
       },
@@ -307,11 +281,11 @@ export default defineComponent({
     const cropperProps = {
       imgFile: file,
       fixedNumber: fixedSize,
-      loading: this.isLoading,
-      'onUpdate:loading': (val: boolean): void => {
-        this.isLoading = val;
-      },
+      loading: this.loading,
       onUpload: this.uploadHandler,
+      onClose: (val: boolean): void => {
+        this.cropperVisible = val;
+      },
     };
     return (
       <div class={cls}>
@@ -338,7 +312,7 @@ export default defineComponent({
           </div>
         </Dialog>
         <Dialog {...cropperDialogProps}>
-          <CropperPanel ref="uploadCropper" {...cropperProps} />
+          <CropperPreview {...cropperProps} />
         </Dialog>
       </div>
     );

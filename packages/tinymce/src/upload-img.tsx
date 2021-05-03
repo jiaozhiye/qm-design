@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-02-09 09:03:59
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-03 15:15:48
+ * @Last Modified time: 2021-05-03 16:09:19
  */
 import { defineComponent, PropType } from 'vue';
 import { JSXNode } from '../../_utils/types';
@@ -82,9 +82,9 @@ export default defineComponent({
             }}
           >
             <el-button type="primary" onClick={this.handleSubmit}>
-              {t('qm.print.close')}
+              {t('qm.dialog.close')}
             </el-button>
-            <el-button onClick={() => (this.visible = !1)}>{t('qm.print.confirm')}</el-button>
+            <el-button onClick={() => (this.visible = !1)}>{t('qm.dialog.confirm')}</el-button>
           </div>
         </Dialog>
       </>

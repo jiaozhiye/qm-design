@@ -2802,6 +2802,11 @@ crc32-stream@^4.0.1:
     crc-32 "^1.2.0"
     readable-stream "^3.4.0"
 
+cropperjs@^1.5.10:
+  version "1.5.11"
+  resolved "https://registry.npm.taobao.org/cropperjs/download/cropperjs-1.5.11.tgz#502ae6d8ca098b124de6813601cca70015879fc0"
+  integrity sha1-UCrm2MoJixJN5oE2AcynABWHn8A=
+
 cross-env@^5.2.0:
   version "5.2.1"
   resolved "https://registry.npm.taobao.org/cross-env/download/cross-env-5.2.1.tgz#b2c76c1ca7add66dc874d11798466094f551b34d"
