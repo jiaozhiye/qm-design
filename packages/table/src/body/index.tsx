@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-02-28 23:01:43
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-04-12 15:11:47
+ * @Last Modified time: 2021-05-03 21:21:19
  */
 import { defineComponent, reactive, CSSProperties } from 'vue';
 import addEventListener from 'add-dom-event-listener';
@@ -25,6 +25,8 @@ import Draggable from 'vuedraggable';
 import Expandable from '../expandable';
 import Selection from '../selection';
 import CellEdit from '../edit';
+
+const trueNoop = (): boolean => !0;
 
 export default defineComponent({
   name: 'TableBody',
@@ -236,14 +238,14 @@ export default defineComponent({
         </td>
       );
     },
-    renderCell(column: IColumn, row: IRecord, rowIndex: number, columnIndex: number, rowKey: string, depth: number): JSXNode {
+    renderCell(column: IColumn, row: IRecord, rowIndex: number, columnIndex: number, rowKey: string, depth: number): Nullable<JSXNode> | JSXNode[] {
       const { expandable, selectionKeys, isTreeTable } = this.$$table;
       const { dataIndex, editRender, render } = column;
       const text = getCellValue(row, dataIndex);
       if (dataIndex === '__expandable__') {
-        const { rowExpandable = noop } = expandable;
+        const { rowExpandable = trueNoop } = expandable;
         // Expandable -> 受控组件
-        return !rowExpandable(row) && <Expandable record={row} rowKey={rowKey} />;
+        return rowExpandable(row) ? <Expandable record={row} rowKey={rowKey} /> : null;
       }
       if (dataIndex === '__selection__') {
         // Selection -> 受控组件

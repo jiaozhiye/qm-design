@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-02-09 09:03:59
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-05-03 19:31:56
+ * @Last Modified time: 2021-05-03 20:39:41
  */
 import { defineComponent, CSSProperties } from 'vue';
 import { JSXNode } from '../../_utils/types';
@@ -48,7 +48,7 @@ export default defineComponent({
         .getCroppedCanvas({
           maxWidth: 1920,
           fillColor: this.fileType === 'png' ? 'transparent' : '#fff',
-          imageSmoothingEnabled: true,
+          imageSmoothingEnabled: false,
           imageSmoothingQuality: 'high',
         })
         .toBlob((blob: Blob): void => {

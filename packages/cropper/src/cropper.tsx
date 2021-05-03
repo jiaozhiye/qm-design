@@ -2,15 +2,18 @@
  * @Author: 焦质晔
  * @Date: 2021-02-09 09:03:59
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-05-03 19:33:40
+ * @Last Modified time: 2021-05-03 21:04:41
  */
 import { defineComponent, PropType, CSSProperties } from 'vue';
 import Cropper from 'cropperjs';
 import 'cropperjs/dist/cropper.css';
+
 import { JSXNode } from '../../_utils/types';
 
 export default defineComponent({
   name: 'Cropper',
+  componentName: 'Cropper',
+  inheritAttrs: false,
   props: {
     // Library props
     containerStyle: {
@@ -141,6 +144,9 @@ export default defineComponent({
     }
 
     this.cropper = new Cropper(this.$refs.img, props);
+  },
+  beforeUnmount() {
+    this.destroy();
   },
   methods: {
     // Reset the image and crop box to their initial states

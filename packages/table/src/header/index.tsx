@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-02-28 23:01:43
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-04-07 14:16:00
+ * @Last Modified time: 2021-05-03 21:22:20
  */
 import { defineComponent, reactive } from 'vue';
 import { pickBy, intersection, isFunction } from 'lodash-es';
@@ -157,7 +157,7 @@ export default defineComponent({
         </th>
       );
     },
-    renderCell(column: IColumn): Nullable<JSXNode> {
+    renderCell(column: IColumn): Nullable<JSXNode> | JSXNode[] {
       const { dataIndex, type, sorter, title, description } = column as IDerivedColumn;
       const { selectionKeys, rowSelection } = this.$$table;
       if (dataIndex === '__selection__' && type === 'checkbox') {
