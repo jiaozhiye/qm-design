@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-02-09 09:03:59
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-05-03 19:32:33
+ * @Last Modified time: 2021-05-03 21:33:07
  */
 import { defineComponent, PropType } from 'vue';
 import { ElMessage, ElMessageBox } from 'element-plus';
@@ -125,7 +125,7 @@ export default defineComponent({
         this.doUpload();
       }
     },
-    uploadHandler(data): void {
+    uploadHandler(data: Blob): void {
       this.fileData = data;
       this.loading = true;
       this.doUpload();
