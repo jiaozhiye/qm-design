@@ -145,8 +145,9 @@ export default defineComponent({
 
     this.cropper = new Cropper(this.$refs.img, props);
   },
-  beforeUnmount() {
+  unmounted() {
     this.destroy();
+    this.destroy = null;
   },
   methods: {
     // Reset the image and crop box to their initial states
@@ -372,7 +373,6 @@ export default defineComponent({
   },
   render(): JSXNode {
     const { containerStyle, src, alt, imgStyle } = this;
-
     return (
       <div style={containerStyle}>
         <img ref="img" src={src} alt={alt} style={{ maxWidth: '100%', ...imgStyle }} />
