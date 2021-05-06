@@ -178,14 +178,14 @@ export default defineComponent({
           //   return <el-input v-model={ctx.form[fieldName]} />;
           // },
         },
-        // {
-        //   type: 'DATE',
-        //   fieldName: 'e',
-        //   label: '表单项5',
-        //   options: {
-        //     dateType: 'week',
-        //   },
-        // },
+        {
+          type: 'DATE',
+          fieldName: 'e',
+          label: '表单项5',
+          options: {
+            dateType: 'week',
+          },
+        },
       ],
       printDataList: [],
       content: '',

@@ -20,7 +20,7 @@ export default defineComponent({
   inject: ['$$form'],
   props: ['option'],
   mounted() {
-    const $input: HTMLInputElement = this.$refs[`DATE`].$el.nextElementSibling.querySelector('.el-input__inner');
+    const $input: HTMLInputElement = this.$el.querySelector('.el-form-item__content .el-input__inner');
     this._event = addEventListener($input, 'input', (ev: Event): void => {
       this.inputText = (ev.target as HTMLInputElement).value;
     });

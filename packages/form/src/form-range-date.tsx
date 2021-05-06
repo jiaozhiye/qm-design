@@ -20,8 +20,7 @@ export default defineComponent({
   inject: ['$$form'],
   props: ['option'],
   mounted() {
-    const $startInput: HTMLInputElement = this.$refs[`RANGE_DATE__start`].$el.nextElementSibling.querySelector('.el-input__inner');
-    const $endInput: HTMLInputElement = this.$refs[`RANGE_DATE__end`].$el.nextElementSibling.querySelector('.el-input__inner');
+    const [$startInput, $endInput] = this.$el.querySelectorAll('.el-form-item__content .el-input__inner');
     this._start = addEventListener($startInput, 'input', (ev: Event): void => {
       this.startInputText = (ev.target as HTMLInputElement).value;
     });
@@ -123,6 +122,7 @@ export default defineComponent({
     };
 
     const cls = [`range-date`, { [`disabled`]: disabled }];
+    const popperCls: string = `date-picker__${fieldName.replace('|', '-')}`;
 
     return (
       <el-form-item
@@ -138,7 +138,7 @@ export default defineComponent({
           <el-date-picker
             ref={`${type}__start`}
             type={dateType.replace('exact', '').slice(0, -5)}
-            popper-class={`date-picker__${fieldName}`}
+            popper-class={popperCls}
             {...startWrapProps}
             range-separator={'-'}
             placeholder={!disabled ? DATE_RANGE_CONF[dateType].placeholder[0] : ''}
@@ -153,8 +153,7 @@ export default defineComponent({
             onChange={(): void => onChange(form[fieldName])}
             onFocus={(): void => {
               this.$nextTick(() => {
-                const $pickerBar: Nullable<HTMLElement> =
-                  document.querySelector(`.date-picker__${fieldName}`)?.querySelector('.el-picker-panel__sidebar') ?? null;
+                const $pickerBar: Nullable<HTMLElement> = document.querySelector(`.${popperCls}`)?.querySelector('.el-picker-panel__sidebar') || null;
                 if ($pickerBar?.nodeType === 1) {
                   this._event = addEventListener($pickerBar, 'click', shortcutClickHandle);
                 }
