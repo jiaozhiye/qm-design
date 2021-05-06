@@ -6,7 +6,7 @@
  */
 import axios from '../fetch';
 
-export const getTableData = (params) => axios.get(`/api/design/getTableData`, { params });
+export const getTableData = (params) => axios.get(`/api/design/getTableData`, { params, lockable: true, cancelable: true });
 
 export const getSelectData = (params) => axios.get(`/api/design/getSelectData`, { params });
 
