@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-02-09 09:03:59
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-05-07 11:28:19
+ * @Last Modified time: 2021-05-07 12:23:12
  */
 import { defineComponent, PropType, CSSProperties } from 'vue';
 import addEventListener from 'add-dom-event-listener';
@@ -10,7 +10,7 @@ import classnames from 'classnames';
 import { isNumber, isUndefined } from 'lodash-es';
 import { setStyle } from '../../_utils/dom';
 import PropTypes from '../../_utils/vue-types';
-import { JSXNode, Nullable, AnyFunction, ComponentSize } from '../../_utils/types';
+import { JSXNode, AnyFunction, ComponentSize } from '../../_utils/types';
 
 import { isValidComponentSize, isValidWidthUnit } from '../../_utils/validators';
 import { useSize } from '../../hooks/useSize';
@@ -80,11 +80,14 @@ export default defineComponent({
     };
   },
   computed: {
+    $$dialog() {
+      return this.$refs[`dialog`].dialogRef;
+    },
     disTop(): string {
       if (this.height === 'auto' || this.height === 'none') {
         return this.top;
       }
-      return `calc((100vh - ${getParserWidth(this.height)}) / 2)`;
+      return this.fullscreen ? '0px' : `calc((100vh - ${getParserWidth(this.height)}) / 2)`;
     },
   },
   watch: {
@@ -127,20 +130,21 @@ export default defineComponent({
       this.$emit('closed');
       this.$emit('afterVisibleChange', false);
       // 恢复默认弹出位置
-      setStyle(this.$refs[`dialog`].dialogRef, { marginTop: this.disTop, marginLeft: 'auto', marginRight: 'auto' });
+      this.resetDialogPosition();
     },
     setDialogStyle(): void {
       if (this.height === 'auto' || this.height === 'none') return;
-      setStyle(this.$refs[`dialog`].dialogRef, { height: this.fullscreen ? 'auto' : getParserWidth(this.height) });
+      setStyle(this.$$dialog, { height: this.fullscreen ? 'auto' : getParserWidth(this.height) });
     },
     setDialogBodyStyle(): void {
       const maxHeight: string =
         this.height !== 'auto' || this.fullscreen
           ? 'none'
-          : `calc(100vh - ${this.disTop} * 2 - ${this.$refs[`dialog`].dialogRef.querySelector('.el-dialog__header').offsetHeight}px)`;
-      this.$nextTick(() => {
-        setStyle(this.$refs[`dialog`].dialogRef.querySelector('.el-dialog__body'), { maxHeight });
-      });
+          : `calc(100vh - ${this.disTop} * 2 - ${this.$$dialog.querySelector('.el-dialog__header').offsetHeight}px)`;
+      this.$nextTick(() => setStyle(this.$$dialog.querySelector('.el-dialog__body'), { maxHeight }));
+    },
+    resetDialogPosition(): void {
+      setStyle(this.$$dialog, { marginTop: this.disTop, marginLeft: 'auto', marginRight: 'auto' });
     },
     addStopEvent(): void {
       this.stopEvent = addEventListener(document.body, 'mousedown', stop);
@@ -150,9 +154,7 @@ export default defineComponent({
     },
     handleClick(): void {
       this.fullscreen = !this.fullscreen;
-      if (this.fullscreen) {
-        setStyle(this.$refs[`dialog`].dialogRef, { marginLeft: 'auto', marginRight: 'auto' });
-      }
+      this.resetDialogPosition();
       this.setDialogStyle();
       this.setDialogBodyStyle();
       this.$emit('viewportChange', this.fullscreen ? 'fullscreen' : 'default');
