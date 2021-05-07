@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-03-02 11:10:34
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-19 16:03:48
+ * @Last Modified time: 2021-05-07 09:06:03
  */
 import { reactive } from 'vue';
 import { xor, isEqual, isUndefined } from 'lodash-es';
@@ -50,7 +50,9 @@ export const LocalStorageMixin = {
       if (!localFields) {
         this.getTableFieldsConfig(this.formUniqueKey)
           .then((result) => {
-            if (!result) return;
+            if (!result) {
+              return this.setLocalFields(this.list);
+            }
             localStorage.setItem(this.formUniqueKey, JSON.stringify(result));
             this.initLocalfields();
           })

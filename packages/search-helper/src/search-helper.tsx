@@ -136,7 +136,7 @@ export default defineComponent({
           dataIndex: 'index',
           width: 80,
           render: (text: number): JSXNode => {
-            return text + 1;
+            return <span>{text + 1}</span>;
           },
         },
         ...(this.table.columns || []),
@@ -260,7 +260,6 @@ export default defineComponent({
         <Spin spinning={loading} tip="Loading...">
           <Form
             ref="top-filter"
-            // @ts-ignore
             formType="search"
             initialValue={initialValue}
             list={topFilters}
@@ -272,7 +271,6 @@ export default defineComponent({
           <Table
             ref="table"
             {...tableProps}
-            // @ts-ignore
             height={height}
             minHeight={200}
             columns={columns}
