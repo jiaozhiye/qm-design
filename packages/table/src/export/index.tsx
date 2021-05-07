@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-02-02 15:58:17
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-04-12 15:58:19
+ * @Last Modified time: 2021-05-07 14:48:56
  */
 import { defineComponent } from 'vue';
 import { get } from 'lodash-es';
@@ -248,8 +248,15 @@ export default defineComponent({
           <i class="iconfont icon-download" />
         </span>
         <Dialog {...wrapProps}>
-          {/* @ts-ignore */}
-          <ExportSetting defaultValue={settingProps} onClose={() => (this.visible = !1)} onChange={(data) => this.getTableData(data)} />
+          <ExportSetting
+            defaultValue={settingProps}
+            onClose={(): void => {
+              this.visible = !1;
+            }}
+            onChange={(data): void => {
+              this.getTableData(data);
+            }}
+          />
         </Dialog>
       </>
     );

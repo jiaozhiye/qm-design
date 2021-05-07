@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-03-08 08:28:55
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-04-07 16:05:05
+ * @Last Modified time: 2021-05-07 16:31:55
  */
 import { VNode } from 'vue';
 import { get, set, transform, intersection, isEqual, isObject } from 'lodash-es';
@@ -248,7 +248,7 @@ export const parseHeight = (height: number | string): number => {
 export const difference = <T extends AnyObject<any>>(object: T, base: T): T => {
   return transform(object, (result, value, key) => {
     if (!isEqual(value, base[key])) {
-      result[key] = isObject(value) && isObject(base[key]) ? difference(value, base[key]) : value;
+      (result as any)[key] = isObject(value) && isObject(base[key]) ? difference(value, base[key]) : value;
     }
   });
 };
@@ -404,13 +404,13 @@ export const createWhereSQL = (filters: any, showType = false): string => {
 };
 
 // 多列分组聚合
-export const groupBy = (array: IRecord[] = [], props: string[] = []): any[] => {
+export const groupBy = (array: IRecord[] = [], props: string[] = []): any[][] => {
   const fn = (x) => {
     const res: unknown[] = [];
     props.forEach((k) => res.push(getCellValue(x, k)));
     return res;
   };
-  const groups = {};
+  const groups: Record<string, any[]> = {};
   array.forEach((x) => {
     const group = JSON.stringify(fn(x));
     groups[group] = groups[group] || [];

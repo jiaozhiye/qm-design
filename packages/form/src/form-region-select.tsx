@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-02-23 21:56:33
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-16 19:40:05
+ * @Last Modified time: 2021-05-07 15:29:27
  */
 import { defineComponent } from 'vue';
 import { get } from 'lodash-es';
@@ -132,7 +132,6 @@ export default defineComponent({
       return this.tabs.map((arr, index) => {
         const label: string = arr.find((x) => x.value === this.values[index])?.text || t('qm.form.selectPlaceholder').replace('...', '');
         return (
-          // @ts-ignore
           <TabPane key={index} label={label} name={index.toString()}>
             <div class="region-item">
               {arr.map((x) => (

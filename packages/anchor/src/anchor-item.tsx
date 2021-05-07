@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-02-21 08:48:51
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-14 18:56:01
+ * @Last Modified time: 2021-05-07 15:28:56
  */
 import { defineComponent } from 'vue';
 import { JSXNode } from '../../_utils/types';
@@ -31,7 +31,6 @@ export default defineComponent({
     };
     return (
       <div class={cls}>
-        {/* @ts-ignore */}
         {showDivider && <Divider label={label} style={{ marginBottom: '10px' }} />}
         {this.$slots.default?.()}
       </div>

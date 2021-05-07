@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-02-28 23:01:43
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-05-03 21:21:19
+ * @Last Modified time: 2021-05-07 17:02:23
  */
 import { defineComponent, reactive, CSSProperties } from 'vue';
 import addEventListener from 'add-dom-event-listener';
@@ -311,8 +311,8 @@ export default defineComponent({
           rowspan = result[0];
           colspan = result[1];
         } else if (isObject(result)) {
-          rowspan = result.rowspan;
-          colspan = result.colspan;
+          rowspan = (result as any).rowspan;
+          colspan = (result as any).colspan;
         }
       }
       return { rowspan, colspan };

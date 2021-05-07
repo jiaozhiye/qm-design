@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-02-09 09:03:59
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-19 16:06:44
+ * @Last Modified time: 2021-05-07 15:44:57
  */
 import { defineComponent, PropType } from 'vue';
 import PropTypes from '../../_utils/vue-types';
@@ -70,18 +70,10 @@ export default defineComponent({
     return (
       <Dialog {...dialogProps}>
         <div style="margin: -10px">
-          <Tabs
-            v-model={this.tabName}
-            // @ts-ignore
-            tabCustomClass={`${prefixCls}__tab`}
-            size={$size}
-            lazyLoad={false}
-            onChange={this.tabChangeHandle}
-          >
+          <Tabs v-model={this.tabName} tabCustomClass={`${prefixCls}__tab`} size={$size} lazyLoad={false} onChange={this.tabChangeHandle}>
             {$slots.map(
               ({ props }, i): JSXNode => {
                 return (
-                  // @ts-ignore
                   <TabPane key={i} label={props?.label} name={i.toString()}>
                     <PrintItem
                       ref={`print-item-${i}`}

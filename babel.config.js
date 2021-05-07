@@ -15,8 +15,8 @@ const presets = [
 const plugins = [
   '@vue/babel-plugin-jsx',
   '@babel/plugin-transform-runtime',
-  ['@babel/plugin-proposal-decorators', { legacy: true }],
-  ['@babel/plugin-proposal-class-properties', { loose: true }],
+  ['@babel/plugin-proposal-private-methods', { loose: false }],
+  '@babel/plugin-proposal-class-properties',
 ];
 
 module.exports = {

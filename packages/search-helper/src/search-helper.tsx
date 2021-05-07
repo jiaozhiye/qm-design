@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-02-09 09:03:59
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-05-07 10:50:26
+ * @Last Modified time: 2021-05-07 15:45:31
  */
 import { defineComponent, PropType } from 'vue';
 import { merge, get, isFunction } from 'lodash-es';
@@ -256,7 +256,6 @@ export default defineComponent({
     const tableProps = !webPagination ? { fetch } : { dataSource: tableList, webPagination: !0 };
     return (
       <div ref="search-helper">
-        {/* @ts-ignore: loading 组件 */}
         <Spin spinning={loading} tip="Loading...">
           <Form
             ref="top-filter"

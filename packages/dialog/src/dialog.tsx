@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-02-09 09:03:59
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-05-07 12:23:12
+ * @Last Modified time: 2021-05-07 15:29:06
  */
 import { defineComponent, PropType, CSSProperties } from 'vue';
 import addEventListener from 'add-dom-event-listener';
@@ -226,7 +226,6 @@ export default defineComponent({
     };
     return (
       <el-dialog ref="dialog" {...wrapProps} v-slots={{ title: () => this.renderHeader() }}>
-        {/* @ts-ignore */}
         <Spin spinning={this.spinning} tip="Loading..." containerStyle={{ height: '100%' }}>
           <div class="dialog-container" style={{ ...containerStyle }}>
             {this.$slots.default?.()}

@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-02-09 09:03:59
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-19 16:16:56
+ * @Last Modified time: 2021-05-07 15:44:49
  */
 import { defineComponent, PropType, CSSProperties } from 'vue';
 import { JSXNode, Nullable } from '../../_utils/types';
@@ -326,7 +326,6 @@ export default defineComponent({
     const cls = { [prefixCls]: true, 'no-visible': directPrint };
     return (
       <div class={cls}>
-        {/* @ts-ignore */}
         <Spin spinning={loading} tip="Loading..." containerStyle={{ height: `100%` }}>
           <div class="preview">
             {/* 隐藏原始的打印模板内容 */}

@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-02-09 09:03:59
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-22 16:15:26
+ * @Last Modified time: 2021-05-07 15:45:13
  */
 import { defineComponent, PropType, reactive } from 'vue';
 import localforage from 'localforage';
@@ -271,7 +271,6 @@ export default defineComponent({
           </div>
         </div>
         <Dialog {...dialogProps}>
-          {/* @ts-ignore */}
           <Setting
             setting={form.setting}
             onChange={this.settingChange}

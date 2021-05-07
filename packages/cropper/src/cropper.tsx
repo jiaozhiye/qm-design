@@ -2,11 +2,10 @@
  * @Author: 焦质晔
  * @Date: 2021-02-09 09:03:59
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-05-03 21:54:20
+ * @Last Modified time: 2021-05-07 12:55:10
  */
 import { defineComponent, PropType, CSSProperties } from 'vue';
 import Cropper from 'cropperjs';
-import 'cropperjs/dist/cropper.css';
 
 import { JSXNode } from '../../_utils/types';
 

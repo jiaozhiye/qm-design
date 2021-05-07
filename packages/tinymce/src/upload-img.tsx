@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-02-09 09:03:59
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-05-03 16:09:19
+ * @Last Modified time: 2021-05-07 13:09:51
  */
 import { defineComponent, PropType } from 'vue';
 import { JSXNode } from '../../_utils/types';
@@ -58,15 +58,7 @@ export default defineComponent({
         </el-button>
         <Dialog {...wrapProps}>
           <div>
-            <UploadCropper
-              action-url={actionUrl}
-              // @ts-ignore
-              headers={headers}
-              fixed-size={fixedSize}
-              limit={20}
-              is-calc-height
-              onChange={this.handleSuccess}
-            />
+            <UploadCropper action-url={actionUrl} headers={headers} fixed-size={fixedSize} limit={20} is-calc-height onChange={this.handleSuccess} />
           </div>
           <div
             style={{

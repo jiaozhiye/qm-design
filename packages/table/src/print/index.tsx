@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-03-26 11:44:24
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-04-08 16:39:35
+ * @Last Modified time: 2021-05-07 17:00:54
  */
 import { defineComponent } from 'vue';
 import { flatten, groupBy, map, spread, mergeWith } from 'lodash-es';
@@ -108,6 +108,7 @@ export default defineComponent({
       return map(
         groupBy(flatten(columns), mark),
         spread((...rest) => {
+          // @ts-ignore
           return mergeWith(...rest, (objValue, srcValue) => {
             if (Array.isArray(objValue)) {
               return this.doMerge(objValue.concat(srcValue), mark);

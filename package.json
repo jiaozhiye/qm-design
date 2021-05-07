@@ -29,6 +29,9 @@
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
   "style": "lib/style/index.css",
+  "peerDependencies": {
+    "vue": "^3.0.11"
+  },
   "dependencies": {
     "add-dom-event-listener": "^1.1.0",
     "axios": "^0.21.1",
@@ -56,12 +59,12 @@
     "@babel/preset-env": "^7.12.0",
     "@babel/preset-typescript": "^7.12.0",
     "@rollup/plugin-babel": "^5.3.0",
-    "@rollup/plugin-commonjs": "^17.1.0",
-    "@rollup/plugin-node-resolve": "^9.0.0",
-    "@rollup/plugin-typescript": "^6.0.0",
+    "@rollup/plugin-commonjs": "^18.1.0",
+    "@rollup/plugin-node-resolve": "^13.0.0",
+    "@rollup/plugin-typescript": "^8.2.0",
     "@typescript-eslint/eslint-plugin": "^4.14.0",
     "@typescript-eslint/parser": "^4.14.0",
-    "@vue/babel-plugin-jsx": "^1.0.5",
+    "@vue/babel-plugin-jsx": "^1.0.6",
     "@vue/compiler-sfc": "^3.0.11",
     "@vue/component-compiler-utils": "^3.2.0",
     "acorn-jsx": "^5.3.1",
@@ -105,19 +108,19 @@
     "sass-loader": "^11.0.0",
     "style-resources-loader": "^1.4.0",
     "transliteration": "^2.1.11",
-    "ts-loader": "^8.0.10",
-    "typescript": "^4.1.2",
+    "ts-loader": "^9.1.2",
+    "typescript": "^4.2.4",
     "vue-eslint-parser": "^7.5.0",
-    "vue-loader": "^16.1.2",
+    "vue-loader": "^16.2.0",
     "vue-router": "^4.0.6",
     "vue-style-loader": "^4.1.2",
-    "webpack": "^5.24.0",
-    "webpack-cli": "^4.5.0",
+    "webpack": "^5.36.2",
+    "webpack-cli": "^4.7.0",
     "webpack-dev-server": "^3.11.2",
     "webpack-merge": "^4.2.2"
   },
   "engines": {
-    "node": ">= 12.0.0",
-    "npm": ">= 6.0.0"
+    "node": ">= 14.16.0",
+    "npm": ">= 6.14.0"
   }
 }

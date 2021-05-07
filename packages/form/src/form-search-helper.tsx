@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-02-23 21:56:33
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-13 16:57:42
+ * @Last Modified time: 2021-05-07 15:47:29
  */
 import { defineComponent } from 'vue';
 import { JSXNode } from '../../_utils/types';
@@ -119,8 +119,7 @@ export default defineComponent({
             default: ({ item }): Array<JSXNode> => {
               return item.__isThead__
                 ? columns.map((x) => (
-                    // @ts-ignore
-                    <th key={x.dataIndex} width={x.width} style="pointer-events: none;">
+                    <th key={x.dataIndex} style={{ width: `${x.width}px`, pointerEvents: 'none' }}>
                       <span>{x.title}</span>
                     </th>
                   ))

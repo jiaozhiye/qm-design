@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-02-29 22:17:28
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-04-07 12:29:50
+ * @Last Modified time: 2021-05-07 14:46:32
  */
 import { getPrefixCls } from '../../../_utils/prefix';
 import { JSXNode } from '../../../_utils/types';
@@ -171,7 +171,6 @@ export default {
             {showColumnDefine && <ColumnFilter columns={columns} />}
           </div>
         </div>
-        {/* @ts-ignore: loading 组件 */}
         <Spin spinning={showLoading} tip="Loading...">
           <div ref="table" class={tableCls} style={tableStyles}>
             {/* 主要内容 */}

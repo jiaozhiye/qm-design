@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-04-14 16:03:27
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-13 16:16:49
+ * @Last Modified time: 2021-05-07 16:48:42
  */
 import { intersection, isObject, isFunction } from 'lodash-es';
 import { getCellValue, setCellValue, tableDataFlatMap } from '../utils';
@@ -138,7 +138,7 @@ export default {
   // 删除数据
   REMOVE_RECORDS<T extends IRecord | string>(records: T | T[]): void {
     const rows = Array.isArray(records) ? records : [records];
-    const rowKeys = rows.filter((x) => !!x).map((x) => (isObject(x) ? this.getRowKey(x, (x as IRecord).index) : x));
+    const rowKeys = rows.filter((x) => !!x).map((x) => (isObject(x) ? this.getRowKey(x, ((x as unknown) as IRecord).index) : x));
     const editableColumns = this.flattenColumns.filter((column) => isFunction(column.editRender));
     for (let i = 0; i < this.tableFullData.length; i++) {
       const row = this.tableFullData[i];

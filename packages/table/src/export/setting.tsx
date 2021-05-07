@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-04-07 08:23:32
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-04-08 16:19:23
+ * @Last Modified time: 2021-05-07 14:48:06
  */
 import { defineComponent } from 'vue';
 import dayjs from 'dayjs';
@@ -16,7 +16,7 @@ export default defineComponent({
   name: 'ExportSetting',
   componentName: 'ExportSetting',
   emits: ['change', 'close'],
-  props: ['defaultValue'],
+  props: ['defaultValue', 'onClose', 'onChange'],
   inject: ['$$table'],
   data() {
     return {
@@ -129,14 +129,7 @@ export default defineComponent({
     const { initialValue, formList, loading } = this;
     return (
       <div>
-        <Form
-          ref="form"
-          // @ts-ignore
-          initialValue={initialValue}
-          list={formList}
-          cols={1}
-          labelWidth={110}
-        />
+        <Form ref="form" initialValue={initialValue} list={formList} cols={1} labelWidth={110} />
         <div
           style={{
             position: 'absolute',

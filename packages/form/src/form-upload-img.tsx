@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-02-23 21:56:33
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-02 15:35:32
+ * @Last Modified time: 2021-05-07 15:44:39
  */
 import { defineComponent } from 'vue';
 import { JSXNode } from '../../_utils/types';
@@ -34,7 +34,6 @@ export default defineComponent({
         }}
       >
         <UploadCropper
-          // @ts-ignore
           actionUrl={upload.actionUrl}
           headers={upload.headers}
           initialValue={form[fieldName]}

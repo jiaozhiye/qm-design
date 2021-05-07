@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-02-09 09:03:59
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-05-03 16:09:13
+ * @Last Modified time: 2021-05-07 15:45:07
  */
 import { defineComponent, PropType } from 'vue';
 import { JSXNode } from '../../_utils/types';
@@ -200,14 +200,7 @@ export default defineComponent({
     const { initialValue, formList } = this;
     return (
       <div>
-        <Form
-          ref="form"
-          // @ts-ignore
-          initialValue={initialValue}
-          list={formList}
-          cols={2}
-          labelWidth={115}
-        />
+        <Form ref="form" initialValue={initialValue} list={formList} cols={2} labelWidth={115} />
         <div
           style={{
             position: 'absolute',
