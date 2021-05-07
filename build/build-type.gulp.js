@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-02-15 10:50:25
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-05-07 17:22:01
+ * @Last Modified time: 2021-05-07 21:51:05
  */
 'use strict';
 
@@ -14,8 +14,6 @@ const rename = require('gulp-rename');
 const tsProject = ts.createProject('../tsconfig.json');
 const utils = require('./utils');
 
-const LIB_NAME = 'qm-design';
-
 function compile() {
   const tsResult = tsProject
     .src()
@@ -26,7 +24,7 @@ function compile() {
 
 function copydts() {
   return src(utils.resolve('typings/vue-shim.d.ts'))
-    .pipe(rename(`${LIB_NAME}.d.ts`))
+    .pipe(rename('qm-design.d.ts'))
     .pipe(dest(utils.resolve('lib')));
 }
 

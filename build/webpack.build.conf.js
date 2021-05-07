@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-02-08 14:35:05
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-05-07 13:02:03
+ * @Last Modified time: 2021-05-07 21:50:47
  */
 'use strict';
 
@@ -23,7 +23,7 @@ module.exports = {
     publicPath: '/',
     filename: 'index.js',
     libraryTarget: 'umd',
-    library: 'qm-design',
+    library: 'QmDesign',
     umdNamedDefine: true,
     globalObject: "typeof self !== 'undefined' ? self : this",
   },
