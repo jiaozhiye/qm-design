@@ -2,13 +2,12 @@
  * @Author: 焦质晔
  * @Date: 2020-07-11 10:51:46
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-22 14:15:21
+ * @Last Modified time: 2021-05-07 17:40:38
  */
 import sf from './lib/filter_string';
 import vr from './lib/variables_replacement';
 import { matchWhere } from './lib/operations';
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const _query = (...rest) => {
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore

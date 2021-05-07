@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-02-15 10:50:25
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-02-15 14:07:55
+ * @Last Modified time: 2021-05-07 17:22:01
  */
 'use strict';
 
@@ -29,16 +29,5 @@ function copydts() {
     .pipe(rename(`${LIB_NAME}.d.ts`))
     .pipe(dest(utils.resolve('lib')));
 }
-
-// gulp.task('default', function () {
-//   const tsResult = tsProject
-//     .src()
-//     .pipe(ignore.include(['packages/**/*', 'typings/vue-shim.d.ts']))
-//     .pipe(tsProject());
-//   return merge([
-//     tsResult.js.pipe(gulp.dest(utils.resolve('lib'))),
-//     tsResult.dts.pipe(gulp.dest(utils.resolve('lib'))),
-//   ]);
-// });
 
 exports.build = series(compile, copydts);
