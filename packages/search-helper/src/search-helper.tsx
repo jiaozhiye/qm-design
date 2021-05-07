@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-02-09 09:03:59
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-05-03 16:09:59
+ * @Last Modified time: 2021-05-07 10:50:26
  */
 import { defineComponent, PropType } from 'vue';
 import { merge, get, isFunction } from 'lodash-es';
@@ -280,6 +280,7 @@ export default defineComponent({
             onRowEnter={this.rowEnterHandle}
             onRowDblclick={this.dbClickHandle}
           />
+          <div style="height: 10px;" />
         </Spin>
         <div
           style={{

@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-02-09 09:03:59
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-27 14:56:49
+ * @Last Modified time: 2021-05-07 11:28:19
  */
 import { defineComponent, PropType, CSSProperties } from 'vue';
 import addEventListener from 'add-dom-event-listener';
@@ -81,24 +81,15 @@ export default defineComponent({
   },
   computed: {
     disTop(): string {
-      if (this.fullscreen || isNaN(Number.parseInt(this.height))) {
+      if (this.height === 'auto' || this.height === 'none') {
         return this.top;
       }
       return `calc((100vh - ${getParserWidth(this.height)}) / 2)`;
-    },
-    dialogHeight(): Nullable<string> {
-      if (this.height === 'auto') {
-        return this.fullscreen ? `100vh` : `calc(100vh - ${this.disTop} - ${this.disTop})`;
-      }
-      return this.height !== 'none' ? getParserWidth(this.height) : this.height;
     },
   },
   watch: {
     loading(val: boolean): void {
       this.spinning = val;
-    },
-    dialogHeight(): void {
-      this.setDialogStyle();
     },
   },
   mounted() {
@@ -112,11 +103,14 @@ export default defineComponent({
       if (this.insideSpinCtrl && (this.destroyOnClose || !this.panelOpened)) {
         this.spinning = true;
       }
-      this.fullscreen = false; // 取消全屏
+      this.fullscreen = false;
+      // 设置 dialog body 高度
+      this.setDialogBodyStyle();
       this.$emit('open');
     },
     opened(): void {
-      this.panelOpened = true; // 打开过一次
+      // 打开过一次
+      this.panelOpened = true;
       this.addStopEvent();
       this.$emit('opened');
       this.$emit('afterVisibleChange', true);
@@ -133,12 +127,20 @@ export default defineComponent({
       this.$emit('closed');
       this.$emit('afterVisibleChange', false);
       // 恢复默认弹出位置
-      if (this.$refs[`dialog`]?.dialogRef) {
-        setStyle(this.$refs[`dialog`].dialogRef, { marginTop: this.disTop, marginLeft: 'auto', marginRight: 'auto' });
-      }
+      setStyle(this.$refs[`dialog`].dialogRef, { marginTop: this.disTop, marginLeft: 'auto', marginRight: 'auto' });
     },
     setDialogStyle(): void {
-      setStyle(this.$refs[`dialog`].dialogRef, 'height', this.dialogHeight);
+      if (this.height === 'auto' || this.height === 'none') return;
+      setStyle(this.$refs[`dialog`].dialogRef, { height: this.fullscreen ? 'auto' : getParserWidth(this.height) });
+    },
+    setDialogBodyStyle(): void {
+      const maxHeight: string =
+        this.height !== 'auto' || this.fullscreen
+          ? 'none'
+          : `calc(100vh - ${this.disTop} * 2 - ${this.$refs[`dialog`].dialogRef.querySelector('.el-dialog__header').offsetHeight}px)`;
+      this.$nextTick(() => {
+        setStyle(this.$refs[`dialog`].dialogRef.querySelector('.el-dialog__body'), { maxHeight });
+      });
     },
     addStopEvent(): void {
       this.stopEvent = addEventListener(document.body, 'mousedown', stop);
@@ -151,6 +153,8 @@ export default defineComponent({
       if (this.fullscreen) {
         setStyle(this.$refs[`dialog`].dialogRef, { marginLeft: 'auto', marginRight: 'auto' });
       }
+      this.setDialogStyle();
+      this.setDialogBodyStyle();
       this.$emit('viewportChange', this.fullscreen ? 'fullscreen' : 'default');
     },
     beforeCloseHandle(cb: AnyFunction<void>): void {
