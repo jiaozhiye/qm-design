@@ -15,7 +15,6 @@ import { noop } from '../../../_utils/util';
 import { t } from '../../../locale';
 
 import Checkbox from '../checkbox';
-import SorterIcon from '../icon/sorter';
 
 export default defineComponent({
   name: 'ColumnFilter',
@@ -269,9 +268,7 @@ export default defineComponent({
               class={{ [`${prefixCls}-column-filter`]: !0, [`selected`]: visible }}
               title={!showButtonText ? t('qm.table.columnFilter.text') : ''}
             >
-              <em class="icon-svg">
-                <SorterIcon />
-              </em>
+              <i class="iconfont el-icon-s-operation" />
               <span>{showButtonText && t('qm.table.columnFilter.text')}</span>
             </span>
           ),

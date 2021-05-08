@@ -137,11 +137,13 @@ export default defineComponent({
       setStyle(this.$$dialog, { height: this.fullscreen ? 'auto' : getParserWidth(this.height) });
     },
     setDialogBodyStyle(): void {
-      const maxHeight: string =
-        this.height !== 'auto' || this.fullscreen
-          ? 'none'
-          : `calc(100vh - ${this.disTop} * 2 - ${this.$$dialog.querySelector('.el-dialog__header').offsetHeight}px)`;
-      this.$nextTick(() => setStyle(this.$$dialog.querySelector('.el-dialog__body'), { maxHeight }));
+      this.$nextTick(() => {
+        const maxHeight: string =
+          this.height !== 'auto' || this.fullscreen
+            ? 'none'
+            : `calc(100vh - ${this.disTop} * 2 - ${this.$$dialog.querySelector('.el-dialog__header').offsetHeight}px)`;
+        setStyle(this.$$dialog.querySelector('.el-dialog__body'), { maxHeight });
+      });
     },
     resetDialogPosition(): void {
       setStyle(this.$$dialog, { marginTop: this.disTop, marginLeft: 'auto', marginRight: 'auto' });
@@ -194,7 +196,6 @@ export default defineComponent({
 
     const { global } = useGlobalConfig();
     const prefixCls = getPrefixCls('dialog');
-
     const { $size } = useSize(this.$props);
 
     const cls = {

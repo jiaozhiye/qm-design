@@ -15,8 +15,10 @@ $prefix: '#{$qm-prefix}-table';
   &.selected {
     color: $v-primary-color;
   }
-  em {
+  .iconfont {
     margin-right: 4px;
+    font-size: 1.15em;
+    vertical-align: middle;
   }
   span {
     vertical-align: middle;

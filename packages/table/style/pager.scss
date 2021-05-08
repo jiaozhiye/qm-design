@@ -9,9 +9,18 @@ $prefix: '#{$qm-prefix}-table';
 .#{$prefix}-pager {
   margin-top: $v-module-distance;
   text-align: right;
-  .el-pagination__jump {
-    .el-input__inner {
-      line-height: 1;
+  .el-pagination {
+    padding-left: 0;
+    padding-right: 0;
+    .el-pagination__jump {
+      margin-left: $margin-base;
+      .el-input__inner {
+        line-height: 1;
+      }
+    }
+    .el-pagination__sizes {
+      margin-left: $margin-base;
+      margin-right: -5px;
     }
   }
 }
