@@ -35,6 +35,11 @@ export default {
     this.tableFullData = [...results];
     this.tableOriginData = [...results];
     // 行选中 & 自动获得焦点
+    this.initialTable();
+    this.dataLoadedHandle();
+  },
+  // 表格初始化
+  initialTable(): void {
     this.$nextTick(() => {
       // 设置选择列
       this.selectionKeys = this.createSelectionKeys();
@@ -43,7 +48,6 @@ export default {
       this.selectFirstRow();
       this.$$tableBody.createInputFocus();
       this.$$tableBody.resetTableBodyScroll();
-      this.dataLoadedHandle();
     });
   },
   // 服务端合计

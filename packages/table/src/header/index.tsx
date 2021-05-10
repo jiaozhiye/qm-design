@@ -234,12 +234,13 @@ export default defineComponent({
       this.clientSorter();
     },
     // 客户端排序
-    clientSorter(): void {
+    clientSorter(type: string): void {
       const validSorter = pickBy(this.sorter);
       for (let key in validSorter) {
         let column = this.flattenColumns.find((column) => column.dataIndex === key);
         this.doSortHandle(column, validSorter[key]);
       }
+      if (type === 'filter') return;
       if (!Object.keys(validSorter).length) {
         this.doResetHandle();
       }
@@ -252,19 +253,17 @@ export default defineComponent({
     // 排序算法
     doSortHandle(column: IColumn, order: string): void {
       const { dataIndex, sorter } = column;
-      if (isFunction(sorter)) {
-        this.$$table.tableFullData.sort(sorter);
-      } else {
-        this.$$table.tableFullData.sort((a, b) => {
-          const start = getCellValue(a, dataIndex);
-          const end = getCellValue(b, dataIndex);
-          if (!!Number(start - end)) {
-            return order === this.ascend ? start - end : end - start;
-          }
-          return order === this.ascend ? start.toString().localeCompare(end.toString()) : end.toString().localeCompare(start.toString());
-        });
-      }
-      this.$$table.tableFullData = reactive([...this.$$table.tableFullData]);
+      const { tableFullData } = this.$$table;
+      const sortFn = (a, b) => {
+        const start = getCellValue(a, dataIndex);
+        const end = getCellValue(b, dataIndex);
+        if (!!Number(start - end)) {
+          return order === this.ascend ? start - end : end - start;
+        }
+        return order === this.ascend ? start.toString().localeCompare(end.toString()) : end.toString().localeCompare(start.toString());
+      };
+      tableFullData.sort(isFunction(sorter) ? sorter : sortFn);
+      this.$$table.tableFullData = reactive([...tableFullData]);
     },
     // 表头筛选
     filterHandle(): void {
@@ -276,8 +275,7 @@ export default defineComponent({
       const { tableOriginData, superFilters } = this.$$table;
       const sql = !superFilters.length ? createWhereSQL(this.filters) : createWhereSQL(superFilters);
       this.$$table.tableFullData = sql !== '' ? where(tableOriginData, sql) : [...tableOriginData];
-      // 执行排序
-      this.sorterHandle();
+      this.clientSorter('filter');
     },
     // 格式化排序参数
     formatSorterValue(sorter: ISorter): ISorter {

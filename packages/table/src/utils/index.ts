@@ -153,9 +153,22 @@ export const getAllRowKeys = (list: IRecord[], getRowKey: AnyFunction<string>, d
 export const tableDataFlatMap = (list: IRecord[]): IRecord[] => {
   const result: IRecord[] = [];
   list.forEach((record) => {
-    result.push(record);
     if (record.children) {
       result.push(...tableDataFlatMap(record.children));
+    } else {
+      result.push(record);
+    }
+  });
+  return result;
+};
+
+// 获取所有 tableData
+export const getAllTableData = (list: IRecord[]): IRecord[] => {
+  const result: IRecord[] = [];
+  list.forEach((record) => {
+    result.push(record);
+    if (record.children) {
+      result.push(...getAllTableData(record.children));
     }
   });
   return result;

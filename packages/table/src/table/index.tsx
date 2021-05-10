@@ -16,7 +16,7 @@ import { isChrome, isIE, deepToRaw, noop } from '../../../_utils/util';
 import { useSize } from '../../../hooks/useSize';
 import { isEmpty } from '../../../_utils/util';
 import { getScrollBarWidth } from '../../../_utils/scrollbar-width';
-import { columnsFlatMap, getAllColumns, getAllRowKeys, tableDataFlatMap, createOrderBy, createWhereSQL, parseHeight, debounce } from '../utils';
+import { columnsFlatMap, getAllColumns, getAllRowKeys, getAllTableData, createOrderBy, createWhereSQL, parseHeight, debounce } from '../utils';
 import { warn } from '../../../_utils/error';
 import config from '../config';
 
@@ -335,13 +335,13 @@ export default defineComponent({
     rowExpandedKeys(next: string[], prev: string[]): void {
       if (!this.expandable || isEqual(next, prev)) return;
       const { onChange = noop } = this.expandable;
-      const expandedRows = tableDataFlatMap(this.tableFullData).filter((record) => next.includes(this.getRowKey(record, record.index)));
+      const expandedRows = getAllTableData(this.tableFullData).filter((record) => next.includes(this.getRowKey(record, record.index)));
       onChange(next, expandedRows);
     },
     highlightKey(next: string): void {
       if (!this.rowHighlight) return;
       const { onChange = noop } = this.rowHighlight;
-      const currentRow = tableDataFlatMap(this.tableFullData).find((record) => this.getRowKey(record, record.index) === next);
+      const currentRow = getAllTableData(this.tableFullData).find((record) => this.getRowKey(record, record.index) === next);
       onChange(next, currentRow || null);
     },
     [`rowHighlight.currentRowKey`](next: string): void {

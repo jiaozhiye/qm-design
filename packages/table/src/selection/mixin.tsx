@@ -4,7 +4,7 @@
  * @Last Modified by: 焦质晔
  * @Last Modified time: 2021-03-22 16:29:06
  */
-import { deepFindRowKey, tableDataFlatMap, isArrayContain } from '../utils';
+import { deepFindRowKey, getAllTableData, isArrayContain } from '../utils';
 import { t } from '../../../locale';
 import { Nullable } from '../../../_utils/types';
 import { IDerivedColumn } from '../table/types';
@@ -51,12 +51,12 @@ const selectionMixin = {
       const uniqRecords = isFetch
         ? [
             ...selectionRows,
-            ...tableDataFlatMap(tableFullData).filter((row) => {
+            ...getAllTableData(tableFullData).filter((row) => {
               let rowKey = getRowKey(row, row.index);
               return selectedKeys.includes(rowKey) && !selectionRowKeys.includes(rowKey);
             }),
           ]
-        : tableDataFlatMap(tableFullData);
+        : getAllTableData(tableFullData);
       this.selectionRows = uniqRecords.filter((row) => selectedKeys.includes(getRowKey(row, row.index)));
     },
     // 选择列已选中 keys

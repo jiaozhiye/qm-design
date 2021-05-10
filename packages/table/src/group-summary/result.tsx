@@ -5,7 +5,7 @@
  * @Last Modified time: 2021-03-22 14:24:14
  */
 import { defineComponent } from 'vue';
-import { maxBy, minBy, sumBy, isObject } from 'lodash-es';
+import { maxBy, minBy, sumBy } from 'lodash-es';
 import { groupBy, getCellValue, setCellValue } from '../utils';
 import { t } from '../../../locale';
 import { JSXNode, AnyObject, Nullable } from '../../../_utils/types';
@@ -13,8 +13,6 @@ import { IColumn, IFetch, IRecord } from '../table/types';
 
 import config from '../config';
 import VTable from '../table';
-
-const GROUP_TYPES = ['date'];
 
 export default defineComponent({
   name: 'GroupSummaryResult',
@@ -66,14 +64,7 @@ export default defineComponent({
       const params = Object.assign({}, fetchParams, {
         [config.sorterFieldName]: undefined,
         [config.groupSummary.summaryFieldName]: this.summary.map((x) => `${x.formula}|${x.summary}`).join(','),
-        [config.groupSummary.groupbyFieldName]: this.group
-          .map((x) => {
-            const { filter, fieldType } = this.columns.find((k) => k.dataIndex === x.group);
-            const type = filter?.type || fieldType;
-            // ** 适应 MEP 后端 **
-            return !GROUP_TYPES.includes(type) ? `${x.group}` : `${x.group}|${type}`;
-          })
-          .join(','),
+        [config.groupSummary.groupbyFieldName]: this.group.map((x) => x.group).join(','),
         usedJH: 2,
         currentPage: 1,
       });
@@ -96,7 +87,7 @@ export default defineComponent({
         })),
         ...summaryColumns.map((x) => {
           let groupSummary = this.columns.find((k) => k.dataIndex === x.dataIndex)?.groupSummary;
-          let summation: Nullable<AnyObject<unknown>> = groupSummary ? { summation: isObject(groupSummary) ? groupSummary : {} } : null;
+          let summation: Nullable<AnyObject<unknown>> = groupSummary ? { summation: groupSummary } : null;
           if (x.dataIndex === config.groupSummary.total.value) {
             summation = { dataIndex: config.groupSummary.recordTotalIndex, summation: { render: () => this.$$table.total } };
           }

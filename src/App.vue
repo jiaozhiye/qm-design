@@ -1,6 +1,7 @@
 <script lang="tsx">
 import { defineComponent, VNode } from 'vue';
 
+import tableData from '@/mock/tableData';
 import PrintTemplate from './print-template.vue';
 
 import { getTableData, getSelectData, getTreeData, getRegionData } from './api/test';
@@ -21,6 +22,7 @@ export default defineComponent({
       visible2: false,
       tabName: 'second',
       btnList: [1, 2],
+      list: tableData.data.items,
       formList: [
         {
           type: 'CITY_SELECT',
@@ -380,7 +382,7 @@ export default defineComponent({
           precision: 2,
           required: true,
           sorter: true,
-          groupSummary: true,
+          groupSummary: {},
           filter: {
             type: 'number',
           },
@@ -400,7 +402,7 @@ export default defineComponent({
           width: 150,
           required: true,
           sorter: true,
-          groupSummary: true,
+          groupSummary: {},
           filter: {
             type: 'number',
           },
@@ -421,7 +423,7 @@ export default defineComponent({
           precision: 2,
           align: 'right',
           sorter: true,
-          groupSummary: true,
+          groupSummary: {},
           filter: {
             type: 'number',
           },
@@ -647,9 +649,10 @@ export default defineComponent({
             uniqueKey="jzyDemoTable"
             maxHeight="400px"
             columns={this.columns}
-            fetch={this.fetch}
+            dataSource={this.list}
             rowKey={(row) => row.id}
-            spanMethod={this.spanMethod}
+            webPagination={true}
+            // spanMethod={this.spanMethod}
             rowSelection={this.selection}
             tablePrint={this.tablePrint}
             exportExcel={this.exportExcel}

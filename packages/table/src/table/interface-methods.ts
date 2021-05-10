@@ -5,7 +5,7 @@
  * @Last Modified time: 2021-05-07 16:48:42
  */
 import { intersection, isObject, isFunction } from 'lodash-es';
-import { getCellValue, setCellValue, tableDataFlatMap } from '../utils';
+import { getCellValue, setCellValue, getAllTableData } from '../utils';
 import { AnyFunction, AnyObject } from '../../../_utils/types';
 import config from '../config';
 
@@ -179,7 +179,7 @@ export default {
   // 表单校验
   FORM_VALIDATE(): Pick<ITableLog, 'required' | 'validate'> {
     const editableColumns = this.flattenColumns.filter((column) => isFunction(column.editRender));
-    tableDataFlatMap(this.tableFullData).forEach((record) => {
+    getAllTableData(this.tableFullData).forEach((record) => {
       editableColumns.forEach((column) => {
         const { dataIndex, editRender } = column;
         const options = editRender(record);
