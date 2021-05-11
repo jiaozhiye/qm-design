@@ -652,7 +652,7 @@ export default defineComponent({
             dataSource={this.list}
             rowKey={(row) => row.id}
             webPagination={true}
-            // spanMethod={this.spanMethod}
+            spanMethod={this.spanMethod}
             rowSelection={this.selection}
             tablePrint={this.tablePrint}
             exportExcel={this.exportExcel}

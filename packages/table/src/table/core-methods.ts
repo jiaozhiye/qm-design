@@ -5,12 +5,12 @@
  * @Last Modified time: 2021-03-30 09:56:43
  */
 import { ComponentInternalInstance } from 'vue';
-import { get } from 'lodash-es';
+import { get, isFunction, isObject } from 'lodash-es';
 import { difference, hasOwn, throttle, getCellValue, setCellValue } from '../utils';
 import { deepToRaw, errorCapture, isChrome, isIE, noop } from '../../../_utils/util';
 import { warn } from '../../../_utils/error';
 import config from '../config';
-import { IRecord, ISuperFilter, IDerivedRowKey } from './types';
+import { IRecord, ISuperFilter, IDerivedRowKey, IColumn, ICellSpan } from './types';
 
 const isWebkit = isChrome();
 const throttleScrollYDuration = isIE() ? 20 : 10;
@@ -214,6 +214,22 @@ export default {
         });
       }
     });
+  },
+  getSpan(row: IRecord, column: IColumn, rowIndex: number, columnIndex: number, tableData: IRecord[]): ICellSpan {
+    let rowspan = 1;
+    let colspan = 1;
+    const fn = this.spanMethod;
+    if (isFunction(fn)) {
+      const result = fn({ row, column, rowIndex, columnIndex, tableData });
+      if (Array.isArray(result)) {
+        rowspan = result[0];
+        colspan = result[1];
+      } else if (isObject(result)) {
+        rowspan = result.rowspan;
+        colspan = result.colspan;
+      }
+    }
+    return { rowspan, colspan };
   },
   // 格式化 表头筛选 和 高级检索 参数
   formatFiltersParams(filters, superFilters): ISuperFilter[] {

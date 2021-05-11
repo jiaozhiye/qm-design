@@ -228,7 +228,7 @@ export default defineComponent({
             (row) =>
               `<tr>${flatColumns
                 .map((column, index) => {
-                  const { rowspan, colspan } = this.getSpan(row, column, row.index, index, tableFullData);
+                  const { rowspan, colspan } = this.$$table.getSpan(row, column, row.index, index, tableFullData);
                   if (!rowspan || !colspan) {
                     return null;
                   }
@@ -284,22 +284,6 @@ export default defineComponent({
         }
         download(blob, name);
       }
-    },
-    getSpan(row: IRecord, column: IColumn, rowIndex: number, columnIndex: number, tableData: IRecord[]): ICellSpan {
-      let rowspan = 1;
-      let colspan = 1;
-      const fn = this.$$table.spanMethod;
-      if (isFunction(fn)) {
-        const result = fn({ row, column, rowIndex, columnIndex, tableData });
-        if (Array.isArray(result)) {
-          rowspan = result[0];
-          colspan = result[1];
-        } else if (isObject(result)) {
-          rowspan = result.rowspan;
-          colspan = result.colspan;
-        }
-      }
-      return { rowspan, colspan };
     },
     renderCell(row: IRecord, rowIndex: number, column: IColumn, columnIndex: number): unknown {
       const { dataIndex, extraRender } = column;

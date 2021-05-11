@@ -110,23 +110,6 @@ const exportMixin = {
       const sheetMerges: ISheetMerge[] = [];
       let beforeRowCount = 0;
 
-      const getSpan = (row: IRecord, column: IColumn, rowIndex: number, columnIndex: number, tableData: IRecord[]): ICellSpan => {
-        let rowspan = 1;
-        let colspan = 1;
-        const fn = spanMethod;
-        if (isFunction(fn)) {
-          const result = fn({ row, column, rowIndex, columnIndex, tableData });
-          if (Array.isArray(result)) {
-            rowspan = result[0];
-            colspan = result[1];
-          } else if (isObject(result)) {
-            rowspan = result.rowspan;
-            colspan = result.colspan;
-          }
-        }
-        return { rowspan, colspan };
-      };
-
       // 处理表头
       const colHead: AnyObject<string> = {};
       columns.forEach((column: IColumn) => {
@@ -180,7 +163,7 @@ const exportMixin = {
         columns.forEach((column: IColumn, columnIndex: number) => {
           // 处理合并
           if (isFunction(spanMethod)) {
-            const { rowspan, colspan } = getSpan(row, column, rowIndex, columnIndex, dataList);
+            const { rowspan, colspan } = this.$$table.getSpan(row, column, rowIndex, columnIndex, dataList);
             if (colspan > 1 || rowspan > 1) {
               sheetMerges.push({
                 s: { r: rowIndex + beforeRowCount, c: columnIndex },
