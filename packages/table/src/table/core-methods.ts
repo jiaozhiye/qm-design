@@ -215,6 +215,7 @@ export default {
       }
     });
   },
+  // 表格单元格合并
   getSpan(row: IRecord, column: IColumn, rowIndex: number, columnIndex: number, tableData: IRecord[]): ICellSpan {
     let rowspan = 1;
     let colspan = 1;
