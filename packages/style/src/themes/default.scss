@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-05-23 13:15:51
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-02-21 15:38:59
+ * @Last Modified time: 2021-05-11 16:08:31
  */
 // The prefix to use on all css classes.
 $qm-prefix: qm;
@@ -37,13 +37,14 @@ $body-background: $white;
 $component-background: $white;
 
 // Fonts
-$font-family: 'Helvetica Neue', Helvetica, 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei',
-  '微软雅黑', Arial, sans-serif;
+$font-family: 'Helvetica Neue', Helvetica, 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', '微软雅黑', Arial, sans-serif;
 $code-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, Courier, monospace;
 
 $text-color: rgba($black, 0.65);
 $text-color-secondary: rgba($black, 0.45);
 $icon-color: inherit;
+
+$font-path: './fonts' !default;
 
 $font-size-base: 14px;
 $font-size-lg: $font-size-base + 2px;

@@ -1,8 +1,8 @@
 /*
  * @Author: 焦质晔
  * @Date: 2021-02-11 15:05:17
- * @Last Modified by:   焦质晔
- * @Last Modified time: 2021-02-11 15:05:17
+ * @Last Modified by: 焦质晔
+ * @Last Modified time: 2021-05-11 15:38:31
  */
 'use strict';
 
@@ -29,4 +29,8 @@ function copyfont() {
     .pipe(dest(utils.resolve('lib/style/fonts')));
 }
 
-exports.build = series(compile, copyfont);
+function copyscss() {
+  return src(utils.resolve('packages/**/*.scss')).pipe(dest(utils.resolve('lib')));
+}
+
+exports.build = series(compile, copyfont, copyscss);
