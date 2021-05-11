@@ -26,6 +26,11 @@ export type IFormatType =
   | 'secret-IDnumber'
   | 'secret-bankNumber';
 
+export type ICellSpan = {
+  rowspan: number;
+  colspan: number;
+};
+
 export type IDict = {
   text: string;
   value: string;

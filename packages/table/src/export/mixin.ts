@@ -5,11 +5,11 @@
  * @Last Modified time: 2021-04-09 10:47:46
  */
 import ExcelJS from 'exceljs';
-import { isFunction } from 'lodash-es';
+import { isFunction, isObject } from 'lodash-es';
 import { getCellValue, convertToRows, deepFindColumn } from '../utils';
 import { download } from '../../../_utils/download';
 import { t } from '../../../locale';
-import { IAlign, IColumn, IRecord } from '../table/types';
+import { IAlign, ICellSpan, IColumn, IRecord } from '../table/types';
 import { AnyObject } from '../../../_utils/types';
 
 type ISheetMerge = {
@@ -101,9 +101,7 @@ const exportMixin = {
         isGroup,
         showFooter,
         scrollYStore: { rowHeight },
-        $$tableBody,
       } = this.$$table;
-      const { getSpan } = $$tableBody;
       const { flatColumns: columns, headColumns } = this;
       const colGroups = convertToRows(headColumns);
       const colList: unknown[] = [];
@@ -111,6 +109,23 @@ const exportMixin = {
       const sheetCols: ISheetCol[] = [];
       const sheetMerges: ISheetMerge[] = [];
       let beforeRowCount = 0;
+
+      const getSpan = (row: IRecord, column: IColumn, rowIndex: number, columnIndex: number, tableData: IRecord[]): ICellSpan => {
+        let rowspan = 1;
+        let colspan = 1;
+        const fn = spanMethod;
+        if (isFunction(fn)) {
+          const result = fn({ row, column, rowIndex, columnIndex, tableData });
+          if (Array.isArray(result)) {
+            rowspan = result[0];
+            colspan = result[1];
+          } else if (isObject(result)) {
+            rowspan = result.rowspan;
+            colspan = result.colspan;
+          }
+        }
+        return { rowspan, colspan };
+      };
 
       // 处理表头
       const colHead: AnyObject<string> = {};
@@ -165,7 +180,7 @@ const exportMixin = {
         columns.forEach((column: IColumn, columnIndex: number) => {
           // 处理合并
           if (isFunction(spanMethod)) {
-            const { rowspan, colspan } = getSpan(row, column, rowIndex, columnIndex);
+            const { rowspan, colspan } = getSpan(row, column, rowIndex, columnIndex, dataList);
             if (colspan > 1 || rowspan > 1) {
               sheetMerges.push({
                 s: { r: rowIndex + beforeRowCount, c: columnIndex },

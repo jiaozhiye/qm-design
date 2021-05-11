@@ -5,14 +5,14 @@
  * @Last Modified time: 2021-05-07 17:00:54
  */
 import { defineComponent } from 'vue';
-import { flatten, groupBy, map, spread, mergeWith } from 'lodash-es';
+import { flatten, groupBy, map, spread, mergeWith, isFunction, isObject } from 'lodash-es';
 import { convertToRows, deepFindColumn, filterTableColumns, getCellValue } from '../utils';
 import { deepToRaw } from '../../../_utils/util';
 import { getPrefixCls } from '../../../_utils/prefix';
 import { t } from '../../../locale';
 import { download } from '../../../_utils/download';
 import { JSXNode } from '../../../_utils/types';
-import { IColumn, IDerivedColumn, IRecord } from '../table/types';
+import { IColumn, IDerivedColumn, ICellSpan, IRecord } from '../table/types';
 
 import config from '../config';
 
@@ -228,7 +228,7 @@ export default defineComponent({
             (row) =>
               `<tr>${flatColumns
                 .map((column, index) => {
-                  const { rowspan, colspan } = this.$$table.$$tableBody.getSpan(row, column, row.index, index);
+                  const { rowspan, colspan } = this.getSpan(row, column, row.index, index, tableFullData);
                   if (!rowspan || !colspan) {
                     return null;
                   }
@@ -284,6 +284,22 @@ export default defineComponent({
         }
         download(blob, name);
       }
+    },
+    getSpan(row: IRecord, column: IColumn, rowIndex: number, columnIndex: number, tableData: IRecord[]): ICellSpan {
+      let rowspan = 1;
+      let colspan = 1;
+      const fn = this.$$table.spanMethod;
+      if (isFunction(fn)) {
+        const result = fn({ row, column, rowIndex, columnIndex, tableData });
+        if (Array.isArray(result)) {
+          rowspan = result[0];
+          colspan = result[1];
+        } else if (isObject(result)) {
+          rowspan = result.rowspan;
+          colspan = result.colspan;
+        }
+      }
+      return { rowspan, colspan };
     },
     renderCell(row: IRecord, rowIndex: number, column: IColumn, columnIndex: number): unknown {
       const { dataIndex, extraRender } = column;

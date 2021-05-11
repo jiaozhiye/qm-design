@@ -13,7 +13,7 @@ import { noop, isVNode } from '../../../_utils/util';
 import { getParentNode } from '../../../_utils/dom';
 import { warn } from '../../../_utils/error';
 import { JSXNode, Nullable } from '../../../_utils/types';
-import { IColumn, IDict, IRecord } from '../table/types';
+import { IColumn, ICellSpan, IDict, IRecord } from '../table/types';
 import TableManager from '../manager';
 import ClickOutside from '../../../directives/click-outside';
 
@@ -301,7 +301,7 @@ export default defineComponent({
     renderIndent(level: number): Nullable<JSXNode> {
       return level ? <span class={`cell--indent indent-level-${level}`} style={{ paddingLeft: `${level * config.treeTable.textIndent}px` }} /> : null;
     },
-    getSpan(row: IRecord, column: IColumn, rowIndex: number, columnIndex: number) {
+    getSpan(row: IRecord, column: IColumn, rowIndex: number, columnIndex: number): ICellSpan {
       let rowspan = 1;
       let colspan = 1;
       const fn = this.$$table.spanMethod;
@@ -311,8 +311,16 @@ export default defineComponent({
           rowspan = result[0];
           colspan = result[1];
         } else if (isObject(result)) {
-          rowspan = (result as any).rowspan;
-          colspan = (result as any).colspan;
+          rowspan = result.rowspan;
+          colspan = result.colspan;
+        }
+        if (this.$$table.webPagination && row === this.tableData[0] && rowspan === 0) {
+          rowspan = 1;
+          for (let i = 1; i < this.tableData.length; i++) {
+            const { rowspan: rowSpan } = this.getSpan(this.tableData[i], column, this.tableData[i].index, columnIndex);
+            if (rowSpan > 0) break;
+            rowspan++;
+          }
         }
       }
       return { rowspan, colspan };
