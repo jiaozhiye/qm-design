@@ -15,7 +15,7 @@
     "build:umd": "cross-env NODE_ENV=production BABEL_ENV=lib webpack --config ./build/webpack.build.conf.js",
     "build:esm": "cross-env BABEL_ENV=lib rollup --config ./build/build-esm.rollup.js",
     "build:type": "gulp build --gulpfile ./build/build-type.gulp.js && cp-cli lib/packages lib && rimraf lib/packages",
-    "build:locale": "cross-env BABEL_ENV=lib babel packages/locale --extensions .ts --out-dir lib/locale",
+    "build:locale": "cross-env BABEL_ENV=utils babel packages/locale --extensions .ts --out-dir lib/locale",
     "build:theme": "gulp build --gulpfile ./build/build-style.gulp.js",
     "clean:lib": "rimraf lib",
     "lint": "eslint ./src --ext .vue,.js,.ts",
