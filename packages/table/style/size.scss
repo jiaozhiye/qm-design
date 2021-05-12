@@ -14,7 +14,6 @@ $prefix: '#{$qm-prefix}-table';
     }
     .header--column,
     .body--column,
-    .body--expanded-column,
     .footer--column {
       &.col--ellipsis {
         @extend %DefaultColumnHeight;
@@ -32,7 +31,6 @@ $prefix: '#{$qm-prefix}-table';
     }
     .header--column,
     .body--column,
-    .body--expanded-column,
     .footer--column {
       &.col--ellipsis {
         @extend %MediumColumnHeight;
@@ -50,7 +48,6 @@ $prefix: '#{$qm-prefix}-table';
     }
     .header--column,
     .body--column,
-    .body--expanded-column,
     .footer--column {
       &.col--ellipsis {
         @extend %SmallColumnHeight;
@@ -68,7 +65,6 @@ $prefix: '#{$qm-prefix}-table';
     }
     .header--column,
     .body--column,
-    .body--expanded-column,
     .footer--column {
       &.col--ellipsis {
         @extend %MiniColumnHeight;

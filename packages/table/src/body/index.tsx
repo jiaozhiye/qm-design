@@ -152,11 +152,11 @@ export default defineComponent({
         // 展开行
         if (expandable) {
           const { rowExpandable = noop } = expandable;
-          const expandColumnCls = [`body--expanded-column`];
+          const expandColumnCls = [`body--column`];
           // 展开状态
           if (!rowExpandable(row) && rowExpandedKeys.includes(rowKey)) {
             rows.push(
-              <tr key={`expand_${rowKey}`} class="body--expanded-row">
+              <tr key={`expand_${rowKey}`} class="body--row-expanded">
                 <td colspan={this.flattenColumns.length} class={expandColumnCls} style={{ paddingLeft: !rowSelection ? `50px` : `100px` }}>
                   <div class="cell">{expandable.expandedRowRender(row, rowIndex)}</div>
                 </td>

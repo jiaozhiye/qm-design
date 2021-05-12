@@ -158,15 +158,14 @@ $prefix: '#{$qm-prefix}-table';
     }
   }
 
-  .body--expanded-row {
-    .body--expanded-column {
+  .body--row-expanded {
+    .body--column {
       background-color: $v-table-row-expanded-background-color;
     }
   }
 
   .header--column,
   .body--column,
-  .body--expanded-column,
   .footer--column {
     position: relative;
     text-align: left;
@@ -251,7 +250,6 @@ $prefix: '#{$qm-prefix}-table';
   &.is--border {
     .header--column,
     .body--column,
-    .body--expanded-column,
     .footer--column {
       border-bottom: 1px solid $v-table-border-color;
       border-right: 1px solid $v-table-border-color;
@@ -265,8 +263,7 @@ $prefix: '#{$qm-prefix}-table';
       border: 0;
     }
     .header--column,
-    .body--column,
-    .body--expanded-column {
+    .body--column {
       border-bottom: 1px solid $v-table-border-color;
     }
   }
@@ -326,7 +323,6 @@ $prefix: '#{$qm-prefix}-table';
   /* 溢出列 */
   .header--column,
   .body--column,
-  .body--expanded-column,
   .footer--column {
     &.col--ellipsis {
       .cell {
