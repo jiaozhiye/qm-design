@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-02-08 14:35:05
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-17 18:55:08
+ * @Last Modified time: 2021-05-12 21:04:28
  */
 'use strict';
 
@@ -18,7 +18,6 @@ const isProd = process.env.NODE_ENV === 'production';
 
 module.exports = {
   mode: isProd ? 'production' : 'development',
-  context: process.cwd(),
   target: 'web', // webpack5.x 加上之后热更新才有效果
   devtool: !isProd && 'eval-cheap-source-map',
   entry: {
@@ -178,9 +177,7 @@ module.exports = {
     : []
   ).concat([
     new webpack.DefinePlugin({
-      'process.env': {
-        NODE_ENV: JSON.stringify(process.env.NODE_ENV),
-      },
+      'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV),
       __VUE_OPTIONS_API__: JSON.stringify(true),
       __VUE_PROD_DEVTOOLS__: JSON.stringify(false),
     }),

@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-02-12 09:22:19
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-05-07 21:27:59
+ * @Last Modified time: 2021-05-12 21:34:19
  */
 'use strict';
 
@@ -28,6 +28,9 @@ export default [
     plugins: [
       terser(),
       nodeResolve(),
+      commonjs({
+        extensions,
+      }),
       vuePlugin({
         target: 'browser',
         css: false,
@@ -37,15 +40,14 @@ export default [
         outDir: 'lib',
         sourceMap: false,
         include: ['packages/**/*', 'typings/vue-shim.d.ts'],
-        exclude: ['node_modules'],
-      }),
-      commonjs({
-        extensions,
+        exclude: ['node_modules/**'],
       }),
       babel({
-        babelHelpers: 'runtime',
-        exclude: 'node_modules',
+        babelHelpers: 'bundled',
+        exclude: 'node_modules/**',
         extensions,
+        presets: [],
+        plugins: ['@vue/babel-plugin-jsx'],
       }),
     ],
     acornInjectPlugins: [jsx()],

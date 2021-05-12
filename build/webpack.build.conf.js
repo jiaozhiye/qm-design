@@ -2,21 +2,22 @@
  * @Author: 焦质晔
  * @Date: 2021-02-08 14:35:05
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-05-07 21:50:47
+ * @Last Modified time: 2021-05-12 21:50:20
  */
 'use strict';
 
-const path = require('path');
-const webpack = require('webpack');
 const utils = require('./utils');
-const VueLoaderPlugin = require('vue-loader').VueLoaderPlugin;
+const webpack = require('webpack');
+const nodeExternals = require('webpack-node-externals');
+const { VueLoaderPlugin } = require('vue-loader');
+// const pkg = require('../package.json');
+// const deps = Object.keys(pkg.dependencies);
 
 process.env.NODE_ENV = 'production';
 
 module.exports = {
   mode: 'production',
-  context: process.cwd(),
-  devtool: false,
+  target: 'web',
   entry: utils.resolve('packages/index.ts'),
   output: {
     path: utils.resolve('lib'),
@@ -29,11 +30,6 @@ module.exports = {
   },
   resolve: {
     extensions: ['.ts', '.tsx', '.js', '.jsx', '.json'],
-    fallback: {
-      crypto: false,
-      stream: false,
-      buffer: false,
-    },
   },
   externals: [
     {
@@ -43,6 +39,13 @@ module.exports = {
         commonjs2: 'vue',
       },
     },
+    // function ({ context, request }, callback) {
+    //   if (deps.some((k) => new RegExp('^' + k).test(request))) {
+    //     return callback(null, `commonjs ${request}`);
+    //   }
+    //   callback();
+    // },
+    nodeExternals(),
   ],
   module: {
     rules: [
@@ -81,14 +84,5 @@ module.exports = {
       },
     ],
   },
-  plugins: [
-    new webpack.DefinePlugin({
-      'process.env': {
-        NODE_ENV: JSON.stringify(process.env.NODE_ENV),
-        __VUE_OPTIONS_API__: JSON.stringify(true),
-        __VUE_PROD_DEVTOOLS__: JSON.stringify(false),
-      },
-    }),
-    new VueLoaderPlugin(),
-  ],
+  plugins: [new VueLoaderPlugin()],
 };

@@ -11,8 +11,9 @@
   "license": "MIT",
   "scripts": {
     "dev": "cross-env NODE_ENV=development BABEL_ENV=web webpack serve --inline --hot --progress --config build/webpack.src.conf.js",
-    "build:lib": "yarn clean:lib && cross-env NODE_ENV=production BABEL_ENV=lib webpack --config ./build/webpack.build.conf.js && yarn build:esm && yarn build:type && yarn build:locale && yarn build:theme",
-    "build:esm": "cross-env BABEL_ENV=lib rollup --config ./build/build-esm.rollup.js",
+    "build:lib": "yarn clean:lib && yarn build:umd && yarn build:esm && yarn build:type && yarn build:locale && yarn build:theme",
+    "build:umd": "cross-env NODE_ENV=production BABEL_ENV=lib webpack --config ./build/webpack.build.conf.js",
+    "build:esm": "cross-env rollup --config ./build/build-esm.rollup.js",
     "build:type": "gulp build --gulpfile ./build/build-type.gulp.js && cp-cli lib/packages lib && rimraf lib/packages",
     "build:locale": "cross-env BABEL_ENV=lib babel packages/locale --extensions .ts --out-dir lib/locale",
     "build:theme": "gulp build --gulpfile ./build/build-style.gulp.js",
@@ -126,7 +127,8 @@
     "webpack": "^5.36.2",
     "webpack-cli": "^4.7.0",
     "webpack-dev-server": "^3.11.2",
-    "webpack-merge": "^4.2.2"
+    "webpack-merge": "^4.2.2",
+    "webpack-node-externals": "^3.0.0"
   },
   "engines": {
     "node": ">= 14.16.0",
