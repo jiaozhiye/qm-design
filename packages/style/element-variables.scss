@@ -6,10 +6,8 @@
  */
 @import './src/themes';
 
+/// color|1|Brand Color|0
 $--color-primary: $primary-color;
 
 /* 改变 icon 字体路径变量，必需 */
 $--font-path: '~element-plus/lib/theme-chalk/fonts';
-
-/* 加载 ElementPlus 样式文件，必需 */
-@import 'element-plus/packages/theme-chalk/src/index';

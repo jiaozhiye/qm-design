@@ -4,11 +4,11 @@
  * @Last Modified by: 焦质晔
  * @Last Modified time: 2021-05-03 12:18:58
  */
+@import '../element-variables.scss';
 @import './reset.scss';
 @import './iconfont.scss';
-// ElementPlus 自定义主题
-@import '../element-variables.scss';
 
+/* QmDesign */
 @import '../../button/style/index.scss';
 @import '../../space/style/index.scss';
 @import '../../anchor/style/index.scss';
@@ -28,3 +28,6 @@
 @import '../../table/style/index.scss';
 @import '../../search-helper/style/index.scss';
 @import '../../cropper/style/index.scss';
+
+/* ElementPlus */
+@import 'element-plus/packages/theme-chalk/src/index.scss';
