@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-03-08 08:28:55
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-05-07 16:31:55
+ * @Last Modified time: 2021-05-12 23:30:52
  */
 import { VNode } from 'vue';
 import { get, set, transform, intersection, isEqual, isObject } from 'lodash-es';
@@ -417,7 +417,7 @@ export const createWhereSQL = (filters: any, showType = false): string => {
 };
 
 // 多列分组聚合
-export const groupBy = (array: IRecord[] = [], props: string[] = []): any[][] => {
+export const groupByProps = (array: IRecord[] = [], props: string[] = []): any[][] => {
   const fn = (x) => {
     const res: unknown[] = [];
     props.forEach((k) => res.push(getCellValue(x, k)));

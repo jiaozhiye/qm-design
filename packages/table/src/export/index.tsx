@@ -2,10 +2,10 @@
  * @Author: 焦质晔
  * @Date: 2020-02-02 15:58:17
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-05-07 14:48:56
+ * @Last Modified time: 2021-05-12 23:32:47
  */
 import { defineComponent } from 'vue';
-import { get, isFunction, isObject } from 'lodash-es';
+import { get } from 'lodash-es';
 import dayjs from 'dayjs';
 
 import { getCellValue, setCellValue, convertToRows, filterTableColumns, getAllTableData } from '../utils';
@@ -13,7 +13,7 @@ import { deepToRaw } from '../../../_utils/util';
 import { getPrefixCls } from '../../../_utils/prefix';
 import { t } from '../../../locale';
 import { download } from '../../../_utils/download';
-import { IColumn, IDerivedColumn, IFetch, ICellSpan, IRecord } from '../table/types';
+import { IColumn, IDerivedColumn, IFetch, IRecord } from '../table/types';
 import { JSXNode, AnyObject, Nullable } from '../../../_utils/types';
 
 import config from '../config';

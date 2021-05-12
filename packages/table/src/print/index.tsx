@@ -2,17 +2,17 @@
  * @Author: 焦质晔
  * @Date: 2020-03-26 11:44:24
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-05-07 17:00:54
+ * @Last Modified time: 2021-05-12 23:33:00
  */
 import { defineComponent } from 'vue';
-import { flatten, groupBy, map, spread, mergeWith, isFunction, isObject } from 'lodash-es';
+import { flatten, groupBy, map, spread, mergeWith } from 'lodash-es';
 import { convertToRows, deepFindColumn, filterTableColumns, getCellValue } from '../utils';
 import { deepToRaw } from '../../../_utils/util';
 import { getPrefixCls } from '../../../_utils/prefix';
 import { t } from '../../../locale';
 import { download } from '../../../_utils/download';
 import { JSXNode } from '../../../_utils/types';
-import { IColumn, IDerivedColumn, ICellSpan, IRecord } from '../table/types';
+import { IColumn, IDerivedColumn, IRecord } from '../table/types';
 
 import config from '../config';
 
@@ -108,7 +108,6 @@ export default defineComponent({
       return map(
         groupBy(flatten(columns), mark),
         spread((...rest) => {
-          // @ts-ignore
           return mergeWith(...rest, (objValue, srcValue) => {
             if (Array.isArray(objValue)) {
               return this.doMerge(objValue.concat(srcValue), mark);

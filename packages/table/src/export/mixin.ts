@@ -2,14 +2,14 @@
  * @Author: 焦质晔
  * @Date: 2021-04-06 13:37:24
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-04-09 10:47:46
+ * @Last Modified time: 2021-05-12 23:32:29
  */
 import ExcelJS from 'exceljs';
-import { isFunction, isObject } from 'lodash-es';
+import { isFunction } from 'lodash-es';
 import { getCellValue, convertToRows, deepFindColumn } from '../utils';
 import { download } from '../../../_utils/download';
 import { t } from '../../../locale';
-import { IAlign, ICellSpan, IColumn, IRecord } from '../table/types';
+import { IAlign, IColumn, IRecord } from '../table/types';
 import { AnyObject } from '../../../_utils/types';
 
 type ISheetMerge = {
