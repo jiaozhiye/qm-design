@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-02-12 09:22:19
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-05-12 21:34:19
+ * @Last Modified time: 2021-05-12 22:22:35
  */
 'use strict';
 
@@ -46,8 +46,6 @@ export default [
         babelHelpers: 'bundled',
         exclude: 'node_modules/**',
         extensions,
-        presets: [],
-        plugins: ['@vue/babel-plugin-jsx'],
       }),
     ],
     acornInjectPlugins: [jsx()],
