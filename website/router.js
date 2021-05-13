@@ -2,14 +2,14 @@
  * @Author: 焦质晔
  * @Date: 2021-03-17 12:55:34
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-04-23 15:32:02
+ * @Last Modified time: 2021-05-13 13:15:36
  */
 import { defineAsyncComponent } from 'vue';
 import { createRouter, createWebHashHistory } from 'vue-router';
 import navList from './nav.config';
 
 const LoadingComponent = {
-  template: `<div v-loading="true" style="min-height: 500px; width: 100%;"></div>`,
+  template: `<div style="text-align: center;padding: 100px 0;">Loading...</div>`,
 };
 
 const ErrorComponent = {
