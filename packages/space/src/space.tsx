@@ -20,6 +20,13 @@ enum Align {
   bottom = 'flex-end',
 }
 
+enum space {
+  default = 14,
+  medium = 12,
+  small = 10,
+  mini = 8,
+}
+
 export default defineComponent({
   name: 'QmSpace',
   componentName: 'QmSpace',
@@ -56,7 +63,7 @@ export default defineComponent({
     const wrapProps = {
       alignment: align,
       spacer,
-      size: size ?? $size,
+      size: size ?? space[$size || 'default'],
       wrap,
     };
     return (

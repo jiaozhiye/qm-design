@@ -18,6 +18,7 @@ import { FormColsMixin } from './form-cols-mixin';
 import { PublicMethodsMixin } from './public-methods-mixin';
 import { IFormType, IFormData, IFormItem, IFormDesc, IFormItemType, ISecretType, props, ARRAY_TYPE, FORMAT_TYPE, UNFIX_TYPE } from './types';
 
+import Space from '../../space';
 import FieldsFilter from './fields-filter';
 import FormInput from './form-input';
 import FormRangeInput from './form-range-input';
@@ -632,12 +633,14 @@ export default defineComponent({
 
       return isSearchBtn ? (
         <el-col key="-" span={colSpan} offset={offset * colSpan} style={{ textAlign: 'right' }}>
-          <el-button type="primary" size={$size} icon="iconfont icon-search" onClick={this.submitForm}>
-            {t('qm.form.search')}
-          </el-button>
-          <el-button size={$size} icon="iconfont icon-reload" onClick={this.resetForm}>
-            {t('qm.form.reset')}
-          </el-button>
+          <Space>
+            <el-button type="primary" size={$size} icon="iconfont icon-search" onClick={this.submitForm}>
+              {t('qm.form.search')}
+            </el-button>
+            <el-button size={$size} icon="iconfont icon-reload" onClick={this.resetForm}>
+              {t('qm.form.reset')}
+            </el-button>
+          </Space>
           {isFieldsDefine && <FieldsFilter size={$size} list={this.list} uniqueKey={this.uniqueKey} />}
           {showFilterCollapse ? (
             <el-button type="text" size={$size} onClick={() => (this.collapse = !collapse)}>
@@ -658,12 +661,14 @@ export default defineComponent({
         <el-row gutter={4}>
           <el-col key="-" span={colSpan}>
             <el-form-item label={''}>
-              <el-button type="primary" size={$size} onClick={this.submitForm}>
-                {t('qm.form.save')}
-              </el-button>
-              <el-button size={$size} onClick={this.resetForm}>
-                {t('qm.form.reset')}
-              </el-button>
+              <Space>
+                <el-button type="primary" size={$size} onClick={this.submitForm}>
+                  {t('qm.form.save')}
+                </el-button>
+                <el-button size={$size} onClick={this.resetForm}>
+                  {t('qm.form.reset')}
+                </el-button>
+              </Space>
             </el-form-item>
           </el-col>
         </el-row>

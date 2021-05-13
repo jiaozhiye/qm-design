@@ -22,9 +22,7 @@
   };
   export default {
     data() {
-      return {
-        visible: false,
-      };
+      return {};
     },
     methods: {
       async clickHandle() {
@@ -56,7 +54,6 @@
   export default {
     data() {
       return {
-        visible: false,
         confirm: {},
       };
     },

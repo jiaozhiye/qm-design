@@ -14,12 +14,14 @@ $prefix: '#{$qm-prefix}-table';
     padding-right: 0;
     .el-pagination__jump {
       margin-left: $margin-base;
+      margin-right: 0;
       .el-input__inner {
         line-height: 1;
       }
     }
     .el-pagination__sizes {
       margin-left: $margin-base;
+      margin-right: 0;
     }
   }
 }
