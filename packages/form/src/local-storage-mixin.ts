@@ -90,7 +90,6 @@ export const LocalStorageMixin = {
         }
         return {
           fieldName: x.fieldName,
-          label: x.label,
           ...target,
         };
       });
