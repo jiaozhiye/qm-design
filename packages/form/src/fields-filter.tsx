@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-02-26 14:53:54
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-11 14:30:28
+ * @Last Modified time: 2021-05-13 10:51:10
  */
 import { defineComponent, PropType, reactive } from 'vue';
 import { JSXNode } from '../../_utils/types';
@@ -32,9 +32,6 @@ export default defineComponent({
     uniqueKey: {
       type: String,
     },
-    fieldsChange: {
-      type: Function,
-    },
   },
   data() {
     return {
@@ -57,7 +54,7 @@ export default defineComponent({
       },
       'onUpdate:modelValue': (val: IFormItem[]): void => {
         this.setLocalFields(deepToRaw(val));
-        this.fieldsChange(reactive(val));
+        this.$$form.fieldsChange(reactive(val));
         // 自动展开
         this.$$form.collapse = true;
       },

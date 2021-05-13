@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-02-28 23:01:43
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-05-07 17:02:23
+ * @Last Modified time: 2021-05-13 11:48:53
  */
 import { defineComponent, reactive, CSSProperties } from 'vue';
 import addEventListener from 'add-dom-event-listener';
@@ -61,10 +61,10 @@ export default defineComponent({
       const { headerHeight, viewportHeight, footerHeight } = layout;
       const result: CSSProperties = {};
       if (minHeight) {
-        Object.assign(result, { minHeight: `${parseHeight(minHeight) - headerHeight - footerHeight}px` });
+        Object.assign(result, { minHeight: `${(parseHeight(minHeight) as number) - headerHeight - footerHeight}px` });
       }
       if (maxHeight) {
-        Object.assign(result, { maxHeight: `${parseHeight(maxHeight) - headerHeight - footerHeight}px` });
+        Object.assign(result, { maxHeight: `${(parseHeight(maxHeight) as number) - headerHeight - footerHeight}px` });
       }
       if (height || fullHeight || autoHeight) {
         return { ...result, height: `${viewportHeight}px` };
@@ -130,12 +130,10 @@ export default defineComponent({
     renderColgroup(): JSXNode {
       return (
         <colgroup>
-          {this.flattenColumns.map(
-            (column: IColumn): JSXNode => {
-              const { dataIndex, width, renderWidth } = column;
-              return <col key={dataIndex} style={{ width: `${width || renderWidth}px`, minWidth: `${width || renderWidth}px` }} />;
-            }
-          )}
+          {this.flattenColumns.map((column: IColumn): JSXNode => {
+            const { dataIndex, width, renderWidth } = column;
+            return <col key={dataIndex} style={{ width: `${width || renderWidth}px`, minWidth: `${width || renderWidth}px` }} />;
+          })}
         </colgroup>
       );
     },

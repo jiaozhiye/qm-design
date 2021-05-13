@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-03-17 10:29:47
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-04-08 15:26:57
+ * @Last Modified time: 2021-05-13 11:13:11
  */
 import { defineComponent, reactive } from 'vue';
 import { cloneDeep, isUndefined } from 'lodash-es';
@@ -268,7 +268,7 @@ export default defineComponent({
               class={{ [`${prefixCls}-column-filter`]: !0, [`selected`]: visible }}
               title={!showButtonText ? t('qm.table.columnFilter.text') : ''}
             >
-              <i class="iconfont el-icon-s-operation" />
+              <i class="icon el-icon-s-operation" />
               <span>{showButtonText && t('qm.table.columnFilter.text')}</span>
             </span>
           ),

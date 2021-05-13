@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-03-05 10:27:24
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-22 13:31:12
+ * @Last Modified time: 2021-05-13 11:47:40
  */
 import { deepMapColumns, createFilterColumns, deepFindColumn, findFirstColumn, findLastColumn, parseHeight } from '../utils';
 import config from '../config';
@@ -100,7 +100,7 @@ const columnsMixin = {
       for (let i = 0; i < this.flattenColumns.length; i++) {
         const column: IColumn = this.flattenColumns[i];
         if (column.dataIndex === key) break;
-        l += parseHeight(column.width || column.renderWidth || 0);
+        l += parseHeight(column.width || column.renderWidth || 0) as number;
       }
       return l;
     },
@@ -113,7 +113,7 @@ const columnsMixin = {
       for (let i = this.flattenColumns.length - 1; i >= 0; i--) {
         const column: IColumn = this.flattenColumns[i];
         if (column.dataIndex === key) break;
-        r += parseHeight(column.width || column.renderWidth || 0);
+        r += parseHeight(column.width || column.renderWidth || 0) as number;
       }
       return r;
     },

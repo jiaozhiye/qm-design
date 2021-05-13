@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-03-08 08:28:55
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-05-12 23:30:52
+ * @Last Modified time: 2021-05-13 11:36:26
  */
 import { VNode } from 'vue';
 import { get, set, transform, intersection, isEqual, isObject } from 'lodash-es';
@@ -245,16 +245,18 @@ export const getNodeOffset = (el: Nullable<HTMLElement>, container: HTMLElement,
 };
 
 // 格式化 DOM 元素高度
-export const parseHeight = (height: number | string): number => {
+export const parseHeight = (height: number | string): Nullable<number | string> => {
   if (typeof height === 'number') {
     return height;
   }
   if (typeof height === 'string') {
     if (/^\d+(?:px)?$/.test(height)) {
       return Number.parseInt(height, 10);
+    } else {
+      return height;
     }
   }
-  return Number(height);
+  return null;
 };
 
 // 比对两个对象的差异

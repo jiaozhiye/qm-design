@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-02-28 23:04:58
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-05-09 12:40:45
+ * @Last Modified time: 2021-05-13 11:21:32
  */
 import { PropType } from 'vue';
 import PropTypes from '../../../_utils/vue-types';
@@ -138,7 +138,7 @@ export default {
   height: {
     type: [Number, String] as PropType<number | string>,
     validator: (val: number | string): boolean => {
-      return isNumber(val) || isValidWidthUnit(val);
+      return isNumber(val) || isValidWidthUnit(val) || val === 'auto';
     },
   },
   // 表格的最小高度

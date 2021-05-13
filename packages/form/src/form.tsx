@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-02-09 09:03:59
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-31 09:34:14
+ * @Last Modified time: 2021-05-13 10:48:03
  */
 import { ComponentPublicInstance, defineComponent } from 'vue';
 import scrollIntoView from 'scroll-into-view-if-needed';
@@ -638,7 +638,7 @@ export default defineComponent({
           <el-button size={$size} icon="iconfont icon-reload" onClick={this.resetForm}>
             {t('qm.form.reset')}
           </el-button>
-          {isFieldsDefine && <FieldsFilter size={$size} list={this.list} uniqueKey={this.uniqueKey} fieldsChange={this.fieldsChange} />}
+          {isFieldsDefine && <FieldsFilter size={$size} list={this.list} uniqueKey={this.uniqueKey} />}
           {showFilterCollapse ? (
             <el-button type="text" size={$size} onClick={() => (this.collapse = !collapse)}>
               {collapse ? t('qm.form.collect') : t('qm.form.spread')}

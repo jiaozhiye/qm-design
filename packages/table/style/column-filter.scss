@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-02-28 22:13:50
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-11 10:30:13
+ * @Last Modified time: 2021-05-13 11:13:37
  */
 $prefix: '#{$qm-prefix}-table';
 
@@ -15,7 +15,7 @@ $prefix: '#{$qm-prefix}-table';
   &.selected {
     color: $v-primary-color;
   }
-  .iconfont {
+  .icon {
     margin-right: 4px;
     font-size: 1.15em;
     vertical-align: middle;

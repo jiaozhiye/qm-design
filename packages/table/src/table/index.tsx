@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-02-09 09:03:59
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-30 10:00:30
+ * @Last Modified time: 2021-05-13 11:39:08
  */
 import { CSSProperties, defineComponent } from 'vue';
 import { isEqual } from 'lodash-es';
@@ -278,9 +278,6 @@ export default defineComponent({
     },
     columns(next: IColumn[]): void {
       this.setLocalColumns(next);
-    },
-    tableColumns(): void {
-      this.doLayout();
     },
     filters(): void {
       this.$emit('change', ...this.tableChange);
