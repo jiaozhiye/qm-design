@@ -2,18 +2,18 @@
  * @Author: 焦质晔
  * @Date: 2021-03-17 12:55:34
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-05-13 13:15:36
+ * @Last Modified time: 2021-05-14 09:18:50
  */
 import { defineAsyncComponent } from 'vue';
 import { createRouter, createWebHashHistory } from 'vue-router';
 import navList from './nav.config';
 
 const LoadingComponent = {
-  template: `<div style="text-align: center;padding: 100px 0;">Loading...</div>`,
+  template: `<div style="text-align: center;padding-top: 200px;"></div>`,
 };
 
 const ErrorComponent = {
-  template: `<div style="text-align: center;padding: 100px 0;">Loading error. Please refresh the page and try again</div>`,
+  template: `<div style="text-align: center;padding-top: 200px;">Loading error. Please refresh the page and try again</div>`,
 };
 
 const getAsyncComponent = (func) => {

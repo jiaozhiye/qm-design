@@ -19,8 +19,8 @@ dayjs.locale('zh-cn');
 
 import App from './App.vue';
 
-import QmDesign from '../packages';
-import '../packages/style/src/index.scss';
+import QmDesign from '../lib/index.esm.js';
+import '../lib/style/index.css';
 
 const app = createApp(App);
 

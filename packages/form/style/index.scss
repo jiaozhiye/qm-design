@@ -12,113 +12,110 @@ $prefix: '#{$qm-prefix}-form';
 .#{$prefix} {
   .el-col {
     margin-bottom: 12px;
-    .el-form-item {
-      margin-bottom: 0;
-      .el-form-item__label {
-        display: flex;
-        align-items: center;
-        justify-content: flex-end;
-        padding-right: 8px;
-        .custom-label__wrap {
-          display: inline-block;
-          .el-input__inner {
-            border-color: $border-color-base;
-          }
-          .el-input__suffix {
-            background-color: transparent;
-          }
-        }
-      }
-      .el-form-item__content {
-        display: flex;
-        align-items: center;
-        .el-form-item__error {
-          margin-top: -2px;
-          transform-origin: 0 50%;
-          -webkit-transform: scale(0.9);
-          transform: scale(0.9);
-        }
-      }
-      .el-input__inner {
-        text-align: left;
-        line-height: 1;
-      }
-      .el-search-helper {
-        .el-input__suffix {
-          transition: none;
-        }
-        .el-input-group__append {
-          padding: 0 13px;
-        }
-      }
-      .el-select {
-        width: 100%;
-      }
-      .el-autocomplete {
-        width: 100%;
-      }
-      .el-date-editor {
-        width: 100%;
-        .el-range-input {
-          text-align: left;
-        }
-      }
-      .el-textarea {
-        display: block;
-        .el-textarea__inner {
-          font-family: inherit;
-          overflow-y: auto;
-        }
-      }
-      .el-input-number {
-        width: 100%;
-        .el-input-number__increase:hover ~ .el-input .el-input__inner:not(.is-disabled),
-        .el-input-number__decrease:hover ~ .el-input .el-input__inner:not(.is-disabled) {
+  }
+  .el-form-item {
+    margin-bottom: 0;
+    .el-form-item__label {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      padding-right: $padding-base;
+      height: 40px;
+      line-height: 1.2;
+      .custom-label__wrap {
+        display: inline-block;
+        .el-input__inner {
           border-color: $border-color-base;
         }
-      }
-      .tree-select,
-      .region-select,
-      .city-select {
-        width: 100%;
-        .select-option {
-          display: none !important;
-        }
-      }
-      .el-range-editor {
-        padding-right: 5px;
-        .el-range-separator {
-          padding-left: 0;
-          padding-right: 0;
-        }
-        .el-range__close-icon {
-          width: 20px;
-        }
-      }
-      .el-radio-group,
-      .el-checkbox-group {
-        flex-wrap: wrap;
-        font-size: inherit;
-        line-height: inherit;
-      }
-      .desc-icon {
-        margin-left: 8px;
-        font-size: larger;
-      }
-      .desc-text {
-        @include text-overflow-cut;
-        margin-left: 8px;
-        cursor: default;
-      }
-      &.is-required {
-        .el-form-item__label {
-          color: $error-color;
+        .el-input__suffix {
+          background-color: transparent;
         }
       }
     }
-    .el-button {
-      .iconfont {
-        margin-right: 4px;
+    .el-form-item__content {
+      display: flex;
+      align-items: center;
+      .el-form-item__error {
+        margin-top: -2px;
+        transform-origin: 0 50%;
+        -webkit-transform: scale(0.9);
+        transform: scale(0.9);
+      }
+    }
+    .el-input__inner {
+      text-align: left;
+      line-height: 1;
+    }
+    .el-search-helper {
+      .el-input__suffix {
+        transition: none;
+      }
+      .el-input-group__append {
+        padding: 0 13px;
+      }
+    }
+    .el-select {
+      width: 100%;
+    }
+    .el-autocomplete {
+      width: 100%;
+    }
+    .el-date-editor {
+      width: 100%;
+      .el-range-input {
+        text-align: left;
+      }
+    }
+    .el-textarea {
+      display: block;
+      .el-textarea__inner {
+        font-family: inherit;
+        overflow-y: auto;
+      }
+    }
+    .el-input-number {
+      width: 100%;
+      .el-input-number__increase:hover ~ .el-input .el-input__inner:not(.is-disabled),
+      .el-input-number__decrease:hover ~ .el-input .el-input__inner:not(.is-disabled) {
+        border-color: $border-color-base;
+      }
+    }
+    .tree-select,
+    .region-select,
+    .city-select {
+      width: 100%;
+      .select-option {
+        display: none !important;
+      }
+    }
+    .el-range-editor {
+      padding-right: 5px;
+      .el-range-separator {
+        padding-left: 0;
+        padding-right: 0;
+      }
+      .el-range__close-icon {
+        width: 20px;
+      }
+    }
+    .el-radio-group,
+    .el-checkbox-group {
+      flex-wrap: wrap;
+      font-size: inherit;
+      line-height: inherit;
+    }
+    .desc-icon {
+      margin-left: $margin-base;
+      font-size: larger;
+    }
+    .desc-text {
+      @include text-overflow-cut;
+      margin-left: $margin-base;
+      cursor: default;
+    }
+    &.is-required {
+      .el-form-item__label {
+        color: $error-color;
       }
     }
   }
@@ -130,13 +127,36 @@ $prefix: '#{$qm-prefix}-form';
           .el-textarea__inner {
             color: $text-color;
             border-style: dashed;
-            background-color: #fff;
+            background-color: $body-background;
           }
           .el-input-group__append {
             background-color: transparent;
             border-style: dashed;
           }
         }
+      }
+    }
+  }
+  // ------ size ------
+  // 40  36  32  28
+  &--medium {
+    .el-form-item {
+      .el-form-item__label {
+        height: 36px;
+      }
+    }
+  }
+  &--small {
+    .el-form-item {
+      .el-form-item__label {
+        height: 32px;
+      }
+    }
+  }
+  &--mini {
+    .el-form-item {
+      .el-form-item__label {
+        height: 28px;
       }
     }
   }
