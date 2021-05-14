@@ -2,18 +2,21 @@
  * @Author: 焦质晔
  * @Date: 2021-03-31 09:27:45
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-31 16:16:51
+ * @Last Modified time: 2021-05-14 15:43:03
  */
 import { defineComponent } from 'vue';
+import { flatten } from 'lodash-es';
 import scrollIntoView from 'scroll-into-view-if-needed';
+import pinyin, { STYLE_FIRST_LETTER } from '../../pinyin/index';
 import { getParserWidth, noop } from '../../_utils/util';
 import { setStyle } from '../../_utils/dom';
 import { JSXNode } from '../../_utils/types';
 import { getPrefixCls } from '../../_utils/prefix';
-import { province, city } from './china-data';
 import { t } from '../../locale';
 import { IDict } from './types';
 import ClickOutside from '../../directives/click-outside';
+
+import chinaData from './china-data';
 
 type ICity = {
   l: string;
@@ -21,6 +24,35 @@ type ICity = {
   c: string;
   p: string;
   children?: ICity[];
+};
+
+const zxsCodes: string[] = ['110000', '120000', '310000', '500000']; // 直辖市
+const gaCodes: string[] = ['810000', '820000']; // 港澳
+
+const formatChinaData = (data: any, key: string, step: number = 1): ICity[] | undefined => {
+  if (step > 2 || !data[key]) return;
+  const codes: string[] = key === '86' ? Object.keys(data[key]).filter((x) => ![...zxsCodes, ...gaCodes].includes(x)) : Object.keys(data[key]);
+  return codes.map((x) => ({
+    l: flatten(pinyin(data[key][x].slice(0, 1), { style: STYLE_FIRST_LETTER }))
+      .join('')
+      .toUpperCase(),
+    n: data[key][x],
+    c: x,
+    p: key,
+    children: formatChinaData(data, x, step + 1),
+  }));
+};
+
+const createOther = (data: any, codes: string[]): ICity[] => {
+  return codes.map((x) => ({
+    l: flatten(pinyin(data['86'][x].slice(0, 1), { style: STYLE_FIRST_LETTER }))
+      .join('')
+      .toUpperCase(),
+    n: data['86'][x],
+    c: x,
+    p: '86',
+    children: undefined,
+  }));
 };
 
 const citySelectLetter: IDict[] = [
@@ -51,8 +83,16 @@ export default defineComponent({
     return {
       select_type: '0', // 0 -> 按省份    1 -> 按城市
       letter_id: '',
+      provinces: this.createProvince(), // 省份数据(递归结构)
       visible: false,
     };
+  },
+  computed: {
+    cities(): ICity[] {
+      const result: ICity[] = [];
+      this.provinces.forEach((x) => result.push(...x.children));
+      return result;
+    },
   },
   watch: {
     select_type(): void {
@@ -68,7 +108,7 @@ export default defineComponent({
       this.visible = !1;
     },
     createTextValue(val: string): string {
-      return Object.values(city).find((x) => x.c === val)?.n || '';
+      return this.cities.find((x) => x.c === val)?.n || '';
     },
     scrollHandle(val: string): void {
       this.letter_id = val;
@@ -80,16 +120,14 @@ export default defineComponent({
       });
     },
     createProvince(): ICity[] {
-      const res1: ICity[] = Object.values(province).filter((x) => x.l !== 'Z1' && x.l !== 'Z2');
-      const res2: ICity = { l: 'Z1', n: '直辖市', c: '', p: '' };
-      const res3: ICity = { l: 'Z2', n: '港澳', c: '', p: '' };
-      res1.forEach((x) => (x.children = Object.values(city).filter((k) => k.p === x.c)));
-      res2.children = Object.values(city).filter((k) => k.p === '86' && k.c !== '810000' && k.c !== '820000');
-      res3.children = Object.values(city).filter((k) => k.p === '86' && (k.c === '810000' || k.c === '820000'));
-      return [...res1, res2, res3];
+      return [
+        ...(formatChinaData(chinaData, '86') as ICity[]),
+        { l: 'Z1', n: '直辖市', c: '', p: '', children: createOther(chinaData, zxsCodes) },
+        { l: 'Z2', n: '港澳', c: '', p: '', children: createOther(chinaData, gaCodes) },
+      ];
     },
     createCity(): ICity[] {
-      return citySelectLetter
+      const result: ICity[] = citySelectLetter
         .filter((x) => x.value !== 'Z1' && x.value !== 'Z2')
         .map((x) => {
           return {
@@ -97,9 +135,14 @@ export default defineComponent({
             n: x.text,
             c: '',
             p: '',
-            children: Object.values(city).filter((k) => k.l === x.value),
+            children: this.cities.filter((x) => ![...zxsCodes, ...gaCodes].includes(x.c)).filter((k) => k.l === x.value),
           };
         });
+      return [
+        ...result,
+        { l: 'Z1', n: '直辖市', c: '', p: '', children: createOther(chinaData, zxsCodes) },
+        { l: 'Z2', n: '港澳', c: '', p: '', children: createOther(chinaData, gaCodes) },
+      ];
     },
     renderType(): JSXNode {
       return (
@@ -220,7 +263,7 @@ export default defineComponent({
                       placeholder={placeholder}
                       filterable
                       v-slots={{
-                        default: (): JSXNode[] => Object.values(city).map((x) => <el-option key={x.c} value={x.c} label={x.n} />),
+                        default: (): JSXNode[] => this.cities.map((x) => <el-option key={x.c} value={x.c} label={x.n} />),
                       }}
                     />
                   </div>

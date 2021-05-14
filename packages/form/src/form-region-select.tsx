@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-02-23 21:56:33
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-05-07 15:29:27
+ * @Last Modified time: 2021-05-14 15:39:22
  */
 import { defineComponent } from 'vue';
 import { get } from 'lodash-es';
@@ -16,8 +16,18 @@ import { IDict, IDictDeep } from './types';
 import { deepFind, deepMapList } from './utils';
 import ClickOutside from '../../directives/click-outside';
 
+import chinaData from './china-data';
 import Tabs from '../../tabs';
 import TabPane from '../../tab-pane';
+
+const formatChinaData = (data: any, key: string): IDictDeep[] | undefined => {
+  if (!data[key]) return;
+  return Object.keys(data[key]).map((x) => ({
+    text: data[key][x],
+    value: x,
+    children: formatChinaData(data, x),
+  }));
+};
 
 export default defineComponent({
   name: 'FormRegionSelect',
@@ -70,7 +80,7 @@ export default defineComponent({
     if (this.isFetch) {
       this.getItemList();
     } else {
-      this.itemList = this.option.options?.itemList ?? [];
+      this.itemList = this.option.options?.itemList ?? formatChinaData(chinaData, '86');
     }
     this.initial();
   },

@@ -1,10 +1,16 @@
+/*
+ * @Author: 焦质晔
+ * @Date: 2021-05-14 13:13:40
+ * @Last Modified by: 焦质晔
+ * @Last Modified time: 2021-05-14 13:14:33
+ */
 import dictZiWeb from '../data/dict-zi-web';
 import Pinyin from './pinyin';
 
 // 解压拼音库。
 // @param {Object} dict_combo, 压缩的拼音库。
 // @param {Object} 解压的拼音库。
-const buildPinyinCache = dict_combo => {
+const buildPinyinCache = (dict_combo) => {
   let hans;
   let uncomboed = {};
 
@@ -12,7 +18,8 @@ const buildPinyinCache = dict_combo => {
     hans = dict_combo[py];
     for (let i = 0, han, l = hans.length; i < l; i++) {
       han = hans.charCodeAt(i);
-      if (!uncomboed.hasOwnProperty(han)) {
+      // eslint-disable-next-line no-prototype-builtins
+      if (!Object.prototype.hasOwnProperty.call(uncomboed, han)) {
         uncomboed[han] = py;
       } else {
         uncomboed[han] += ',' + py;

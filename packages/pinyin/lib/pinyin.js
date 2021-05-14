@@ -1,3 +1,9 @@
+/*
+ * @Author: 焦质晔
+ * @Date: 2021-05-14 13:13:43
+ * @Last Modified by: 焦质晔
+ * @Last Modified time: 2021-05-14 13:14:35
+ */
 import PHONETIC_SYMBOL from './phonetic-symbol';
 
 // XXX: Symbol when web support.
@@ -7,12 +13,12 @@ const PINYIN_STYLE = {
   TONE2: 2, // 声调以数字形式在拼音之后，使用数字 0~4 标识。
   TO3NE: 5, // 声调以数字形式在声母之后，使用数字 0~4 标识。
   INITIALS: 3, // 仅需要声母部分。
-  FIRST_LETTER: 4 // 仅保留首字母。
+  FIRST_LETTER: 4, // 仅保留首字母。
 };
 const DEFAULT_OPTIONS = {
   style: PINYIN_STYLE.TONE, // 风格
   segment: false, // 分词。
-  heteronym: false // 多音字
+  heteronym: false, // 多音字
 };
 
 // 声母表。
@@ -107,7 +113,7 @@ export default class Pinyin {
     let pinyins = [];
     for (let i = 0, py, l = pys.length; i < l; i++) {
       py = Pinyin.toFixed(pys[i], options.style);
-      if (py_cached.hasOwnProperty(py)) {
+      if (Object.prototype.hasOwnProperty.call(py_cached, py)) {
         continue;
       }
       py_cached[py] = py;
@@ -133,23 +139,23 @@ export default class Pinyin {
 
       case PINYIN_STYLE.FIRST_LETTER:
         first_letter = pinyin.charAt(0);
-        if (PHONETIC_SYMBOL.hasOwnProperty(first_letter)) {
+        if (Object.prototype.hasOwnProperty.call(PHONETIC_SYMBOL, first_letter)) {
           first_letter = PHONETIC_SYMBOL[first_letter].charAt(0);
         }
         return first_letter;
 
       case PINYIN_STYLE.NORMAL:
-        return pinyin.replace(RE_PHONETIC_SYMBOL, function($0, $1_phonetic) {
+        return pinyin.replace(RE_PHONETIC_SYMBOL, function ($0, $1_phonetic) {
           return PHONETIC_SYMBOL[$1_phonetic].replace(RE_TONE2, '$1');
         });
 
       case PINYIN_STYLE.TO3NE:
-        return pinyin.replace(RE_PHONETIC_SYMBOL, function($0, $1_phonetic) {
+        return pinyin.replace(RE_PHONETIC_SYMBOL, function ($0, $1_phonetic) {
           return PHONETIC_SYMBOL[$1_phonetic];
         });
 
       case PINYIN_STYLE.TONE2:
-        py = pinyin.replace(RE_PHONETIC_SYMBOL, function($0, $1) {
+        py = pinyin.replace(RE_PHONETIC_SYMBOL, function ($0, $1) {
           // 声调数值。
           tone = PHONETIC_SYMBOL[$1].replace(RE_TONE2, '$2');
 
