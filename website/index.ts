@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-02-05 09:13:33
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-17 15:19:07
+ * @Last Modified time: 2021-05-14 09:42:19
  */
 import { createApp } from 'vue';
 import router from './router';
@@ -28,6 +28,8 @@ app.component('DemoBlock', DemoBlock);
 app.component('RightNav', RightNav);
 app.component('SideNav', SideNav);
 
-app.use(router).use(QmDesign, { size: 'medium' }, { closeOnPressEscape: true });
+app.use(router).use(QmDesign, {
+  size: 'medium',
+});
 
 app.mount('#app');
