@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-02-28 23:01:43
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-05-13 11:48:53
+ * @Last Modified time: 2021-05-15 08:53:24
  */
 import { defineComponent, reactive, CSSProperties } from 'vue';
 import addEventListener from 'add-dom-event-listener';
@@ -12,7 +12,7 @@ import { getPrefixCls } from '../../../_utils/prefix';
 import { noop, isVNode } from '../../../_utils/util';
 import { getParentNode } from '../../../_utils/dom';
 import { warn } from '../../../_utils/error';
-import { JSXNode, Nullable } from '../../../_utils/types';
+import { JSXNode, AnyObject, Nullable } from '../../../_utils/types';
 import { IColumn, ICellSpan, IDict, IRecord } from '../table/types';
 import TableManager from '../manager';
 import ClickOutside from '../../../directives/click-outside';
@@ -173,7 +173,7 @@ export default defineComponent({
       return rows;
     },
     renderRow(row: IRecord, depth: number = 0): JSXNode {
-      const { getRowKey, selectionKeys, highlightKey } = this.$$table;
+      const { getRowKey, selectionKeys, highlightKey, isGroupSubtotal } = this.$$table;
       // 行记录 索引
       const rowIndex: number = row.index;
       // 行记录 rowKey
@@ -183,6 +183,7 @@ export default defineComponent({
         {
           [`body--row-selected`]: selectionKeys.includes(rowKey),
           [`body--row-current`]: highlightKey === rowKey,
+          ...(isGroupSubtotal ? this.createGroupRowCls(row._group) : null),
         },
       ];
       return (
@@ -192,7 +193,7 @@ export default defineComponent({
       );
     },
     renderColumn(column: IColumn, columnIndex: number, row: IRecord, rowIndex: number, rowKey: string, depth: number): Nullable<JSXNode> {
-      const { leftFixedColumns, rightFixedColumns, getStickyLeft, getStickyRight, ellipsis, sorter, isIE } = this.$$table;
+      const { leftFixedColumns, rightFixedColumns, getStickyLeft, getStickyRight, ellipsis, sorter, isGroupSubtotal, isIE } = this.$$table;
       const { dataIndex, fixed, align, className = '' } = column;
       const { rowspan, colspan } = this.getSpan(row, column, rowIndex, columnIndex);
       const isEllipsis = ellipsis || column.ellipsis;
@@ -221,6 +222,7 @@ export default defineComponent({
         : null;
       const trExtraStys = this.rowStyle ? (isFunction(this.rowStyle) ? this.rowStyle(row, rowIndex) : this.rowStyle) : null;
       const tdExtraStys = this.cellStyle ? (isFunction(this.cellStyle) ? this.cellStyle(row, column, rowIndex, columnIndex) : this.cellStyle) : null;
+      const groupStys = isGroupSubtotal ? this.getGroupStyles(row._group) : null;
       return (
         <td
           key={dataIndex}
@@ -228,7 +230,7 @@ export default defineComponent({
           rowspan={rowspan}
           colspan={colspan}
           class={cls}
-          style={{ ...stys, ...trExtraStys, ...tdExtraStys }}
+          style={{ ...stys, ...trExtraStys, ...tdExtraStys, ...groupStys }}
           onClick={(ev) => this.cellClickHandle(ev, row, column)}
           onDblclick={(ev) => this.cellDbclickHandle(ev, row, column)}
         >
@@ -322,6 +324,16 @@ export default defineComponent({
         }
       }
       return { rowspan, colspan };
+    },
+    createGroupRowCls(dataIndex: string): AnyObject<boolean> {
+      const level: number = this.$$table.groupSubtotal.findIndex((x) => x.dataIndex === dataIndex);
+      return {
+        [`body--row-group_${level + 1}`]: level >= 0 ? true : false,
+      };
+    },
+    getGroupStyles(dataIndex: string): CSSProperties {
+      const { backgroundColor, color } = this.$$table.groupSubtotal.find((x) => x.dataIndex === dataIndex) ?? {};
+      return { backgroundColor, color };
     },
     renderCellTitle(column: IColumn, row: IRecord, rowIndex: number, columnIndex: number): string {
       const { dataIndex, render } = column;

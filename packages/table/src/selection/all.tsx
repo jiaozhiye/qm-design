@@ -6,7 +6,7 @@
  */
 import { defineComponent } from 'vue';
 import { intersection, xor } from 'lodash-es';
-import { getAllRowKeys } from '../utils';
+import { getAllTableData } from '../utils';
 import { getPrefixCls } from '../../../_utils/prefix';
 import { noop } from '../../../_utils/util';
 import { t } from '../../../locale';
@@ -32,7 +32,9 @@ export default defineComponent({
     filterAllRowKeys(): string[] {
       const { tableFullData, getRowKey, rowSelection } = this.$$table;
       const { disabled = noop } = rowSelection;
-      return getAllRowKeys(tableFullData, getRowKey, disabled);
+      return getAllTableData(tableFullData)
+        .filter((row) => !disabled(row))
+        .map((row) => getRowKey(row, row.index));
     },
     indeterminate(): boolean {
       return this.selectionKeys.length > 0 && intersection(this.selectionKeys, this.filterAllRowKeys).length < this.filterAllRowKeys.length;

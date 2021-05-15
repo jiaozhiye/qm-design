@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-03-01 23:54:20
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-25 11:16:03
+ * @Last Modified time: 2021-05-15 08:36:43
  */
 import { defineComponent } from 'vue';
 import { formatNumber, setCellValue, getCellValue } from '../utils';
@@ -18,7 +18,7 @@ export default defineComponent({
   inject: ['$$table'],
   computed: {
     summationRows(): Record<string, string>[] {
-      const { tableFullData, selectionKeys, summaries, getRowKey } = this.$$table;
+      const { tableFullData, selectionKeys, summaries, getRowKey, getGroupValidData, isGroupSubtotal } = this.$$table;
       const summationColumns = this.flattenColumns.filter((x) => typeof x.summation !== 'undefined');
       // 结果
       const res = {};
@@ -28,12 +28,13 @@ export default defineComponent({
           precision,
           summation: { sumBySelection, displayWhenNotSelect, unit = '', onChange = noop },
         } = column;
+        const tableDataList: IRecord[] = !isGroupSubtotal ? tableFullData : getGroupValidData(tableFullData);
         // 未选择时，显示合计结果
         const notSelectAndDisplay: boolean = !selectionKeys.length && displayWhenNotSelect;
         let values: number[] = [];
         // 可选择列动态合计
         if (!sumBySelection || notSelectAndDisplay) {
-          values = tableFullData.map((x) => Number(getCellValue(x, dataIndex)));
+          values = tableDataList.map((x) => Number(getCellValue(x, dataIndex)));
         } else {
           values = selectionKeys.map((x) => {
             const record = this.$$table.selectionRows.find((row) => getRowKey(row, row.index) === x);

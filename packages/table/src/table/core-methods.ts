@@ -30,7 +30,7 @@ export default {
         return record;
       });
     };
-    const results = resetRowData(list);
+    const results: IRecord[] = this.createGroupData(resetRowData(list));
     // 设置表格数据
     this.tableFullData = [...results];
     this.tableOriginData = [...results];

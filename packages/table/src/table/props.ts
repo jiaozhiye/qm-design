@@ -217,6 +217,15 @@ export default {
     defaultExpandAllRows: PropTypes.bool, // 默认展开所有行
     expandedRowKeys: PropTypes.array, // 展开行的 key 数组，支持动态赋值
   }),
+  // 分组合计表格
+  groupSubtotal: PropTypes.arrayOf(
+    PropTypes.shape({
+      dataIndex: PropTypes.string.isRequired,
+      titleIndex: PropTypes.string,
+      color: PropTypes.string,
+      backgroundColor: PropTypes.string,
+    }).loose
+  ),
   // 多列排序
   multipleSort: PropTypes.bool.def(true),
   // 是否为前端内存分页

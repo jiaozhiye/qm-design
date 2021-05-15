@@ -2,9 +2,9 @@
  * @Author: 焦质晔
  * @Date: 2020-02-28 23:01:43
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-05-03 21:22:20
+ * @Last Modified time: 2021-05-15 08:33:01
  */
-import { defineComponent, reactive } from 'vue';
+import { defineComponent } from 'vue';
 import { pickBy, intersection, isFunction } from 'lodash-es';
 import { hasOwn, convertToRows, deepFindColumn, getCellValue, createWhereSQL } from '../utils';
 import { getPrefixCls } from '../../../_utils/prefix';
@@ -247,13 +247,15 @@ export default defineComponent({
     },
     // 还原排序数据
     doResetHandle(): void {
-      const { tableFullData, tableOriginData } = this.$$table;
-      this.$$table.tableFullData = intersection(tableOriginData, tableFullData);
+      const { tableFullData, tableOriginData, createGroupData, getGroupValidData, isGroupSubtotal } = this.$$table;
+      this.$$table.tableFullData = !isGroupSubtotal
+        ? intersection(tableOriginData, tableFullData)
+        : createGroupData(intersection(getGroupValidData(tableOriginData), getGroupValidData(tableFullData)));
     },
     // 排序算法
     doSortHandle(column: IColumn, order: string): void {
       const { dataIndex, sorter } = column;
-      const { tableFullData } = this.$$table;
+      const { tableFullData, createGroupData, getGroupValidData, isGroupSubtotal } = this.$$table;
       const sortFn = (a, b) => {
         const start = getCellValue(a, dataIndex);
         const end = getCellValue(b, dataIndex);
@@ -262,8 +264,10 @@ export default defineComponent({
         }
         return order === this.ascend ? start.toString().localeCompare(end.toString()) : end.toString().localeCompare(start.toString());
       };
-      tableFullData.sort(isFunction(sorter) ? sorter : sortFn);
-      this.$$table.tableFullData = reactive([...tableFullData]);
+      const result = !isGroupSubtotal
+        ? tableFullData.sort(isFunction(sorter) ? sorter : sortFn)
+        : createGroupData(getGroupValidData(tableFullData).sort(isFunction(sorter) ? sorter : sortFn));
+      this.$$table.tableFullData = [...result];
     },
     // 表头筛选
     filterHandle(): void {
@@ -272,9 +276,14 @@ export default defineComponent({
     },
     // 客户端筛选
     clientFilter(): void {
-      const { tableOriginData, superFilters } = this.$$table;
+      const { tableOriginData, superFilters, isGroupSubtotal, createGroupData, getGroupValidData } = this.$$table;
       const sql = !superFilters.length ? createWhereSQL(this.filters) : createWhereSQL(superFilters);
-      this.$$table.tableFullData = sql !== '' ? where(tableOriginData, sql) : [...tableOriginData];
+      this.$$table.tableFullData =
+        sql !== ''
+          ? !isGroupSubtotal
+            ? where(tableOriginData, sql)
+            : createGroupData(where(getGroupValidData(tableOriginData), sql))
+          : [...tableOriginData];
       this.clientSorter('filter');
     },
     // 格式化排序参数

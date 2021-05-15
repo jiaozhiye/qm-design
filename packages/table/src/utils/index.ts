@@ -137,13 +137,12 @@ export const deepFindRowKey = (rowKeys: IRowKey[], mark: string): Nullable<IRowK
 };
 
 // 所有 rowKey
-export const getAllRowKeys = (list: IRecord[], getRowKey: AnyFunction<string>, disabled?: AnyFunction<boolean>): string[] => {
+export const getAllRowKeys = (list: IRecord[], getRowKey: AnyFunction<string>): string[] => {
   const result: string[] = [];
   list.forEach((record) => {
-    if (disabled?.(record)) return;
     result.push(getRowKey(record, record.index));
     if (record.children) {
-      result.push(...getAllRowKeys(record.children, getRowKey, disabled));
+      result.push(...getAllRowKeys(record.children, getRowKey));
     }
   });
   return result;

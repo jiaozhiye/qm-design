@@ -23,6 +23,7 @@ import config from '../config';
 import columnsMixin from '../columns';
 import expandableMixin from '../expandable/mixin';
 import selectionMixin from '../selection/mixin';
+import groupSubtotalMixin from '../group-subtotal';
 import validateMixin from '../edit/validate';
 import localStorageMixin from '../local-storage';
 import layoutMethods from './layout-methods';
@@ -44,7 +45,7 @@ export default defineComponent({
       $$table: this,
     };
   },
-  mixins: [columnsMixin, expandableMixin, selectionMixin, validateMixin, localStorageMixin],
+  mixins: [columnsMixin, expandableMixin, selectionMixin, groupSubtotalMixin, validateMixin, localStorageMixin],
   emits: EMITS,
   data() {
     Object.assign(this, {
@@ -191,6 +192,9 @@ export default defineComponent({
     },
     isGroupSummary(): boolean {
       return this.flattenColumns.some((column) => !!column.groupSummary);
+    },
+    isGroupSubtotal(): boolean {
+      return !!this.groupSubtotal?.length;
     },
     isTableEmpty(): boolean {
       return !this.tableData.length;
