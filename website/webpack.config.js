@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-02-08 14:35:05
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-05-12 21:04:28
+ * @Last Modified time: 2021-05-15 12:25:42
  */
 'use strict';
 
@@ -171,7 +171,7 @@ module.exports = {
     ? [
         new MiniCssExtractPlugin({
           filename: '[name].[contenthash:8].css',
-          chunkFilename: '[id].[contenthash:8].css',
+          chunkFilename: '[name].[contenthash:8].css',
         }),
       ]
     : []
