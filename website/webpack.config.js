@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-02-08 14:35:05
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-05-15 12:25:42
+ * @Last Modified time: 2021-05-17 09:16:20
  */
 'use strict';
 
@@ -49,9 +49,6 @@ module.exports = {
       stream: false,
       buffer: false,
     },
-  },
-  experiments: {
-    topLevelAwait: true,
   },
   module: {
     rules: [

@@ -16,10 +16,12 @@
 </template>
 
 <script>
-  // 模拟请求延迟方法
+  // ajax 接口示例代码，不作为实际的参考
+  const axios = require('@/api/fetch').default;
   const sleep = async (delay) => {
     return new Promise((resolve) => setTimeout(resolve, delay));
   };
+  // ----- END -----
   export default {
     data() {
       return {};
@@ -47,7 +49,6 @@
 </template>
 
 <script>
-  // 模拟请求延迟方法
   const sleep = async (delay) => {
     return new Promise((resolve) => setTimeout(resolve, delay));
   };
