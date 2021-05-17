@@ -111,10 +111,13 @@ export default {
 
     return this.computeScrollLoad();
   },
+  // 获取表格数据
+  createTableList(): IRecord[] {
+    return !this.webPagination ? this.tableFullData : this.pageTableData;
+  },
   // 设置是否开启虚拟滚动
   createScrollYLoad(): boolean {
-    const dataList = !this.webPagination ? this.tableFullData : this.pageTableData;
-    return dataList.length > config.virtualScrollY;
+    return this.createTableList().length > config.virtualScrollY;
   },
   // 创建分页索引
   createPageIndex(index: number): number {
@@ -126,8 +129,8 @@ export default {
   },
   // 处理渲染数据
   handleTableData(): void {
-    const { scrollYLoad, scrollYStore, webPagination, tableFullData, pageTableData } = this;
-    const dataList = !webPagination ? tableFullData : pageTableData;
+    const { scrollYLoad, scrollYStore } = this;
+    const dataList = this.createTableList();
     // 处理显示数据
     this.tableData = scrollYLoad ? dataList.slice(scrollYStore.startIndex, scrollYStore.startIndex + scrollYStore.renderSize) : dataList;
   },
@@ -144,9 +147,10 @@ export default {
   },
   // 纵向 Y 可视渲染处理
   loadScrollYData(scrollTop = 0): void {
-    const { tableFullData, scrollYStore } = this;
+    const { scrollYStore } = this;
     const { startIndex, renderSize, offsetSize, visibleSize, rowHeight } = scrollYStore;
     const toVisibleIndex = Math.ceil(scrollTop / rowHeight);
+    const dataList = this.createTableList();
 
     let preload = false;
 
@@ -163,7 +167,7 @@ export default {
         // 向下
         preload = toVisibleIndex + visibleSize + offsetSize >= startIndex + renderSize;
         if (preload) {
-          scrollYStore.startIndex = Math.max(0, Math.min(tableFullData.length - renderSize, toVisibleIndex - marginSize));
+          scrollYStore.startIndex = Math.max(0, Math.min(dataList.length - renderSize, toVisibleIndex - marginSize));
         }
       }
 
@@ -176,14 +180,15 @@ export default {
   },
   // 更新纵向 Y 可视渲染上下剩余空间大小
   updateScrollYSpace(isReset: boolean): void {
-    const { scrollYStore, tableFullData, $$tableBody } = this;
+    const { scrollYStore, $$tableBody } = this;
+    const dataList = this.createTableList();
 
     const $tableBody = $$tableBody.$el.querySelector('.qm-table--body');
     const $tableYSpaceElem = $$tableBody.$el.querySelector('.body--y-space');
 
     if (!isReset) {
       // 计算高度
-      const bodyHeight = tableFullData.length * scrollYStore.rowHeight;
+      const bodyHeight = dataList.length * scrollYStore.rowHeight;
       const topSpaceHeight = Math.max(scrollYStore.startIndex * scrollYStore.rowHeight, 0);
 
       $tableBody.style.transform = `translateY(${topSpaceHeight}px)`;
@@ -329,6 +334,7 @@ export default {
     this.createLimitData();
     // 在内存分页模式下，分页改变时，加载数据
     this.loadTableData();
+    this.$$tableBody.resetTableBodyScroll();
   },
   // 创建内存分页的列表数据
   createLimitData(): void {
