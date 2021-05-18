@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-02-28 23:04:58
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-05-13 11:21:32
+ * @Last Modified time: 2021-05-18 08:57:10
  */
 import { PropType } from 'vue';
 import PropTypes from '../../../_utils/vue-types';
@@ -19,6 +19,7 @@ const columnItem = {
   fixed: PropTypes.oneOf(['left', 'right']), // 列固定（IE 下无效）
   align: PropTypes.oneOf(['left', 'center', 'right']), // 设置列的对齐方式
   theadAlign: PropTypes.oneOf(['left', 'center', 'right']), // 设置表头的对齐方式
+  printFixed: PropTypes.bool, // 打印时，是否固定列
   hidden: PropTypes.bool, // 是否隐藏列
   ellipsis: PropTypes.bool, // 超过宽度将自动省略
   className: PropTypes.string, // 列样式类名

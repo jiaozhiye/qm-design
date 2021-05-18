@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-03-26 11:44:24
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-05-12 23:33:00
+ * @Last Modified time: 2021-05-18 09:12:59
  */
 import { defineComponent } from 'vue';
 import { flatten, groupBy, map, spread, mergeWith } from 'lodash-es';
@@ -55,9 +55,6 @@ export default defineComponent({
   name: 'PrintTable',
   props: ['tableColumns', 'flattenColumns', 'showHeader', 'showFooter', 'showLogo'],
   inject: ['$$table'],
-  data() {
-    return {};
-  },
   computed: {
     headColumns(): IColumn[] {
       return deepToRaw(filterTableColumns(this.tableColumns, ['__expandable__', '__selection__', config.operationColumn]));
@@ -65,12 +62,15 @@ export default defineComponent({
     flatColumns(): IColumn[] {
       return deepToRaw(filterTableColumns(this.flattenColumns, ['__expandable__', '__selection__', config.operationColumn]));
     },
+    printFixedColumns(): IColumn[] {
+      return this.tableColumns.filter((column: IColumn) => column.printFixed);
+    },
   },
   methods: {
-    createChunkColumnRows(chunkColumns, tableColumns): any[] {
-      let res: any[] = [];
+    createChunkColumnRows(chunkColumns: IDerivedColumn[][], tableColumns: IColumn[]): Array<IDerivedColumn[][]> {
+      let res: Array<IDerivedColumn[][]> = [];
       chunkColumns.forEach((columns) => {
-        let tmp: any[] = [];
+        let tmp: IDerivedColumn[] = [];
         columns.forEach((column) => {
           if (column.level === 1) {
             tmp.push(column);
@@ -94,7 +94,7 @@ export default defineComponent({
       return parent;
     },
     mergeColumns(columns: IColumn[]): IColumn[] {
-      const keys = [...new Set(columns.map((x) => x.dataIndex))];
+      const keys: string[] = [...new Set(columns.map((x) => x.dataIndex))];
       return keys.map((x) => {
         const res = columns.filter((k) => k.dataIndex === x);
         if (res.length <= 1) {
@@ -117,8 +117,8 @@ export default defineComponent({
       );
     },
     createChunkColumns(columns: IColumn[]): IColumn[][] {
-      let res: any[] = [];
-      let tmp: any[] = [];
+      let res: IColumn[][] = [];
+      let tmp: IColumn[] = [];
       let sum = 0;
       let i = 0;
       for (; i < columns.length; ) {
@@ -133,6 +133,7 @@ export default defineComponent({
           i++;
         } else if (i > 0) {
           columns.splice(0, i);
+          this.printFixedColumns.length && columns.unshift(...this.printFixedColumns);
           res.push(tmp);
           tmp = [];
           sum = 0;

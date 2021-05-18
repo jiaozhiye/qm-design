@@ -83,8 +83,9 @@
 | colSpan      | 表头列合并,设置为 0 时，不渲染                 | number                                                             | -      |
 | align        | 设置列的对齐方式                               | left \| center \| right                                            | left   |
 | theadAlign   | 设置表头的对齐方式                             | left \| center \| right                                            | left   |
-| hidden       | 是否隐藏列                                     | boolean                                                            | false  |
-| ellipsis     | 超过宽度将自动省略                             | boolean                                                            | false  |
+| printFixed   | 打印时，是否固定列                             | boolean                                                            | -      |
+| hidden       | 是否隐藏列                                     | boolean                                                            | -      |
+| ellipsis     | 超过宽度将自动省略                             | boolean                                                            | -      |
 | className    | 列样式类名                                     | string                                                             | -      |
 | children     | 内嵌 children，以渲染分组表头                  | array                                                              |        |
 | sorter       | 列排序                                         | boolean \| func                                                    | -      |
@@ -95,7 +96,7 @@
 | editRender   | 可编辑单元格，返回值请参考 [配置项](#editable) | function(row, column):object                                       | -      |
 | dictItems    | 数据字典配置，[配置项](#item)                  | array                                                              | -      |
 | summation    | 底部合计，[配置项](#summation)                 | object                                                             | -      |
-| groupSummary | 分组汇总，[配置项](#groupSummary)              | object \| boolean                                                  | false  |
+| groupSummary | 分组汇总，[配置项](#groupSummary)              | object                                                             | -      |
 | render       | 列渲染方法                                     | function(text, row, column, rowIndex, cellIndex): JSX Node         | -      |
 | extraRender  | 额外的列渲染方法，用于处理导出和打印数据       | function(text, row, column, rowIndex, cellIndex): string \| number | -      |
 

@@ -215,6 +215,7 @@ export default defineComponent({
           title: '序号',
           description: '数据索引',
           dataIndex: 'pageIndex',
+          printFixed: true,
           width: 80,
           sorter: true,
           render: (text) => {

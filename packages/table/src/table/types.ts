@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-03-06 15:11:01
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-04-07 16:03:02
+ * @Last Modified time: 2021-05-18 09:10:10
  */
 import { AnyFunction, AnyObject, JSXNode, Nullable } from '../../../_utils/types';
 
@@ -125,6 +125,7 @@ export type IColumn = {
   fixed?: IFixed;
   align?: IAlign;
   theadAlign?: IAlign;
+  printFixed?: boolean;
   hidden?: boolean;
   ellipsis?: boolean;
   className?: string;
