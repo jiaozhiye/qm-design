@@ -651,7 +651,7 @@ export default defineComponent({
             columns={this.columns}
             dataSource={this.list}
             rowKey={(row) => row.id}
-            webPagination={true}
+            webPagination={false}
             spanMethod={this.spanMethod}
             rowSelection={this.selection}
             tablePrint={this.tablePrint}

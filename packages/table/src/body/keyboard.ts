@@ -6,6 +6,7 @@
  */
 import { isUndefined } from 'lodash-es';
 import { prevent } from '../../../_utils/dom';
+import { getAllTableData } from '../utils';
 import TableManager from '../manager';
 import config from '../config';
 
@@ -35,14 +36,15 @@ const keyboardMixin = {
       // 上  下
       if (keyCode === 38 || keyCode === 40) {
         prevent(ev);
-        const { allRowKeys, allTableData } = this.$$table;
-        const total = allRowKeys.length;
-        let index = allRowKeys.findIndex((x) => x === this.clicked[0]);
+        const { getRowKey, createTableList } = this.$$table;
+        const pageTableData = getAllTableData(createTableList());
+        const total = pageTableData.length;
+        let index = pageTableData.findIndex((row) => getRowKey(row, row.index) === this.clicked[0]);
         // let xIndex = keyCode === 38 ? (--index + total) % total : ++index % total;
         const xIndex = keyCode === 38 ? --index : ++index;
         if (!(index < 0 || index > total - 1)) {
-          const rowKey = allRowKeys[xIndex];
-          const row = allTableData[xIndex];
+          const row = pageTableData[xIndex];
+          const rowKey = getRowKey(row, row.index);
           // 行单选
           if (rowSelection?.type === 'radio' && !rowSelection.disabled?.(row)) {
             this.setSelectionKeys([rowKey]);
