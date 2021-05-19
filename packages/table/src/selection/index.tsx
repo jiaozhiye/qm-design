@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-03-06 12:05:16
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-22 15:17:37
+ * @Last Modified time: 2021-05-18 20:42:57
  */
 import { defineComponent } from 'vue';
 import { deepFindRowKey, isArrayContain } from '../utils';
@@ -27,16 +27,17 @@ export default defineComponent({
       this.$$table.selectionKeys = [val];
     },
     toggleRowSelection(val: string): void {
-      this.$$table.selectionKeys = !this.selectionKeys.includes(val)
-        ? [...new Set([...this.selectionKeys, val])]
-        : this.selectionKeys.filter((x) => x !== val);
+      this.$$table.selectionKeys = !this.selectionKeys.includes(val) ? [...this.selectionKeys, val] : this.selectionKeys.filter((x) => x !== val);
     },
     createIndeterminate(key: string): boolean {
-      const { rowSelection, deriveRowKeys, getAllChildRowKeys, isTreeTable } = this.$$table;
-      const { checkStrictly = !0 } = rowSelection;
+      const {
+        rowSelection: { checkStrictly = !0 },
+        isTreeTable,
+      } = this.$$table;
       if (!(isTreeTable && !checkStrictly)) {
         return !1;
       }
+      const { deriveRowKeys, getAllChildRowKeys } = this.$$table;
       // true -> 子节点非全部选中，至少有一个后代节点在 selectionKeys 中
       const target = deepFindRowKey(deriveRowKeys, key);
       const childRowKeys = getAllChildRowKeys(target?.children ?? []);

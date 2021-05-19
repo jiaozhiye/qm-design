@@ -211,9 +211,6 @@ $prefix: '#{$qm-prefix}-form';
           border: 1px solid $border-color-secondary;
           border-radius: $border-radius-base;
           cursor: pointer;
-          &:hover {
-            color: $primary-color;
-          }
           &.actived {
             color: $white;
             background-color: $primary-color;

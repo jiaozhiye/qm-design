@@ -266,7 +266,7 @@ export default defineComponent({
             const checkboxProps = {
               modelValue: prevValue,
               'onUpdate:modelValue': (val) => {
-                const arr = val !== null ? [...new Set([...results, val])] : results.filter((x) => x !== prevValue);
+                const arr = val !== null ? [...results, val] : results.filter((x) => x !== prevValue);
                 this.filterValues[dataKey] = Object.assign({}, this.filterValues[dataKey], { [`in`]: arr });
               },
             };

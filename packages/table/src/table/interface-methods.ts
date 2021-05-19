@@ -2,10 +2,10 @@
  * @Author: 焦质晔
  * @Date: 2020-04-14 16:03:27
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-05-07 16:48:42
+ * @Last Modified time: 2021-05-18 23:10:18
  */
 import { intersection, isObject, isFunction } from 'lodash-es';
-import { getCellValue, setCellValue, getAllTableData } from '../utils';
+import { getCellValue, setCellValue } from '../utils';
 import { AnyFunction, AnyObject } from '../../../_utils/types';
 import config from '../config';
 
@@ -138,7 +138,7 @@ export default {
   // 删除数据
   REMOVE_RECORDS<T extends IRecord | string>(records: T | T[]): void {
     const rows = Array.isArray(records) ? records : [records];
-    const rowKeys = rows.filter((x) => !!x).map((x) => (isObject(x) ? this.getRowKey(x, ((x as unknown) as IRecord).index) : x));
+    const rowKeys = rows.filter((x) => !!x).map((x) => (isObject(x) ? this.getRowKey(x, (x as IRecord).index) : x));
     const editableColumns = this.flattenColumns.filter((column) => isFunction(column.editRender));
     for (let i = 0; i < this.tableFullData.length; i++) {
       const row = this.tableFullData[i];
@@ -179,7 +179,7 @@ export default {
   // 表单校验
   FORM_VALIDATE(): Pick<ITableLog, 'required' | 'validate'> {
     const editableColumns = this.flattenColumns.filter((column) => isFunction(column.editRender));
-    getAllTableData(this.tableFullData).forEach((record) => {
+    this.allTableData.forEach((record) => {
       editableColumns.forEach((column) => {
         const { dataIndex, editRender } = column;
         const options = editRender(record);

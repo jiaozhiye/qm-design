@@ -35,14 +35,14 @@ const keyboardMixin = {
       // 上  下
       if (keyCode === 38 || keyCode === 40) {
         prevent(ev);
-        const { allRowKeys, tableFullData, getRowKey } = this.$$table;
+        const { allRowKeys, allTableData } = this.$$table;
         const total = allRowKeys.length;
         let index = allRowKeys.findIndex((x) => x === this.clicked[0]);
         // let xIndex = keyCode === 38 ? (--index + total) % total : ++index % total;
         const xIndex = keyCode === 38 ? --index : ++index;
         if (!(index < 0 || index > total - 1)) {
           const rowKey = allRowKeys[xIndex];
-          const row = tableFullData.find((record) => getRowKey(record, record.index) === rowKey);
+          const row = allTableData[xIndex];
           // 行单选
           if (rowSelection?.type === 'radio' && !rowSelection.disabled?.(row)) {
             this.setSelectionKeys([rowKey]);

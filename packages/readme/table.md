@@ -10,10 +10,11 @@
 | rowKey           | 表格行 key 的取值，可以是字符串或一个函数                     | string \| function(row, index): string                 | uid    |
 | fetch            | 向后台请求数据的接口，[配置项](#fetch)                        | object                                                 | -      |
 | border           | 是否带有纵向边框                                              | boolean                                                | true   |
+| stripe           | 是否为斑马纹表格                                              | boolean                                                | -      |
 | height           | 表格的高度，单位 px                                           | number \| auto                                         | -      |
 | minHeight        | 表格的最小高度，单位 px                                       | number                                                 | 150    |
 | maxHeight        | 表格的最大高度，单位 px                                       | number                                                 | -      |
-| loading          | 页面是否加载中                                                | boolean                                                | false  |
+| loading          | 页面是否加载中                                                | boolean                                                | -      |
 | resizable        | 所有列是否允许拖动列宽调整大小                                | boolean                                                | true   |
 | size             | 表格尺寸                                                      | medium \| small \| mini                                | -      |
 | uniqueKey        | 设置表格各种配置信息的本地缓存，不能重复                      | string                                                 | -      |
@@ -22,7 +23,7 @@
 | rowStyle         | 给行附加样式                                                  | object \| function(row, rowIndex)                      | -      |
 | cellStyle        | 给单元格附加样式                                              | object \| function(row, column, rowIndex, columnIndex) | -      |
 | spanMethod       | 合并行或列的计算方法                                          | function({row, column, rowIndex, columnIndex})         | -      |
-| rowDraggable     | 是否开启列表数据拖拽排序                                      | boolean                                                | false  |
+| rowDraggable     | 是否开启列表数据拖拽排序                                      | boolean                                                | -      |
 | rowSelection     | 列表项是否可选择，[配置项](#rowSelection)                     | object                                                 | -      |
 | rowHighlight     | 列表行高亮选中，[配置项](#rowHighlight)                       | object                                                 | -      |
 | expandable       | 展开行配置项，[配置项](#expandable)                           | object                                                 | -      |
@@ -30,7 +31,7 @@
 | groupSubtotal    | 分组合计表格，[配置项](#groupSubtotal)                        | array                                                  | -      |
 | multipleSort     | 是否为多列排序模式                                            | boolean                                                | true   |
 | paginationConfig | 分页参数的详细配置，[配置项](#pagination)                     | object                                                 | -      |
-| webPagination    | 是否为前端内存分页                                            | boolean                                                | false  |
+| webPagination    | 是否为前端内存分页                                            | boolean                                                | -      |
 | showAlert        | 是否显示表格信息                                              | boolean                                                | true   |
 | topSpaceAlign    | 顶部按钮插槽的对其方式                                        | left \| right                                          | right  |
 | showFullScreen   | 是否显示全屏按钮                                              | boolean                                                | true   |

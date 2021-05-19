@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2019-06-20 10:00:00
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-13 14:34:30
+ * @Last Modified time: 2021-05-18 22:08:25
  */
 import Mock from 'mockjs';
 
@@ -10,7 +10,7 @@ export default {
   code: 1,
   message: '',
   data: Mock.mock({
-    'items|500': [
+    'items|1000': [
       {
         'id|+1': 1,
         person: {

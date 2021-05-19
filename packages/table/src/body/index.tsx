@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-02-28 23:01:43
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-05-15 08:53:24
+ * @Last Modified time: 2021-05-18 20:21:59
  */
 import { defineComponent, reactive, CSSProperties } from 'vue';
 import addEventListener from 'add-dom-event-listener';
@@ -173,7 +173,7 @@ export default defineComponent({
       return rows;
     },
     renderRow(row: IRecord, depth: number = 0): JSXNode {
-      const { getRowKey, selectionKeys, highlightKey, isGroupSubtotal } = this.$$table;
+      const { getRowKey, stripe, selectionKeys, highlightKey, isGroupSubtotal } = this.$$table;
       // 行记录 索引
       const rowIndex: number = row.index;
       // 行记录 rowKey
@@ -181,6 +181,7 @@ export default defineComponent({
       const cls = [
         `body--row`,
         {
+          [`body--row-striped`]: stripe && rowIndex % 2 !== 0,
           [`body--row-selected`]: selectionKeys.includes(rowKey),
           [`body--row-current`]: highlightKey === rowKey,
           ...(isGroupSubtotal ? this.createGroupRowCls(row._group) : null),
@@ -376,9 +377,7 @@ export default defineComponent({
           if (isTreeTable && !checkStrictly) {
             this.setTreeSelectionKeys(rowKey, selectionKeys);
           } else {
-            this.setSelectionKeys(
-              !selectionKeys.includes(rowKey) ? [...new Set([...selectionKeys, rowKey])] : selectionKeys.filter((x) => x !== rowKey)
-            );
+            this.setSelectionKeys(!selectionKeys.includes(rowKey) ? [...selectionKeys, rowKey] : selectionKeys.filter((x) => x !== rowKey));
           }
         }
       }

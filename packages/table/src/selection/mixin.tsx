@@ -2,12 +2,12 @@
  * @Author: 焦质晔
  * @Date: 2020-03-05 10:27:24
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-22 16:29:06
+ * @Last Modified time: 2021-05-18 23:09:50
  */
-import { deepFindRowKey, getAllTableData, isArrayContain } from '../utils';
+import { deepFindRowKey, isArrayContain } from '../utils';
 import { t } from '../../../locale';
 import { Nullable } from '../../../_utils/types';
-import { IDerivedColumn } from '../table/types';
+import { IDerivedColumn, IRecord } from '../table/types';
 import config from '../config';
 
 const selectionMixin = {
@@ -45,19 +45,21 @@ const selectionMixin = {
       });
       return arr;
     },
-    createSelectionRows(selectedKeys: string[]): void {
-      const { tableFullData, selectionRows, getRowKey, isFetch } = this;
-      const selectionRowKeys = selectionRows.map((row) => getRowKey(row, row.index));
-      const uniqRecords = isFetch
-        ? [
-            ...selectionRows,
-            ...getAllTableData(tableFullData).filter((row) => {
-              let rowKey = getRowKey(row, row.index);
-              return selectedKeys.includes(rowKey) && !selectionRowKeys.includes(rowKey);
-            }),
-          ]
-        : getAllTableData(tableFullData);
-      this.selectionRows = uniqRecords.filter((row) => selectedKeys.includes(getRowKey(row, row.index)));
+    createSelectionRows(selectedKeys: string[]): IRecord[] {
+      const { allTableData, allRowKeys, selectionRows, getRowKey, isFetch } = this;
+      if (isFetch) {
+        return [
+          ...selectionRows.filter((row) => selectedKeys.includes(getRowKey(row, row.index))),
+          ...allTableData.filter((row) => {
+            let rowKey = getRowKey(row, row.index);
+            return selectedKeys.includes(rowKey) && selectionRows.findIndex((row) => getRowKey(row, row.index) === rowKey) === -1;
+          }),
+        ];
+      }
+      return selectedKeys.map((x) => {
+        let index = allRowKeys.findIndex((key) => key === x);
+        return allTableData[index];
+      });
     },
     // 选择列已选中 keys
     createSelectionKeys(keys: string[]): string[] {
@@ -71,7 +73,7 @@ const selectionMixin = {
         });
       }
       const selectedKeys = type === 'radio' ? rowSelectionKeys.slice(0, 1) : [...new Set([...rowSelectionKeys, ...result])];
-      this.createSelectionRows(selectedKeys);
+      this.selectionRows = this.createSelectionRows(selectedKeys);
       return selectedKeys;
     },
   },

@@ -28,7 +28,7 @@ export default defineComponent({
     clickHandle(): void {
       const { rowExpandedKeys } = this.$$table;
       // 展开状态 -> 收起
-      const result = this.expanded ? rowExpandedKeys.filter((x) => x !== this.rowKey) : [...new Set([...rowExpandedKeys, this.rowKey])];
+      const result = this.expanded ? rowExpandedKeys.filter((x) => x !== this.rowKey) : [...rowExpandedKeys, this.rowKey];
       this.$$table.rowExpandedKeys = result;
     },
   },

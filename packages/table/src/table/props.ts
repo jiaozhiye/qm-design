@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-02-28 23:04:58
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-05-18 08:57:10
+ * @Last Modified time: 2021-05-18 20:21:53
  */
 import { PropType } from 'vue';
 import PropTypes from '../../../_utils/vue-types';
@@ -159,6 +159,8 @@ export default {
   },
   // 是否带有纵向边框
   border: PropTypes.bool.def(true),
+  // 是否为斑马纹
+  stripe: PropTypes.bool.def(false),
   // 向后台请求数据的接口
   fetch: PropTypes.shape({
     api: PropTypes.func.isRequired, // api 接口

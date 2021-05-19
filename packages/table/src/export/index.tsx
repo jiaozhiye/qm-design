@@ -2,13 +2,13 @@
  * @Author: 焦质晔
  * @Date: 2020-02-02 15:58:17
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-05-12 23:32:47
+ * @Last Modified time: 2021-05-18 23:14:58
  */
 import { defineComponent } from 'vue';
 import { get } from 'lodash-es';
 import dayjs from 'dayjs';
 
-import { getCellValue, setCellValue, convertToRows, filterTableColumns, getAllTableData } from '../utils';
+import { getCellValue, setCellValue, convertToRows, filterTableColumns } from '../utils';
 import { deepToRaw } from '../../../_utils/util';
 import { getPrefixCls } from '../../../_utils/prefix';
 import { t } from '../../../locale';
@@ -72,10 +72,10 @@ export default defineComponent({
     },
     async getTableData(options: IOptions): Promise<void> {
       const { fileType, exportType, startIndex = 1, endIndex } = options;
-      const { fetch, fetchParams, total, tableFullData, selectionKeys, getRowKey } = this.$$table;
-      let tableList: IRecord[] = [];
+      const { fetch, fetchParams, total, isFetch, allTableData, selectionKeys, getRowKey } = this.$$table;
+      let tableList: IRecord[] = allTableData;
 
-      if (!!fetch) {
+      if (isFetch) {
         this.exporting = !0;
         const { api, dataKey } = fetch;
         try {
@@ -85,8 +85,6 @@ export default defineComponent({
           }
         } catch (err) {}
         this.exporting = !1;
-      } else {
-        tableList = getAllTableData(tableFullData);
       }
 
       if (exportType === 'selected') {
@@ -125,8 +123,8 @@ export default defineComponent({
     },
     _toTable(options: IOptions, columnRows: Array<IDerivedColumn[]>, flatColumns: IColumn[], dataList: IRecord[]): string {
       const { footSummation } = options;
-      const { showHeader, showFooter, $refs } = this.$$table;
-      const summationRows = flatColumns.some((x) => !!x.summation) ? $refs[`tableFooter`].summationRows : [];
+      const { showHeader, showFooter } = this.$$table;
+      const summationRows = flatColumns.some((x) => !!x.summation) ? this.$$table.$refs[`tableFooter`].summationRows : [];
       let html = `<table width="100%" border="0" cellspacing="0" cellpadding="0">`;
       html += `<colgroup>${flatColumns
         .map(({ width, renderWidth }) => `<col style="width:${width || renderWidth || config.defaultColumnWidth}px">`)

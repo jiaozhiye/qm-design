@@ -464,7 +464,6 @@ export default defineComponent({
         {
           title: '状态',
           dataIndex: 'state',
-          colSpan: 2,
           width: 150,
           filter: {
             type: 'radio',
@@ -493,7 +492,6 @@ export default defineComponent({
         {
           title: '业余爱好',
           dataIndex: 'hobby',
-          colSpan: 0,
           width: 150,
           filter: {
             type: 'checkbox',
@@ -649,6 +647,7 @@ export default defineComponent({
             ref="table"
             uniqueKey="jzyDemoTable"
             maxHeight="400px"
+            stripe={true}
             columns={this.columns}
             dataSource={this.list}
             rowKey={(row) => row.id}

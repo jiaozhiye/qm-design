@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-02-29 22:17:28
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-05-07 14:46:32
+ * @Last Modified time: 2021-05-18 20:21:41
  */
 import { getPrefixCls } from '../../../_utils/prefix';
 import { JSXNode } from '../../../_utils/types';
@@ -41,6 +41,7 @@ export default {
       tableSize,
       showLoading,
       bordered,
+      stripe,
       tableStyles,
       rowStyle,
       cellStyle,
@@ -84,6 +85,7 @@ export default {
     const tableCls = {
       [prefixCls]: true,
       [`is--border`]: bordered,
+      [`is--striped`]: stripe,
       [`is--fixed`]: leftFixedColumns.length || rightFixedColumns.length,
       [`is--group`]: isGroup,
       [`is--sortable`]: isHeadSorter,

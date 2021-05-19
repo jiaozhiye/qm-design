@@ -2,10 +2,10 @@
  * @Author: 焦质晔
  * @Date: 2020-02-28 23:01:43
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-05-15 08:33:01
+ * @Last Modified time: 2021-05-18 22:23:40
  */
 import { defineComponent } from 'vue';
-import { pickBy, intersection, isFunction } from 'lodash-es';
+import { pickBy, isFunction } from 'lodash-es';
 import { hasOwn, convertToRows, deepFindColumn, getCellValue, createWhereSQL } from '../utils';
 import { getPrefixCls } from '../../../_utils/prefix';
 import { isEmpty } from '../../../_utils/util';
@@ -241,25 +241,19 @@ export default defineComponent({
         this.doSortHandle(column, validSorter[key]);
       }
       if (type === 'filter') return;
+      // 还原排序数据
       if (!Object.keys(validSorter).length) {
-        this.doResetHandle();
+        this.doSortHandle({ dataIndex: 'index' }, this.ascend);
       }
-    },
-    // 还原排序数据
-    doResetHandle(): void {
-      const { tableFullData, tableOriginData, createGroupData, getGroupValidData, isGroupSubtotal } = this.$$table;
-      this.$$table.tableFullData = !isGroupSubtotal
-        ? intersection(tableOriginData, tableFullData)
-        : createGroupData(intersection(getGroupValidData(tableOriginData), getGroupValidData(tableFullData)));
     },
     // 排序算法
     doSortHandle(column: IColumn, order: string): void {
       const { dataIndex, sorter } = column;
       const { tableFullData, createGroupData, getGroupValidData, isGroupSubtotal } = this.$$table;
       const sortFn = (a, b) => {
-        const start = getCellValue(a, dataIndex);
-        const end = getCellValue(b, dataIndex);
-        if (!!Number(start - end)) {
+        let start = getCellValue(a, dataIndex);
+        let end = getCellValue(b, dataIndex);
+        if (!Number.isNaN(start - end)) {
           return order === this.ascend ? start - end : end - start;
         }
         return order === this.ascend ? start.toString().localeCompare(end.toString()) : end.toString().localeCompare(start.toString());
@@ -324,11 +318,11 @@ export default defineComponent({
       columnRows.forEach((columns, depth) => {
         const leftFixedColumns: IColumn[] = [];
         const rightFixedColumns: IColumn[] = [];
-        columns.forEach((x) => {
-          hasOwn(x, 'lastFixedLeft') && delete x.lastFixedLeft;
-          hasOwn(x, 'firstFixedRight') && delete x.firstFixedRight;
-          x.fixed === 'left' && leftFixedColumns.push(x);
-          x.fixed === 'right' && rightFixedColumns.push(x);
+        columns.forEach((column) => {
+          hasOwn(column, 'lastFixedLeft') && delete column.lastFixedLeft;
+          hasOwn(column, 'firstFixedRight') && delete column.firstFixedRight;
+          column.fixed === 'left' && leftFixedColumns.push(column);
+          column.fixed === 'right' && rightFixedColumns.push(column);
         });
         const lastColumn: IDerivedColumn = leftFixedColumns[leftFixedColumns.length - 1];
         const firstColumn: IDerivedColumn = rightFixedColumns[0];
@@ -350,8 +344,6 @@ export default defineComponent({
     } = this.$$table;
     const prefixCls = getPrefixCls('table');
     const columnRows = convertToRows(tableColumns);
-    // 是否拥有多级表头
-    this.$$table.isGroup = columnRows.length > 1;
     // 处理左右的固定列
     this.setFixedColumns(columnRows);
     return (

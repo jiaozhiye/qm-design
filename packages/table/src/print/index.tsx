@@ -176,6 +176,7 @@ export default defineComponent({
       });
     },
     toHtml(): string {
+      const { allTableData } = this.$$table;
       const chunkFlatColumns = this.createChunkColumns([...this.flatColumns]);
       const chunkColumnRows = this.createChunkColumnRows(chunkFlatColumns, this.headColumns);
       let html = [
@@ -189,14 +190,13 @@ export default defineComponent({
         `<body>`,
       ].join('');
       for (let i = 0; i < chunkFlatColumns.length; i++) {
-        html += this._toTable(chunkColumnRows[i], chunkFlatColumns[i]);
+        html += this._toTable(chunkColumnRows[i], chunkFlatColumns[i], allTableData);
         html += `<div class="page-break"></div>`;
       }
       return html + `</body></html>`;
     },
-    _toTable(columnRows: Array<IDerivedColumn[]>, flatColumns: IColumn[]): string {
-      const { tableFullData, $refs } = this.$$table;
-      const summationRows = flatColumns.some((x) => !!x.summation) ? $refs[`tableFooter`].summationRows : [];
+    _toTable(columnRows: Array<IDerivedColumn[]>, flatColumns: IColumn[], dataList: IRecord[]): string {
+      const summationRows = flatColumns.some((x) => !!x.summation) ? this.$$table.$refs[`tableFooter`].summationRows : [];
       let html = `<table class="table--print" width="100%" border="0" cellspacing="0" cellpadding="0">`;
       html += `<colgroup>${flatColumns
         .map(({ width, renderWidth }) => `<col style="width:${width || renderWidth || config.defaultColumnWidth}px">`)
@@ -222,13 +222,13 @@ export default defineComponent({
           `</thead>`,
         ].join('');
       }
-      if (tableFullData.length) {
-        html += `<tbody>${tableFullData
+      if (dataList.length) {
+        html += `<tbody>${dataList
           .map(
             (row) =>
               `<tr>${flatColumns
                 .map((column, index) => {
-                  const { rowspan, colspan } = this.$$table.getSpan(row, column, row.index, index, tableFullData);
+                  const { rowspan, colspan } = this.$$table.getSpan(row, column, row.index, index, dataList);
                   if (!rowspan || !colspan) {
                     return null;
                   }
@@ -247,7 +247,7 @@ export default defineComponent({
                 `<tr>${flatColumns
                   .map((column, index) => {
                     const { dataIndex, summation } = column;
-                    const text = summation?.render ? summation.render(tableFullData) : getCellValue(row, dataIndex);
+                    const text = summation?.render ? summation.render(dataList) : getCellValue(row, dataIndex);
                     return `<td>${index === 0 && text === '' ? t('qm.table.config.summaryText') : text}</td>`;
                   })
                   .join('')}</tr>`

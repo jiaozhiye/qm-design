@@ -136,18 +136,6 @@ export const deepFindRowKey = (rowKeys: IRowKey[], mark: string): Nullable<IRowK
   return result;
 };
 
-// 所有 rowKey
-export const getAllRowKeys = (list: IRecord[], getRowKey: AnyFunction<string>): string[] => {
-  const result: string[] = [];
-  list.forEach((record) => {
-    result.push(getRowKey(record, record.index));
-    if (record.children) {
-      result.push(...getAllRowKeys(record.children, getRowKey));
-    }
-  });
-  return result;
-};
-
 // 展平 tableData
 export const tableDataFlatMap = (list: IRecord[]): IRecord[] => {
   const result: IRecord[] = [];

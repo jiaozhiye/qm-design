@@ -2,11 +2,10 @@
  * @Author: 焦质晔
  * @Date: 2020-03-06 21:30:12
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-04-01 12:56:33
+ * @Last Modified time: 2021-05-18 23:08:52
  */
 import { defineComponent } from 'vue';
 import { intersection, xor } from 'lodash-es';
-import { getAllTableData } from '../utils';
 import { getPrefixCls } from '../../../_utils/prefix';
 import { noop } from '../../../_utils/util';
 import { t } from '../../../locale';
@@ -27,14 +26,12 @@ export default defineComponent({
   computed: {
     isFilterable(): boolean {
       const { rowSelection } = this.$$table;
-      return rowSelection.filterable || false;
+      return rowSelection.filterable || !1;
     },
     filterAllRowKeys(): string[] {
-      const { tableFullData, getRowKey, rowSelection } = this.$$table;
+      const { allTableData, getRowKey, rowSelection } = this.$$table;
       const { disabled = noop } = rowSelection;
-      return getAllTableData(tableFullData)
-        .filter((row) => !disabled(row))
-        .map((row) => getRowKey(row, row.index));
+      return allTableData.filter((row) => !disabled(row)).map((row) => getRowKey(row, row.index));
     },
     indeterminate(): boolean {
       return this.selectionKeys.length > 0 && intersection(this.selectionKeys, this.filterAllRowKeys).length < this.filterAllRowKeys.length;
