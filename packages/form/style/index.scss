@@ -14,7 +14,7 @@ $prefix: '#{$qm-prefix}-form';
     margin-bottom: 12px;
   }
   .el-form-item {
-    margin-bottom: 0;
+    margin-bottom: 0 !important;
     .el-form-item__label {
       display: flex;
       align-items: center;
