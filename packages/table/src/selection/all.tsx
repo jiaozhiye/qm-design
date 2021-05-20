@@ -5,7 +5,7 @@
  * @Last Modified time: 2021-05-18 23:08:52
  */
 import { defineComponent } from 'vue';
-import { intersection, xor } from 'lodash-es';
+import { intersection, union, xor } from 'lodash-es';
 import { getPrefixCls } from '../../../_utils/prefix';
 import { noop } from '../../../_utils/util';
 import { t } from '../../../locale';
@@ -13,6 +13,10 @@ import { JSXNode } from '../../../_utils/types';
 
 import Checkbox from '../checkbox';
 import DropdownIcon from '../icon/dropdown';
+
+// intersection -> 交集(去重)
+// union -> 并集(去重)
+// xor -> 补集(并集 + 除了交集)
 
 export default defineComponent({
   name: 'AllSelection',
@@ -46,16 +50,16 @@ export default defineComponent({
   methods: {
     changeHandle(val: boolean): void {
       const { selectionKeys, filterAllRowKeys } = this;
-      this.$$table.selectionKeys = val ? [...new Set([...selectionKeys, ...filterAllRowKeys])] : xor(selectionKeys, filterAllRowKeys);
+      this.$$table.selectionKeys = val ? union(selectionKeys, filterAllRowKeys) : selectionKeys.filter((x) => !filterAllRowKeys.includes(x));
     },
     selectAllHandle(): void {
       this.changeHandle(true);
     },
     invertHandle(): void {
-      this.changeHandle(false);
+      this.$$table.selectionKeys = xor(this.selectionKeys, this.filterAllRowKeys);
     },
     clearAllHandle(): void {
-      this.$$table.selectionKeys = this.selectionKeys.filter((x) => !this.filterAllRowKeys.includes(x));
+      this.changeHandle(false);
     },
   },
   render(): JSXNode {

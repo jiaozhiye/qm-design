@@ -7,7 +7,7 @@
 import { defineComponent, reactive, CSSProperties } from 'vue';
 import addEventListener from 'add-dom-event-listener';
 import { isEqual, isFunction, isObject } from 'lodash-es';
-import { parseHeight, getCellValue, getVNodeText, deepFindRowKey, isArrayContain } from '../utils';
+import { parseHeight, throttle, getCellValue, getVNodeText, deepFindRowKey, isArrayContain } from '../utils';
 import { getPrefixCls } from '../../../_utils/prefix';
 import { noop, isVNode } from '../../../_utils/util';
 import { getParentNode } from '../../../_utils/dom';
@@ -90,7 +90,7 @@ export default defineComponent({
   },
   mounted() {
     this.event1 = addEventListener(this.$el, 'scroll', this.scrollEvent);
-    this.event2 = addEventListener(document, 'keydown', this.keyboardEvent);
+    this.event2 = addEventListener(document, 'keydown', throttle(this.keyboardEvent, 100));
   },
   unmounted() {
     this.event1.remove();
