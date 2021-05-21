@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-03-06 21:30:12
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-05-18 23:08:52
+ * @Last Modified time: 2021-05-21 13:51:23
  */
 import { defineComponent } from 'vue';
 import { intersection, union, xor } from 'lodash-es';
@@ -67,7 +67,12 @@ export default defineComponent({
     const prefixCls = getPrefixCls('table');
     return (
       <div class="cell--selection">
-        <Checkbox indeterminate={this.indeterminate} modelValue={this.selectable} onChange={this.changeHandle} />
+        <Checkbox
+          indeterminate={this.indeterminate}
+          disabled={!this.filterAllRowKeys.length}
+          modelValue={this.selectable}
+          onChange={this.changeHandle}
+        />
         {isFilterable && (
           <el-popover
             popper-class={`${prefixCls}__popper head-selection--popper`}

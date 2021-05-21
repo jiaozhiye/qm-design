@@ -145,6 +145,11 @@ export default {
       refresh: {
         text: '刷新',
       },
+      selectCollection: {
+        text: '行选集合',
+        settingTitle: '行选列表',
+        closeButton: '关闭',
+      },
       groupSummary: {
         text: '汇总',
         settingTitle: '汇总设置',

@@ -649,7 +649,7 @@ export default defineComponent({
             maxHeight="400px"
             stripe={true}
             columns={this.columns}
-            dataSource={this.list}
+            fetch={this.fetch}
             rowKey={(row) => row.id}
             webPagination={false}
             spanMethod={this.spanMethod}

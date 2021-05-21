@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-02-29 22:17:28
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-05-18 20:21:41
+ * @Last Modified time: 2021-05-21 13:53:12
  */
 import { getPrefixCls } from '../../../_utils/prefix';
 import { JSXNode } from '../../../_utils/types';
@@ -15,6 +15,7 @@ import Spin from '../../../spin';
 import EmptyContent from '../empty';
 import Alert from '../alert';
 import ColumnFilter from '../column-filter';
+import SelectCollection from '../select-collection';
 import GroupSummary from '../group-summary';
 import HighSearch from '../high-search';
 import FullScreen from '../full-screen';
@@ -70,6 +71,7 @@ export default {
       showRefresh,
       tablePrint,
       exportExcel,
+      isSelectCollection,
       isSuperSearch,
       isGroupSummary,
       showColumnDefine,
@@ -165,6 +167,8 @@ export default {
             {tablePrint && <PrintTable {...printProps} />}
             {/* 导出 */}
             {exportExcel && <Export {...exportProps} />}
+            {/* 多选集合 */}
+            {isSelectCollection && <SelectCollection columns={columns} />}
             {/* 高级检索 */}
             {isSuperSearch && <HighSearch columns={flattenColumns} />}
             {/* 分组汇总 */}

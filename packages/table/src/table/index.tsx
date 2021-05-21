@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-02-09 09:03:59
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-05-18 23:07:58
+ * @Last Modified time: 2021-05-21 13:52:40
  */
 import { CSSProperties, defineComponent } from 'vue';
 import { isEqual } from 'lodash-es';
@@ -189,6 +189,9 @@ export default defineComponent({
     isServerSummation(): boolean {
       return this.flattenColumns.some((x) => !!x.summation?.dataKey);
     },
+    isSelectCollection(): boolean {
+      return this.isFetch && this.rowSelection?.type === 'checkbox';
+    },
     isSuperSearch(): boolean {
       return this.showSuperSearch && this.isHeadFilter;
     },
@@ -301,9 +304,10 @@ export default defineComponent({
       this.clearSuperSearch();
     },
     fetchParams(next: IFetchParams, prev: IFetchParams): void {
+      const { clearableAfterFetched = !0 } = this.rowSelection || {};
       const isOnlyPageChange = this.onlyPaginationChange(next, prev);
       if (!isOnlyPageChange) {
-        this.isFetch && debounce(this.clearRowSelection)();
+        this.isFetch && clearableAfterFetched && debounce(this.clearRowSelection)();
       }
       if (!isOnlyPageChange && next.currentPage > 1 && !this.fetch?.stopToFirst) {
         this.toFirstPage();
