@@ -246,10 +246,6 @@ export default {
   showAlert: PropTypes.bool.def(true),
   // 顶部按钮插槽的对其方式
   topSpaceAlign: PropTypes.oneOf(['left', 'right']).def('right'),
-  // 是否显示全屏按钮
-  showFullScreen: PropTypes.bool.def(true),
-  // 是否显示刷新按钮
-  showRefresh: PropTypes.bool.def(true),
   // 导出表格数据
   exportExcel: PropTypes.shape({
     fileName: PropTypes.string, // 导出的文件名，需包含扩展名[xlsx|csv]
@@ -263,6 +259,12 @@ export default {
   tablePrint: PropTypes.shape({
     showLogo: PropTypes.bool, // 是否显示 Logo
   }),
+  // 是否显示全屏按钮
+  showFullScreen: PropTypes.bool.def(true),
+  // 是否显示刷新按钮
+  showRefresh: PropTypes.bool.def(true),
+  // 是否显示行选合集
+  showSelectCollection: PropTypes.bool.def(true),
   // 是否显示高级检索
   showSuperSearch: PropTypes.bool.def(true),
   // 是否显示分组汇总
@@ -270,7 +272,7 @@ export default {
   // 是否显示列定义
   showColumnDefine: PropTypes.bool.def(true),
   // 只显示图标，不显示文字
-  onlyShowIcon: PropTypes.bool,
+  onlyShowIcon: PropTypes.bool.def(false),
   // 加载表格之前的拦截器，适用于 fetch.api 情况
   beforeLoadTable: PropTypes.func,
   // 事件监听

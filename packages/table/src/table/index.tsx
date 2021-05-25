@@ -190,7 +190,7 @@ export default defineComponent({
       return this.flattenColumns.some((x) => !!x.summation?.dataKey);
     },
     isSelectCollection(): boolean {
-      return this.isFetch && this.rowSelection?.type === 'checkbox';
+      return this.showSelectCollection && this.isFetch && this.rowSelection?.type === 'checkbox';
     },
     isSuperSearch(): boolean {
       return this.showSuperSearch && this.isHeadFilter;

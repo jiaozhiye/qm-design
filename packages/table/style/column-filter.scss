@@ -30,8 +30,7 @@ $prefix: '#{$qm-prefix}-table';
   li.item {
     position: relative;
     line-height: 1.75;
-    white-space: nowrap;
-    text-overflow: ellipsis;
+    @include text-overflow-cut;
     .handle {
       padding: 2px 4px;
       font-weight: 700;

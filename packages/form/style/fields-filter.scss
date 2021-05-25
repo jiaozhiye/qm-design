@@ -11,9 +11,7 @@ $prefix: '#{$qm-prefix}-fields-filter';
 .#{$prefix} {
   .filter-item {
     line-height: 1.75;
-    .el-checkbox {
-      transform: translateY(-1px);
-    }
+    @include text-overflow-cut;
     .handle {
       margin: 0 5px;
       cursor: s-resize;
@@ -23,4 +21,5 @@ $prefix: '#{$qm-prefix}-fields-filter';
 
 .popover-fields-filter {
   min-width: 100px !important;
+  max-width: 160px !important;
 }

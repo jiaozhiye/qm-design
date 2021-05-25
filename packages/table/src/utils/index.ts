@@ -275,7 +275,7 @@ export const setCellValue = (record: IRecord, dataIndex: string, val: unknown, p
 };
 
 // 函数防抖
-export const debounce = <T extends AnyFunction<void>>(fn: T, delay: number) => {
+export const debounce = <T extends AnyFunction<void>>(fn: T, delay = 0) => {
   let timeoutId = 0 as any;
   return (...args: any[]): void => {
     clearTimeout(timeoutId);
