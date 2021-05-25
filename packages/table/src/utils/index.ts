@@ -274,22 +274,24 @@ export const setCellValue = (record: IRecord, dataIndex: string, val: unknown, p
   set(record, dataIndex, val);
 };
 
-// 函数截流
-export const throttle = (fn: any, delay: number): AnyFunction<void> => {
-  return function (...args) {
-    const nowTime: number = +new Date();
-    if (!fn.lastTime || nowTime - fn.lastTime > delay) {
-      fn.apply(this, args);
-      fn.lastTime = nowTime;
-    }
+// 函数防抖
+export const debounce = <T extends AnyFunction<void>>(fn: T, delay: number) => {
+  let timeoutId = 0 as any;
+  return (...args: any[]): void => {
+    clearTimeout(timeoutId);
+    timeoutId = setTimeout(() => fn(...args), delay);
   };
 };
 
-// 函数防抖
-export const debounce = (fn: any, delay = 0): AnyFunction<void> => {
-  return function (...args) {
-    fn.timer && clearTimeout(fn.timer);
-    fn.timer = setTimeout(() => fn.apply(this, args), delay);
+// 函数截流
+export const throttle = <T extends AnyFunction<void>>(fn: T, limit: number) => {
+  let throttling = false;
+  return (...args: Parameters<T>): void | ReturnType<T> => {
+    if (!throttling) {
+      throttling = true;
+      setTimeout(() => (throttling = false), limit);
+      return fn(...args);
+    }
   };
 };
 

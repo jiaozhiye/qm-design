@@ -10,17 +10,41 @@ import isServer from './isServer';
 import { Nullable } from './types';
 
 // 事件绑定
-export const on = (element: HTMLElement | Document | Window, event: string, handler: EventListener, useCapture = false): void => {
+export const on = (
+  element: HTMLElement | Document | Window,
+  event: string,
+  handler: EventListener,
+  useCapture: boolean | AddEventListenerOptions = false
+): void => {
   if (element && event && handler) {
     element.addEventListener(event, handler, useCapture);
   }
 };
 
 // 事件解绑
-export const off = (element: HTMLElement | Document | Window, event: string, handler: EventListener, useCapture = false): void => {
+export const off = (
+  element: HTMLElement | Document | Window,
+  event: string,
+  handler: EventListener,
+  useCapture: boolean | AddEventListenerOptions = false
+): void => {
   if (element && event && handler) {
     element.removeEventListener(event, handler, useCapture);
   }
+};
+
+// 事件绑定 - 触发一次
+export const once = (
+  element: HTMLElement | Document | Window,
+  event: string,
+  cb: EventListener,
+  useCapture: boolean | AddEventListenerOptions = false
+): void => {
+  const fn = (ev: Event): void => {
+    cb(ev);
+    off(element, event, fn, useCapture);
+  };
+  on(element, event, fn, useCapture);
 };
 
 // 阻止事件冒泡
