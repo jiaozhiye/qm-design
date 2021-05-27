@@ -71,11 +71,7 @@ $prefix: '#{$qm-prefix}-table';
 /* table 样式 */
 .#{$prefix} {
   position: relative;
-  color: $v-font-color;
-  font-size: $v-font-size;
-  font-family: $v-font-family;
   background-color: $v-table-background-color;
-  clear: both;
   &:before,
   &:after {
     content: '';

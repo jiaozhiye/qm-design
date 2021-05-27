@@ -2,10 +2,11 @@
  * @Author: 焦质晔
  * @Date: 2020-03-09 13:18:43
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-22 16:24:14
+ * @Last Modified time: 2021-05-27 21:55:04
  */
 import { defineComponent } from 'vue';
 import { cloneDeep } from 'lodash-es';
+import classnames from 'classnames';
 import { isEmpty } from '../../../_utils/util';
 import { validateNumber, stringToNumber, toDate, dateFormat } from '../utils';
 import { getPrefixCls } from '../../../_utils/prefix';
@@ -334,8 +335,15 @@ export default defineComponent({
     },
   },
   render(): JSXNode {
+    const { tableSize } = this.$$table;
     const { visible, isActived } = this;
     const prefixCls = getPrefixCls('table');
+    const popperCls = {
+      [`${prefixCls}__popper`]: true,
+      [`${prefixCls}__popper--medium`]: tableSize === 'medium',
+      [`${prefixCls}__popper--small`]: tableSize === 'small',
+      [`${prefixCls}__popper--mini`]: tableSize === 'mini',
+    };
     const filterBtnCls = [
       `cell--filter__btn`,
       {
@@ -346,7 +354,7 @@ export default defineComponent({
     return (
       <div class="cell--filter" title={t('qm.table.filter.text')}>
         <el-popover
-          popper-class={`${prefixCls}__popper`}
+          popper-class={`${classnames(popperCls)}`}
           v-model={[this.visible, 'visible']}
           width="auto"
           trigger="click"

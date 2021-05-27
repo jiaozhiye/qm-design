@@ -9,5 +9,35 @@
 /// color|1|Brand Color|0
 $--color-primary: $primary-color;
 
+$--color-success: $success-color;
+$--color-warning: $warning-color;
+$--color-danger: $error-color;
+
+$--font-size-base: $font-size-base;
+$--font-size-small: $font-size-base;
+$--input-small-font-size: $--font-size-small;
+$--button-small-font-size: $--font-size-small;
+
+$--color-text-primary: $text-color;
+$--color-text-regular: #606060;
+$--color-text-secondary: #8c8c8c;
+$--color-text-placeholder: #bfbfbf;
+$--disabled-color-base: $text-color;
+
+$--border-color-base: $border-color-base;
+$--border-color-light: $border-color-base;
+$--border-color-lighter: $border-color-secondary;
+
+$--border-radius-base: $border-radius-base;
+$--button-small-border-radius: $--border-radius-base;
+$--button-mini-border-radius: $--border-radius-base;
+$--button-small-padding-vertical: $padding-sm;
+
+$--background-color-base: $background-color;
+$--table-border-color: $border-color-secondary;
+
+$--checkbox-disabled-checked-icon-color: #333;
+$--radio-disabled-checked-icon-color: #666;
+
 /* 改变 icon 字体路径变量，必需 */
 $--font-path: '~element-plus/lib/theme-chalk/fonts';

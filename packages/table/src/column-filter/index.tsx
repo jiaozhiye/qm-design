@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-03-17 10:29:47
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-05-13 11:13:11
+ * @Last Modified time: 2021-05-27 21:59:23
  */
 import { defineComponent, reactive } from 'vue';
 import { cloneDeep, isUndefined } from 'lodash-es';
@@ -124,7 +124,9 @@ export default defineComponent({
         <li key={column.dataIndex} class="item">
           <Checkbox {...checkboxProps} disabled={column.required} onChange={this.changeHandle} />
           <i class={cls} title={t('qm.table.columnFilter.draggable')} />
-          <span title={column.title}>{column.title}</span>
+          <span class="text" title={column.title}>
+            {column.title}
+          </span>
           {type === 'main' ? (
             <span class="fixed">
               <i

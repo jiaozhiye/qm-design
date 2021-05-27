@@ -51,7 +51,7 @@ $prefix: '#{$qm-prefix}-form';
         transition: none;
       }
       .el-input-group__append {
-        padding: 0 13px;
+        padding: 0 $padding-lg;
       }
     }
     .el-select {
@@ -157,6 +157,10 @@ $prefix: '#{$qm-prefix}-form';
     .el-form-item {
       .el-form-item__label {
         height: 28px;
+        font-size: $font-size-sm;
+      }
+      .desc-text {
+        font-size: $font-size-sm;
       }
     }
   }
