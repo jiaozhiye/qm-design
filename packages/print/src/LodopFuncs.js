@@ -1,8 +1,8 @@
 ﻿/*
  * @Author: 焦质晔
  * @Date: 2021-03-01 17:49:11
- * @Last Modified by:   焦质晔
- * @Last Modified time: 2021-03-01 17:49:11
+ * @Last Modified by: 焦质晔
+ * @Last Modified time: 2021-05-27 11:10:47
  */
 import { ElNotification, ElMessage } from 'element-plus';
 
@@ -51,9 +51,11 @@ if (needCLodop()) {
 
   var head = document.head || document.getElementsByTagName('head')[0] || document.documentElement;
   var oscript = document.createElement('script');
+  oscript.async = 'async';
   oscript.src = src1;
   head.insertBefore(oscript, head.firstChild);
   oscript = document.createElement('script');
+  oscript.async = 'async';
   oscript.src = src2;
   head.insertBefore(oscript, head.firstChild);
   CLodopIsLocal = !!(src1 + src2).match(/\/\/localho|\/\/127.0.0./i);
@@ -61,23 +63,17 @@ if (needCLodop()) {
 
 // ====获取LODOP对象的主过程：====
 export function getLodop(oOBJECT, oEMBED) {
-  var strHtmInstall =
-    "打印控件未安装!点击这里<a href='/static/cLodop/install_lodop32.exe' target='_self'>执行安装</a>,安装后请刷新页面或重新进入。";
-  var strHtmUpdate =
-    "打印控件需要升级!点击这里<a href='/static/cLodop/install_lodop32.exe' target='_self'>执行升级</a>,升级后请重新进入。";
+  var strHtmInstall = "打印控件未安装!点击这里<a href='/static/cLodop/install_lodop32.exe' target='_self'>执行安装</a>,安装后请刷新页面或重新进入。";
+  var strHtmUpdate = "打印控件需要升级!点击这里<a href='/static/cLodop/install_lodop32.exe' target='_self'>执行升级</a>,升级后请重新进入。";
   var strHtm64_Install =
     "打印控件未安装!点击这里<a href='/static/cLodop/install_lodop64.exe' target='_self'>执行安装</a>,安装后请刷新页面或重新进入。";
-  var strHtm64_Update =
-    "打印控件需要升级!点击这里<a href='/static/cLodop/install_lodop64.exe' target='_self'>执行升级</a>,升级后请重新进入。";
-  var strHtmFireFox =
-    '（注意：如曾安装过Lodop旧版附件npActiveXPLugin,请在【工具】->【附加组件】->【扩展】中先卸它）';
+  var strHtm64_Update = "打印控件需要升级!点击这里<a href='/static/cLodop/install_lodop64.exe' target='_self'>执行升级</a>,升级后请重新进入。";
+  var strHtmFireFox = '（注意：如曾安装过Lodop旧版附件npActiveXPLugin,请在【工具】->【附加组件】->【扩展】中先卸它）';
   var strHtmChrome = '(如果此前正常，仅因浏览器升级或重安装而出问题，需重新执行以上安装）';
   var strCLodopInstall_1 =
     "Web打印服务CLodop未安装启动，点击这里<a href='/static/cLodop/CLodop_Setup_for_Win32NT.exe' target='_self'>下载执行安装</a>，";
-  var strCLodopInstall_2 =
-    "（若此前已安装过，可<a href='CLodop.protocol:setup' target='_self'>点这里直接再次启动</a>），";
-  var strCLodopInstall_3 =
-    '成功后请 <a href="javascript:;" onclick="javascript:window.history.go(0)">刷新本页面</a> 。';
+  var strCLodopInstall_2 = "（若此前已安装过，可<a href='CLodop.protocol:setup' target='_self'>点这里直接再次启动</a>），";
+  var strCLodopInstall_3 = '成功后请 <a href="javascript:;" onclick="javascript:window.history.go(0)">刷新本页面</a> 。';
   var strCLodopUpdate =
     "Web打印服务CLodop需升级!点击这里<a href='/static/cLodop/CLodop_Setup_for_Win32NT.exe' target='_self'>执行升级</a>,升级后请刷新页面。";
   var LODOP;
@@ -100,8 +96,7 @@ export function getLodop(oOBJECT, oEMBED) {
           title: 'CLodop 信息',
           dangerouslyUseHTMLString: true,
           duration: 0,
-          message:
-            strCLodopInstall_1 + (CLodopIsLocal ? strCLodopInstall_2 : '') + strCLodopInstall_3,
+          message: strCLodopInstall_1 + (CLodopIsLocal ? strCLodopInstall_2 : '') + strCLodopInstall_3,
         });
         return;
       } else {
@@ -168,11 +163,12 @@ export function getLodop(oOBJECT, oEMBED) {
         });
       }
     }
+
     // ===如下空白位置适合调用统一功能(如注册语句、语言选择等):==
     // LODOP.SET_LICENSES('用友汽车信息科技（上海）股份有限公司', 'FA9A697F2551BCE81BD852A4EB520525347', '用友汽車信息科技（上海）股份有限公司', 'C66313BD8413BD0174C2CADD29F5380CD92');
     // LODOP.SET_LICENSES('THIRD LICENSE', '', 'Yonyou Auto Information Technology (Shanghai) Co., Ltd.', '941DF3639D9F5679867946141A31424B4E6');
-
     // =======================================================
+
     return LODOP;
   } catch (err) {
     ElMessage.error('getLodop 出错:' + err);

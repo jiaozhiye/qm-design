@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-02-28 23:01:43
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-05-18 20:21:59
+ * @Last Modified time: 2021-05-27 11:34:55
  */
 import { defineComponent, reactive, CSSProperties } from 'vue';
 import addEventListener from 'add-dom-event-listener';
@@ -268,11 +268,11 @@ export default defineComponent({
       }
       return vNodeText;
     },
-    renderText(text: string, column: IColumn, row: IRecord): string {
+    renderText(text: string | number, column: IColumn, row: IRecord): string | number {
       const { dictItems, precision, formatType, editRender } = column;
       const dicts: IDict[] = dictItems || editRender?.(row, column)?.items || [];
       const target = dicts.find((x) => x.value == text);
-      let result: string = target?.text ?? text ?? '';
+      let result = target?.text ?? text ?? '';
       // 数据是数组的情况
       if (Array.isArray(text)) {
         result = text
@@ -287,7 +287,9 @@ export default defineComponent({
         result = Number(result).toFixed(precision);
       }
       // 处理换行符
-      result = result.toString().replace(/[\r\n]/g, '');
+      if (typeof result === 'string') {
+        result = result.replace(/[\r\n]/g, '');
+      }
       // 处理数据格式化
       if (formatType) {
         const render = this[`${formatType}Format`];
