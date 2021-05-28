@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-02-09 09:03:59
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-19 16:45:30
+ * @Last Modified time: 2021-05-28 10:37:15
  */
 import { defineComponent, VNode, ComponentInternalInstance, PropType } from 'vue';
 import addEventListener from 'add-dom-event-listener';
@@ -64,7 +64,7 @@ export default defineComponent({
     getAnchorItems(): Array<ComponentInternalInstance> {
       // this -> ctx 执行上下文
       // instance -> 组件实例，有 uid, subTree 属性
-      // VNode -> 有 __v_isVNode 属性
+      // vnode -> 有 __v_isVNode, el 属性
       const { _: instance } = this;
       const { children } = instance.subTree;
       const content: Nullable<VNode> =
@@ -78,7 +78,7 @@ export default defineComponent({
     },
     createDistances(): Array<number> {
       return !this.labelList?.length
-        ? this.anchorItemInstances.map((x) => getOffsetTopDistance(x.ctx.$el, this.$refs[`scroll`]))
+        ? this.anchorItemInstances.map((x) => getOffsetTopDistance(x.vnode.el, this.$refs[`scroll`]))
         : this.labelList.map((x) => getOffsetTopDistance(document.getElementById(x.id) as HTMLElement, this.$refs[`scroll`]));
     },
     findCurrentIndex(t: number): number {
@@ -103,7 +103,7 @@ export default defineComponent({
       this.state = 'stop';
       this.timer && clearTimeout(this.timer);
       this.activeKey = index;
-      const $el: HTMLElement = !this.labelList?.length ? this.anchorItemInstances[index].ctx.$el : document.getElementById(this.labelList[index].id);
+      const $el: HTMLElement = !this.labelList?.length ? this.anchorItemInstances[index].vnode.el : document.getElementById(this.labelList[index].id);
       scrollIntoView($el, {
         scrollMode: 'always',
         block: 'start',
