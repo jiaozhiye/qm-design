@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-02-12 15:39:35
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-13 10:22:56
+ * @Last Modified time: 2021-05-28 11:26:27
  */
 import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse, AxiosError, Canceler } from 'axios';
 import qs from 'qs';
@@ -105,11 +105,6 @@ instance.interceptors.request.use((config: IRequestConfig) => {
   config.headers = {
     ...config.headers,
     ...getConfigHeaders(),
-  };
-  // 处理 IE 缓存
-  config.params = {
-    ...config.params,
-    _t: +new Date().getTime(),
   };
   addPendingRequest(config);
   addLockingRequest(config);

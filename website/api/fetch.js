@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-05-17 08:59:58
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-05-17 09:06:32
+ * @Last Modified time: 2021-05-28 11:26:39
  */
 import axios from 'axios';
 import qs from 'qs';
@@ -37,11 +37,6 @@ instance.interceptors.request.use((config) => {
   config.headers = {
     ...config.headers,
     ...getConfigHeaders(),
-  };
-  // 处理 IE 缓存
-  config.params = {
-    ...config.params,
-    _t: +new Date().getTime(),
   };
   return config;
 }, errorHandler);
