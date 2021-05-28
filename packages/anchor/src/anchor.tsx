@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-02-09 09:03:59
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-05-28 10:37:15
+ * @Last Modified time: 2021-05-28 11:17:30
  */
 import { defineComponent, VNode, ComponentInternalInstance, PropType } from 'vue';
 import addEventListener from 'add-dom-event-listener';
@@ -46,7 +46,7 @@ export default defineComponent({
     },
   },
   data() {
-    Object.assign(this, { distances: [], state: 'ready' });
+    Object.assign(this, { state: 'ready' });
     return {
       activeKey: 0,
       anchorItemInstances: [],
@@ -54,8 +54,7 @@ export default defineComponent({
   },
   mounted() {
     this.anchorItemInstances = this.getAnchorItems();
-    this.distances = this.createDistances();
-    this.scrollEvent = addEventListener(this.$refs[`scroll`], 'scroll', throttle(this.scrollHandle, 20));
+    this.scrollEvent = addEventListener(this.$refs[`scroll`], 'scroll', throttle(this.scrollHandle, 60));
   },
   beforeUnmount() {
     this.scrollEvent?.remove();
@@ -83,10 +82,11 @@ export default defineComponent({
     },
     findCurrentIndex(t: number): number {
       const top: number = Math.abs(t);
+      const distances = this.createDistances();
       let index: number = -1;
-      for (let i = 0; i < this.distances.length; i++) {
-        const t1: number = this.distances[i];
-        const t2: number = this.distances[i + 1] || 10000;
+      for (let i = 0; i < distances.length; i++) {
+        const t1: number = distances[i];
+        const t2: number = distances[i + 1] || 10000;
         if (top >= t1 && top < t2) {
           index = i;
         }
@@ -95,7 +95,7 @@ export default defineComponent({
     },
     scrollHandle(ev: Event): void {
       if (this.state !== 'ready') return;
-      const index: number = this.findCurrentIndex((ev.target as any).scrollTop);
+      const index: number = this.findCurrentIndex((ev.target as HTMLElement).scrollTop);
       if (index === -1) return;
       this.activeKey = index;
     },
