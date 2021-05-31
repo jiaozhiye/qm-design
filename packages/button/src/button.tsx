@@ -39,9 +39,6 @@ export default defineComponent({
     round: PropTypes.bool,
     circle: PropTypes.bool,
     icon: PropTypes.string,
-    // 权限校验参数
-    authList: PropTypes.array,
-    authMark: PropTypes.string.def(''),
   },
   data() {
     return {
@@ -51,11 +48,6 @@ export default defineComponent({
   computed: {
     isDisabled(): boolean {
       return this.ajaxing || this.disabled;
-    },
-    isVisible(): boolean {
-      // 没有权限控制，默认该按钮显示状态
-      if (!this.authList) return true;
-      return this.authList.includes(this.authMark);
     },
   },
   methods: {

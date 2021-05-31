@@ -13,8 +13,6 @@
 | circle   | 是否圆形按钮                             | boolean                                                 | false  |
 | icon     | 图标类名                                 | string                                                  | -      |
 | confirm  | 点击操作，确认提示，[配置项](#confirm)   | object                                                  | -      |
-| authList | 权限数组                                 | string[]                                                | -      |
-| authMark | 权限值                                   | string                                                  | -      |
 
 ### 事件
 
