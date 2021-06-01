@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-03-31 09:27:45
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-05-14 15:43:03
+ * @Last Modified time: 2021-06-01 13:45:12
  */
 import { defineComponent } from 'vue';
 import { flatten } from 'lodash-es';
@@ -209,7 +209,8 @@ export default defineComponent({
       >
         <div class="city-select">
           <el-popover
-            popper-class={`${prefixCls}__popper city-select__${fieldName}`}
+            ref="popper"
+            popper-class={`${prefixCls}__popper`}
             v-model={[this.visible, 'visible']}
             width="auto"
             trigger="manual"
@@ -230,11 +231,14 @@ export default defineComponent({
                   readonly={readonly}
                   style={readonly && { pointerEvents: 'none' }}
                   popper-append-to-body={false}
-                  v-click-outside={[() => (this.visible = !1), document.querySelector(`.city-select__${fieldName}`)]}
+                  v-click-outside={($down, $up): void => {
+                    if (document.getElementById(this.$refs[`popper`].popperId)?.contains($up)) return;
+                    this.visible = !1;
+                  }}
                   onVisibleChange={(visible: boolean): void => {
                     if (!visible) return;
                     setStyle(
-                      document.querySelector(`.city-select__${fieldName}`) as HTMLElement,
+                      document.getElementById(this.$refs[`popper`].popperId) as HTMLElement,
                       'minWidth',
                       `${this.$refs[`select`].$el.getBoundingClientRect().width}px`
                     );

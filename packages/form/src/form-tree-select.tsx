@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-02-23 21:56:33
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-16 11:19:42
+ * @Last Modified time: 2021-06-01 13:46:34
  */
 import { defineComponent, CSSProperties } from 'vue';
 import { get } from 'lodash-es';
@@ -132,7 +132,8 @@ export default defineComponent({
       >
         <div class="tree-select">
           <el-popover
-            popper-class={`${prefixCls}__popper tree-select__${fieldName}`}
+            ref="popper"
+            popper-class={`${prefixCls}__popper`}
             v-model={[this.visible, 'visible']}
             width={width}
             trigger="manual"
@@ -159,8 +160,10 @@ export default defineComponent({
                   readonly={readonly}
                   style={readonly && { pointerEvents: 'none' }}
                   popper-append-to-body={false}
-                  // v-click-outside={() => (this.visible = !1)}
-                  v-click-outside={[() => (this.visible = !1), document.querySelector(`.tree-select__${fieldName}`)]}
+                  v-click-outside={($down, $up): void => {
+                    if (document.getElementById(this.$refs[`popper`].popperId)?.contains($up)) return;
+                    this.visible = !1;
+                  }}
                   onVisibleChange={(visible: boolean): void => {
                     if (!visible) return;
                     this.width = this.$refs[`select`].$el.getBoundingClientRect().width + 'px';

@@ -2,13 +2,13 @@
  * @Author: 焦质晔
  * @Date: 2021-02-09 09:03:59
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-05-13 10:48:03
+ * @Last Modified time: 2021-06-01 16:01:17
  */
 import { ComponentPublicInstance, defineComponent } from 'vue';
 import scrollIntoView from 'scroll-into-view-if-needed';
 import { isObject, isFunction, cloneDeep, xor } from 'lodash-es';
 import { AnyObject, JSXNode, Nullable, ValueOf } from '../../_utils/types';
-import { sleep, getParserWidth } from '../../_utils/util';
+import { getParserWidth } from '../../_utils/util';
 import { getPrefixCls } from '../../_utils/prefix';
 import { useSize } from '../../hooks/useSize';
 import { t } from '../../locale';
@@ -135,6 +135,7 @@ export default defineComponent({
         if ([...new Set(next)].length !== next.length) {
           warn('Form', `配置项 fieldName 属性是唯一的，不能重复`);
         }
+        this.createInputFocus();
         if (!Array.isArray(prev)) return;
         const diffs: string[] = xor(prev, next);
         if (!diffs.length) return;
@@ -192,9 +193,6 @@ export default defineComponent({
   },
   created() {
     this.initialHandle();
-  },
-  mounted() {
-    this.createInputFocus();
   },
   methods: {
     // 组件初始化方法
@@ -255,12 +253,11 @@ export default defineComponent({
         this.view = Object.assign({}, this.view, { [fieldName]: val });
       }
     },
-    async createInputFocus(): Promise<void> {
+    createInputFocus(): void {
       if (!this.isAutoFocus) return;
-      await sleep(10);
       const { type, fieldName } = this.list.filter((x) => x.fieldName && !x.hidden)[0] || {};
       if ((type === 'INPUT' || type === 'INPUT_NUMBER') && fieldName) {
-        this.$$(`${fieldName}-${type}`).focus();
+        this.$nextTick(() => this.$$(`${fieldName}-${type}`)?.focus());
       }
     },
     createFormItemLabel(option): JSXNode {
@@ -511,7 +508,7 @@ export default defineComponent({
         }
         // 搜索帮助
         if (x.type === 'INPUT') {
-          this.$$(x.fieldName)?.reset?.();
+          this.$$(x.fieldName)?.reset();
         }
       });
       // this.$refs[`form`].resetFields();
@@ -677,8 +674,8 @@ export default defineComponent({
     // 获取子组件实例
     $$(paths: string): ComponentPublicInstance {
       let ret = this;
-      paths.split('-').map((path) => {
-        ret = ret.$refs?.[path];
+      paths.split('-').forEach((path) => {
+        ret = ret?.$refs[path];
       });
       return ret;
     },

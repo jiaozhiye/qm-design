@@ -2,9 +2,8 @@
  * @Author: 焦质晔
  * @Date: 2021-02-08 19:28:35
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-27 15:05:35
+ * @Last Modified time: 2021-06-01 13:53:24
  */
-import { isFunction } from 'lodash-es';
 import { on } from '../../_utils/dom';
 import isServer from '../../_utils/isServer';
 import type { ComponentPublicInstance, DirectiveBinding, ObjectDirective } from 'vue';
@@ -39,15 +38,10 @@ function createDocumentHandler(el: HTMLElement, binding: DirectiveBinding): Docu
     excludes = binding.arg;
   } else {
     // due to current implementation on binding type is wrong the type casting is necessary here
-    excludes.push((binding.arg as unknown) as HTMLElement);
-  }
-  if (Array.isArray(binding.value) && binding.value.length >= 2) {
-    excludes.push(...binding.value.slice(1));
+    excludes.push(binding.arg as unknown as HTMLElement);
   }
   return function (mouseup, mousedown) {
-    const popperRef = (binding.instance as ComponentPublicInstance<{
-      popperRef: Nullable<HTMLElement>;
-    }>).popperRef;
+    const popperRef = (binding.instance as ComponentPublicInstance<{ popperRef: Nullable<HTMLElement> }>).popperRef;
     const mouseUpTarget = mouseup.target as Node;
     const mouseDownTarget = mousedown?.target as Node;
     const isBound = !binding || !binding.instance;
@@ -58,16 +52,14 @@ function createDocumentHandler(el: HTMLElement, binding: DirectiveBinding): Docu
     const isTargetExcluded =
       (excludes.length && excludes.some((item) => item?.contains(mouseUpTarget))) ||
       (excludes.length && excludes.includes(mouseDownTarget as HTMLElement));
+
     const isContainedByPopper = popperRef && (popperRef.contains(mouseUpTarget) || popperRef.contains(mouseDownTarget));
+
     if (isBound || isTargetExists || isContainedByEl || isSelf || isTargetExcluded || isContainedByPopper) {
       return;
     }
-    if (isFunction(binding.value)) {
-      return binding.value(mouseDownTarget, mouseUpTarget);
-    }
-    if (Array.isArray(binding.value) && isFunction(binding.value[0])) {
-      return binding.value[0](mouseDownTarget, mouseUpTarget);
-    }
+
+    binding.value?.(mouseDownTarget, mouseUpTarget);
   };
 }
 
