@@ -2,9 +2,9 @@
  * @Author: 焦质晔
  * @Date: 2020-03-17 10:29:47
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-05-27 21:59:23
+ * @Last Modified time: 2021-06-02 14:25:13
  */
-import { defineComponent, reactive } from 'vue';
+import { defineComponent } from 'vue';
 import { cloneDeep, isUndefined } from 'lodash-es';
 import Draggable from 'vuedraggable';
 import classnames from 'classnames';
@@ -101,12 +101,11 @@ export default defineComponent({
           })
         );
       });
-      columnsChange(reactive(resultColumns));
+      columnsChange(resultColumns);
     },
     resetColumnsHandle(): void {
-      const { columnsChange = noop } = this.$$table;
-      const realColumns = cloneDeep(this.$$table.originColumns);
-      columnsChange(reactive(realColumns));
+      const { originColumns, columnsChange = noop } = this.$$table;
+      columnsChange(cloneDeep(originColumns));
     },
     renderListItem(column: IColumn, type: string): JSXNode {
       const { colSpan } = column;
@@ -162,7 +161,7 @@ export default defineComponent({
           type: 'transition-group',
         },
         'onUpdate:modelValue': (val) => {
-          this.leftFixedColumns = reactive(val);
+          this.leftFixedColumns = val;
         },
         onChange: this.changeHandle,
       };
@@ -178,7 +177,7 @@ export default defineComponent({
           type: 'transition-group',
         },
         'onUpdate:modelValue': (val) => {
-          this.mainColumns = reactive(val);
+          this.mainColumns = val;
         },
         onChange: this.changeHandle,
       };
@@ -194,7 +193,7 @@ export default defineComponent({
           type: 'transition-group',
         },
         'onUpdate:modelValue': (val) => {
-          this.rightFixedColumns = reactive(val);
+          this.rightFixedColumns = val;
         },
         onChange: this.changeHandle,
       };

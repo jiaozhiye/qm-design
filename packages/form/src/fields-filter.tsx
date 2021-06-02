@@ -2,9 +2,9 @@
  * @Author: 焦质晔
  * @Date: 2021-02-26 14:53:54
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-05-13 10:51:10
+ * @Last Modified time: 2021-06-02 14:05:07
  */
-import { defineComponent, PropType, reactive } from 'vue';
+import { defineComponent, PropType } from 'vue';
 import { JSXNode } from '../../_utils/types';
 
 import { LocalStorageMixin } from './local-storage-mixin';
@@ -54,7 +54,7 @@ export default defineComponent({
       },
       'onUpdate:modelValue': (val: IFormItem[]): void => {
         this.setLocalFields(deepToRaw(val));
-        this.$$form.fieldsChange(reactive(val));
+        this.$$form.fieldsChange(val);
         // 自动展开
         this.$$form.collapse = true;
       },

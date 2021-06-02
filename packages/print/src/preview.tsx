@@ -2,9 +2,9 @@
  * @Author: 焦质晔
  * @Date: 2021-02-09 09:03:59
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-05-07 15:45:13
+ * @Last Modified time: 2021-06-02 14:12:37
  */
-import { defineComponent, PropType, reactive } from 'vue';
+import { defineComponent, PropType } from 'vue';
 import localforage from 'localforage';
 import { JSXNode } from '../../_utils/types';
 
@@ -114,12 +114,10 @@ export default defineComponent({
         }
       }
       if (isObject(res) && Object.keys(res).length) {
-        this.form = reactive(
-          merge({}, this.form, {
-            ...res,
-            printerName: this.printerItems.find((x) => x.text === res?.printerName)?.value ?? -1,
-          })
-        );
+        merge(this.form, {
+          ...res,
+          printerName: this.printerItems.find((x) => x.text === res?.printerName)?.value ?? -1,
+        });
       }
     } catch (err) {}
   },

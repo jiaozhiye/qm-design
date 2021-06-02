@@ -2,9 +2,8 @@
  * @Author: 焦质晔
  * @Date: 2021-03-02 11:10:34
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-05-13 10:57:12
+ * @Last Modified time: 2021-06-02 14:07:34
  */
-import { reactive } from 'vue';
 import { xor, isEqual, isUndefined } from 'lodash-es';
 import { IFormItem } from './types';
 
@@ -104,7 +103,7 @@ export const LocalStorageMixin = {
       // 获取本地 list
       const localFields = this.getLocalFields();
       if (!localFields) return;
-      this.$nextTick(() => this.$$form.fieldsChange(reactive(localFields)));
+      this.$nextTick(() => this.$$form.fieldsChange(localFields));
     },
   },
 };

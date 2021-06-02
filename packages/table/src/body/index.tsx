@@ -2,9 +2,9 @@
  * @Author: 焦质晔
  * @Date: 2020-02-28 23:01:43
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-05-27 11:34:55
+ * @Last Modified time: 2021-06-02 14:23:24
  */
-import { defineComponent, reactive, CSSProperties } from 'vue';
+import { defineComponent, CSSProperties } from 'vue';
 import addEventListener from 'add-dom-event-listener';
 import { isEqual, isFunction, isObject } from 'lodash-es';
 import { parseHeight, throttle, getCellValue, getVNodeText, deepFindRowKey, isArrayContain } from '../utils';
@@ -464,7 +464,7 @@ export default defineComponent({
             records.push(row);
           }
         });
-        this.$$table.tableFullData = reactive(records);
+        this.$$table.tableFullData = records;
       },
     };
     return (

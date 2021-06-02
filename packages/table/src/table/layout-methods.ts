@@ -54,7 +54,7 @@ export default {
     addResizeListener(this.$vTable, this.resizeListener);
     if (this.height !== 'auto') return;
     this.resizeEvent = addEventListener(window, 'resize', this.calcTableHeight);
-    setTimeout(() => this.calcTableHeight(), 0);
+    this.calcTableHeight();
   },
   removeEvents(): void {
     removeResizeListener(this.$vTable, this.resizeListener);

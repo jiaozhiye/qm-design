@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-02-08 19:28:31
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-25 09:56:53
+ * @Last Modified time: 2021-06-02 15:12:02
  */
 import { Ref, toRaw, isVNode, Fragment, Comment, Text, VNode } from 'vue';
 import { isObject, isArray, hasOwn, camelize } from '@vue/shared';
@@ -26,6 +26,11 @@ export const isChrome = (): boolean => {
 
 export const isFirefox = (): boolean => {
   return !isServer && !!navigator.userAgent.match(/firefox/i);
+};
+
+export const isSimpleValue = (x: unknown): boolean => {
+  const simpleTypes = new Set(['undefined', 'boolean', 'number', 'string']);
+  return x === null || simpleTypes.has(typeof x);
 };
 
 export { isVNode } from 'vue';
@@ -101,7 +106,7 @@ export const $ = <T>(ref: Ref<T>): unknown => {
  * @returns 转换后的对象
  */
 export const deepToRaw = <T>(target: T): T => {
-  if (typeof target !== 'object' || target == null) {
+  if (typeof target !== 'object' || target === null) {
     return target;
   }
   const clone: any = Array.isArray(target) ? [] : {};
