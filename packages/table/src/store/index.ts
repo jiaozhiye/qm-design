@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-03-08 11:04:35
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-22 12:53:24
+ * @Last Modified time: 2021-06-02 15:40:39
  */
 import { reactive } from 'vue';
 
@@ -97,7 +97,7 @@ class Store {
     this.state.removed = [];
   };
 
-  destroye = () => {
+  destroy = () => {
     // 释放内存
     for (const key in this) {
       (this as any)[key] = null;

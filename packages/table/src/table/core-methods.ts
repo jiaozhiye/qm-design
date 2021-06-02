@@ -420,6 +420,6 @@ export default {
   // 析构方法
   destroy(): void {
     this.removeEvents();
-    this.store.destroye();
+    this.store.destroy();
   },
 };
