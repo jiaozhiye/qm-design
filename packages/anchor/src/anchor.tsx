@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-02-09 09:03:59
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-05-28 11:17:30
+ * @Last Modified time: 2021-06-02 10:20:29
  */
 import { defineComponent, VNode, ComponentInternalInstance, PropType } from 'vue';
 import addEventListener from 'add-dom-event-listener';
@@ -105,7 +105,6 @@ export default defineComponent({
       this.activeKey = index;
       const $el: HTMLElement = !this.labelList?.length ? this.anchorItemInstances[index].vnode.el : document.getElementById(this.labelList[index].id);
       scrollIntoView($el, {
-        scrollMode: 'always',
         block: 'start',
         behavior: 'smooth',
         boundary: this.$refs[`scroll`],

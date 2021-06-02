@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-02-09 09:03:59
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-06-01 16:01:17
+ * @Last Modified time: 2021-06-02 10:19:02
  */
 import { ComponentPublicInstance, defineComponent } from 'vue';
 import scrollIntoView from 'scroll-into-view-if-needed';
@@ -423,8 +423,9 @@ export default defineComponent({
       const ids: string[] = Object.keys(fields);
       if (!ids.length) return;
       scrollIntoView(document.getElementById(ids[0]) as HTMLElement, {
-        scrollMode: 'if-needed',
+        behavior: 'smooth',
         block: 'nearest',
+        scrollMode: 'if-needed',
       });
     },
     // 处理 from data 数据

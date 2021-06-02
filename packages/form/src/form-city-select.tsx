@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-03-31 09:27:45
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-06-01 13:45:12
+ * @Last Modified time: 2021-06-02 10:28:14
  */
 import { defineComponent } from 'vue';
 import { flatten } from 'lodash-es';
@@ -82,7 +82,7 @@ export default defineComponent({
   data() {
     return {
       select_type: '0', // 0 -> 按省份    1 -> 按城市
-      letter_id: '',
+      active_key: '',
       provinces: this.createProvince(), // 省份数据(递归结构)
       visible: false,
     };
@@ -96,7 +96,7 @@ export default defineComponent({
   },
   watch: {
     select_type(): void {
-      this.letter_id = '';
+      this.active_key = '';
       this.$refs[`scroll`].scrollTop = 0;
     },
   },
@@ -111,9 +111,8 @@ export default defineComponent({
       return this.cities.find((x) => x.c === val)?.n || '';
     },
     scrollHandle(val: string): void {
-      this.letter_id = val;
-      scrollIntoView(document.getElementById(val) as HTMLElement, {
-        scrollMode: 'always',
+      this.active_key = val;
+      scrollIntoView(this.$refs[val] as HTMLElement, {
         block: 'start',
         behavior: 'smooth',
         boundary: this.$refs[`scroll`],
@@ -154,7 +153,7 @@ export default defineComponent({
     },
     renderLetter(): JSXNode[] {
       return citySelectLetter.map((x) => (
-        <li key={x.value} class={{ tag: !0, actived: x.value === this.letter_id }} onClick={() => this.scrollHandle(x.value)}>
+        <li key={x.value} class={{ tag: !0, actived: x.value === this.active_key }} onClick={() => this.scrollHandle(x.value)}>
           {x.text}
         </li>
       ));
@@ -163,7 +162,7 @@ export default defineComponent({
       const cites: ICity[] = this.select_type === '0' ? this.createProvince() : this.createCity();
       return cites.map((x) => (
         <>
-          <dt id={x.l}>{x.n}：</dt>
+          <dt ref={x.l}>{x.n}：</dt>
           <dd>
             {x.children?.map((k) => (
               <li key={k.c} class={{ actived: k.c === val }} onClick={() => this.clickHadnle(k.c)}>

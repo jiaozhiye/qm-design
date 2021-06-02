@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-02-09 09:03:59
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-05-07 15:29:22
+ * @Last Modified time: 2021-06-02 10:00:46
  */
 import { CSSProperties, defineComponent, PropType } from 'vue';
 import addEventListener from 'add-dom-event-listener';
@@ -102,12 +102,14 @@ export default defineComponent({
       }
       this.fullscreen = false; // 取消全屏
       this.$emit('open');
+      this.$refs[`drawer`].drawerRef.classList.add('gpu');
     },
     opened(): void {
       this.panelOpened = true; // 打开过一次
       this.addStopEvent();
       this.$emit('opened');
       this.$emit('afterVisibleChange', true);
+      this.$refs[`drawer`].drawerRef.classList.remove('gpu');
       if (this.insideSpinCtrl) {
         setTimeout(() => (this.spinning = false), 300);
       }
