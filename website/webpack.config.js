@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-02-08 14:35:05
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-05-17 09:16:20
+ * @Last Modified time: 2021-06-03 10:29:10
  */
 'use strict';
 
@@ -143,26 +143,21 @@ module.exports = {
     minimizer: [new CssMinimizerPlugin()],
   },
   devServer: {
-    clientLogLevel: 'warning',
     /* 当使用 HTML5 History API 时，任意的 404 响应都可能需要被替代为 index.html */
     historyApiFallback: {
       disableDotRule: true,
       rewrites: [{ from: /.*/, to: '/index.html' }],
     },
-    publicPath: '/',
-    contentBase: __dirname,
-    inline: true,
-    hot: true, // 热加载
-    compress: true, // 开启资源的 gzip 压缩
-    overlay: {
-      warnings: false,
-      errors: true,
+    public: '/',
+    client: {
+      overlay: false,
+      progress: true,
     },
     host: 'localhost',
     port: '8082',
+    hot: true, // 热加载
     open: true,
     proxy: {},
-    watchOptions: { poll: false },
   },
   plugins: (isProd
     ? [

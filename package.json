@@ -10,7 +10,7 @@
   "author": "jiaozhiye",
   "license": "MIT",
   "scripts": {
-    "dev": "cross-env NODE_ENV=development BABEL_ENV=web webpack serve --inline --hot --progress --config build/webpack.src.conf.js",
+    "dev": "cross-env NODE_ENV=development BABEL_ENV=web webpack serve --progress --config build/webpack.src.conf.js",
     "build:lib": "yarn clean:lib && yarn build:umd && yarn build:esm && yarn build:type && yarn build:locale && yarn build:theme",
     "build:umd": "cross-env NODE_ENV=production BABEL_ENV=lib webpack --config ./build/webpack.build.conf.js",
     "build:esm": "cross-env BABEL_ENV=lib rollup --config ./build/build-esm.rollup.js",
@@ -21,7 +21,7 @@
     "lint": "eslint ./src --ext .vue,.js,.ts",
     "lint-fix": "eslint --fix ./src --ext .vue,.js,.ts",
     "format": "prettier --write \"./src/**/*.{vue,js,ts}\"",
-    "website-dev": "cross-env NODE_ENV=development BABEL_ENV=web webpack serve --inline --hot --progress --config ./website/webpack.config.js",
+    "website-dev": "cross-env NODE_ENV=development BABEL_ENV=web webpack serve --progress --config ./website/webpack.config.js",
     "website-build": "rimraf website-dist && cross-env NODE_ENV=production BABEL_ENV=web webpack --config ./website/webpack.config.js"
   },
   "gitHooks": {
@@ -125,7 +125,7 @@
     "vue-style-loader": "^4.1.2",
     "webpack": "^5.36.2",
     "webpack-cli": "^4.7.0",
-    "webpack-dev-server": "^3.11.2",
+    "webpack-dev-server": "^4.0.0-beta.3",
     "webpack-merge": "^4.2.2",
     "webpack-node-externals": "^3.0.0"
   },

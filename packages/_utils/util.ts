@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-02-08 19:28:31
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-06-02 15:12:02
+ * @Last Modified time: 2021-06-03 09:01:57
  */
 import { Ref, toRaw, isVNode, Fragment, Comment, Text, VNode } from 'vue';
 import { isObject, isArray, hasOwn, camelize } from '@vue/shared';
@@ -111,7 +111,7 @@ export const deepToRaw = <T>(target: T): T => {
   }
   const clone: any = Array.isArray(target) ? [] : {};
   for (const [key, value] of Object.entries(target)) {
-    if (Reflect.hasOwnProperty.call(target, key)) {
+    if (hasOwn(target as any, key)) {
       clone[key] = deepToRaw(toRaw(value));
     }
   }
