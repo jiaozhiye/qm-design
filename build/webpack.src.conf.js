@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-02-08 14:35:05
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-06-03 10:55:50
+ * @Last Modified time: 2021-06-03 15:24:04
  */
 'use strict';
 
@@ -57,6 +57,9 @@ module.exports = {
       {
         test: /\.vue$/,
         loader: 'vue-loader',
+        options: {
+          babelParserPlugins: ['jsx', 'classProperties', 'decorators-legacy'],
+        },
       },
       // js jsx
       {

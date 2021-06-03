@@ -2,8 +2,9 @@
  * @Author: 焦质晔
  * @Date: 2020-03-01 23:27:04
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-05-18 20:10:48
+ * @Last Modified time: 2021-06-03 15:53:30
  */
+@use "sass:math";
 @import './common.scss';
 
 $prefix: '#{$qm-prefix}-table';
@@ -191,7 +192,7 @@ $prefix: '#{$qm-prefix}-table';
     text-align: left;
     line-height: $v-table-row-line-height;
     &:not(.col--ellipsis) {
-      padding: #{floor(($v-table-row-height-default - $v-table-row-line-height) / 2)} 0;
+      padding: #{math.div($v-table-row-height-default - $v-table-row-line-height, 2)} 0;
     }
     &.col--center:not(.header--column) {
       text-align: center;

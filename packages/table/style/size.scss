@@ -2,8 +2,9 @@
  * @Author: 焦质晔
  * @Date: 2020-05-30 14:13:37
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-05-27 22:12:10
+ * @Last Modified time: 2021-06-03 15:53:36
  */
+@use "sass:math";
 $prefix: '#{$qm-prefix}-table';
 
 .#{$prefix} {
@@ -21,7 +22,7 @@ $prefix: '#{$qm-prefix}-table';
         @extend %DefaultColumnHeight;
       }
       &:not(.col--ellipsis) {
-        padding: #{floor(($v-table-row-height-default - $v-table-row-line-height) / 2)} 0;
+        padding: #{math.div($v-table-row-height-default - $v-table-row-line-height, 2)} 0;
       }
     }
   }
@@ -38,7 +39,7 @@ $prefix: '#{$qm-prefix}-table';
         @extend %MediumColumnHeight;
       }
       &:not(.col--ellipsis) {
-        padding: #{floor(($v-table-row-height-medium - $v-table-row-line-height) / 2)} 0;
+        padding: #{math.div($v-table-row-height-medium - $v-table-row-line-height, 2)} 0;
       }
     }
   }
@@ -55,7 +56,7 @@ $prefix: '#{$qm-prefix}-table';
         @extend %SmallColumnHeight;
       }
       &:not(.col--ellipsis) {
-        padding: #{floor(($v-table-row-height-small - $v-table-row-line-height) / 2)} 0;
+        padding: #{math.div($v-table-row-height-small - $v-table-row-line-height, 2)} 0;
       }
     }
   }
@@ -72,7 +73,7 @@ $prefix: '#{$qm-prefix}-table';
         @extend %MiniColumnHeight;
       }
       &:not(.col--ellipsis) {
-        padding: #{floor(($v-table-row-height-mini - $v-table-row-line-height) / 2)} 0;
+        padding: #{math.div($v-table-row-height-mini - $v-table-row-line-height, 2)} 0;
       }
       .cell--edit {
         .el-input__inner {
