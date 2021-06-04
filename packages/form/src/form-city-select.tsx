@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-03-31 09:27:45
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-06-02 10:28:14
+ * @Last Modified time: 2021-06-04 13:31:51
  */
 import { defineComponent } from 'vue';
 import { flatten } from 'lodash-es';
@@ -29,33 +29,7 @@ type ICity = {
 const zxsCodes: string[] = ['110000', '120000', '310000', '500000']; // 直辖市
 const gaCodes: string[] = ['810000', '820000']; // 港澳
 
-const formatChinaData = (data: any, key: string, step: number = 1): ICity[] | undefined => {
-  if (step > 2 || !data[key]) return;
-  const codes: string[] = key === '86' ? Object.keys(data[key]).filter((x) => ![...zxsCodes, ...gaCodes].includes(x)) : Object.keys(data[key]);
-  return codes.map((x) => ({
-    l: flatten(pinyin(data[key][x].slice(0, 1), { style: STYLE_FIRST_LETTER }))
-      .join('')
-      .toUpperCase(),
-    n: data[key][x],
-    c: x,
-    p: key,
-    children: formatChinaData(data, x, step + 1),
-  }));
-};
-
-const createOther = (data: any, codes: string[]): ICity[] => {
-  return codes.map((x) => ({
-    l: flatten(pinyin(data['86'][x].slice(0, 1), { style: STYLE_FIRST_LETTER }))
-      .join('')
-      .toUpperCase(),
-    n: data['86'][x],
-    c: x,
-    p: '86',
-    children: undefined,
-  }));
-};
-
-const citySelectLetter: IDict[] = [
+const provinceLetter: IDict[] = [
   { text: 'A', value: 'A' },
   { text: 'F', value: 'F' },
   { text: 'G', value: 'G' },
@@ -73,26 +47,75 @@ const citySelectLetter: IDict[] = [
   { text: '港澳', value: 'Z2' },
 ];
 
+const cityLetter: IDict[] = [
+  { text: 'A', value: 'A' },
+  { text: 'B', value: 'B' },
+  { text: 'C', value: 'C' },
+  { text: 'D', value: 'D' },
+  { text: 'E', value: 'E' },
+  { text: 'F', value: 'F' },
+  { text: 'G', value: 'G' },
+  { text: 'H', value: 'H' },
+  { text: 'J', value: 'J' },
+  { text: 'K', value: 'K' },
+  { text: 'L', value: 'L' },
+  { text: 'M', value: 'M' },
+  { text: 'N', value: 'N' },
+  { text: 'P', value: 'P' },
+  { text: 'Q', value: 'Q' },
+  { text: 'R', value: 'R' },
+  { text: 'S', value: 'S' },
+  { text: 'T', value: 'T' },
+  { text: 'W', value: 'W' },
+  { text: 'X', value: 'X' },
+  { text: 'Y', value: 'Y' },
+  { text: 'Z', value: 'Z' },
+  { text: '直辖市', value: 'Z1' },
+  { text: '港澳', value: 'Z2' },
+];
+
+const formatChinaData = (data: any, key: string, step: number = 1): ICity[] | undefined => {
+  if (step > 2 || !data[key]) return;
+  const codes: string[] = key === '86' ? Object.keys(data[key]).filter((x) => ![...zxsCodes, ...gaCodes].includes(x)) : Object.keys(data[key]);
+  return codes.map((x) => ({
+    l: flatten(pinyin(data[key][x].slice(0, 1), { style: STYLE_FIRST_LETTER }))
+      .join('')
+      .toUpperCase(),
+    n: data[key][x],
+    c: x,
+    p: key,
+    children: formatChinaData(data, x, step + 1),
+  }));
+};
+
+const createOtherData = (data: any, codes: string[]): ICity[] => {
+  return codes.map((x) => ({
+    l: flatten(pinyin(data['86'][x].slice(0, 1), { style: STYLE_FIRST_LETTER }))
+      .join('')
+      .toUpperCase(),
+    n: data['86'][x],
+    c: x,
+    p: '86',
+    children: undefined,
+  }));
+};
+
 export default defineComponent({
-  name: 'FormRegionSelect',
+  name: 'FormCitySelect',
   inheritAttrs: false,
   inject: ['$$form'],
   directives: { ClickOutside },
   props: ['option'],
   data() {
+    this.zxsAndGa = this.createZxsAndGa();
+    this.provinces = this.createProvince();
+    this.allCities = this.createAllCity();
+    this.letterCities = this.createCity();
     return {
       select_type: '0', // 0 -> 按省份    1 -> 按城市
       active_key: '',
-      provinces: this.createProvince(), // 省份数据(递归结构)
       visible: false,
     };
-  },
-  computed: {
-    cities(): ICity[] {
-      const result: ICity[] = [];
-      this.provinces.forEach((x) => result.push(...x.children));
-      return result;
-    },
   },
   watch: {
     select_type(): void {
@@ -108,7 +131,7 @@ export default defineComponent({
       this.visible = !1;
     },
     createTextValue(val: string): string {
-      return this.cities.find((x) => x.c === val)?.n || '';
+      return this.allCities.find((x) => x.c === val)?.n || '';
     },
     scrollHandle(val: string): void {
       this.active_key = val;
@@ -118,15 +141,23 @@ export default defineComponent({
         boundary: this.$refs[`scroll`],
       });
     },
-    createProvince(): ICity[] {
+    createZxsAndGa(): ICity[] {
       return [
-        ...(formatChinaData(chinaData, '86') as ICity[]),
-        { l: 'Z1', n: '直辖市', c: '', p: '', children: createOther(chinaData, zxsCodes) },
-        { l: 'Z2', n: '港澳', c: '', p: '', children: createOther(chinaData, gaCodes) },
+        { l: 'Z1', n: '直辖市', c: '', p: '', children: createOtherData(chinaData, zxsCodes) },
+        { l: 'Z2', n: '港澳', c: '', p: '', children: createOtherData(chinaData, gaCodes) },
       ];
     },
+    createProvince(): ICity[] {
+      const result: ICity[] = formatChinaData(chinaData, '86') ?? [];
+      return result.concat(this.zxsAndGa);
+    },
+    createAllCity(): ICity[] {
+      const result: ICity[] = [];
+      this.provinces.forEach((x) => result.push(...x.children));
+      return result;
+    },
     createCity(): ICity[] {
-      const result: ICity[] = citySelectLetter
+      const result: ICity[] = cityLetter
         .filter((x) => x.value !== 'Z1' && x.value !== 'Z2')
         .map((x) => {
           return {
@@ -134,14 +165,10 @@ export default defineComponent({
             n: x.text,
             c: '',
             p: '',
-            children: this.cities.filter((x) => ![...zxsCodes, ...gaCodes].includes(x.c)).filter((k) => k.l === x.value),
+            children: this.allCities.filter((x) => ![...zxsCodes, ...gaCodes].includes(x.c)).filter((k) => k.l === x.value),
           };
         });
-      return [
-        ...result,
-        { l: 'Z1', n: '直辖市', c: '', p: '', children: createOther(chinaData, zxsCodes) },
-        { l: 'Z2', n: '港澳', c: '', p: '', children: createOther(chinaData, gaCodes) },
-      ];
+      return result.concat(this.zxsAndGa);
     },
     renderType(): JSXNode {
       return (
@@ -152,14 +179,15 @@ export default defineComponent({
       );
     },
     renderLetter(): JSXNode[] {
-      return citySelectLetter.map((x) => (
+      const letters: IDict[] = this.select_type === '0' ? provinceLetter : cityLetter;
+      return letters.map((x) => (
         <li key={x.value} class={{ tag: !0, actived: x.value === this.active_key }} onClick={() => this.scrollHandle(x.value)}>
           {x.text}
         </li>
       ));
     },
     renderCity(val: string): JSXNode[] {
-      const cites: ICity[] = this.select_type === '0' ? this.createProvince() : this.createCity();
+      const cites: ICity[] = this.select_type === '0' ? this.provinces : this.letterCities;
       return cites.map((x) => (
         <>
           <dt ref={x.l}>{x.n}：</dt>
@@ -191,11 +219,8 @@ export default defineComponent({
       disabled,
       onChange = noop,
     } = this.option;
-
     const prefixCls = getPrefixCls('city-select');
-
     let textValue: string = this.createTextValue(form[fieldName]);
-
     return (
       <el-form-item
         key={fieldName}
@@ -266,7 +291,7 @@ export default defineComponent({
                       placeholder={placeholder}
                       filterable
                       v-slots={{
-                        default: (): JSXNode[] => this.cities.map((x) => <el-option key={x.c} value={x.c} label={x.n} />),
+                        default: (): JSXNode[] => this.allCities.map((x) => <el-option key={x.c} value={x.c} label={x.n} />),
                       }}
                     />
                   </div>

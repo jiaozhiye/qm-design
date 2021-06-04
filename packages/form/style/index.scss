@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-02-09 09:27:46
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-05-14 15:44:39
+ * @Last Modified time: 2021-06-04 11:17:28
  */
 @import '../../style/src/common';
 @import './fields-filter';
@@ -188,7 +188,7 @@ $prefix: '#{$qm-prefix}-form';
 
 .qm-city-select__popper {
   box-sizing: border-box;
-  max-width: 400px;
+  max-width: 420px;
   .container {
     margin-bottom: -8px;
     .city-drop {
