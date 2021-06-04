@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-03-31 09:27:45
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-06-04 13:31:51
+ * @Last Modified time: 2021-06-04 15:09:03
  */
 import { defineComponent } from 'vue';
 import { flatten } from 'lodash-es';
@@ -111,6 +111,7 @@ export default defineComponent({
     this.provinces = this.createProvince();
     this.allCities = this.createAllCity();
     this.letterCities = this.createCity();
+    Object.assign(this, { isLoaded: false });
     return {
       select_type: '0', // 0 -> 按省份    1 -> 按城市
       active_key: '',
@@ -118,6 +119,11 @@ export default defineComponent({
     };
   },
   watch: {
+    visible(next: boolean): void {
+      if (next) {
+        this.isLoaded = next;
+      }
+    },
     select_type(): void {
       this.active_key = '';
       this.$refs[`scroll`].scrollTop = 0;
@@ -185,6 +191,21 @@ export default defineComponent({
           {x.text}
         </li>
       ));
+    },
+    renderSelect(): JSXNode {
+      const { form } = this.$$form;
+      const { fieldName } = this.option;
+      return (
+        <el-select
+          size="mini"
+          v-model={form[fieldName]}
+          placeholder={t('qm.form.selectPlaceholder')}
+          filterable
+          v-slots={{
+            default: (): JSXNode[] => this.allCities.map((x) => <el-option key={x.c} value={x.c} label={x.n} />),
+          }}
+        />
+      );
     },
     renderCity(val: string): JSXNode[] {
       const cites: ICity[] = this.select_type === '0' ? this.provinces : this.letterCities;
@@ -281,26 +302,18 @@ export default defineComponent({
             }}
           >
             <div class="container" style={{ ...style }}>
-              <div class="city-drop">
-                <div class="city-drop-toper">
-                  <div class="city-drop-toper__type">{this.renderType()}</div>
-                  <div class="city-drop-toper__search">
-                    <el-select
-                      size="mini"
-                      v-model={form[fieldName]}
-                      placeholder={placeholder}
-                      filterable
-                      v-slots={{
-                        default: (): JSXNode[] => this.allCities.map((x) => <el-option key={x.c} value={x.c} label={x.n} />),
-                      }}
-                    />
+              {this.isLoaded && (
+                <div class="city-drop">
+                  <div class="city-drop-toper">
+                    <div class="city-drop-toper__type">{this.renderType()}</div>
+                    <div class="city-drop-toper__search">{this.renderSelect()}</div>
+                  </div>
+                  <div class="city-drop-letter">{this.renderLetter()}</div>
+                  <div ref="scroll" class="city-drop-list">
+                    <dl>{this.renderCity(form[fieldName])}</dl>
                   </div>
                 </div>
-                <div class="city-drop-letter">{this.renderLetter()}</div>
-                <div ref="scroll" class="city-drop-list">
-                  <dl>{this.renderCity(form[fieldName])}</dl>
-                </div>
-              </div>
+              )}
             </div>
           </el-popover>
         </div>

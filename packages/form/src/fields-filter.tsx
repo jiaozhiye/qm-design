@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-02-26 14:53:54
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-06-02 14:05:07
+ * @Last Modified time: 2021-06-04 15:18:50
  */
 import { defineComponent, PropType } from 'vue';
 import { JSXNode } from '../../_utils/types';
@@ -89,33 +89,35 @@ export default defineComponent({
         }}
       >
         <div class={cls}>
-          <Draggable
-            {...wrapProps}
-            v-slots={{
-              item: ({ element: item }): JSXNode => {
-                const isDisabled: boolean = item.rules?.findIndex((x) => x.required) > -1;
-                const checkboxProps = {
-                  modelValue: !item.hidden,
-                  disabled: isDisabled,
-                  'onUpdate:modelValue': (val: boolean): void => {
-                    item.hidden = !val;
-                  },
-                  onChange: (): void => {
-                    this.setLocalFields(list);
-                  },
-                };
-                return (
-                  <li class="filter-item">
-                    <el-checkbox {...checkboxProps} />
-                    <i class="iconfont icon-menu handle" title={t('qm.form.draggable')} />
-                    <span class="title" title={item.label}>
-                      {item.label}
-                    </span>
-                  </li>
-                );
-              },
-            }}
-          />
+          {this.visible && (
+            <Draggable
+              {...wrapProps}
+              v-slots={{
+                item: ({ element: item }): JSXNode => {
+                  const isDisabled: boolean = item.rules?.findIndex((x) => x.required) > -1;
+                  const checkboxProps = {
+                    modelValue: !item.hidden,
+                    disabled: isDisabled,
+                    'onUpdate:modelValue': (val: boolean): void => {
+                      item.hidden = !val;
+                    },
+                    onChange: (): void => {
+                      this.setLocalFields(list);
+                    },
+                  };
+                  return (
+                    <li class="filter-item">
+                      <el-checkbox {...checkboxProps} />
+                      <i class="iconfont icon-menu handle" title={t('qm.form.draggable')} />
+                      <span class="title" title={item.label}>
+                        {item.label}
+                      </span>
+                    </li>
+                  );
+                },
+              }}
+            />
+          )}
         </div>
       </el-popover>
     );

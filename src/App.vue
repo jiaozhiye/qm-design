@@ -15,18 +15,28 @@ export default defineComponent({
           label: '条件9',
           fieldName: 'g',
         },
-        // {
-        //   type: 'REGION_SELECT',
-        //   label: '条件7',
-        //   fieldName: 'f',
-        //   request: {
-        //     fetchStreetApi: getSelectData,
-        //     params: {},
-        //     datakey: 'records',
-        //     valueKey: 'value',
-        //     textKey: 'text',
-        //   },
-        // },
+        {
+          type: 'REGION_SELECT',
+          label: '条件7',
+          fieldName: 'f',
+          request: {
+            fetchStreetApi: getSelectData,
+            params: {},
+            datakey: 'records',
+            valueKey: 'value',
+            textKey: 'text',
+          },
+        },
+        {
+          type: 'MULTIPLE_TREE_SELECT',
+          label: '条件6',
+          fieldName: 'a',
+          request: {
+            fetchApi: getTreeData,
+            params: {},
+            datakey: 'records',
+          },
+        },
       ],
     };
   },

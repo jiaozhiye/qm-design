@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-03-06 21:30:12
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-05-21 13:51:23
+ * @Last Modified time: 2021-06-04 15:33:29
  */
 import { defineComponent } from 'vue';
 import { intersection, union, xor } from 'lodash-es';
@@ -61,9 +61,23 @@ export default defineComponent({
     clearAllHandle(): void {
       this.changeHandle(false);
     },
+    renderDropdown(): JSXNode {
+      return (
+        <ul class={`el-dropdown-menu--${this.size}`}>
+          <li class="el-dropdown-menu__item" onClick={() => this.selectAllHandle()}>
+            {t('qm.table.selection.all')}
+          </li>
+          <li class="el-dropdown-menu__item" onClick={() => this.invertHandle()}>
+            {t('qm.table.selection.invert')}
+          </li>
+          <li class="el-dropdown-menu__item" onClick={() => this.clearAllHandle()}>
+            {t('qm.table.selection.clear')}
+          </li>
+        </ul>
+      );
+    },
   },
   render(): JSXNode {
-    const { isFilterable, size } = this;
     const prefixCls = getPrefixCls('table');
     return (
       <div class="cell--selection">
@@ -73,7 +87,7 @@ export default defineComponent({
           modelValue={this.selectable}
           onChange={this.changeHandle}
         />
-        {isFilterable && (
+        {this.isFilterable && (
           <el-popover
             popper-class={`${prefixCls}__popper head-selection--popper`}
             v-model={[this.visible, 'visible']}
@@ -94,17 +108,7 @@ export default defineComponent({
               ),
             }}
           >
-            <ul class={`el-dropdown-menu--${size}`}>
-              <li class="el-dropdown-menu__item" onClick={() => this.selectAllHandle()}>
-                {t('qm.table.selection.all')}
-              </li>
-              <li class="el-dropdown-menu__item" onClick={() => this.invertHandle()}>
-                {t('qm.table.selection.invert')}
-              </li>
-              <li class="el-dropdown-menu__item" onClick={() => this.clearAllHandle()}>
-                {t('qm.table.selection.clear')}
-              </li>
-            </ul>
+            {this.renderDropdown()}
           </el-popover>
         )}
       </div>

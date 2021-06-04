@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-02-23 21:56:33
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-06-01 13:46:34
+ * @Last Modified time: 2021-06-04 15:53:49
  */
 import { defineComponent, CSSProperties } from 'vue';
 import { get } from 'lodash-es';
@@ -22,6 +22,7 @@ export default defineComponent({
   directives: { ClickOutside },
   props: ['option', 'multiple'],
   data() {
+    Object.assign(this, { isLoaded: false });
     return {
       filterText: '',
       itemList: [],
@@ -42,11 +43,16 @@ export default defineComponent({
     },
   },
   watch: {
+    visible(next: boolean): void {
+      if (next) {
+        this.isLoaded = next;
+      }
+    },
     fetchParams(): void {
       this.getItemList();
     },
     formItemValue(next: string | string[]): void {
-      this.$refs[`tree`].setCheckedKeys(next);
+      this.$refs[`tree`]?.setCheckedKeys(next);
     },
   },
   created() {
@@ -188,43 +194,47 @@ export default defineComponent({
             }}
           >
             <div style={{ ...innerStyle, ...style }}>
-              <el-input
-                v-model={this.filterText}
-                placeholder={t('qm.form.treePlaceholder')}
-                onInput={(val: string): void => {
-                  this.treeFilterTextHandle(val);
-                }}
-              />
-              <el-tree
-                ref="tree"
-                class="tree-select__tree"
-                data={this.itemList}
-                nodeKey={'value'}
-                props={{ children: 'children', label: 'text' }}
-                defaultCheckedKeys={multiple ? form[fieldName] : undefined}
-                style={{ marginTop: '5px' }}
-                checkStrictly={true}
-                defaultExpandAll={true}
-                expandOnClickNode={false}
-                showCheckbox={multiple}
-                checkOnClickNode={multiple}
-                // 节点过滤，配合输入框筛选使用
-                filterNodeMethod={(val, data): boolean => {
-                  if (!val) return true;
-                  return data.text.indexOf(val) !== -1;
-                }}
-                onNodeClick={(item): void => {
-                  if (multiple || item.disabled) return;
-                  form[fieldName] = item.value;
-                  this.visible = false;
-                  onChange(form[fieldName], item);
-                }}
-                onCheck={(data, item): void => {
-                  if (!multiple) return;
-                  form[fieldName] = item.checkedKeys;
-                  onChange(form[fieldName], item);
-                }}
-              />
+              {this.isLoaded && (
+                <>
+                  <el-input
+                    v-model={this.filterText}
+                    placeholder={t('qm.form.treePlaceholder')}
+                    onInput={(val: string): void => {
+                      this.treeFilterTextHandle(val);
+                    }}
+                  />
+                  <el-tree
+                    ref="tree"
+                    class="tree-select__tree"
+                    data={this.itemList}
+                    nodeKey={'value'}
+                    props={{ children: 'children', label: 'text' }}
+                    defaultCheckedKeys={multiple ? form[fieldName] : undefined}
+                    style={{ marginTop: '5px' }}
+                    checkStrictly={true}
+                    defaultExpandAll={true}
+                    expandOnClickNode={false}
+                    showCheckbox={multiple}
+                    checkOnClickNode={multiple}
+                    // 节点过滤，配合输入框筛选使用
+                    filterNodeMethod={(val, data): boolean => {
+                      if (!val) return true;
+                      return data.text.indexOf(val) !== -1;
+                    }}
+                    onNodeClick={(item): void => {
+                      if (multiple || item.disabled) return;
+                      form[fieldName] = item.value;
+                      this.visible = false;
+                      onChange(form[fieldName], item);
+                    }}
+                    onCheck={(data, item): void => {
+                      if (!multiple) return;
+                      form[fieldName] = item.checkedKeys;
+                      onChange(form[fieldName], item);
+                    }}
+                  />
+                </>
+              )}
             </div>
           </el-popover>
         </div>

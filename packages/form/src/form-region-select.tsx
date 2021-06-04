@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-02-23 21:56:33
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-06-01 13:45:25
+ * @Last Modified time: 2021-06-04 15:01:47
  */
 import { defineComponent } from 'vue';
 import { get } from 'lodash-es';
@@ -36,7 +36,7 @@ export default defineComponent({
   directives: { ClickOutside },
   props: ['option'],
   data() {
-    Object.assign(this, { prevText: '' });
+    Object.assign(this, { prevText: '', isLoaded: false });
     return {
       itemList: [], // 省市区，不包含街道
       values: [],
@@ -64,6 +64,11 @@ export default defineComponent({
     },
   },
   watch: {
+    visible(next: boolean): void {
+      if (next) {
+        this.isLoaded = next;
+      }
+    },
     fetchParams(): void {
       this.getItemList();
     },
@@ -138,11 +143,11 @@ export default defineComponent({
         this.tabs.push(dataList.map((x) => ({ text: x[textKey], value: x[valueKey] })) as IDict[]);
       }
     },
-    renderTabPane(): Array<JSXNode> {
-      return this.tabs.map((arr, index) => {
-        const label: string = arr.find((x) => x.value === this.values[index])?.text || t('qm.form.selectPlaceholder').replace('...', '');
+    renderTabs(): JSXNode {
+      const tabPanes = this.tabs.map((arr, index) => {
+        let label: string = arr.find((x) => x.value === this.values[index])?.text || t('qm.form.selectPlaceholder').replace('...', '');
         return (
-          <TabPane key={index} label={label} name={index.toString()}>
+          <TabPane key={label} label={label} name={index.toString()}>
             <div class="region-item">
               {arr.map((x) => (
                 <span
@@ -165,6 +170,7 @@ export default defineComponent({
           </TabPane>
         );
       });
+      return <Tabs v-model={[this.activeName, 'modelValue']}>{tabPanes}</Tabs>;
     },
   },
   render(): JSXNode {
@@ -256,7 +262,7 @@ export default defineComponent({
             }}
           >
             <div class="container" style={{ ...style }}>
-              {this.visible && <Tabs v-model={[this.activeName, 'modelValue']}>{this.renderTabPane()}</Tabs>}
+              {this.isLoaded && this.renderTabs()}
             </div>
           </el-popover>
         </div>
