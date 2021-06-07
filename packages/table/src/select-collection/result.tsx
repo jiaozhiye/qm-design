@@ -23,7 +23,7 @@ export default defineComponent({
       list: cloneDeep(this.selectionRows),
       selection: {
         type: 'checkbox',
-        selectedRowKeys: this.selectionKeys,
+        selectedRowKeys: [...this.selectionKeys],
         onChange: (val) => {
           this.setSelectionKeys(val);
         },

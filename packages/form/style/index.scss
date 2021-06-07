@@ -168,16 +168,19 @@ $prefix: '#{$qm-prefix}-form';
 
 .qm-region-select__popper {
   box-sizing: border-box;
-  max-width: 400px;
+  max-width: 580px;
   .container {
     margin-top: -10px;
-    .region-item {
+    .region-box {
       display: flex;
       flex-wrap: wrap;
+      width: 440px;
       line-height: $line-height-base;
       &__item {
-        margin: 0 6px;
+        margin: 0 5px;
+        width: 100px;
         cursor: pointer;
+        @include text-overflow-cut;
         &.actived {
           color: $primary-color;
         }

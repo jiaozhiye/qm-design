@@ -25,8 +25,8 @@ export default {
       falseText: '否',
       draggable: '拖动排序',
       inputPlaceholder: '请输入...',
-      treePlaceholder: '树节点过滤',
       selectPlaceholder: '请选择...',
+      treePlaceholder: '树节点过滤',
       rangeInputNumberPlaceholder: ['开始值', '结束值'],
       datePlaceholder: '选择日期',
       timePlaceholder: '选择时间',
@@ -40,6 +40,7 @@ export default {
       datePickers: ['今天', '昨天', '一周前', '一个月前'],
       dateRangePickers: ['最近一周', '最近一个月', '最近三个月', '最近六个月'],
       citySelectType: ['按省份', '按城市'],
+      regionSelectLabel: ['省', '市', '区', '街道'],
     },
     download: {
       error: '文件下载失败！',

@@ -145,14 +145,17 @@ export default defineComponent({
     },
     renderTabs(): JSXNode {
       const tabPanes = this.tabs.map((arr, index) => {
-        let label: string = arr.find((x) => x.value === this.values[index])?.text || t('qm.form.selectPlaceholder').replace('...', '');
+        let label: string =
+          arr.find((x) => x.value === this.values[index])?.text ||
+          `${t('qm.form.selectPlaceholder').replace('...', '')}(${t('qm.form.regionSelectLabel')[index]})`;
         return (
           <TabPane key={label} label={label} name={index.toString()}>
-            <div class="region-item">
+            <div class="region-box">
               {arr.map((x) => (
                 <span
                   key={x.value}
-                  class={{ [`region-item__item`]: true, actived: this.values.includes(x.value) }}
+                  class={{ [`region-box__item`]: true, actived: this.values.includes(x.value) }}
+                  title={x.text}
                   onClick={(): void => {
                     this.values[index] = x.value;
                     this.values = this.values.slice(0, index + 1);
