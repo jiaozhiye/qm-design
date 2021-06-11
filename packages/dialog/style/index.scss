@@ -12,7 +12,7 @@ $prefix: '#{$qm-prefix}-dialog';
   &__flex {
     display: flex;
     flex-direction: column;
-    margin-bottom: 0;
+    margin-bottom: 0 !important;
     .el-dialog__body {
       flex: 1;
       height: 0;
