@@ -228,7 +228,7 @@ export default defineComponent({
     return (
       <el-dialog ref="dialog" {...wrapProps} v-slots={{ title: () => this.renderHeader() }}>
         <Spin spinning={this.spinning} tip="Loading..." containerStyle={{ height: '100%' }}>
-          <div class="dialog-container" style={{ ...containerStyle }}>
+          <div class="dialog-container" style={containerStyle}>
             {this.$slots.default?.()}
           </div>
         </Spin>

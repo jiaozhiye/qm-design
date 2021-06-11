@@ -9,7 +9,8 @@
 $prefix: '#{$qm-prefix}-space';
 
 .#{$prefix} {
-  & > span {
-    width: auto !important;
+  display: inline-flex;
+  .el-space > span {
+    line-height: 1;
   }
 }

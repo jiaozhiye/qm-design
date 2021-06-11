@@ -631,7 +631,7 @@ export default defineComponent({
 
       return isSearchBtn ? (
         <el-col key="-" span={colSpan} offset={offset * colSpan} style={{ textAlign: 'right' }}>
-          <Space>
+          <Space containerStyle={{ marginRight: '10px' }}>
             <el-button type="primary" size={$size} icon="iconfont icon-search" onClick={this.submitForm}>
               {t('qm.form.search')}
             </el-button>

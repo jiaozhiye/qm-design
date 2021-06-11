@@ -4,14 +4,14 @@
  * @Last Modified by: 焦质晔
  * @Last Modified time: 2021-02-26 23:38:46
  */
-import { defineComponent } from 'vue';
+import { defineComponent, CSSProperties } from 'vue';
+import { isString, isNumber } from 'lodash-es';
 import PropTypes from '../../_utils/vue-types';
 import { JSXNode } from '../../_utils/types';
 import { useSize } from '../../hooks/useSize';
 import { isVNode } from '../../_utils/util';
 import { isValidComponentSize } from '../../_utils/validators';
 import { getPrefixCls } from '../../_utils/prefix';
-import { isString, isNumber } from 'lodash-es';
 import type { PropType } from 'vue';
 
 enum Align {
@@ -47,6 +47,9 @@ export default defineComponent({
         return isVNode(val) || isString(val);
       },
     },
+    containerStyle: {
+      type: [String, Object] as PropType<string | CSSProperties>,
+    },
   },
   computed: {
     align(): string {
@@ -54,22 +57,24 @@ export default defineComponent({
     },
   },
   render(): JSXNode {
-    const { align, spacer, size, wrap } = this;
+    const { align, spacer, size, wrap, containerStyle } = this;
     const { $size } = useSize(this.$props);
     const prefixCls = getPrefixCls('space');
+    const rsize = isNumber(size) ? size : space[size || $size || 'default'];
     const cls = {
       [prefixCls]: true,
     };
     const wrapProps = {
       alignment: align,
+      size: rsize,
       spacer,
-      size: size ?? space[$size || 'default'],
       wrap,
+      style: { marginRight: `-${rsize}px` },
     };
     return (
-      <el-space class={cls} {...wrapProps}>
-        {this.$slots.default?.()}
-      </el-space>
+      <div class={cls} style={containerStyle}>
+        <el-space {...wrapProps}>{this.$slots.default?.()}</el-space>
+      </div>
     );
   },
 });
