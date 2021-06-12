@@ -196,7 +196,7 @@ export default defineComponent({
       return html + `</body></html>`;
     },
     _toTable(columnRows: Array<IDerivedColumn[]>, flatColumns: IColumn[], dataList: IRecord[]): string {
-      const summationRows = flatColumns.some((x) => !!x.summation) ? this.$$table.$refs[`tableFooter`].summationRows : [];
+      const summationRows = this.$$table.$refs[`tableFooter`]?.summationRows ?? [];
       let html = `<table class="table--print" width="100%" border="0" cellspacing="0" cellpadding="0">`;
       html += `<colgroup>${flatColumns
         .map(({ width, renderWidth }) => `<col style="width:${width || renderWidth || config.defaultColumnWidth}px">`)

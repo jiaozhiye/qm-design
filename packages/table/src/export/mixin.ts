@@ -178,7 +178,7 @@ const exportMixin = {
       beforeRowCount += rowList.length;
 
       // 处理表尾
-      const summationRows = columns.some((column: IColumn) => !!column.summation) ? this.$$table.$refs[`tableFooter`].summationRows : [];
+      const summationRows = this.$$table.$refs[`tableFooter`]?.summationRows ?? [];
       if (showFooter && footSummation) {
         summationRows.forEach((row: IRecord, rowIndex: number) => {
           const colFoot: AnyObject<string> = {};

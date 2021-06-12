@@ -126,7 +126,7 @@ export default defineComponent({
     _toTable(options: IOptions, columnRows: Array<IDerivedColumn[]>, flatColumns: IColumn[], dataList: IRecord[]): string {
       const { footSummation } = options;
       const { showHeader, showFooter } = this.$$table;
-      const summationRows = flatColumns.some((x) => !!x.summation) ? this.$$table.$refs[`tableFooter`].summationRows : [];
+      const summationRows = this.$$table.$refs[`tableFooter`]?.summationRows ?? [];
       let html = `<table width="100%" border="0" cellspacing="0" cellpadding="0">`;
       html += `<colgroup>${flatColumns
         .map(({ width, renderWidth }) => `<col style="width:${width || renderWidth || config.defaultColumnWidth}px">`)

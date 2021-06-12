@@ -16,12 +16,8 @@ export default {
   updateElsHeight(): void {
     const { tableHeader, tableFooter } = this.$refs;
     const tableOuterHeight = this.$vTable.offsetHeight;
-    if (this.showHeader) {
-      this.layout.headerHeight = tableHeader?.$el.offsetHeight || 0;
-    }
-    if (this.showFooter) {
-      this.layout.footerHeight = tableFooter?.$el.offsetHeight || 0;
-    }
+    this.layout.headerHeight = (this.showHeader ? tableHeader?.$el.offsetHeight : 0) || 0;
+    this.layout.footerHeight = (this.showFooter ? tableFooter?.$el.offsetHeight : 0) || 0;
     // body 可视区高度
     this.layout.viewportHeight = tableOuterHeight - this.layout.headerHeight - this.layout.footerHeight;
     this.layout.tableBodyHeight = this.$$tableBody.$el.querySelector('.qm-table--body').offsetHeight;
