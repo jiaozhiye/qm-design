@@ -204,6 +204,7 @@ export default defineComponent({
 
     return (
       <el-drawer ref="drawer" {...wrapProps} v-slots={{ title: () => this.renderHeader() }}>
+        {/* @ts-ignore */}
         <Spin spinning={this.spinning} tip="Loading..." containerStyle={{ height: '100%' }}>
           <div class="drawer-container" style={containerStyle}>
             {this.$slots.default?.()}

@@ -50,6 +50,7 @@ $prefix: '#{$qm-prefix}-table';
         > h5 {
           display: flex;
           align-items: center;
+          font-size: inherit;
           padding: 0 $v-module-distance;
           border-bottom: 1px solid $v-table-border-color;
           background-color: $v-table-header-background-color;

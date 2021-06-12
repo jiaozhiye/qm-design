@@ -148,8 +148,12 @@ export default defineComponent({
         let label: string =
           arr.find((x) => x.value === this.values[index])?.text ||
           `${t('qm.form.selectPlaceholder').replace('...', '')}(${t('qm.form.regionSelectLabel')[index]})`;
+        let tabPaneProps = {
+          label,
+          name: index.toString(),
+        };
         return (
-          <TabPane key={label} label={label} name={index.toString()}>
+          <TabPane key={label} {...tabPaneProps}>
             <div class="region-box">
               {arr.map((x) => (
                 <span

@@ -129,6 +129,7 @@ export default defineComponent({
     const { initialValue, formList, loading } = this;
     return (
       <div>
+        {/* @ts-ignore */}
         <Form ref="form" initialValue={initialValue} list={formList} cols={1} labelWidth={110} />
         <div
           style={{

@@ -71,6 +71,7 @@ export default defineComponent({
         <div class={cls}>
           <div class="cropper-area">
             <div class="img-cropper">
+              {/* @ts-ignore */}
               <Cropper ref="cropper" aspect-ratio={w / h} src={imgFile.url} drag-mode="move" preview=".preview" />
             </div>
             <div class="actions">

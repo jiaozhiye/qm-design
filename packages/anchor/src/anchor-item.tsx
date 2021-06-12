@@ -31,6 +31,7 @@ export default defineComponent({
     };
     return (
       <div class={cls}>
+        {/* @ts-ignore */}
         {showDivider && <Divider label={label} style={{ marginBottom: '10px' }} />}
         {this.$slots.default?.()}
       </div>

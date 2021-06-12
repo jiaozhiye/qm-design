@@ -35,6 +35,7 @@ export default defineComponent({
         }}
       >
         <UploadFile
+          // @ts-ignore
           actionUrl={upload.actionUrl}
           headers={upload.headers}
           initialValue={form[fieldName]}

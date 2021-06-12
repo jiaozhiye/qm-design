@@ -326,6 +326,7 @@ export default defineComponent({
     const cls = { [prefixCls]: true, 'no-visible': directPrint };
     return (
       <div class={cls}>
+        {/* @ts-ignore */}
         <Spin spinning={loading} tip="Loading..." containerStyle={{ height: `100%` }}>
           <div class="preview">
             {/* 隐藏原始的打印模板内容 */}

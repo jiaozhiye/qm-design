@@ -57,9 +57,8 @@ export default defineComponent({
           {t('qm.uploadCropper.text')}
         </el-button>
         <Dialog {...wrapProps}>
-          <div>
-            <UploadCropper action-url={actionUrl} headers={headers} fixed-size={fixedSize} limit={20} is-calc-height onChange={this.handleSuccess} />
-          </div>
+          {/* @ts-ignore */}
+          <UploadCropper action-url={actionUrl} headers={headers} fixed-size={fixedSize} limit={20} is-calc-height onChange={this.handleSuccess} />
           <div
             style={{
               position: 'absolute',

@@ -177,6 +177,7 @@ export default {
             {showColumnDefine && <ColumnFilter columns={columns} />}
           </div>
         </div>
+        {/* @ts-ignore */}
         <Spin spinning={showLoading} tip="Loading...">
           <div ref="table" class={tableCls} style={tableStyles}>
             {/* 主要内容 */}

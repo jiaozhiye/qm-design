@@ -70,22 +70,25 @@ export default defineComponent({
     return (
       <Dialog {...dialogProps}>
         <div style="margin: -10px">
+          {/* @ts-ignore */}
           <Tabs v-model={this.tabName} tabCustomClass={`${prefixCls}__tab`} size={$size} lazyLoad={false} onChange={this.tabChangeHandle}>
-            {$slots.map(
-              ({ props }, i): JSXNode => {
-                return (
-                  <TabPane key={i} label={props?.label} name={i.toString()}>
-                    <PrintItem
-                      ref={`print-item-${i}`}
-                      uniqueKey={`${uniqueKey}_tab_${i}`}
-                      dataSource={props?.dataSource}
-                      templateRender={props?.templateRender}
-                      style={{ margin: 0 }}
-                    />
-                  </TabPane>
-                );
-              }
-            )}
+            {$slots.map(({ props }, i): JSXNode => {
+              let tabPaneProps = {
+                label: props?.label,
+                name: i.toString(),
+              };
+              return (
+                <TabPane key={i} {...tabPaneProps}>
+                  <PrintItem
+                    ref={`print-item-${i}`}
+                    uniqueKey={`${uniqueKey}_tab_${i}`}
+                    dataSource={props?.dataSource}
+                    templateRender={props?.templateRender}
+                    style={{ margin: 0 }}
+                  />
+                </TabPane>
+              );
+            })}
           </Tabs>
         </div>
       </Dialog>

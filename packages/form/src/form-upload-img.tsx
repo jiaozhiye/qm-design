@@ -34,6 +34,7 @@ export default defineComponent({
         }}
       >
         <UploadCropper
+          // @ts-ignore
           actionUrl={upload.actionUrl}
           headers={upload.headers}
           initialValue={form[fieldName]}

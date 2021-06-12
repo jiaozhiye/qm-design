@@ -48,6 +48,7 @@ export default defineComponent({
       >
         <Tinymce
           v-model={form[fieldName]}
+          // @ts-ignore
           upload={upload}
           height={height}
           disabled={disabled}

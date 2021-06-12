@@ -256,9 +256,11 @@ export default defineComponent({
     const tableProps = !webPagination ? { fetch } : { dataSource: tableList, webPagination: !0 };
     return (
       <div ref="search-helper">
+        {/* @ts-ignore */}
         <Spin spinning={loading} tip="Loading...">
           <Form
             ref="top-filter"
+            // @ts-ignore
             formType="search"
             initialValue={initialValue}
             list={topFilters}
@@ -270,6 +272,7 @@ export default defineComponent({
           <Table
             ref="table"
             {...tableProps}
+            // @ts-ignore
             height={height}
             minHeight={200}
             columns={columns}
