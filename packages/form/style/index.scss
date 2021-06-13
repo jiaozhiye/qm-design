@@ -170,7 +170,7 @@ $prefix: '#{$qm-prefix}-form';
   box-sizing: border-box;
   max-width: 580px;
   .container {
-    margin-top: -10px;
+    margin-top: -5px;
     .region-box {
       display: flex;
       flex-wrap: wrap;
@@ -181,6 +181,9 @@ $prefix: '#{$qm-prefix}-form';
         width: 100px;
         cursor: pointer;
         @include text-overflow-cut;
+        &:hover {
+          color: $primary-color;
+        }
         &.actived {
           color: $primary-color;
         }
@@ -193,7 +196,6 @@ $prefix: '#{$qm-prefix}-form';
   box-sizing: border-box;
   max-width: 420px;
   .container {
-    margin-bottom: -8px;
     .city-drop {
       &-toper {
         margin-bottom: 10px;

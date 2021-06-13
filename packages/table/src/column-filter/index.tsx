@@ -201,7 +201,7 @@ export default defineComponent({
       return (
         <div class="column-filter--wrap">
           <div class="reset">
-            <el-button type="text" onClick={this.resetColumnsHandle}>
+            <el-button type="text" size="small" onClick={this.resetColumnsHandle}>
               {t('qm.table.columnFilter.reset')}
             </el-button>
           </div>
