@@ -145,6 +145,7 @@ export default defineComponent({
             trigger="manual"
             placement="bottom-start"
             transition="el-zoom-in-top"
+            fallback-placements={['auto']}
             append-to-body={true}
             stop-popper-mouse-event={false}
             gpu-acceleration={false}
