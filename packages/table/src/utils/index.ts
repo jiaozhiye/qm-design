@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-03-08 08:28:55
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-05-13 11:36:26
+ * @Last Modified time: 2021-06-15 14:56:13
  */
 import { VNode } from 'vue';
 import { get, set, transform, intersection, isEqual, isObject } from 'lodash-es';
@@ -275,22 +275,20 @@ export const setCellValue = (record: IRecord, dataIndex: string, val: unknown, p
 };
 
 // 函数防抖
-export const debounce = <T extends AnyFunction<void>>(fn: T, delay = 0) => {
-  let timeoutId = 0 as any;
+export const debounce = <T extends AnyFunction<void> & { timer: any }>(fn: T, delay = 0) => {
   return (...args: any[]): void => {
-    clearTimeout(timeoutId);
-    timeoutId = setTimeout(() => fn(...args), delay);
+    fn.timer && clearTimeout(fn.timer);
+    fn.timer = setTimeout(() => fn(...args), delay);
   };
 };
 
 // 函数截流
-export const throttle = <T extends AnyFunction<void>>(fn: T, limit: number) => {
-  let throttling = false;
-  return (...args: Parameters<T>): void | ReturnType<T> => {
-    if (!throttling) {
-      throttling = true;
-      setTimeout(() => (throttling = false), limit);
-      return fn(...args);
+export const throttle = <T extends AnyFunction<void> & { lastTime: number }>(fn: T, limit: number) => {
+  return (...args: any[]): void => {
+    const nowTime: number = +new Date();
+    if (!fn.lastTime || nowTime - fn.lastTime > limit) {
+      fn(...args);
+      fn.lastTime = nowTime;
     }
   };
 };
