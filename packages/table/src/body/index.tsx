@@ -231,7 +231,7 @@ export default defineComponent({
           rowspan={rowspan}
           colspan={colspan}
           class={cls}
-          style={{ ...stys, ...trExtraStys, ...tdExtraStys, ...groupStys }}
+          style={{ ...stys, ...groupStys, ...trExtraStys, ...tdExtraStys }}
           onClick={(ev) => this.cellClickHandle(ev, row, column)}
           onDblclick={(ev) => this.cellDbclickHandle(ev, row, column)}
         >

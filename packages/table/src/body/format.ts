@@ -21,6 +21,9 @@ const formatMixin = {
       const res = val ? dayjs(val).format('YYYY-MM-DD HH:mm') : '';
       return !res.startsWith('1900-01-01') ? res : '';
     },
+    percentFormat(val: number): string {
+      return Number(val * 100).toFixed(2) + '%';
+    },
     financeFormat(val: string | number): string {
       return formatNumber(val.toString());
     },

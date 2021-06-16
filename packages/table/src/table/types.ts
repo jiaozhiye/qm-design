@@ -20,6 +20,7 @@ export type IFormatType =
   | 'date'
   | 'datetime'
   | 'dateShortTime'
+  | 'percent'
   | 'finance'
   | 'secret-name'
   | 'secret-phone'

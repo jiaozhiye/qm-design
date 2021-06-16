@@ -171,7 +171,8 @@ const exportMixin = {
               });
             }
           }
-          colBody[column.dataIndex] = this.renderCell(row, rowIndex, column, columnIndex);
+          const isOriginal = ['percent', 'finance'].includes(column.formatType as string);
+          colBody[column.dataIndex] = isOriginal ? getCellValue(row, column.dataIndex) : this.renderCell(row, rowIndex, column, columnIndex);
         });
         return colBody;
       });
@@ -234,8 +235,18 @@ const exportMixin = {
           excelRow.eachCell((excelCell) => {
             const excelCol = sheet.getColumn(excelCell.col);
             const column: IColumn = deepFindColumn(headColumns, excelCol.key as string) as IColumn;
-            const { align } = column;
+            const { align, precision, formatType } = column;
             setExcelCellStyle(excelCell, align);
+            const suffix = (precision as number) >= 0 ? (precision ? `0.${new Array(precision).fill('0').join('')}` : '0') : '';
+            if (suffix) {
+              Object.assign(excelCell, { numFmt: suffix });
+            }
+            if (formatType === 'percent') {
+              Object.assign(excelCell, { numFmt: (precision as number) >= 0 ? `${suffix}%` : '0%' });
+            }
+            if (formatType === 'finance') {
+              Object.assign(excelCell, { numFmt: (precision as number) >= 0 ? `#,##${suffix}` : '#,##0' });
+            }
             if (useStyle) {
               Object.assign(excelCell, {
                 font: {
