@@ -124,7 +124,7 @@ export default {
       this.store.addToInserted(row);
     });
     // 处理插入数据
-    this.tableFullData.push(...rows);
+    this.tableFullData = this.tableFullData.concat(rows);
     this.tableOriginData.push(...rows);
     // 滚动条定位
     if (rows.length > 0) {
@@ -175,6 +175,8 @@ export default {
         i = i - 1;
       }
     }
+    // 触发数据数据响应式
+    this.tableFullData = this.tableFullData.slice(0);
   },
   // 表单校验
   FORM_VALIDATE(): Pick<ITableLog, 'required' | 'validate'> {
