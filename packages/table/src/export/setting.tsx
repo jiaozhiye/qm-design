@@ -119,6 +119,7 @@ export default defineComponent({
           data[key] = !!data[key];
         }
       }
+      await sleep(0);
       this.$emit('change', data);
       await sleep(500);
       this.loading = !1;
