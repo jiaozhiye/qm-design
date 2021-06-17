@@ -52,7 +52,7 @@ export default defineComponent({
       this.getItemList();
     },
     formItemValue(next: string | string[]): void {
-      this.$refs[`tree`]?.setCheckedKeys(next);
+      this.$refs[`tree`]?.setCheckedKeys(Array.isArray(next) ? next : [next]);
     },
   },
   created() {

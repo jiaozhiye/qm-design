@@ -188,6 +188,25 @@ export default defineComponent({
             dateType: 'week',
           },
         },
+        {
+          type: 'CASCADER',
+          fieldName: 'h',
+          label: '表单项6',
+          options: {
+            itemList: [
+              {
+                text: '浙江省',
+                value: '330000',
+                children: [{ text: '杭州市', value: '330100', children: [{ text: '清河区', value: '330201' }] }],
+              },
+              {
+                text: '江苏省',
+                value: '320000',
+                children: [{ text: '苏州市', value: '320101', children: [{ text: '沧浪区', value: '320502' }] }],
+              },
+            ],
+          },
+        },
       ],
       printDataList: [],
       content: '',
