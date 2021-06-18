@@ -1,8 +1,8 @@
 /*
  * @Author: 焦质晔
  * @Date: 2021-03-17 13:17:30
- * @Last Modified by:   焦质晔
- * @Last Modified time: 2021-03-17 13:17:30
+ * @Last Modified by: 焦质晔
+ * @Last Modified time: 2021-06-18 13:03:41
  */
 export default [
   {
@@ -21,6 +21,10 @@ export default [
         name: '快速上手',
       },
       {
+        path: '/custom-theme',
+        name: '自定义主题',
+      },
+      {
         path: '/i18n',
         name: '国际化',
       },
@@ -32,6 +36,62 @@ export default [
       {
         path: '/button',
         title: 'Button 按钮',
+      },
+      {
+        path: '/anchor',
+        title: 'Anchor 锚点',
+      },
+      {
+        path: '/countup',
+        title: 'Countup 计数',
+      },
+      {
+        path: '/space',
+        title: 'Space 间距',
+      },
+      {
+        path: '/split',
+        title: 'Split 分割面板',
+      },
+      {
+        path: '/divider',
+        title: 'Divider 分隔符',
+      },
+      {
+        path: '/dialog',
+        title: 'Dialog 弹出框',
+      },
+      {
+        path: '/drawer',
+        title: 'Drawer 抽屉',
+      },
+      {
+        path: '/spin',
+        title: 'Spin 加载中',
+      },
+      {
+        path: '/tabs',
+        title: 'Tabs 标签页',
+      },
+      {
+        path: '/print',
+        title: 'Print 打印',
+      },
+      {
+        path: '/form',
+        title: 'Form 表单',
+      },
+      {
+        path: '/table',
+        title: 'Table 表格',
+      },
+      {
+        path: '/upload',
+        title: 'Upload 上传',
+      },
+      {
+        path: '/download',
+        title: 'Download 下载',
       },
     ],
   },

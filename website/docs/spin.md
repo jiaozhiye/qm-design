@@ -1,6 +1,38 @@
-## API
+## Spin 加载中
+
+用于页面和区块的加载中状态。
 
 ### Spin
+
+:::demo
+
+```html
+<template>
+  <qm-button @click="clickHandle">切换loading</qm-button>
+  <qm-spin :spinning="loading" tip="Loading...">
+    <div style="height: 200px;">内容</div>
+  </qm-spin>
+</template>
+
+<script>
+  export default {
+    data() {
+      return {
+        loading: false,
+      };
+    },
+    methods: {
+      clickHandle() {
+        this.loading = !this.loading;
+      },
+    },
+  };
+</script>
+```
+
+:::
+
+### 参数
 
 | 参数           | 说明                      | 类型                    | 默认值 |
 | -------------- | ------------------------- | ----------------------- | ------ |

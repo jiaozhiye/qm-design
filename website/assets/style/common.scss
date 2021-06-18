@@ -1,8 +1,8 @@
 /*
  * @Author: 焦质晔
  * @Date: 2021-03-17 16:47:14
- * @Last Modified by:   焦质晔
- * @Last Modified time: 2021-03-17 16:47:14
+ * @Last Modified by: 焦质晔
+ * @Last Modified time: 2021-06-18 13:08:03
  */
 html,
 body {
@@ -158,9 +158,23 @@ textarea {
     }
   }
 }
+
 .demo {
   margin: 20px 0;
 }
+
+.fixed-footer {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  z-index: 9;
+  border-top: 1px solid #d9d9d9;
+  padding: 10px 15px;
+  background: #fff;
+  text-align: right;
+}
+
 @media (max-width: 1140px) {
   .container,
   .page-container {

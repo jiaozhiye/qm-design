@@ -1,6 +1,90 @@
-## API
+## Form 表单
 
-### Form
+可实现 **筛选器** 和 **表单** 功能。
+
+### Filter 筛选器
+
+:::demo
+
+```html
+<template>
+  <qm-form uniqueKey="jzy_filter" formType="search" :list="filterList" :fieldsChange="fieldsChange" @finish="onFinish" />
+</template>
+
+<script>
+  export default {
+    data() {
+      return {
+        filterList: this.createFilterList(),
+      };
+    },
+    methods: {
+      createFilterList() {
+        return [
+          {
+            type: 'INPUT',
+            label: '标题1',
+            labelOptions: {
+              description: 'Label 描述信息',
+            },
+            fieldName: 'a',
+          },
+        ];
+      },
+      fieldsChange(items) {
+        this.filterList = items;
+      },
+      onFinish() {},
+    },
+  };
+</script>
+```
+
+:::
+
+### Form 表单
+
+:::demo
+
+```html
+<template>
+  <qm-form ref="form" :list="formList" />
+  <qm-button type="primary" :click="saveHandle">保 存</qm-button>
+</template>
+
+<script>
+  export default {
+    data() {
+      return {
+        formList: this.createFormList(),
+      };
+    },
+    methods: {
+      createFormList() {
+        return [
+          {
+            type: 'INPUT',
+            label: '标题1',
+            labelOptions: {
+              description: 'Label 描述信息',
+            },
+            fieldName: 'a',
+          },
+        ];
+      },
+      async saveHandle() {
+        const [err, res] = await this.$refs[`form`].GET_FORM_DATA();
+        if (err) return;
+        console.log(res);
+      },
+    },
+  };
+</script>
+```
+
+:::
+
+### 参数
 
 | 参数           | 说明                                            | 类型                          | 默认值  |
 | -------------- | ----------------------------------------------- | ----------------------------- | ------- |

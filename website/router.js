@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-03-17 12:55:34
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-05-14 09:18:50
+ * @Last Modified time: 2021-06-18 12:54:52
  */
 import { defineAsyncComponent } from 'vue';
 import { createRouter, createWebHashHistory } from 'vue-router';
@@ -55,7 +55,7 @@ const registerRoute = (navs) => {
   });
 
   function addRoute(page) {
-    const component = page.path === '/changelog' ? load('changelog') : loadDocs(page.path.slice(1));
+    const component = loadDocs(page.path.slice(1));
     let child = {
       path: page.path.slice(1),
       meta: {
