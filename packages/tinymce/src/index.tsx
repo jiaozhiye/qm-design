@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-02-09 09:03:59
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-15 16:36:24
+ * @Last Modified time: 2021-06-18 09:56:55
  */
 import { defineComponent, PropType } from 'vue';
 import { isNumber } from 'lodash-es';
@@ -11,6 +11,7 @@ import { ComponentSize, JSXNode } from '../../_utils/types';
 
 import { useSize } from '../../hooks/useSize';
 import { getPrefixCls } from '../../_utils/prefix';
+import { useGlobalConfig } from '../../hooks/useGlobalConfig';
 import { isValidComponentSize, isValidWidthUnit } from '../../_utils/validators';
 
 import { Editor } from './components/Editor';
@@ -38,7 +39,7 @@ export default defineComponent({
       actionUrl: PropTypes.string.isRequired,
       headers: PropTypes.object.def({}),
       fixedSize: PropTypes.array.def([5, 4]),
-    }),
+    }).loose,
     tinymceScriptSrc: PropTypes.string,
     disabled: PropTypes.bool,
     plugins: PropTypes.oneOfType([PropTypes.string, PropTypes.array]).def('lists image link media table textcolor wordcount contextmenu fullscreen'),
@@ -81,6 +82,7 @@ export default defineComponent({
     const { initial, content, disabled, tinymceScriptSrc, upload = {} } = this;
     const prefixCls = getPrefixCls('tinymce');
     const { $size } = useSize(this.$props);
+    const { global } = useGlobalConfig();
     const cls = {
       [prefixCls]: true,
       [`${prefixCls}--medium`]: $size === 'medium',
@@ -91,7 +93,7 @@ export default defineComponent({
       init: initial,
       modelValue: content,
       disabled,
-      tinymceScriptSrc,
+      tinymceScriptSrc: tinymceScriptSrc || global?.tinymceScriptSrc || undefined,
       'onUpdate:modelValue': (val: string): void => {
         this.content = val;
         this.$emit('update:modelValue', val);

@@ -34,8 +34,7 @@ export default defineComponent({
       return [...this.leftFixedColumns, ...this.mainColumns, ...this.rightFixedColumns];
     },
     showButtonText(): boolean {
-      const { global } = this.$DESIGN;
-      return !(this.$$table.onlyShowIcon ?? global['table_onlyShowIcon'] ?? !1);
+      return !this.$$table.onlyShowIcon;
     },
   },
   watch: {

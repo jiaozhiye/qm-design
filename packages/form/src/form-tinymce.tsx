@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-02-23 21:56:33
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-05-07 15:44:25
+ * @Last Modified time: 2021-06-18 09:54:37
  */
 import { defineComponent } from 'vue';
 import { JSXNode } from '../../_utils/types';
@@ -27,7 +27,7 @@ export default defineComponent({
       labelOptions,
       descOptions,
       options = {},
-      upload = {},
+      upload,
       style = {},
       disabled,
       onChange = noop,

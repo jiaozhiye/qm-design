@@ -147,13 +147,16 @@ export default defineComponent({
       return `<tr type="page-break" style="page-break-after: always;"></tr>`;
     },
     createLogo(): string {
+      const { global } = this.$DESIGN;
+      const leftLogoUrl: string = global['print']?.leftLogo ?? '';
+      const rightLogoUrl: string = global['print']?.rightLogo ?? '';
       const __html__: string[] = [
         `<tr style="height: ${config.logoHeight}px;">`,
         `<td colspan="12" align="left">`,
-        `<img src="/static/img/logo_l.png" border="0" height="26" style="margin-left: 10px;" />`,
+        leftLogoUrl ? `<img src="${leftLogoUrl}" border="0" height="26" style="margin-left: 10px;" />` : '',
         `</td>`,
         `<td colspan="12" align="right">`,
-        `<img src="/static/img/logo_r.png" border="0" height="38" style="margin-right: 10px;" />`,
+        rightLogoUrl ? `<img src="${rightLogoUrl}" border="0" height="38" style="margin-right: 10px;" />` : '',
         `</td>`,
         `</tr>`,
       ];

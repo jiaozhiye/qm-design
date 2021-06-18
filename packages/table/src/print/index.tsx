@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-03-26 11:44:24
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-05-18 09:12:59
+ * @Last Modified time: 2021-06-18 09:37:29
  */
 import { defineComponent } from 'vue';
 import { flatten, groupBy, map, spread, mergeWith } from 'lodash-es';
@@ -260,19 +260,22 @@ export default defineComponent({
       return html;
     },
     _toLogo(): string {
-      const baseUrl = window.location.origin;
-      return `
-        <table class="no-border" width="100%" border="0" cellspacing="0" cellpadding="0">
-          <tr>
-            <td width="50%" align="left">
-              <img src="${baseUrl}/static/img/logo_l.png" border="0" height="26" />
-            </td>
-            <td width="50%" align="right">
-              <img src="${baseUrl}/static/img/logo_r.png" border="0" height="36" />
-            </td>
-          </tr>
-        </table>
-      `;
+      const { global } = this.$DESIGN;
+      const leftLogoUrl: string = global['print']?.leftLogo ?? '';
+      const rightLogoUrl: string = global['print']?.rightLogo ?? '';
+      const __html__: string[] = [
+        `<table class="no-border" width="100%" border="0" cellspacing="0" cellpadding="0">`,
+        `<tr>`,
+        `<td width="50%" align="left">`,
+        leftLogoUrl ? `<img src="${leftLogoUrl}" border="0" height="26" />` : '',
+        `</td>`,
+        `<td width="50%" align="right">`,
+        rightLogoUrl ? `<img src="${rightLogoUrl}" border="0" height="38" />` : '',
+        `</td>`,
+        `</tr>`,
+        `</table>`,
+      ];
+      return __html__.join('');
     },
     downloadFile(opts, content) {
       const { filename, type, isDownload } = opts;
