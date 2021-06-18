@@ -1,8 +1,8 @@
 <template>
+  <main-header />
   <el-scrollbar ref="componentScrollBar" class="page-component__scroll">
     <div class="page-container page-component">
       <el-scrollbar class="page-component__nav">
-        <div class="page-logo"></div>
         <side-nav :data="navList" :base="`/component`" />
       </el-scrollbar>
       <div class="page-component__content">
@@ -133,7 +133,7 @@ export default defineComponent({
   height: 100%;
 
   &.page-container {
-    padding: 20px;
+    padding: 10px 40px;
   }
 
   .page-component__nav {
@@ -153,21 +153,9 @@ export default defineComponent({
     }
   }
 
-  .page-logo {
-    margin: 20px 10px 10px 0;
-    height: 50px;
-    background: url(../assets/img/logo.png) no-repeat;
-    background-size: contain;
-  }
-
-  .side-nav {
-    height: 100%;
-    padding-right: 0;
-  }
-
   .page-component__content {
     padding-left: 220px;
-    margin-right: 160px;
+    margin-right: 180px;
     box-sizing: border-box;
   }
   .content-wrap {
@@ -235,31 +223,6 @@ export default defineComponent({
   .page-component {
     .page-component__content {
       margin-right: 0;
-    }
-  }
-}
-
-@media (max-width: 768px) {
-  .page-component {
-    .page-component__nav {
-      width: 100%;
-      position: static;
-      margin-top: 0;
-    }
-    .side-nav {
-      padding-top: 0;
-      padding-left: 50px;
-    }
-    .page-component__content {
-      padding-left: 10px;
-      padding-right: 10px;
-    }
-    .content {
-      padding-top: 0;
-    }
-    .content > table {
-      overflow: auto;
-      display: block;
     }
   }
 }

@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-03-17 13:17:30
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-06-18 13:03:41
+ * @Last Modified time: 2021-06-18 22:51:21
  */
 export default [
   {
@@ -38,10 +38,6 @@ export default [
         title: 'Button 按钮',
       },
       {
-        path: '/anchor',
-        title: 'Anchor 锚点',
-      },
-      {
         path: '/countup',
         title: 'Countup 计数',
       },
@@ -50,12 +46,16 @@ export default [
         title: 'Space 间距',
       },
       {
+        path: '/divider',
+        title: 'Divider 分隔符',
+      },
+      {
         path: '/split',
         title: 'Split 分割面板',
       },
       {
-        path: '/divider',
-        title: 'Divider 分隔符',
+        path: '/anchor',
+        title: 'Anchor 锚点',
       },
       {
         path: '/dialog',
@@ -74,16 +74,16 @@ export default [
         title: 'Tabs 标签页',
       },
       {
-        path: '/print',
-        title: 'Print 打印',
-      },
-      {
         path: '/form',
         title: 'Form 表单',
       },
       {
         path: '/table',
         title: 'Table 表格',
+      },
+      {
+        path: '/print',
+        title: 'Print 打印',
       },
       {
         path: '/upload',

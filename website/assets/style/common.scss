@@ -19,31 +19,13 @@ body {
   }
 }
 
+body {
+  padding-top: 80px !important;
+  height: calc(100% - 80px) !important;
+}
+
 #app {
   height: 100%;
-
-  &.is-component {
-    overflow-y: hidden;
-
-    .main-cnt {
-      padding: 0;
-      margin-top: 0;
-      height: 100%;
-      min-height: auto;
-    }
-
-    .headerWrapper {
-      position: fixed;
-      width: 100%;
-      left: 0;
-      top: 0;
-      z-index: 1500;
-
-      .container {
-        padding: 0 40px;
-      }
-    }
-  }
 }
 
 a {
@@ -80,15 +62,8 @@ textarea {
   -webkit-font-smoothing: auto;
 }
 
-.main-cnt {
-  padding-bottom: 340px;
-  box-sizing: border-box;
-  min-height: 100%;
-}
-
 .container,
 .page-container {
-  //width: 1140px;
   padding: 0 40px;
 }
 
@@ -173,22 +148,4 @@ textarea {
   padding: 10px 15px;
   background: #fff;
   text-align: right;
-}
-
-@media (max-width: 1140px) {
-  .container,
-  .page-container {
-    width: 100%;
-  }
-}
-
-@media (max-width: 768px) {
-  .container,
-  .page-container {
-    padding: 0 20px;
-  }
-
-  #app.is-component .headerWrapper .container {
-    padding: 0 12px;
-  }
 }

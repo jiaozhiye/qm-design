@@ -22,7 +22,6 @@
         </template>
       </li>
     </ul>
-    <!--<div id="code-sponsor-widget"></div>-->
   </div>
 </template>
 
@@ -125,8 +124,8 @@ export default defineComponent({
 .side-nav {
   width: 100%;
   box-sizing: border-box;
-  padding-right: 30px;
   transition: opacity 0.3s;
+
   &.is-fade {
     transition: opacity 3s;
   }
@@ -136,7 +135,7 @@ export default defineComponent({
   }
 
   ul {
-    padding: 0;
+    padding: 10px 0;
     margin: 0;
     overflow: hidden;
   }
@@ -224,13 +223,6 @@ export default defineComponent({
 
   #code-sponsor-widget {
     margin: 0 0 0 -20px;
-  }
-}
-.nav-dropdown-list {
-  width: 120px;
-  margin-top: -8px;
-  li {
-    font-size: 14px;
   }
 }
 </style>

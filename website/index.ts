@@ -8,6 +8,7 @@ import { createApp } from 'vue';
 import router from './router';
 
 import DemoBlock from './components/demo-block.vue';
+import MainHeader from './components/header.vue';
 import RightNav from './components/right-nav.vue';
 import SideNav from './components/side-nav.vue';
 
@@ -25,6 +26,7 @@ import '../lib/style/index.css';
 const app = createApp(App);
 
 app.component('DemoBlock', DemoBlock);
+app.component('MainHeader', MainHeader);
 app.component('RightNav', RightNav);
 app.component('SideNav', SideNav);
 
