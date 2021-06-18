@@ -595,7 +595,7 @@ export default defineComponent({
         // 调整 selfCols 的大小
         selfCols = selfCols >= 24 || type === 'BREAK_SPACE' || type === 'TINYMCE' ? cols : selfCols;
         // 判断改栅格是否显示
-        const isBlock: boolean = collapse ? true : fieldCols[i] < defaultPlayRows * cols;
+        const isBlock: boolean = collapse || !showFilterCollapse ? true : fieldCols[i] < defaultPlayRows * cols;
         const isDisplay: boolean = isDividerCollapse ? this.getElementDisplay(x) : !0;
         if (isBlock) {
           tmpArr.push(fieldCols[i]);
