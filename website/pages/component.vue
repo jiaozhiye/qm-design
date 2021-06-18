@@ -133,7 +133,7 @@ export default defineComponent({
   height: 100%;
 
   &.page-container {
-    padding: 10px 40px;
+    padding: 20px 40px 0;
   }
 
   .page-component__nav {
