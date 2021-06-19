@@ -94,7 +94,7 @@
 | filter       | 列筛选，[配置项](#filter)                      | object                                                             | -      |
 | precision    | 数值类型字段的精度                             | number                                                             | -      |
 | formatType   | 字段的格式化类型，[配置项](#formatType)        | string                                                             | -      |
-| required     | 可编辑列是否必填                               | boolean                                                            | false  |
+| required     | 可编辑列是否必填                               | boolean                                                            | -      |
 | editRender   | 可编辑单元格，返回值请参考 [配置项](#editable) | function(row, column):object                                       | -      |
 | dictItems    | 数据字典配置，[配置项](#item)                  | array                                                              | -      |
 | summation    | 底部合计，[配置项](#summation)                 | object                                                             | -      |
@@ -104,15 +104,15 @@
 
 ### fetch
 
-| 参数        | 说明                                                     | 类型                      | 默认值 |
-| ----------- | -------------------------------------------------------- | ------------------------- | ------ |
-| api         | ajax 接口，必要参数                                      | func                      | -      |
-| params      | 接口参数，必要参数                                       | object                    | -      |
-| xhrAbort    | 是否取消请求                                             | boolean                   | false  |
-| stopToFirst | 是否阻止返回第一页                                       | boolean                   | false  |
-| beforeFetch | 执行查询接口的前置钩子，返回 true 执行查询、false 不执行 | function(params): boolean | -      |
-| dataKey     | 数据的 key，支持 `a.b.c` 的路径写法                      | string                    | items  |
-| callback    | 请求的回调，参数是服务端返回的数据                       | function(response)        | -      |
+| 参数        | 说明                                                     | 类型                      | 默认值  |
+| ----------- | -------------------------------------------------------- | ------------------------- | ------- |
+| api         | ajax 接口，必要参数                                      | func                      | -       |
+| params      | 接口参数，必要参数                                       | object                    | -       |
+| xhrAbort    | 是否取消请求                                             | boolean                   | -       |
+| stopToFirst | 是否阻止返回第一页                                       | boolean                   | -       |
+| beforeFetch | 执行查询接口的前置钩子，返回 true 执行查询、false 不执行 | function(params): boolean | -       |
+| dataKey     | 数据的 key，支持 `a.b.c` 的路径写法                      | string                    | records |
+| callback    | 请求的回调，参数是服务端返回的数据                       | function(response)        | -       |
 
 ### filter
 
@@ -317,15 +317,15 @@
 | 参数     | 说明                | 类型    | 默认值 |
 | -------- | ------------------- | ------- | ------ |
 | showLogo | 是否显示打印单 Logo | boolean | true   |
-| showSign | 是否显示签名        | boolean | false  |
+| showSign | 是否显示签名        | boolean | -      |
 
 ### 注意
 
-1. 在 Table 中，`dataSource` 和 `columns` 里的数据值都需要指定 `key` 值。对于 `dataSource` 默认将每列数据的 `key` 属性作为唯一的标识。
+- 1. 在 Table 中，`dataSource` 和 `columns` 里的数据值都需要指定 `key` 值。对于 `dataSource` 默认将每列数据的 `key` 属性作为唯一的标识。
 
-2. 如果你的数据没有这个属性，务必使用 `rowKey` 来指定数据列的主键。若没有指定，控制台会出现缺少 key 的提示，表格组件也会出现各类奇怪的错误。
+- 2. 如果你的数据没有这个属性，务必使用 `rowKey` 来指定数据列的主键。若没有指定，控制台会出现缺少 key 的提示，表格组件也会出现各类奇怪的错误。
 
-3. 表格支持树形数据的展示，当数据中有 children 字段时会自动展示为树形表格，渲染形表格时，必须要指定 rowKey 且值不能为 index。
+- 3. 表格支持树形数据的展示，当数据中有 children 字段时会自动展示为树形表格，渲染形表格时，必须要指定 rowKey 且值不能为 index。
 
 ```bash
 // 比如你的数据主键是 uid

@@ -1,6 +1,6 @@
 ## Form 表单
 
-可实现 **筛选器** 和 **表单** 功能。
+可实现 **筛选器** 和 **表单** 功能，列定义支持 **本地** 和 **服务端** 存储。
 
 ### Filter 筛选器
 
@@ -49,7 +49,9 @@
 ```html
 <template>
   <qm-form ref="form" :list="formList" />
-  <qm-button type="primary" :click="saveHandle">保 存</qm-button>
+  <qm-space :containerStyle="{ marginLeft: '80px' }">
+    <qm-button type="primary" :click="saveHandle">保 存</qm-button>
+  </qm-space>
 </template>
 
 <script>
@@ -99,7 +101,7 @@
 | isFieldsDefine | 是否显示列定义功能 - 筛选器有效                 | boolean                       | true    |
 | isCollapse     | 是否显示 展开/收起 功能 - 筛选器有效            | boolean                       | true    |
 | isSearchBtn    | 是否显示 搜索/重置 按钮 - 筛选器有效            | boolean                       | true    |
-| isSubmitBtn    | 是否显示 保存/重置 按钮 - 筛选器有效            | boolean                       | false   |
+| isSubmitBtn    | 是否显示 保存/重置 按钮 - 筛选器有效            | boolean                       | -       |
 | fieldsChange   | 表单配置项变化回调，必要参数 - 筛选器有效       | function(fields)              | -       |
 
 ### 事件
@@ -237,17 +239,17 @@
 | max           | 最大值                                                      | number             | -      |
 | step          | 计数器步长                                                  | number             | 1      |
 | precision     | 浮点型数值的精度                                            | number             | 0      |
-| controls      | 是否显示控制按钮                                            | boolean            | false  |
+| controls      | 是否显示控制按钮                                            | boolean            | -      |
 | minlength     | 最小长度                                                    | number             | 0      |
 | maxlength     | 最大长度                                                    | number             | -      |
 | rows          | 文本域输入框行数                                            | number             | 2      |
 | maxrows       | 文本域最大行数                                              | number             | -      |
-| showLimit     | 是否显示输入字数统计                                        | boolean            | false  |
-| password      | 是否时密码格式                                              | boolean            | false  |
-| noInput       | 输入框是否不允许输入                                        | boolean            | false  |
-| toUpper       | 输入框文本自动转大写                                        | boolean            | false  |
+| showLimit     | 是否显示输入字数统计                                        | boolean            | -      |
+| password      | 是否时密码格式                                              | boolean            | -      |
+| noInput       | 输入框是否不允许输入                                        | boolean            | -      |
+| toUpper       | 输入框文本自动转大写                                        | boolean            | -      |
 | filterable    | 是否开启自动检索功能                                        | boolean            | true   |
-| collapseTags  | 是否折叠 tag 标签                                           | boolean            | false  |
+| collapseTags  | 是否折叠 tag 标签                                           | boolean            | -      |
 | openPyt       | 是否开启拼音头检索                                          | boolean            | true   |
 | onInput       | 输入框 input 事件                                           | function(value)    | -      |
 | onClick       | 单击事件                                                    | function()         | -      |
@@ -334,7 +336,7 @@
 
 | 参数      | 说明                            | 类型              | 默认值 |
 | --------- | ------------------------------- | ----------------- | ------ |
-| isTooltip | 是否以 Tooltip 形式显示描述信息 | boolean           | false  |
+| isTooltip | 是否以 Tooltip 形式显示描述信息 | boolean           | -      |
 | style     | 描述文本容器的 css 样式         | object            | -      |
 | content   | 描述信息的内容                  | string \| JSXNode | -      |
 
@@ -378,7 +380,7 @@
 
 | 参数          | 说明                                                             | 类型                     | 默认值 |
 | ------------- | ---------------------------------------------------------------- | ------------------------ | ------ |
-| defaultExpand | 默认的展开状态                                                   | boolean                  | false  |
+| defaultExpand | 默认的展开状态                                                   | boolean                  | -      |
 | showLimit     | 默认显示表单项的数量                                             | number                   | -      |
 | remarkItems   | 指定被隐藏的表单作为摘要显示到分隔符区域，[配置项](#remarkItems) | array                    | -      |
 | onCollapse    | 展开/收起 状态改变时的回调事件                                   | function(collapse: bool) | -      |

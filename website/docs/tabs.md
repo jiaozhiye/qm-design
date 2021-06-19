@@ -9,7 +9,6 @@
 ```html
 <template>
   <qm-tabs v-model="tabName" @change="changeHandle">
-    <div>asd</div>
     <qm-tab-pane label="用户管理" name="first">用户管理1</qm-tab-pane>
     <qm-tab-pane label="配置管理" name="second">配置管理2</qm-tab-pane>
     <qm-tab-pane label="角色管理" name="third">角色管理3</qm-tab-pane>

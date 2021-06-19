@@ -8,7 +8,7 @@
 
 ```html
 <template>
-  <qm-button @click="clickHandle">切换loading</qm-button>
+  <qm-button type="primary" @click="clickHandle">切换 loading</qm-button>
   <qm-spin :spinning="loading" tip="Loading...">
     <div style="height: 200px;">内容</div>
   </qm-spin>

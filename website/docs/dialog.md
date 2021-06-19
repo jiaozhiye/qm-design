@@ -10,10 +10,7 @@
 <template>
   <qm-button type="primary" @click="clickHandle">打开对话框</qm-button>
   <qm-dialog v-model:visible="visible" title="标题名称" destroyOnClose>
-    <div>
-      内容<br />
-      内容<br />
-      内容<br />
+    <div style="height: 600px;">
       内容<br />
       内容<br />
       内容<br />
@@ -49,28 +46,17 @@
 <template>
   <qm-button type="primary" @click="clickHandle">打开对话框</qm-button>
   <qm-dialog v-model:visible="visible" title="标题名称" destroyOnClose :containerStyle="{ paddingBottom: '60px' }">
-    <div>
-      内容<br />
-      内容<br />
-      内容<br />
-      内容<br />
-      内容<br />
-      内容<br />
-      内容<br />
-      内容<br />
-      内容<br />
-      内容<br />
-      内容<br />
+    <div style="height: 600px;">
       内容<br />
       内容<br />
       内容<br />
       内容<br />
       内容<br />
     </div>
-    <div class="fixed-footer">
+    <qm-space class="fixed-footer" arrangement="right">
       <el-button>取 消</el-button>
       <qm-button type="primary">提 交</qm-button>
-    </div>
+    </qm-space>
   </qm-dialog>
 </template>
 
