@@ -48,7 +48,7 @@
     "axios": "^0.21.1",
     "classnames": "^2.3.1",
     "countup.js": "^2.0.7",
-    "cropperjs": "^1.5.11",
+    "cropperjs": "^1.5.12",
     "dayjs": "^1.10.4",
     "element-plus": "^1.0.2-beta.48",
     "exceljs": "^4.2.1",
@@ -57,7 +57,7 @@
     "resize-observer-polyfill": "^1.5.1",
     "scroll-into-view-if-needed": "^2.2.28",
     "vue": "3.1.1",
-    "vuedraggable": "^4.0.1"
+    "vuedraggable": "^4.0.3"
   },
   "devDependencies": {
     "@babel/cli": "^7.12.0",
