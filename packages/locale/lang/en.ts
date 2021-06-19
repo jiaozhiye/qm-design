@@ -1,5 +1,14 @@
+/*
+ * @Author: 焦质晔
+ * @Date: 2021-06-19 08:46:00
+ * @Last Modified by: 焦质晔
+ * @Last Modified time: 2021-06-19 09:36:51
+ */
+import enLocale from 'element-plus/lib/locale/lang/en';
+
 export default {
   name: 'en',
+  el: enLocale.el,
   qm: {
     button: {
       confirmPrompt: '提示',
@@ -166,7 +175,6 @@ export default {
         minText: '列最小值',
         avgText: '列平均值',
         countText: '条数汇总',
-        exportFileName: '汇总结果.xlsx',
       },
       highSearch: {
         text: '高级检索',

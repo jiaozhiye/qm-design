@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-02-24 13:02:36
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-31 09:32:00
+ * @Last Modified time: 2021-06-19 10:15:43
  */
 import { CSSProperties, PropType } from 'vue';
 import PropTypes from '../../_utils/vue-types';
@@ -234,23 +234,28 @@ export const DATE_CONF = {
 
 export const DATE_RANGE_CONF = {
   daterange: {
-    placeholder: t('qm.form.daterangePlaceholder'),
+    startPlaceholder: t('qm.form.daterangePlaceholder.0'),
+    endPlaceholder: t('qm.form.daterangePlaceholder.1'),
     valueFormat: 'YYYY-MM-DD HH:mm:ss',
   },
   datetimerange: {
-    placeholder: t('qm.form.timerangePlaceholder'),
+    startPlaceholder: t('qm.form.timerangePlaceholder.0'),
+    endPlaceholder: t('qm.form.timerangePlaceholder.1'),
     valueFormat: 'YYYY-MM-DD HH:mm:ss',
   },
   exactdaterange: {
-    placeholder: t('qm.form.daterangePlaceholder'),
+    startPlaceholder: t('qm.form.daterangePlaceholder.0'),
+    endPlaceholder: t('qm.form.daterangePlaceholder.1'),
     valueFormat: 'YYYY-MM-DD',
   },
   monthrange: {
-    placeholder: t('qm.form.monthrangePlaceholder'),
+    startPlaceholder: t('qm.form.monthrangePlaceholder.0'),
+    endPlaceholder: t('qm.form.monthrangePlaceholder.1'),
     valueFormat: 'YYYY-MM',
   },
   yearrange: {
-    placeholder: t('qm.form.yearrangePlaceholder'),
+    startPlaceholder: t('qm.form.yearrangePlaceholder.0'),
+    endPlaceholder: t('qm.form.yearrangePlaceholder.1'),
     valueFormat: 'YYYY',
   },
 };

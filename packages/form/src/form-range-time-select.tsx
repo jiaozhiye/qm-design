@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-02-23 21:56:33
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-02-27 16:42:06
+ * @Last Modified time: 2021-06-19 09:34:10
  */
 import { defineComponent } from 'vue';
 import { JSXNode } from '../../_utils/types';
@@ -67,7 +67,7 @@ export default defineComponent({
               maxTime: form[fieldName][1],
             }}
             value-format={valueFormat}
-            placeholder={!disabled ? t('qm.form.timerangePlaceholder')[0] : ''}
+            placeholder={!disabled ? t('qm.form.timerangePlaceholder.0') : ''}
             clearable={clearable}
             readonly={readonly}
             disabled={disabled || startDisabled}
@@ -84,7 +84,7 @@ export default defineComponent({
               minTime: form[fieldName][0],
             }}
             value-format={valueFormat}
-            placeholder={!disabled ? t('qm.form.timerangePlaceholder')[1] : ''}
+            placeholder={!disabled ? t('qm.form.timerangePlaceholder.1') : ''}
             clearable={clearable}
             readonly={readonly}
             disabled={disabled || endDisabled}

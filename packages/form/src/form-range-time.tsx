@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-02-23 21:56:33
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-02-27 14:45:12
+ * @Last Modified time: 2021-06-19 09:34:23
  */
 import { defineComponent } from 'vue';
 import { JSXNode } from '../../_utils/types';
@@ -60,8 +60,8 @@ export default defineComponent({
           value-format={timeFormat}
           format={timeFormat}
           range-separator="-"
-          start-placeholder={!disabled ? t('qm.form.timerangePlaceholder')[0] : ''}
-          end-placeholder={!disabled ? t('qm.form.timerangePlaceholder')[1] : ''}
+          start-placeholder={!disabled ? t('qm.form.timerangePlaceholder.0') : ''}
+          end-placeholder={!disabled ? t('qm.form.timerangePlaceholder.1') : ''}
           style={{ ...style }}
           clearable={clearable}
           readonly={readonly}

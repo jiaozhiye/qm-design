@@ -2,12 +2,12 @@
  * @Author: 焦质晔
  * @Date: 2020-05-20 09:36:38
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-05-12 23:30:53
+ * @Last Modified time: 2021-06-19 10:16:45
  */
 import { defineComponent } from 'vue';
 import { maxBy, minBy, sumBy } from 'lodash-es';
+import dayjs from 'dayjs';
 import { groupByProps, getCellValue, setCellValue } from '../utils';
-import { t } from '../../../locale';
 import { JSXNode, AnyObject, Nullable } from '../../../_utils/types';
 import { IColumn, IFetch, IRecord } from '../table/types';
 
@@ -35,7 +35,7 @@ export default defineComponent({
       vFetch: this.createvTableFetch(),
       vColumns: this.createvTableColumns(groupColumns, summaryColumns),
       exportExcel: {
-        fileName: t('qm.table.groupSummary.exportFileName'),
+        fileName: `${dayjs().format('YYYYMMDDHHmmss')}.xlsx`,
       },
       tablePrint: {
         showLogo: true,

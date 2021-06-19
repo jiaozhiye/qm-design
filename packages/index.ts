@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-02-08 16:39:21
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-05-03 21:57:40
+ * @Last Modified time: 2021-06-19 08:40:27
  */
 import type { App } from 'vue';
 import { ComponentSize, AnyObject } from './_utils/types';
@@ -41,7 +41,6 @@ import { setConfig } from './_utils/config';
 import ElementPlus from 'element-plus';
 import lang from 'element-plus/lib/locale/lang/zh-cn';
 import 'dayjs/locale/zh-cn';
-// import './style/element-variables.scss';
 
 // 默认参数
 const defaultInstallOpt: InstallOptions = {

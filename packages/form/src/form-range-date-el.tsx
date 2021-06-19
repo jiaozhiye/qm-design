@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-02-23 21:56:33
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-02-27 14:44:02
+ * @Last Modified time: 2021-06-19 09:28:29
  */
 import { defineComponent } from 'vue';
 import dayjs from 'dayjs';
@@ -42,7 +42,7 @@ export default defineComponent({
     // 日期区间快捷键方法
     const pickers = [
       {
-        text: t('qm.form.dateRangePickers')[0],
+        text: t('qm.form.dateRangePickers.0'),
         value: (() => {
           const date = new Date();
           date.setTime(date.getTime() - 3600 * 1000 * 24 * 7);
@@ -50,7 +50,7 @@ export default defineComponent({
         })(),
       },
       {
-        text: t('qm.form.dateRangePickers')[1],
+        text: t('qm.form.dateRangePickers.1'),
         value: (() => {
           const date = new Date();
           date.setTime(date.getTime() - 3600 * 1000 * 24 * 30);
@@ -58,7 +58,7 @@ export default defineComponent({
         })(),
       },
       {
-        text: t('qm.form.dateRangePickers')[2],
+        text: t('qm.form.dateRangePickers.2'),
         value: (() => {
           const date = new Date();
           date.setTime(date.getTime() - 3600 * 1000 * 24 * 90);
@@ -66,7 +66,7 @@ export default defineComponent({
         })(),
       },
       {
-        text: t('qm.form.dateRangePickers')[3],
+        text: t('qm.form.dateRangePickers.3'),
         value: (() => {
           const date = new Date();
           date.setTime(date.getTime() - 3600 * 1000 * 24 * 180);
@@ -102,8 +102,8 @@ export default defineComponent({
           type={dateType.replace('exact', '')}
           {...wrapProps}
           range-separator={'-'}
-          start-placeholder={!disabled ? DATE_RANGE_CONF[dateType].placeholder[0] : ''}
-          end-placeholder={!disabled ? DATE_RANGE_CONF[dateType].placeholder[1] : ''}
+          start-placeholder={!disabled ? DATE_RANGE_CONF[dateType].startPlaceholder : ''}
+          end-placeholder={!disabled ? DATE_RANGE_CONF[dateType].endPlaceholder : ''}
           unlink-panels={unlinkPanels}
           clearable={clearable}
           readonly={readonly}

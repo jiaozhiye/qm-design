@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-02-23 21:56:33
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-02-28 07:59:06
+ * @Last Modified time: 2021-06-19 09:15:40
  */
 import { defineComponent } from 'vue';
 import addEventListener from 'add-dom-event-listener';
@@ -52,11 +52,11 @@ export default defineComponent({
     // 日期快捷键方法
     const pickers = [
       {
-        text: t('qm.form.datePickers')[0],
+        text: t('qm.form.datePickers.0'),
         value: new Date(),
       },
       {
-        text: t('qm.form.datePickers')[1],
+        text: t('qm.form.datePickers.1'),
         value: (() => {
           const date = new Date();
           date.setTime(date.getTime() - 3600 * 1000 * 24 * 30);
@@ -64,7 +64,7 @@ export default defineComponent({
         })(),
       },
       {
-        text: t('qm.form.datePickers')[2],
+        text: t('qm.form.datePickers.2'),
         value: (() => {
           const date = new Date();
           date.setTime(date.getTime() - 3600 * 1000 * 24 * 90);
@@ -72,7 +72,7 @@ export default defineComponent({
         })(),
       },
       {
-        text: t('qm.form.datePickers')[3],
+        text: t('qm.form.datePickers.3'),
         value: (() => {
           const date = new Date();
           date.setTime(date.getTime() - 3600 * 1000 * 24 * 180);

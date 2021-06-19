@@ -3,10 +3,9 @@
     <header class="header">
       <div class="container">
         <h1>
-          <router-link :to="`/`">
-            <!-- logo -->
+          <router-link to="/">
             <slot>
-              <img src="../assets/img/logo.png" alt="" class="nav-logo" />
+              <img src="../assets/img/logo.png" class="nav-logo" alt="" />
             </slot>
           </router-link>
         </h1>

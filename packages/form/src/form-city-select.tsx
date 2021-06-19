@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-03-31 09:27:45
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-06-04 15:09:03
+ * @Last Modified time: 2021-06-19 09:20:22
  */
 import { defineComponent } from 'vue';
 import { flatten } from 'lodash-es';
@@ -179,8 +179,8 @@ export default defineComponent({
     renderType(): JSXNode {
       return (
         <el-radio-group v-model={this.select_type} size="mini">
-          <el-radio-button label="0">{t('qm.form.citySelectType')[0]}</el-radio-button>
-          <el-radio-button label="1">{t('qm.form.citySelectType')[1]}</el-radio-button>
+          <el-radio-button label="0">{t('qm.form.citySelectType.0')}</el-radio-button>
+          <el-radio-button label="1">{t('qm.form.citySelectType.1')}</el-radio-button>
         </el-radio-group>
       );
     },
