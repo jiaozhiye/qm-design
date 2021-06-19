@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-02-08 14:35:05
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-06-18 13:10:51
+ * @Last Modified time: 2021-06-19 11:48:39
  */
 'use strict';
 
@@ -12,7 +12,6 @@ const webpack = require('webpack');
 const VueLoaderPlugin = require('vue-loader').VueLoaderPlugin;
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
 
 const isProd = process.env.NODE_ENV === 'production';
 
@@ -96,12 +95,12 @@ module.exports = {
       // css
       {
         test: /\.css?$/,
-        use: ['vue-style-loader', 'css-loader'],
+        use: [isProd ? MiniCssExtractPlugin.loader : 'vue-style-loader', 'css-loader'],
       },
       // scss
       {
         test: /\.scss?$/,
-        use: ['vue-style-loader', 'css-loader', 'sass-loader'],
+        use: [isProd ? MiniCssExtractPlugin.loader : 'vue-style-loader', 'css-loader', 'sass-loader'],
       },
       // do not base64-inline SVG
       {
@@ -131,7 +130,6 @@ module.exports = {
   },
   optimization: {
     minimize: true,
-    minimizer: [new CssMinimizerPlugin()],
   },
   devServer: {
     /* 当使用 HTML5 History API 时，任意的 404 响应都可能需要被替代为 index.html */
@@ -153,8 +151,8 @@ module.exports = {
   plugins: (isProd
     ? [
         new MiniCssExtractPlugin({
-          filename: '[name].[contenthash:8].css',
-          chunkFilename: '[name].[contenthash:8].css',
+          filename: 'css/[name].[contenthash:8].css',
+          chunkFilename: 'css/[name].[contenthash:8].css',
         }),
       ]
     : []
