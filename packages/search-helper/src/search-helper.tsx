@@ -99,7 +99,7 @@ export default defineComponent({
   },
   mounted() {
     this.calcTableHeight();
-    addResizeListener(this.$refs[`search-helper`], debounce(this.calcTableHeight, 100));
+    addResizeListener(this.$refs[`search-helper`], debounce(this.calcTableHeight, 10));
   },
   beforeUnmount() {
     removeResizeListener(this.$refs[`search-helper`], this.calcTableHeight);

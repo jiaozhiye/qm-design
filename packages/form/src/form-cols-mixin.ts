@@ -32,7 +32,7 @@ export const FormColsMixin = {
       this.flexCols = typeof this.cols === 'undefined' ? cols : this.cols;
     },
     bindResizeEvent(): void {
-      addResizeListener(this.$refs[`form`].$el, debounce(this.resizeListener, 100));
+      addResizeListener(this.$refs[`form`].$el, debounce(this.resizeListener, 10));
     },
     removeResizeEvent(): void {
       removeResizeListener(this.$refs[`form`].$el, this.resizeListener);
