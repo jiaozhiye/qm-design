@@ -10,6 +10,7 @@ import formatMixin from '../body/format';
 import { getPrefixCls } from '../../../_utils/prefix';
 import { noop } from '../../../_utils/util';
 import { t } from '../../../locale';
+import config from '../config';
 import { JSXNode } from '../../../_utils/types';
 import { IColumn, IRecord } from '../table/types';
 
@@ -34,18 +35,16 @@ export default defineComponent({
         const tableDataList: IRecord[] = !isGroupSubtotal ? tableFullData : getGroupValidData(tableFullData);
         // 未选择时，显示合计结果
         const notSelectAndDisplay: boolean = !selectionKeys.length && displayWhenNotSelect;
-        let values: number[] = [];
         // 可选择列动态合计
-        if (!sumBySelection || notSelectAndDisplay) {
-          values = tableDataList.map((x) => Number(getCellValue(x, dataIndex)));
-        } else {
-          values = selectionRows.map((record) => Number(getCellValue(record, dataIndex)));
-        }
+        const values: IRecord[] = !sumBySelection || notSelectAndDisplay ? tableDataList : selectionRows;
         // 累加求和
         let result: number | string = values.reduce((prev, curr) => {
-          const value = Number(curr);
+          if (curr[config.summaryIgnore]) {
+            return prev;
+          }
+          const value = Number(getCellValue(curr, dataIndex));
           if (!Number.isNaN(value)) {
-            return prev + curr;
+            return prev + value;
           }
           return prev;
         }, 0);

@@ -55,6 +55,8 @@ const config = {
   printWidth: 1040,
   // 操作列 dataIndex
   operationColumn: '__action__',
+  // 忽略合计的数据行标记
+  summaryIgnore: 'sumIgnored',
 };
 
 export default config;

@@ -5,6 +5,7 @@
  * @Last Modified time: 2021-05-15 09:32:20
  */
 import { groupByProps, createUidKey, getCellValue, setCellValue } from '../utils';
+import config from '../config';
 import { IColumn, IRecord } from '../table/types';
 
 const groupSubtotalMixin = {
@@ -62,8 +63,14 @@ const groupSubtotalMixin = {
         this.summationColumns.forEach((column: IColumn) => {
           const { dataIndex } = column;
           const result: number = target.children?.reduce((prev, curr) => {
-            curr = Number(getCellValue(curr, dataIndex));
-            return prev + curr;
+            if (curr[config.summaryIgnore]) {
+              return prev;
+            }
+            const value = Number(getCellValue(curr, dataIndex));
+            if (!Number.isNaN(value)) {
+              return prev + value;
+            }
+            return prev;
           }, 0);
           setCellValue(target, dataIndex, result);
         });
