@@ -5,7 +5,8 @@
  * @Last Modified time: 2021-05-15 08:36:43
  */
 import { defineComponent } from 'vue';
-import { formatNumber, setCellValue, getCellValue } from '../utils';
+import { setCellValue, getCellValue } from '../utils';
+import formatMixin from '../body/format';
 import { getPrefixCls } from '../../../_utils/prefix';
 import { noop } from '../../../_utils/util';
 import { t } from '../../../locale';
@@ -16,6 +17,7 @@ export default defineComponent({
   name: 'TableFooter',
   props: ['flattenColumns'],
   inject: ['$$table'],
+  mixins: [formatMixin],
   computed: {
     summationRows(): Record<string, string>[] {
       const { tableFullData, selectionKeys, selectionRows, summaries, getGroupValidData, isGroupSubtotal } = this.$$table;
@@ -26,6 +28,7 @@ export default defineComponent({
         const {
           dataIndex,
           precision,
+          formatType = 'finance', // 默认货币格式
           summation: { sumBySelection, displayWhenNotSelect, unit = '', onChange = noop },
         } = column;
         const tableDataList: IRecord[] = !isGroupSubtotal ? tableFullData : getGroupValidData(tableFullData);
@@ -52,8 +55,10 @@ export default defineComponent({
           result = getCellValue(summaries, dataIndex);
         }
         result = precision >= 0 ? (result as number).toFixed(precision) : result;
+        // 处理数据格式化
+        result = this[`${formatType}Format`]?.(result) ?? result;
         // 设置合计值
-        setCellValue(res, dataIndex, `${formatNumber(result)} ${unit}`);
+        setCellValue(res, dataIndex, unit ? `${result} ${unit}` : result);
         // 触发事件
         onChange(result);
       });
