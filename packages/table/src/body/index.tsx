@@ -197,7 +197,7 @@ export default defineComponent({
       const { leftFixedColumns, rightFixedColumns, getStickyLeft, getStickyRight, ellipsis, sorter, isGroupSubtotal, isIE } = this.$$table;
       const { dataIndex, fixed, align, className = '' } = column;
       const { rowspan, colspan } = this.getSpan(row, column, rowIndex, columnIndex);
-      const isEllipsis = ellipsis || column.ellipsis;
+      const isEllipsis = column.ellipsis ?? ellipsis;
       if (!rowspan || !colspan) {
         return null;
       }

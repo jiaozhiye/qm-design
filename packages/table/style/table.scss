@@ -193,6 +193,9 @@ $prefix: '#{$qm-prefix}-table';
     line-height: $v-table-row-line-height;
     &:not(.col--ellipsis) {
       padding: #{math.div($v-table-row-height-default - $v-table-row-line-height, 2)} 0;
+      .cell {
+        line-height: 1.25;
+      }
     }
     &.col--center:not(.header--column) {
       text-align: center;

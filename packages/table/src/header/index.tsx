@@ -104,6 +104,7 @@ export default defineComponent({
         layout: { gutterWidth },
         resizable,
         scrollY,
+        ellipsis,
         sorter,
         isIE,
       } = this.$$table;
@@ -122,10 +123,11 @@ export default defineComponent({
       if (colSpan === 0) {
         return null;
       }
+      const isEllipsis = column.ellipsis ?? ellipsis;
       const cls = [
         `header--column`,
-        `col--ellipsis`,
         {
+          [`col--ellipsis`]: isEllipsis,
           [`col--center`]: align === 'center',
           [`col--right`]: align === 'right',
           [`column--required`]: !!required,
