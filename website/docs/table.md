@@ -50,7 +50,7 @@
 | rowHighlight         | 列表行高亮选中，[配置项](#rowHighlight)                       | object                                                 | -      |
 | expandable           | 展开行配置项，[配置项](#expandable)                           | object                                                 | -      |
 | treeStructure        | 树结构选项，[配置项](#treeStructure)                          | object                                                 | -      |
-| groupSubtotal        | 分组合计表格，[配置项](#groupSubtotal)                        | array                                                  | -      |
+| summation            | 表格合计，包含底部合计和分组合计，[配置项](#summation)        | array                                                  | -      |
 | multipleSort         | 是否为多列排序模式                                            | boolean                                                | true   |
 | paginationConfig     | 分页参数的详细配置，[配置项](#pagination)                     | object                                                 | -      |
 | webPagination        | 是否为前端内存分页                                            | boolean                                                | -      |
@@ -118,8 +118,8 @@
 | required     | 可编辑列是否必填                               | boolean                                                            | -      |
 | editRender   | 可编辑单元格，返回值请参考 [配置项](#editable) | function(row, column):object                                       | -      |
 | dictItems    | 数据字典配置，[配置项](#item)                  | array                                                              | -      |
-| summation    | 底部合计，[配置项](#summation)                 | object                                                             | -      |
-| groupSummary | 分组汇总，[配置项](#groupSummary)              | object                                                             | -      |
+| summation    | 底部合计，[配置项](#columnSummation)           | object                                                             | -      |
+| groupSummary | 分组汇总，[配置项](#columnGroupSummary)        | object                                                             | -      |
 | render       | 列渲染方法                                     | function(text, row, column, rowIndex, cellIndex): JSX Node         | -      |
 | extraRender  | 额外的列渲染方法，用于处理导出和打印数据       | function(text, row, column, rowIndex, cellIndex): string \| number | -      |
 
@@ -251,6 +251,13 @@
 
 ### summation
 
+| 参数       | 说明                                         | 类型   | 默认值 |
+| ---------- | -------------------------------------------- | ------ | ------ |
+| groupItems | 分组小计，[配置项](#groupSubtotal)           | array  | -      |
+| fetch      | 从服务端获取底部合计的数据，[配置项](#fetch) | object | -      |
+
+### columnSummation
+
 | 参数                 | 说明                                                | 类型                    | 默认值 |
 | -------------------- | --------------------------------------------------- | ----------------------- | ------ |
 | sumBySelection       | 是否通过选择列进行合计                              | boolean                 | -      |
@@ -259,26 +266,36 @@
 | unit                 | 合计字段的单位                                      | string                  | -      |
 | onChange             | 字段合计变化时触发                                  | function(value: number) | -      |
 
-### groupSummary
+### columnGroupSummary
 
 | 参数    | 说明                                                | 类型   | 默认值 |
 | ------- | --------------------------------------------------- | ------ | ------ |
 | dataKey | 服务端合计，合计数据的 key，支持 `a.b.c` 的路径写法 | string | -      |
 | unit    | 合计字段的单位                                      | string | -      |
 
+### groupSubtotal
+
+| 参数            | 说明                                                                                | 类型   | 默认值 |
+| --------------- | ----------------------------------------------------------------------------------- | ------ | ------ |
+| dataIndex       | 分组项的字段名，对应 column 的 dataIndex 值，必要参数                               | string | -      |
+| titleIndex      | 分组项标题的字段名，如果 dataIndex 设置的不是对应分组项标题字段，则需要设置此参数， | string | -      |
+| color           | 小计行的文本颜色                                                                    | string | -      |
+| backgroundColor | 小计行的背景颜色                                                                    | string | -      |
+
 ### rowSelection
 
-| 参数                  | 说明                                       | 类型                                   | 默认值 |
-| --------------------- | ------------------------------------------ | -------------------------------------- | ------ |
-| type                  | 选择类型，必要参数                         | checkbox \| radio                      | -      |
-| selectedRowKeys       | 选中项的 rowKey 数组                       | string[]                               | -      |
-| hideSelectAll         | 隐藏表头全选勾选框                         | boolean                                | -      |
-| checkStrictly         | 选择列完全受控（父子数据选中状态不再关联） | boolean                                | true   |
-| defaultSelectFirstRow | 是否默认选中第一行（单选时生效）           | boolean                                | -      |
-| filterable            | 是否显示筛选箭头                           | boolean                                | -      |
-| clearableAfterFetched | 重新检索之后，是否清空已选择列             | boolean                                | true   |
-| disabled              | 是否允许行选择                             | function(row): boolean                 | -      |
-| onChange              | 选中项发生变化时触发                       | function(selectionKeys, selectionRows) | -      |
+| 参数                  | 说明                                                                  | 类型                                   | 默认值 |
+| --------------------- | --------------------------------------------------------------------- | -------------------------------------- | ------ |
+| type                  | 选择类型，必要参数                                                    | checkbox \| radio                      | -      |
+| selectedRowKeys       | 选中项的 rowKey 数组                                                  | string[]                               | -      |
+| hideSelectAll         | 隐藏表头全选勾选框                                                    | boolean                                | -      |
+| checkStrictly         | 选择列完全受控（父子数据选中状态不再关联）                            | boolean                                | true   |
+| defaultSelectFirstRow | 是否默认选中第一行（单选时生效）                                      | boolean                                | -      |
+| filterable            | 是否显示筛选箭头                                                      | boolean                                | -      |
+| clearableAfterFetched | 重新检索之后，是否清空已选择列                                        | boolean                                | true   |
+| fetch                 | 从服务端获取要回显的数据列表，只对后台分页+复选有效，[配置项](#fetch) | object                                 | -      |
+| disabled              | 是否允许行选择                                                        | function(row): boolean                 | -      |
+| onChange              | 选中项发生变化时触发                                                  | function(selectionKeys, selectionRows) | -      |
 
 ### rowHighlight
 
@@ -315,15 +332,6 @@
 | -------------------- | ---------------------- | -------- | ------ |
 | defaultExpandAllRows | 默认展开树表格的所有行 | boolean  | -      |
 | expandedRowKeys      | 展开行的 rowKey 数组   | string[] | -      |
-
-### groupSubtotal
-
-| 参数            | 说明                                                                                | 类型   | 默认值 |
-| --------------- | ----------------------------------------------------------------------------------- | ------ | ------ |
-| dataIndex       | 分组项的字段名，对应 column 的 dataIndex 值，必要参数                               | string | -      |
-| titleIndex      | 分组项标题的字段名，如果 dataIndex 设置的不是对应分组项标题字段，则需要设置此参数， | string | -      |
-| color           | 小计行的文本颜色                                                                    | string | -      |
-| backgroundColor | 小计行的背景颜色                                                                    | string | -      |
 
 ### exportExcel
 

@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-02-09 09:03:59
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-05-21 13:52:40
+ * @Last Modified time: 2021-06-22 14:18:15
  */
 import { CSSProperties, defineComponent } from 'vue';
 import { isEqual } from 'lodash-es';
@@ -199,7 +199,7 @@ export default defineComponent({
       return this.flattenColumns.some((column) => !!column.groupSummary);
     },
     isGroupSubtotal(): boolean {
-      return !!this.groupSubtotal?.length;
+      return !!this.summation?.groupItems?.length;
     },
     isTreeTable(): boolean {
       return this.tableFullData.some((x) => Array.isArray(x.children) && x.children.length);

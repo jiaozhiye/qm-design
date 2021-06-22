@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-02-28 23:01:43
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-06-02 14:23:24
+ * @Last Modified time: 2021-06-22 14:14:45
  */
 import { defineComponent, CSSProperties } from 'vue';
 import addEventListener from 'add-dom-event-listener';
@@ -329,13 +329,13 @@ export default defineComponent({
       return { rowspan, colspan };
     },
     createGroupRowCls(dataIndex: string): AnyObject<boolean> {
-      const level: number = this.$$table.groupSubtotal.findIndex((x) => x.dataIndex === dataIndex);
+      const level: number = this.$$table.summation.groupItems.findIndex((x) => x.dataIndex === dataIndex);
       return {
         [`body--row-group_${level + 1}`]: level >= 0 ? true : false,
       };
     },
     getGroupStyles(dataIndex: string): CSSProperties {
-      const { backgroundColor, color } = this.$$table.groupSubtotal.find((x) => x.dataIndex === dataIndex) ?? {};
+      const { backgroundColor, color } = this.$$table.summation.groupItems.find((x) => x.dataIndex === dataIndex) ?? {};
       return { backgroundColor, color };
     },
     renderCellTitle(column: IColumn, row: IRecord, rowIndex: number, columnIndex: number): string {

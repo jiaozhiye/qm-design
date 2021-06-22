@@ -401,7 +401,9 @@ export default defineComponent({
       treeStructure: {
         defaultExpandAllRows: true,
       },
-      groupSubtotal: [{ dataIndex: 'pinpaiText' }, { dataIndex: 'chexingText' }, { dataIndex: 'chexiText' }],
+      summation: {
+        groupItems: [{ dataIndex: 'pinpaiText' }, { dataIndex: 'chexingText' }, { dataIndex: 'chexiText' }],
+      },
     };
   },
   mounted() {
@@ -411,7 +413,7 @@ export default defineComponent({
   },
   methods: {
     spanMethod({ row, column, rowIndex, columnIndex }) {
-      if (this.groupSubtotal.map((x) => x.titleIndex || x.dataIndex).includes(column.dataIndex)) {
+      if (this.summation.groupItems.map((x) => x.titleIndex || x.dataIndex).includes(column.dataIndex)) {
         return [row._rowSpan ?? 1, 1];
       }
       return [1, 1];
@@ -494,7 +496,7 @@ export default defineComponent({
             rowKey="id"
             webPagination={true}
             spanMethod={this.spanMethod}
-            groupSubtotal={this.groupSubtotal}
+            summation={this.summation}
             treeStructure={this.treeStructure}
             rowSelection={this.selection}
             tablePrint={this.tablePrint}

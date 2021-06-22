@@ -28,7 +28,7 @@
 | rowHighlight         | 列表行高亮选中，[配置项](#rowHighlight)                       | object                                                 | -      |
 | expandable           | 展开行配置项，[配置项](#expandable)                           | object                                                 | -      |
 | treeStructure        | 树结构选项，[配置项](#treeStructure)                          | object                                                 | -      |
-| groupSubtotal        | 分组合计表格，[配置项](#groupSubtotal)                        | array                                                  | -      |
+| summation            | 表格合计，包含底部合计和分组合计，[配置项](#summation)        | array                                                  | -      |
 | multipleSort         | 是否为多列排序模式                                            | boolean                                                | true   |
 | paginationConfig     | 分页参数的详细配置，[配置项](#pagination)                     | object                                                 | -      |
 | webPagination        | 是否为前端内存分页                                            | boolean                                                | -      |
@@ -96,8 +96,8 @@
 | required     | 可编辑列是否必填                               | boolean                                                            | -      |
 | editRender   | 可编辑单元格，返回值请参考 [配置项](#editable) | function(row, column):object                                       | -      |
 | dictItems    | 数据字典配置，[配置项](#item)                  | array                                                              | -      |
-| summation    | 底部合计，[配置项](#summation)                 | object                                                             | -      |
-| groupSummary | 分组汇总，[配置项](#groupSummary)              | object                                                             | -      |
+| summation    | 底部合计，[配置项](#columnSummation)           | object                                                             | -      |
+| groupSummary | 分组汇总，[配置项](#columnGroupSummary)        | object                                                             | -      |
 | render       | 列渲染方法                                     | function(text, row, column, rowIndex, cellIndex): JSX Node         | -      |
 | extraRender  | 额外的列渲染方法，用于处理导出和打印数据       | function(text, row, column, rowIndex, cellIndex): string \| number | -      |
 
@@ -229,6 +229,13 @@
 
 ### summation
 
+| 参数       | 说明                                         | 类型   | 默认值 |
+| ---------- | -------------------------------------------- | ------ | ------ |
+| groupItems | 分组小计，[配置项](#groupSubtotal)           | array  | -      |
+| fetch      | 从服务端获取底部合计的数据，[配置项](#fetch) | object | -      |
+
+### columnSummation
+
 | 参数                 | 说明                                                | 类型                    | 默认值 |
 | -------------------- | --------------------------------------------------- | ----------------------- | ------ |
 | sumBySelection       | 是否通过选择列进行合计                              | boolean                 | -      |
@@ -237,12 +244,21 @@
 | unit                 | 合计字段的单位                                      | string                  | -      |
 | onChange             | 字段合计变化时触发                                  | function(value: number) | -      |
 
-### groupSummary
+### columnGroupSummary
 
 | 参数    | 说明                                                | 类型   | 默认值 |
 | ------- | --------------------------------------------------- | ------ | ------ |
 | dataKey | 服务端合计，合计数据的 key，支持 `a.b.c` 的路径写法 | string | -      |
 | unit    | 合计字段的单位                                      | string | -      |
+
+### groupSubtotal
+
+| 参数            | 说明                                                                                | 类型   | 默认值 |
+| --------------- | ----------------------------------------------------------------------------------- | ------ | ------ |
+| dataIndex       | 分组项的字段名，对应 column 的 dataIndex 值，必要参数                               | string | -      |
+| titleIndex      | 分组项标题的字段名，如果 dataIndex 设置的不是对应分组项标题字段，则需要设置此参数， | string | -      |
+| color           | 小计行的文本颜色                                                                    | string | -      |
+| backgroundColor | 小计行的背景颜色                                                                    | string | -      |
 
 ### rowSelection
 
@@ -294,15 +310,6 @@
 | -------------------- | ---------------------- | -------- | ------ |
 | defaultExpandAllRows | 默认展开树表格的所有行 | boolean  | -      |
 | expandedRowKeys      | 展开行的 rowKey 数组   | string[] | -      |
-
-### groupSubtotal
-
-| 参数            | 说明                                                                                | 类型   | 默认值 |
-| --------------- | ----------------------------------------------------------------------------------- | ------ | ------ |
-| dataIndex       | 分组项的字段名，对应 column 的 dataIndex 值，必要参数                               | string | -      |
-| titleIndex      | 分组项标题的字段名，如果 dataIndex 设置的不是对应分组项标题字段，则需要设置此参数， | string | -      |
-| color           | 小计行的文本颜色                                                                    | string | -      |
-| backgroundColor | 小计行的背景颜色                                                                    | string | -      |
 
 ### exportExcel
 

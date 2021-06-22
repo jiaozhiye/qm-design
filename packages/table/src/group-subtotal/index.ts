@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-03-05 10:27:24
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-05-15 09:32:20
+ * @Last Modified time: 2021-06-22 14:17:37
  */
 import { groupByProps, createUidKey, getCellValue, setCellValue } from '../utils';
 import config from '../config';
@@ -32,7 +32,7 @@ const groupSubtotalMixin = {
       return result;
     },
     deepCreateData(list: IRecord[], index: number): IRecord[] {
-      const item = this.groupSubtotal[index];
+      const item = this.summation.groupItems[index];
 
       if (!item) {
         list.forEach((row, i) => {

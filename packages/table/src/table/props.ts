@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-02-28 23:04:58
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-06-22 12:45:07
+ * @Last Modified time: 2021-06-22 14:18:29
  */
 import { PropType } from 'vue';
 import PropTypes from '../../../_utils/vue-types';
@@ -241,15 +241,6 @@ export default {
       dataKey: PropTypes.string, // 数据路径
     }),
   }),
-  // 分组合计表格
-  groupSubtotal: PropTypes.arrayOf(
-    PropTypes.shape({
-      dataIndex: PropTypes.string.isRequired,
-      titleIndex: PropTypes.string,
-      color: PropTypes.string,
-      backgroundColor: PropTypes.string,
-    }).loose
-  ),
   // 多列排序
   multipleSort: PropTypes.bool.def(true),
   // 是否为前端内存分页
