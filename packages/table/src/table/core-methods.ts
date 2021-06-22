@@ -75,7 +75,7 @@ export default {
     try {
       const [res, sum] = !isSummationFetch
         ? [await fetch.api(fetchParams)]
-        : await Promise.all([fetch.api(fetchParams), summation.fetch.api(summation.fetch.params)]);
+        : await Promise.all([fetch.api(fetchParams), summation.fetch.api(fetchParams)]);
       const isSuccess = !isSummationFetch ? res.code === 200 : res.code === 200 && sum.code === 200;
       if (isSuccess) {
         const datakey = fetch.dataKey ?? config.dataKey;
