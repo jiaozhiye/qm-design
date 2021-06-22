@@ -429,7 +429,7 @@ export default defineComponent({
           sorter: true,
           summation: {
             dataKey: 'num',
-            unit: '元',
+            unit: '个',
           },
           groupSummary: {},
           filter: {
