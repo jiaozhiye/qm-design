@@ -51,7 +51,7 @@ export default {
     });
   },
   // 服务端合计
-  createSummation(data): void {
+  createSummation(data: Record<string, any>): void {
     if (!this.isServerSummation) return;
     const { summation = {} } = this;
     const dataKey = summation.fetch?.dataKey ?? config.summationKey;
