@@ -106,7 +106,6 @@
 | fixed        | 列固定（IE 下无效）                            | left \| right                                                      | -      |
 | colSpan      | 表头列合并,设置为 0 时，不渲染                 | number                                                             | -      |
 | align        | 设置列的对齐方式                               | left \| center \| right                                            | left   |
-| theadAlign   | 设置表头的对齐方式                             | left \| center \| right                                            | left   |
 | printFixed   | 打印时，是否固定列                             | boolean                                                            | -      |
 | hidden       | 是否隐藏列                                     | boolean                                                            | -      |
 | ellipsis     | 超过宽度将自动省略                             | boolean                                                            | -      |

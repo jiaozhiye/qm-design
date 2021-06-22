@@ -205,8 +205,8 @@ const exportMixin = {
             excelRow.eachCell((excelCell) => {
               const excelCol = sheet.getColumn(excelCell.col);
               const column: IColumn = deepFindColumn(headColumns, excelCol.key as string) as IColumn;
-              const { theadAlign, align } = column;
-              setExcelCellStyle(excelCell, theadAlign || align);
+              const { align } = column;
+              setExcelCellStyle(excelCell, align);
               if (useStyle) {
                 Object.assign(excelCell, {
                   font: {

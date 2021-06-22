@@ -125,7 +125,6 @@ export type IColumn = {
   renderWidth?: number | null;
   fixed?: IFixed;
   align?: IAlign;
-  theadAlign?: IAlign;
   printFixed?: boolean;
   hidden?: boolean;
   ellipsis?: boolean;

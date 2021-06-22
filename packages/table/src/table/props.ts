@@ -18,7 +18,6 @@ const columnItem = {
   width: PropTypes.number, // 列宽度/最小宽度
   fixed: PropTypes.oneOf(['left', 'right']), // 列固定（IE 下无效）
   align: PropTypes.oneOf(['left', 'center', 'right']), // 设置列的对齐方式
-  theadAlign: PropTypes.oneOf(['left', 'center', 'right']), // 设置表头的对齐方式
   printFixed: PropTypes.bool, // 打印时，是否固定列
   hidden: PropTypes.bool, // 是否隐藏列
   ellipsis: PropTypes.bool, // 超过宽度将自动省略

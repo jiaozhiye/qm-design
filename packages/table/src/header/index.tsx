@@ -112,8 +112,7 @@ export default defineComponent({
         colSpan,
         rowSpan,
         fixed,
-        align: tbodyAlign,
-        theadAlign,
+        align,
         sorter: isSorter,
         filter,
         required,
@@ -123,7 +122,6 @@ export default defineComponent({
       if (colSpan === 0) {
         return null;
       }
-      const align = theadAlign || tbodyAlign;
       const cls = [
         `header--column`,
         `col--ellipsis`,
