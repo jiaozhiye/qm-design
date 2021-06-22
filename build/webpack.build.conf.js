@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-02-08 14:35:05
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-05-12 22:20:08
+ * @Last Modified time: 2021-06-22 19:50:10
  */
 'use strict';
 
@@ -37,6 +37,7 @@ module.exports = {
         root: 'Vue',
         commonjs: 'vue',
         commonjs2: 'vue',
+        amd: 'vue',
       },
     },
     // function ({ context, request }, callback) {
