@@ -336,7 +336,7 @@
 
 ```bash
 // 比如你的数据主键是 uid
-return <Table rowKey="uid" />;
+return <qm-table rowKey="uid" />;
 // 或
-return <Table rowKey={record: record.uid} />;
+return <qm-table :rowKey="record => record.uid" />;
 ```
