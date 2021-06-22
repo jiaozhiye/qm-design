@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-03-02 21:21:13
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-03-13 10:36:18
+ * @Last Modified time: 2021-06-22 13:56:41
  */
 const config = {
   // 表格列的默认最小宽度
@@ -41,6 +41,8 @@ const config = {
   },
   // 后台返回数据的路径
   dataKey: 'records',
+  // 后台返回合计的路径
+  summationKey: 'summation',
   // 后台返回总条数的 key
   totalKey: 'total',
   // 虚拟滚动的阀值

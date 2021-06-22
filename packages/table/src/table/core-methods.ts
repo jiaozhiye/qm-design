@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-03-01 15:20:02
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-05-18 22:49:24
+ * @Last Modified time: 2021-06-22 14:08:04
  */
 import { ComponentInternalInstance } from 'vue';
 import { get, isFunction, isObject } from 'lodash-es';
@@ -51,25 +51,33 @@ export default {
     });
   },
   // 服务端合计
-  createServerSummation(data): void {
+  createSummation(data): void {
     if (!this.isServerSummation) return;
+    const { summation = {} } = this;
+    const dataKey = summation.fetch?.dataKey ?? config.summationKey;
+    const summationData = (dataKey ? get(data, dataKey) : data) ?? {};
     this.flattenColumns
       .filter((x) => !!x.summation?.dataKey)
       .forEach((x) => {
-        setCellValue(this.summaries, x.dataIndex, Number(getCellValue(data, x.summation.dataKey)));
+        setCellValue(this.summaries, x.dataIndex, Number(getCellValue(summationData, x.summation.dataKey)));
       });
   },
   // ajax 获取数据
   async getTableData(): Promise<void> {
-    const { fetch, fetchParams } = this;
+    const { summation, fetch, fetchParams } = this;
     if (!fetch) return;
     const { beforeFetch = () => !0, xhrAbort = !1 } = fetch;
     if (!beforeFetch(fetchParams) || xhrAbort) return;
+    // 是否为单独的合计接口
+    const isSummationFetch = !!summation?.fetch;
     console.log(`ajax 请求参数：`, fetchParams);
     this.showLoading = true;
     try {
-      const res = await fetch.api(fetchParams);
-      if (res.code === 200) {
+      const [res, sum] = !isSummationFetch
+        ? [await fetch.api(fetchParams)]
+        : await Promise.all([fetch.api(fetchParams), summation.fetch.api(summation.fetch.params)]);
+      const isSuccess = !isSummationFetch ? res.code === 200 : res.code === 200 && sum.code === 200;
+      if (isSuccess) {
         const datakey = fetch.dataKey ?? config.dataKey;
         const items = get(res.data, datakey) ?? [];
         const total = get(res.data, datakey.replace(/[^.]+$/, config.totalKey)) || items.length || 0;
@@ -77,7 +85,7 @@ export default {
         if (!err && bool) {
           this.createTableData(items);
           this.setRecordsTotal(total);
-          this.createServerSummation(res.data);
+          this.createSummation(!isSummationFetch ? res.data : sum.data);
           fetch.callback?.(res.data);
         }
       }

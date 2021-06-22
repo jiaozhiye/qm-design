@@ -4,7 +4,7 @@ import { defineComponent, VNode } from 'vue';
 import tableData from '@/mock/tableData';
 import PrintTemplate from './print-template.vue';
 
-import { getTableData, getSelectData, getTreeData, getRegionData } from './api/test';
+import { getTableData, getSummationData, getSelectData, getTreeData, getRegionData } from './api/test';
 
 const sleep = async (delay: number): Promise<any> => {
   return new Promise((resolve) => setTimeout(resolve, delay));
@@ -215,6 +215,11 @@ export default defineComponent({
         params: {},
         dataKey: 'records',
       },
+      summation: {
+        fetch: {
+          api: getSummationData,
+        },
+      },
       columns: [
         {
           title: '操作',
@@ -422,6 +427,10 @@ export default defineComponent({
           width: 150,
           required: true,
           sorter: true,
+          summation: {
+            dataKey: 'num',
+            unit: '元',
+          },
           groupSummary: {},
           filter: {
             type: 'number',
@@ -673,6 +682,7 @@ export default defineComponent({
             webPagination={false}
             spanMethod={this.spanMethod}
             rowSelection={this.selection}
+            summation={this.summation}
             tablePrint={this.tablePrint}
             exportExcel={this.exportExcel}
             columnsChange={(columns) => (this.columns = columns)}

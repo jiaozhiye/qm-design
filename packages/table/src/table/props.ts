@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-02-28 23:04:58
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-05-21 13:53:34
+ * @Last Modified time: 2021-06-22 12:45:07
  */
 import { PropType } from 'vue';
 import PropTypes from '../../../_utils/vue-types';
@@ -199,7 +199,7 @@ export default {
     clearableAfterFetched: PropTypes.bool.def(true), // 重新检索之后，是否清空已选择
     fetch: PropTypes.shape({
       api: PropTypes.func.isRequired, // api 接口
-      params: PropTypes.object.isRequired, // 接口参数
+      params: PropTypes.object, // 接口参数
       dataKey: PropTypes.string, // 数据路径
     }),
     disabled: PropTypes.func, // 是否允许行选择，参数：row，返回值 bool
@@ -224,6 +224,22 @@ export default {
   treeStructure: PropTypes.shape({
     defaultExpandAllRows: PropTypes.bool, // 默认展开所有行
     expandedRowKeys: PropTypes.array, // 展开行的 key 数组，支持动态赋值
+  }),
+  summation: PropTypes.shape({
+    // 分组合计
+    groupItems: PropTypes.arrayOf(
+      PropTypes.shape({
+        dataIndex: PropTypes.string.isRequired,
+        titleIndex: PropTypes.string,
+        color: PropTypes.string,
+        backgroundColor: PropTypes.string,
+      }).loose
+    ),
+    fetch: PropTypes.shape({
+      api: PropTypes.func.isRequired, // api 接口
+      params: PropTypes.object, // 接口参数
+      dataKey: PropTypes.string, // 数据路径
+    }),
   }),
   // 分组合计表格
   groupSubtotal: PropTypes.arrayOf(
