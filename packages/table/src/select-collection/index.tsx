@@ -5,8 +5,11 @@
  * @Last Modified time: 2021-05-21 13:47:28
  */
 import { defineComponent } from 'vue';
+import { get } from 'lodash-es';
 import { getPrefixCls } from '../../../_utils/prefix';
 import { t } from '../../../locale';
+import { noop } from '../../../_utils/util';
+import { IRecord } from '../table/types';
 import { JSXNode } from '../../../_utils/types';
 
 import Dialog from '../../../dialog';
@@ -21,7 +24,26 @@ export default defineComponent({
       visible: false,
     };
   },
+  mounted() {
+    this.getSelectionRows();
+  },
   methods: {
+    async getSelectionRows(): Promise<void> {
+      const {
+        isFetch,
+        rowSelection: { fetch, disabled = noop },
+        getRowKey,
+      } = this.$$table;
+      if (!(isFetch && fetch)) return;
+      try {
+        const res = await fetch.api(fetch.params);
+        if (res.code === 200) {
+          const records: IRecord[] = Array.isArray(res.data) ? res.data : get(res.data, fetch.dataKey) ?? [];
+          this.$$table.selectionRows = records.filter((row) => !disabled(row));
+          this.$$table.selectionKeys = this.$$table.selectionRows.map((row, index) => getRowKey(row, index));
+        }
+      } catch (err) {}
+    },
     clickHandle(): void {
       this.visible = true;
     },
