@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-02-23 21:56:33
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-06-19 09:15:40
+ * @Last Modified time: 2021-06-23 09:46:31
  */
 import { defineComponent } from 'vue';
 import addEventListener from 'add-dom-event-listener';
@@ -116,7 +116,7 @@ export default defineComponent({
           disabledDate={(time: Date): boolean => {
             return setDisabledDate(time, [minDateTime, maxDateTime]);
           }}
-          shortcuts={shortCuts ? pickers : null}
+          shortcuts={shortCuts ? pickers : []}
           onChange={(): void => onChange(form[fieldName])}
           onBlur={() => {
             if (!['date', 'exactdate', 'datetime'].includes(dateType)) return;

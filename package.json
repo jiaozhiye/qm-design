@@ -1,6 +1,6 @@
 {
   "name": "@jiaozhiye/qm-design",
-  "version": "1.0.0-beta.17",
+  "version": "1.0.0-beta.19",
   "description": "A Component Library for Vue3.0",
   "keywords": [
     "vue3.0",
@@ -76,7 +76,7 @@
     "@typescript-eslint/parser": "^4.14.0",
     "@vue/babel-plugin-jsx": "^1.0.6",
     "@vue/compiler-sfc": "3.1.1",
-    "@vue/component-compiler-utils": "^3.2.1",
+    "@vue/component-compiler-utils": "^3.2.2",
     "acorn-jsx": "^5.3.1",
     "autoprefixer": "^10.2.6",
     "babel-loader": "^8.2.2",

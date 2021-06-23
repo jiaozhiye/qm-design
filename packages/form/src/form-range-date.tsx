@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-02-23 21:56:33
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-06-19 09:28:50
+ * @Last Modified time: 2021-06-23 09:46:46
  */
 import { defineComponent } from 'vue';
 import addEventListener from 'add-dom-event-listener';
@@ -149,7 +149,7 @@ export default defineComponent({
             disabledDate={(time: Date): boolean => {
               return setDisabledDate(time, [minDateTime, form[fieldName][1]]);
             }}
-            shortcuts={shortCuts ? pickers : null}
+            shortcuts={shortCuts ? pickers : []}
             onChange={(): void => onChange(form[fieldName])}
             onFocus={(): void => {
               this.$nextTick(() => {

@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-02-23 21:56:33
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-06-19 09:28:29
+ * @Last Modified time: 2021-06-23 09:46:41
  */
 import { defineComponent } from 'vue';
 import dayjs from 'dayjs';
@@ -112,7 +112,7 @@ export default defineComponent({
           disabledDate={(time: Date): boolean => {
             return setDisabledDate(time, [minDateTime, maxDateTime]);
           }}
-          shortcuts={shortCuts ? pickers : null}
+          shortcuts={shortCuts ? pickers : []}
           onChange={(): void => onChange(form[fieldName])}
         />
         {descOptions && this.$$form.createFormItemDesc({ fieldName, ...descOptions })}
