@@ -8,6 +8,8 @@ import axios from '../fetch';
 
 export const getTableData = (params) => axios.get(`/api/design/getTableData`, { params, lockable: true, cancelable: true });
 
+export const getTableKeys = (params) => axios.get(`/api/design/getTableKeys`, { params });
+
 export const getSummationData = (params) => axios.get(`/api/design/getSummationData`, { params });
 
 export const getSelectData = (params) => axios.get(`/api/design/getSelectData`, { params });

@@ -48,6 +48,10 @@ export default defineComponent({
     isClientFilter(): boolean {
       return !this.$$table.isFetch;
     },
+    showSelectAll(): boolean {
+      const { isFetch, rowSelection } = this.$$table;
+      return isFetch ? !!rowSelection?.fetchAllRowKeys : !rowSelection?.hideSelectAll;
+    },
   },
   watch: {
     filters(val: IFilter): void {
@@ -159,13 +163,9 @@ export default defineComponent({
     },
     renderCell(column: IColumn): Nullable<JSXNode> | JSXNode[] {
       const { dataIndex, type, sorter, title, description } = column as IDerivedColumn;
-      const { selectionKeys, rowSelection } = this.$$table;
+      const { selectionKeys } = this.$$table;
       if (dataIndex === '__selection__' && type === 'checkbox') {
-        return !rowSelection?.hideSelectAll ? (
-          <div class="cell">
-            <AllSelection selectionKeys={selectionKeys} />
-          </div>
-        ) : null;
+        return <div class="cell">{this.showSelectAll ? <AllSelection selectionKeys={selectionKeys} /> : t('qm.table.config.selectionText')}</div>;
       }
       const vNodes: JSXNode[] = [];
       vNodes.push(

@@ -409,10 +409,6 @@ export default {
   clearSuperSearch(): void {
     this.createSuperSearch([]);
   },
-  // 清空列汇总条件
-  clearColumnSummary(): void {
-    this.columnSummaryQuery = '';
-  },
   // 清空表格各种操作记录
   clearTableLog(): void {
     this.store.clearAllLog();

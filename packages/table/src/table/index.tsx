@@ -57,8 +57,6 @@ export default defineComponent({
       selectionRows: [],
       // 高级检索的条件
       superFilters: [],
-      // 列汇总条件
-      columnSummaryQuery: '',
     });
     return {
       // 组件 store 仓库
@@ -212,13 +210,11 @@ export default defineComponent({
     },
     fetchParams(): IFetchParams {
       const orderby = createOrderBy(this.sorter);
-      // const query = createWhereSQL(this.filters, config.showFilterType) || createWhereSQL(this.superFilters, config.showFilterType);
       const query = this.formatFiltersParams(this.filters, this.superFilters);
       const params = this.isFetch ? this.fetch.params : null;
       const sorter = orderby ? { [config.sorterFieldName]: orderby } : null;
-      // const filter = query ? { [config.filterFieldName]: query } : null;
       const filter = query.length ? { [config.filterFieldName]: query } : null;
-      const summary = this.columnSummaryQuery ? { [config.groupSummary.summaryFieldName]: this.columnSummaryQuery, usedJH: 1 } : null;
+      const summary = this.isServerSummation ? { [config.groupSummary.summaryFieldName]: this.createColumnSummary(), usedJH: 1 } : null;
       return {
         ...sorter,
         ...filter,
@@ -374,12 +370,11 @@ export default defineComponent({
   created() {
     TableManager.register(this.getTableInstance().uid, this.getTableInstance());
     this.originColumns = deepToRaw(this.columns);
-    this.columnSummaryQuery = this.createColumnSummary();
     // 获取表格数据
     if (!this.isFetch) {
       this.createTableData(this.dataSource);
     } else {
-      this.getTableData();
+      debounce(this.getTableData)();
     }
     // 加载表格数据
     this.loadTableData().then(() => {

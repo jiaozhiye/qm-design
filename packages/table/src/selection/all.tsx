@@ -5,10 +5,11 @@
  * @Last Modified time: 2021-06-04 15:33:29
  */
 import { defineComponent } from 'vue';
-import { intersection, union, xor } from 'lodash-es';
+import { get, intersection, union, xor } from 'lodash-es';
 import { getPrefixCls } from '../../../_utils/prefix';
 import { noop } from '../../../_utils/util';
 import { t } from '../../../locale';
+import { IRecord } from '../table/types';
 import { JSXNode } from '../../../_utils/types';
 
 import Checkbox from '../checkbox';
@@ -48,9 +49,28 @@ export default defineComponent({
     },
   },
   methods: {
-    changeHandle(val: boolean): void {
+    async getAllSelectionKeys(): Promise<IRecord[]> {
+      const { fetchParams } = this.$$table;
+      const { fetchAllRowKeys: fetch } = this.$$table.rowSelection;
+      let rowKeys: IRecord[] = [];
+      this.$$table.showLoading = !0;
+      try {
+        const res = await fetch.api(fetchParams);
+        if (res.code === 200) {
+          rowKeys = Array.isArray(res.data) ? res.data : get(res.data, fetch.dataKey) ?? [];
+        }
+      } catch (err) {}
+      this.$$table.showLoading = !1;
+      return rowKeys;
+    },
+    async changeHandle(val: boolean): Promise<void> {
       const { selectionKeys, filterAllRowKeys } = this;
-      this.$$table.selectionKeys = val ? union(selectionKeys, filterAllRowKeys) : selectionKeys.filter((x) => !filterAllRowKeys.includes(x));
+      const { rowSelection } = this.$$table;
+      if (rowSelection.fetchAllRowKeys) {
+        this.$$table.selectionKeys = val ? await this.getAllSelectionKeys() : [];
+      } else {
+        this.$$table.selectionKeys = val ? union(selectionKeys, filterAllRowKeys) : selectionKeys.filter((x) => !filterAllRowKeys.includes(x));
+      }
     },
     selectAllHandle(): void {
       this.changeHandle(true);

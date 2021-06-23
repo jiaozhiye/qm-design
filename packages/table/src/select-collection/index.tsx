@@ -31,7 +31,7 @@ export default defineComponent({
     async getSelectionRows(): Promise<void> {
       const {
         isFetch,
-        rowSelection: { fetch, disabled = noop },
+        rowSelection: { fetchSelectedRows: fetch, disabled = noop },
         getRowKey,
       } = this.$$table;
       if (!(isFetch && fetch)) return;

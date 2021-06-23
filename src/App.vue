@@ -4,7 +4,7 @@ import { defineComponent, VNode } from 'vue';
 import tableData from '@/mock/tableData';
 import PrintTemplate from './print-template.vue';
 
-import { getTableData, getSummationData, getSelectData, getTreeData, getRegionData } from './api/test';
+import { getTableData, getTableKeys, getSummationData, getSelectData, getTreeData, getRegionData } from './api/test';
 
 const sleep = async (delay: number): Promise<any> => {
   return new Promise((resolve) => setTimeout(resolve, delay));
@@ -566,10 +566,15 @@ export default defineComponent({
         type: 'checkbox',
         filterable: true,
         selectedRowKeys: this.selectedKeys,
+        fetchAllRowKeys: {
+          api: getTableKeys,
+          dataKey: 'recordKeys',
+        },
         disabled: (row) => {
           return row.id === 3;
         },
         onChange: (val, rows) => {
+          console.log(12, val);
           this.selectedKeys = val;
         },
       },

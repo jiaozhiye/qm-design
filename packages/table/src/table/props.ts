@@ -197,7 +197,14 @@ export default {
     defaultSelectFirstRow: PropTypes.bool.def(false), // 是否默认选中第一行（单选时生效）
     filterable: PropTypes.bool.def(false), // 是否显示筛选箭头
     clearableAfterFetched: PropTypes.bool.def(true), // 重新检索之后，是否清空已选择
-    fetch: PropTypes.shape({
+    // 请求选中行数据并回显
+    fetchSelectedRows: PropTypes.shape({
+      api: PropTypes.func.isRequired, // api 接口
+      params: PropTypes.object, // 接口参数
+      dataKey: PropTypes.string, // 数据路径
+    }),
+    // 请求所有行数据的 rowKey，在点击全选是回显
+    fetchAllRowKeys: PropTypes.shape({
       api: PropTypes.func.isRequired, // api 接口
       params: PropTypes.object, // 接口参数
       dataKey: PropTypes.string, // 数据路径
