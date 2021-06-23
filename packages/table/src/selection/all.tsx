@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-03-06 21:30:12
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-06-04 15:33:29
+ * @Last Modified time: 2021-06-23 18:50:47
  */
 import { defineComponent } from 'vue';
 import { get, intersection, union, xor } from 'lodash-es';
@@ -31,7 +31,7 @@ export default defineComponent({
   computed: {
     isFilterable(): boolean {
       const { rowSelection } = this.$$table;
-      return rowSelection.filterable || !1;
+      return rowSelection.filterable ?? !0;
     },
     filterAllRowKeys(): string[] {
       const { allTableData, getRowKey, rowSelection } = this.$$table;
