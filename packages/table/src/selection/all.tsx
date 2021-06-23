@@ -75,8 +75,13 @@ export default defineComponent({
     selectAllHandle(): void {
       this.changeHandle(true);
     },
-    invertHandle(): void {
-      this.$$table.selectionKeys = xor(this.selectionKeys, this.filterAllRowKeys);
+    async invertHandle(): Promise<void> {
+      const { rowSelection } = this.$$table;
+      if (rowSelection.fetchAllRowKeys) {
+        this.$$table.selectionKeys = xor(this.selectionKeys, await this.getAllSelectionKeys());
+      } else {
+        this.$$table.selectionKeys = xor(this.selectionKeys, this.filterAllRowKeys);
+      }
     },
     clearAllHandle(): void {
       this.changeHandle(false);
