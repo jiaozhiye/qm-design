@@ -29,21 +29,25 @@ const selectionMixin = {
     createTreeSelectionKeys(key: string, arr: string[]): string[] {
       const { deriveRowKeys } = this;
       const target = deepFindRowKey(deriveRowKeys, key);
+      let result: string[] = [];
+      if (!target) {
+        return result;
+      }
       const childRowKeys = this.getAllChildRowKeys(target?.children || []);
       const parentRowKeys = this.findParentRowKeys(deriveRowKeys, key);
       // 处理后代节点
-      arr = [...new Set([...arr, ...childRowKeys])];
+      result = [...new Set([...arr, ...childRowKeys])];
       // 处理祖先节点
       parentRowKeys.forEach((x) => {
         const target = deepFindRowKey(deriveRowKeys, x);
-        const isContain = isArrayContain(arr, target?.children?.map((k) => k.rowKey) || []);
+        const isContain = isArrayContain(result, target?.children?.map((k) => k.rowKey) || []);
         if (isContain) {
-          arr = [...arr, x];
+          result = [...result, x];
         } else {
-          arr = arr.filter((k) => k !== x);
+          result = result.filter((k) => k !== x);
         }
       });
-      return arr;
+      return result;
     },
     createSelectionRows(selectedKeys: string[]): IRecord[] {
       const { allTableData, allRowKeys, selectionRows, getRowKey, isFetch } = this;

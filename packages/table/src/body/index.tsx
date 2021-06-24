@@ -413,27 +413,28 @@ export default defineComponent({
     createTreeSelectionKeys(key: string, arr: string[], state: string): string[] {
       const { deriveRowKeys, getAllChildRowKeys, findParentRowKeys } = this.$$table;
       const target = deepFindRowKey(deriveRowKeys, key);
+      let result: string[] = [];
       // 后代节点 rowKeys
       const childRowKeys = getAllChildRowKeys(target?.children || []);
       // 祖先节点 rowKeys
       const parentRowKeys = findParentRowKeys(deriveRowKeys, key);
       // 处理后代节点
       if (state === 'on') {
-        arr = [...new Set([...arr, key, ...childRowKeys])];
+        result = [...new Set([...arr, key, ...childRowKeys])];
       } else {
-        arr = arr.filter((x) => ![key, ...childRowKeys].includes(x));
+        result = arr.filter((x) => ![key, ...childRowKeys].includes(x));
       }
       // 处理祖先节点
       parentRowKeys.forEach((x) => {
         const target = deepFindRowKey(deriveRowKeys, x);
-        const isContain = isArrayContain(arr, target?.children?.map((k) => k.rowKey) || []);
+        const isContain = isArrayContain(result, target?.children?.map((k) => k.rowKey) || []);
         if (isContain) {
-          arr = [...arr, x];
+          result = [...result, x];
         } else {
-          arr = arr.filter((k) => k !== x);
+          result = result.filter((k) => k !== x);
         }
       });
-      return arr;
+      return result;
     },
     setHighlightKey(key: string): void {
       this.$$table.highlightKey = key;
