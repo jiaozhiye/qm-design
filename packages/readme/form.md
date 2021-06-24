@@ -31,17 +31,18 @@
 
 ### 方法
 
-| 方法名称         | 说明                         | 参数                                | 返回值                               |
-| ---------------- | ---------------------------- | ----------------------------------- | ------------------------------------ |
-| SUBMIT_FORM      | 表单提交                     | -                                   | -                                    |
-| RESET_FORM       | 重置表单                     | -                                   | -                                    |
-| CLEAR_FORM       | 清空表单                     | -                                   | -                                    |
-| SET_FIELDS_VALUE | 设置表单字段的值             | function(values:object)             | -                                    |
-| SET_FORM_VALUES  | 可以设置除了表单字段的额外值 | function(values:object)             | -                                    |
-| CREATE_FOCUS     | 设置表单元素获得焦点方法     | function(fieldName:string)          | -                                    |
-| GET_FORM_DATA    | 获取表单数据，异步方法       | -                                   | 返回错误前置的数组 [error, formData] |
-| GET_FIELD_VALUE  | 获取表单项的值               | function(fieldName:string)          | 返回表单字段值                       |
-| VALIDATE_FIELDS  | 对表单字段进行校验           | function(fieldNames[] \| fieldName) | -                                    |
+| 方法名称          | 说明                                   | 参数                                | 返回值                               |
+| ----------------- | -------------------------------------- | ----------------------------------- | ------------------------------------ |
+| SUBMIT_FORM       | 表单提交                               | -                                   | -                                    |
+| RESET_FORM        | 重置表单                               | -                                   | -                                    |
+| CLEAR_FORM        | 清空表单                               | -                                   | -                                    |
+| SET_FIELDS_VALUE  | 设置表单字段的值                       | function(values:object)             | -                                    |
+| SET_FORM_VALUES   | 可以设置除了表单字段的额外值           | function(values:object)             | -                                    |
+| SET_INITIAL_VALUE | 设置表单的初始值，适用于异步获取初始值 | function(values:object)             | -                                    |
+| CREATE_FOCUS      | 设置表单元素获得焦点方法               | function(fieldName:string)          | -                                    |
+| GET_FORM_DATA     | 获取表单数据，异步方法                 | -                                   | 返回错误前置的数组 [error, formData] |
+| GET_FIELD_VALUE   | 获取表单项的值                         | function(fieldName:string)          | 返回表单字段值                       |
+| VALIDATE_FIELDS   | 对表单字段进行校验                     | function(fieldNames[] \| fieldName) | -                                    |
 
 ### formType
 

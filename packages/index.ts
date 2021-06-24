@@ -39,6 +39,7 @@ import { setConfig } from './_utils/config';
 
 // import ElementPlus
 import ElementPlus from 'element-plus';
+import { ElMessageBox as QmMessageBox, ElNotification as QmNotification, ElMessage as QmMessage } from 'element-plus';
 import lang from 'element-plus/lib/locale/lang/zh-cn';
 import 'dayjs/locale/zh-cn';
 
@@ -118,6 +119,9 @@ export {
   QmTable,
   QmSearchHelper,
   QmCropper,
+  QmMessageBox,
+  QmNotification,
+  QmMessage,
   version,
   install,
   locale,

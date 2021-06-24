@@ -4,6 +4,7 @@
  * @Last Modified by: 焦质晔
  * @Last Modified time: 2021-02-24 18:28:11
  */
+import { merge } from 'lodash-es';
 import { ValueOf } from '../../_utils/types';
 import { IFormData, IFormItem } from './types';
 
@@ -27,6 +28,10 @@ export const PublicMethodsMixin = {
           this.form[key] = values[key];
         }
       }
+    },
+    SET_INITIAL_VALUE(val: IFormData = {}): void {
+      this.initialValues = merge({}, this.initialValues, val);
+      this.SET_FIELDS_VALUE(val);
     },
     SUBMIT_FORM(): void {
       this.submitForm();

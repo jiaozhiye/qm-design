@@ -4,10 +4,11 @@
 
 ### 1.0.0-beta.21
 
-2021-02-23
+2021-02-24
 
 - 🎉 [Table] 行选择新增了 fetchSelectedRows 参数，用于从服务端获取要回显的数据列表
 - 🎉 [Table] 行选择新增了 fetchAllRowKeys 参数，用于从服务端获取所有行数据 rowKey 的列表
+- 🎉 [Form] 新增了 SET_INITIAL_VALUE 方法，设置表单的初始值，用于异步获取初始值的情况
 - 🌟 vue 升级到了 3.1.2
 - 🐞 修复组件 bug
 
