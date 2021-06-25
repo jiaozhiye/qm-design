@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-02-28 23:01:43
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-06-22 14:14:45
+ * @Last Modified time: 2021-06-25 09:59:26
  */
 import { defineComponent, CSSProperties } from 'vue';
 import addEventListener from 'add-dom-event-listener';
@@ -92,7 +92,7 @@ export default defineComponent({
     this.event1 = addEventListener(this.$el, 'scroll', this.scrollEvent);
     this.event2 = addEventListener(document, 'keydown', throttle(this.keyboardEvent, 100));
   },
-  unmounted() {
+  beforeUnmount() {
     this.event1.remove();
     this.event2.remove();
   },

@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-02-09 09:03:59
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-06-25 09:43:26
+ * @Last Modified time: 2021-06-25 10:00:17
  */
 import { CSSProperties, defineComponent } from 'vue';
 import { isEqual } from 'lodash-es';
@@ -392,7 +392,7 @@ export default defineComponent({
     this.scrollYLoad && this.loadScrollYData(0);
     this.calcTableHeight();
   },
-  unmounted() {
+  beforeUnmount() {
     TableManager.deregister(this.getTableInstance().uid);
     this.destroy();
   },
