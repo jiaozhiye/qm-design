@@ -49,8 +49,7 @@ export default defineComponent({
           return prev;
         }, 0);
         // 服务端合计
-        const isServerSummation: boolean = Object.keys(summaries).includes(dataIndex);
-        if (isServerSummation && (!sumBySelection || notSelectAndDisplay)) {
+        if (Object.keys(summaries).includes(dataIndex) && (!sumBySelection || notSelectAndDisplay)) {
           result = getCellValue(summaries, dataIndex);
         }
         result = precision >= 0 ? (result as number).toFixed(precision) : result;

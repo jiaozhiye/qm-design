@@ -184,8 +184,9 @@ export default defineComponent({
     isHeadFilter(): boolean {
       return this.flattenColumns.some((column) => column.filter);
     },
-    isServerSummation(): boolean {
-      return this.flattenColumns.some((x) => !!x.summation?.dataKey);
+    isServiceSummation(): boolean {
+      this.serviceSummation = this.flattenColumns.some((x) => !!x.summation?.dataKey);
+      return this.serviceSummation;
     },
     isSelectCollection(): boolean {
       return this.showSelectCollection && this.isFetch && this.rowSelection?.type === 'checkbox';
@@ -214,7 +215,7 @@ export default defineComponent({
       const params = this.isFetch ? this.fetch.params : null;
       const sorter = orderby ? { [config.sorterFieldName]: orderby } : null;
       const filter = query.length ? { [config.filterFieldName]: query } : null;
-      const summary = this.isServerSummation ? { [config.groupSummary.summaryFieldName]: this.createColumnSummary(), usedJH: 1 } : null;
+      const summary = this.serviceSummation ? { [config.groupSummary.summaryFieldName]: this.createColumnSummary(), usedJH: 1 } : null;
       return {
         ...sorter,
         ...filter,

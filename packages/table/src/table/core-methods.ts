@@ -49,7 +49,7 @@ export default {
   },
   // 服务端合计
   createSummation(data: Record<string, any>): void {
-    if (!this.isServerSummation) return;
+    if (!this.isServiceSummation) return;
     const { summation = {} } = this;
     const dataKey = summation.fetch?.dataKey ?? config.summationKey;
     const summationData = (dataKey ? get(data, dataKey) : data) ?? {};
