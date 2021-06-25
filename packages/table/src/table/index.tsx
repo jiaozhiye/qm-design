@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-02-09 09:03:59
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-06-22 14:18:15
+ * @Last Modified time: 2021-06-25 09:43:26
  */
 import { CSSProperties, defineComponent } from 'vue';
 import { isEqual } from 'lodash-es';
@@ -16,7 +16,7 @@ import { isChrome, isIE, deepToRaw, noop } from '../../../_utils/util';
 import { useSize } from '../../../hooks/useSize';
 import { isEmpty } from '../../../_utils/util';
 import { getScrollBarWidth } from '../../../_utils/scrollbar-width';
-import { columnsFlatMap, convertToRows, getAllColumns, getAllTableData, createOrderBy, createWhereSQL, parseHeight, debounce } from '../utils';
+import { columnsFlatMap, convertToRows, getAllColumns, getAllTableData, createOrderBy, parseHeight } from '../utils';
 import { warn } from '../../../_utils/error';
 import config from '../config';
 
@@ -277,7 +277,7 @@ export default defineComponent({
         this.doLayout();
       });
       // 触发 dataChange 事件
-      debounce(this.dataChangeHandle)();
+      this.dataChangeDebouncer();
     },
     columns(next: IColumn[]): void {
       this.setLocalColumns(next);
@@ -303,12 +303,12 @@ export default defineComponent({
       const { clearableAfterFetched = !0 } = this.rowSelection || {};
       const isOnlyPageChange = this.onlyPaginationChange(next, prev);
       if (!isOnlyPageChange) {
-        this.isFetch && clearableAfterFetched && debounce(this.clearRowSelection)();
+        this.isFetch && clearableAfterFetched && this.clearRowSelection();
       }
       if (!isOnlyPageChange && next.currentPage > 1 && !this.fetch?.stopToFirst) {
         this.toFirstPage();
       } else {
-        this.isFetch && debounce(this.getTableData)();
+        this.isFetch && this.getTableDataDebouncer();
       }
     },
     selectionKeys(next: string[], prev: string[]): void {
@@ -370,11 +370,12 @@ export default defineComponent({
   created() {
     TableManager.register(this.getTableInstance().uid, this.getTableInstance());
     this.originColumns = deepToRaw(this.columns);
+    this.createDebouncer();
     // 获取表格数据
     if (!this.isFetch) {
       this.createTableData(this.dataSource);
     } else {
-      debounce(this.getTableData)();
+      this.getTableDataDebouncer();
     }
     // 加载表格数据
     this.loadTableData().then(() => {

@@ -2,18 +2,15 @@
  * @Author: 焦质晔
  * @Date: 2020-03-01 15:20:02
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-06-22 14:08:04
+ * @Last Modified time: 2021-06-25 09:41:56
  */
 import { ComponentInternalInstance } from 'vue';
 import { get, isFunction, isObject } from 'lodash-es';
-import { difference, hasOwn, throttle, getCellValue, setCellValue } from '../utils';
-import { deepToRaw, errorCapture, isChrome, isIE, noop } from '../../../_utils/util';
+import { difference, hasOwn, debounce, getCellValue, setCellValue } from '../utils';
+import { deepToRaw, errorCapture, noop } from '../../../_utils/util';
 import { warn } from '../../../_utils/error';
 import config from '../config';
 import { IRecord, ISuperFilter, IDerivedRowKey, IColumn, ICellSpan } from './types';
-
-const isWebkit = isChrome();
-const throttleScrollYDuration = isIE() ? 20 : 10;
 
 export default {
   // 创建表格数据
@@ -146,12 +143,7 @@ export default {
   triggerScrollYEvent(ev: Event): void {
     const target = ev.target as HTMLElement;
     if (!target) return;
-    // webkit 浏览器使用最佳的渲染方式
-    if (isWebkit) {
-      this.loadScrollYData(target.scrollTop);
-    } else {
-      throttle(this.loadScrollYData, throttleScrollYDuration)(target.scrollTop);
-    }
+    this.loadScrollYData(target.scrollTop);
   },
   // 纵向 Y 可视渲染处理
   loadScrollYData(scrollTop = 0): void {
@@ -389,8 +381,14 @@ export default {
     if (!this.webPagination || currentPage >= pageCount) return;
     this.pagerChangeHandle({ currentPage: pageCount, pageSize });
   },
+  // 创建 debouncer
+  createDebouncer() {
+    this.getTableDataDebouncer = debounce(this.getTableData);
+    this.dataChangeDebouncer = debounce(this.dataChangeHandle);
+  },
   // 清空列选中
   clearRowSelection(): void {
+    if (!this.selectionKeys.length) return;
     this.selectionKeys = [];
   },
   // 清空行高亮

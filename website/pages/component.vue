@@ -53,7 +53,8 @@ export default defineComponent({
   mounted() {
     this.componentScrollBar = this.$refs.componentScrollBar;
     this.componentScrollBox = this.componentScrollBar.$el.querySelector('.el-scrollbar__wrap');
-    this.componentScrollBox.addEventListener('scroll', throttle(this.handleScroll, 300));
+    this.throttledScrollHandler = throttle(this.handleScroll, 300);
+    this.componentScrollBox.addEventListener('scroll', this.throttledScrollHandler);
     document.body.classList.add('is-component');
     this.addContentObserver();
   },
@@ -61,7 +62,7 @@ export default defineComponent({
     document.body.classList.remove('is-component');
   },
   beforeUnmount() {
-    this.componentScrollBox.removeEventListener('scroll', this.handleScroll);
+    this.componentScrollBox.removeEventListener('scroll', this.throttledScrollHandler);
     this.observer.disconnect();
   },
   methods: {

@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-06-01 13:23:53
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-05-31 09:48:28
+ * @Last Modified time: 2021-06-25 09:14:04
  */
 import { addResizeListener, removeResizeListener } from '../../_utils/resize-event';
 import { debounce } from '../../_utils/util';
@@ -14,6 +14,9 @@ export const FormColsMixin = {
     return {
       flexCols: 4, // 默认
     };
+  },
+  created() {
+    this.resizeListenerHandle = debounce(this.resizeListener, 10);
   },
   mounted() {
     this.bindResizeEvent();
@@ -32,10 +35,10 @@ export const FormColsMixin = {
       this.flexCols = typeof this.cols === 'undefined' ? cols : this.cols;
     },
     bindResizeEvent(): void {
-      addResizeListener(this.$refs[`form`].$el, debounce(this.resizeListener, 10));
+      addResizeListener(this.$refs[`form`].$el, this.resizeListenerHandle);
     },
     removeResizeEvent(): void {
-      removeResizeListener(this.$refs[`form`].$el, this.resizeListener);
+      removeResizeListener(this.$refs[`form`].$el, this.resizeListenerHandle);
     },
   },
 };

@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2020-03-26 11:44:24
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-06-18 09:37:29
+ * @Last Modified time: 2021-06-25 08:29:34
  */
 import { defineComponent } from 'vue';
 import { flatten, groupBy, map, spread, mergeWith } from 'lodash-es';
@@ -277,7 +277,7 @@ export default defineComponent({
       ];
       return __html__.join('');
     },
-    downloadFile(opts, content) {
+    downloadFile(opts: any, content: string): Promise<any> | undefined {
       const { filename, type, isDownload } = opts;
       const name = `${filename}.${type}`;
       if (window.Blob) {
