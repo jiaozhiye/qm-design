@@ -20,7 +20,7 @@ export default {
     this.layout.footerHeight = (this.showFooter ? tableFooter?.$el.offsetHeight : 0) || 0;
     // body 可视区高度
     this.layout.viewportHeight = tableOuterHeight - this.layout.headerHeight - this.layout.footerHeight;
-    this.layout.tableBodyHeight = this.$$tableBody.$el.querySelector('.qm-table--body').offsetHeight;
+    this.layout.tableBodyHeight = this.elementStore[`$tableBody`].offsetHeight;
     this.scrollY = this.scrollYLoad || this.layout.tableBodyHeight > this.layout.viewportHeight;
   },
   resizeListener(): void {

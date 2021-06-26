@@ -48,9 +48,6 @@ export default defineComponent({
     };
   },
   computed: {
-    $vTableBody(): HTMLElement {
-      return this.$el.querySelector('.qm-table--body');
-    },
     bodyWidth(): Nullable<string> {
       const { layout, scrollY } = this.$$table;
       const { tableBodyWidth, gutterWidth } = layout;
@@ -89,6 +86,7 @@ export default defineComponent({
     },
   },
   mounted() {
+    this.setElementStore();
     this.event1 = addEventListener(this.$el, 'scroll', this.scrollEvent);
     this.event2 = addEventListener(document, 'keydown', throttle(this.keyboardEvent, 100));
   },
@@ -97,6 +95,11 @@ export default defineComponent({
     this.event2.remove();
   },
   methods: {
+    setElementStore() {
+      const { elementStore } = this.$$table;
+      elementStore[`$tableBody`] = this.$refs[`table-body`];
+      elementStore[`$tableYspace`] = this.$refs[`y-space`];
+    },
     scrollEvent(ev: Event): void {
       const { scrollYLoad, scrollY, layout, triggerScrollYEvent, $refs } = this.$$table;
       const scrollYWidth: number = scrollY ? layout.gutterWidth : 0;
@@ -122,10 +125,10 @@ export default defineComponent({
       this.setClickedValues([]);
     },
     renderBodyXSpace(): JSXNode {
-      return <div class="body--x-space" style={{ width: this.bodyWidth }} />;
+      return <div ref="x-space" class="body--x-space" style={{ width: this.bodyWidth }} />;
     },
     renderBodyYSpace(): JSXNode {
-      return <div class="body--y-space" />;
+      return <div ref="y-space" class="body--y-space" />;
     },
     renderColgroup(): JSXNode {
       return (
@@ -473,6 +476,7 @@ export default defineComponent({
         {this.renderBodyYSpace()}
         {this.renderBodyXSpace()}
         <table
+          ref="table-body"
           class={`${prefixCls}--body`}
           cellspacing="0"
           cellpadding="0"

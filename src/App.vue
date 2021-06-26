@@ -682,13 +682,17 @@ export default defineComponent({
             maxHeight="400px"
             stripe={true}
             columns={this.columns}
-            fetch={this.fetch}
+            dataSource={this.list}
             rowKey={(row) => row.id}
-            webPagination={false}
+            webPagination={true}
             spanMethod={this.spanMethod}
             rowSelection={this.selection}
             summation={this.summation}
             tablePrint={this.tablePrint}
+            paginationConfig={{
+              pageSize: 300,
+              pageSizeOptions: [200, 300],
+            }}
             exportExcel={this.exportExcel}
             columnsChange={(columns) => (this.columns = columns)}
           ></qm-table>

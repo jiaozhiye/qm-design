@@ -57,6 +57,8 @@ export default defineComponent({
       selectionRows: [],
       // 高级检索的条件
       superFilters: [],
+      // dom 节点集合
+      elementStore: {},
     });
     return {
       // 组件 store 仓库
@@ -92,7 +94,7 @@ export default defineComponent({
       scrollYStore: {
         startIndex: 0,
         visibleIndex: 0,
-        renderSize: 0,
+        endIndex: 0,
         offsetSize: 0,
         visibleSize: 0,
         rowHeight: 0,
@@ -352,14 +354,17 @@ export default defineComponent({
       this.highlightKey = this.rowHighlight?.currentRowKey ?? this.highlightKey;
     },
     [`layout.viewportHeight`](next: number): void {
-      const visibleYSize = Math.ceil(next / this.scrollYStore.rowHeight);
-      const renderSize = isChrome() ? visibleYSize + 3 : visibleYSize + 5;
-      Object.assign(this.scrollYStore, { visibleSize: visibleYSize, offsetSize: visibleYSize, renderSize });
+      const { rowHeight, startIndex, endIndex } = this.scrollYStore;
+      const visibleYSize = Math.max(8, Math.ceil(next / rowHeight) + 2);
+      const offsetYSize = isChrome() ? 0 : 10;
+      Object.assign(this.scrollYStore, {
+        visibleSize: visibleYSize,
+        offsetSize: offsetYSize,
+        endIndex: Math.max(startIndex, visibleYSize + offsetYSize, endIndex),
+      });
     },
     scrollYLoad(next: boolean): void {
-      this.$nextTick(() => {
-        !next ? this.updateScrollYSpace(!0) : this.loadScrollYData(this.$$tableBody.prevST);
-      });
+      this.$nextTick(() => (!next ? this.updateScrollYSpace() : this.loadScrollYData(this.$$tableBody.prevST)));
     },
     scrollX(next: boolean): void {
       this.isPingRight = next;

@@ -137,7 +137,7 @@ export default {
     const { scrollYLoad, scrollYStore } = this;
     const dataList = this.createTableList();
     // 处理显示数据
-    this.tableData = scrollYLoad ? dataList.slice(scrollYStore.startIndex, scrollYStore.startIndex + scrollYStore.renderSize) : dataList;
+    this.tableData = scrollYLoad ? dataList.slice(scrollYStore.startIndex, scrollYStore.endIndex) : dataList;
   },
   // 纵向 Y 可视渲染事件处理
   triggerScrollYEvent(ev: Event): void {
@@ -148,55 +148,34 @@ export default {
   // 纵向 Y 可视渲染处理
   loadScrollYData(scrollTop = 0): void {
     const { scrollYStore } = this;
-    const { startIndex, renderSize, offsetSize, visibleSize, rowHeight } = scrollYStore;
-    const toVisibleIndex = Math.ceil(scrollTop / rowHeight);
-    const dataList = this.createTableList();
-
-    let preload = false;
-
-    if (scrollYStore.visibleIndex !== toVisibleIndex) {
-      const marginSize = Math.min(Math.floor((renderSize - visibleSize) / 2), visibleSize);
-
-      if (scrollYStore.visibleIndex > toVisibleIndex) {
-        // 向上
-        preload = toVisibleIndex - offsetSize <= startIndex;
-        if (preload) {
-          scrollYStore.startIndex = Math.max(0, toVisibleIndex - Math.max(marginSize, renderSize - visibleSize));
-        }
-      } else {
-        // 向下
-        preload = toVisibleIndex + visibleSize + offsetSize >= startIndex + renderSize;
-        if (preload) {
-          scrollYStore.startIndex = Math.max(0, Math.min(dataList.length - renderSize, toVisibleIndex - marginSize));
-        }
-      }
-
-      if (preload) {
+    const { startIndex, endIndex, offsetSize, visibleSize, rowHeight } = scrollYStore;
+    const toVisibleIndex = Math.floor(scrollTop / rowHeight);
+    const offsetStartIndex = Math.max(0, toVisibleIndex - 1 - offsetSize);
+    const offsetEndIndex = toVisibleIndex + visibleSize + offsetSize;
+    if (toVisibleIndex <= startIndex || toVisibleIndex >= endIndex - visibleSize - 1) {
+      if (startIndex !== offsetStartIndex || endIndex !== offsetEndIndex) {
+        scrollYStore.startIndex = offsetStartIndex;
+        scrollYStore.endIndex = offsetEndIndex;
         this.updateScrollYData();
       }
-
-      scrollYStore.visibleIndex = toVisibleIndex;
     }
   },
   // 更新纵向 Y 可视渲染上下剩余空间大小
-  updateScrollYSpace(isReset: boolean): void {
-    const { scrollYStore, $$tableBody } = this;
+  updateScrollYSpace(): void {
+    const { scrollYLoad, scrollYStore, elementStore } = this;
+    const { startIndex, rowHeight } = scrollYStore;
     const dataList = this.createTableList();
 
-    const $tableBody = $$tableBody.$el.querySelector('.qm-table--body');
-    const $tableYSpaceElem = $$tableBody.$el.querySelector('.body--y-space');
+    let marginTop = '';
+    let ySpaceHeight = '';
 
-    if (!isReset) {
-      // 计算高度
-      const bodyHeight = dataList.length * scrollYStore.rowHeight;
-      const topSpaceHeight = Math.max(scrollYStore.startIndex * scrollYStore.rowHeight, 0);
-
-      $tableBody.style.transform = `translateY(${topSpaceHeight}px)`;
-      $tableYSpaceElem.style.height = `${bodyHeight}px`;
-    } else {
-      $tableBody.style.transform = '';
-      $tableYSpaceElem.style.height = '';
+    if (scrollYLoad) {
+      marginTop = Math.max(0, startIndex * rowHeight) + 'px';
+      ySpaceHeight = dataList.length * rowHeight + 'px';
     }
+
+    elementStore[`$tableBody`].style.transform = marginTop ? `translateY(${marginTop})` : marginTop;
+    elementStore[`$tableYspace`].style.height = ySpaceHeight;
   },
   // 更新 Y 方向数据
   updateScrollYData(): void {

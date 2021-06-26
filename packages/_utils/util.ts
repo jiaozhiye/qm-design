@@ -21,7 +21,7 @@ export const isEdge = (): boolean => {
 };
 
 export const isChrome = (): boolean => {
-  return !isServer && /chrome\/\d+/.test(navigator.userAgent) && !isEdge();
+  return !isServer && navigator.userAgent.indexOf('Chrome') > -1 && !isEdge();
 };
 
 export const isFirefox = (): boolean => {

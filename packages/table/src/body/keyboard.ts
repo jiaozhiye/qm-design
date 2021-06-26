@@ -102,11 +102,11 @@ const keyboardMixin = {
       return !0;
     },
     scrollXToColumn(dataIndex: string, index: number): void {
-      const { leftFixedColumns } = this.$$table;
+      const { leftFixedColumns, elementStore } = this.$$table;
       const v = isUndefined(index) ? this.flattenColumns.findIndex((x) => x.dataIndex === dataIndex) : index;
       if (v < 0) return;
       const fixedWidth = leftFixedColumns.map((x) => x.width || x.renderWidth || config.defaultColumnWidth).reduce((prev, curr) => prev + curr, 0);
-      this.$el.scrollLeft = this.$vTableBody.querySelectorAll('tbody > tr > td')[v].offsetLeft - fixedWidth;
+      this.$el.scrollLeft = elementStore[`$tableBody`].querySelectorAll('tbody > tr > td')[v].offsetLeft - fixedWidth;
     },
     scrollYToRecord(rowKey: string, index: number): void {
       const { scrollYStore, allRowKeys } = this.$$table;
