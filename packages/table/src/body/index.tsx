@@ -320,7 +320,8 @@ export default defineComponent({
           rowspan = result.rowspan;
           colspan = result.colspan;
         }
-        if (this.$$table.webPagination && row === this.tableData[0] && rowspan === 0) {
+        // 内存分页 或 虚拟滚动 支持动态合并行
+        if (row === this.tableData[0] && rowspan === 0) {
           rowspan = 1;
           for (let i = 1; i < this.tableData.length; i++) {
             const { rowspan: rowSpan } = this.getSpan(this.tableData[i], column, this.tableData[i].index, columnIndex);
