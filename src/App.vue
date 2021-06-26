@@ -689,10 +689,6 @@ export default defineComponent({
             rowSelection={this.selection}
             summation={this.summation}
             tablePrint={this.tablePrint}
-            paginationConfig={{
-              pageSize: 300,
-              pageSizeOptions: [200, 300],
-            }}
             exportExcel={this.exportExcel}
             columnsChange={(columns) => (this.columns = columns)}
           ></qm-table>

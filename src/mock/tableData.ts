@@ -10,7 +10,7 @@ export default {
   code: 1,
   message: '',
   data: Mock.mock({
-    'items|1000': [
+    'items|500': [
       {
         'id|+1': 1,
         person: {
