@@ -4,7 +4,9 @@
  * @Last Modified by: 焦质晔
  * @Last Modified time: 2021-05-18 09:10:10
  */
-import { AnyFunction, AnyObject, JSXNode, Nullable } from '../../../_utils/types';
+import { AnyFunction, AnyObject, ComponentSize, JSXNode, Nullable } from '../../../_utils/types';
+
+export type ITableSize = 'default' | ComponentSize;
 
 export type IFixed = 'left' | 'right';
 

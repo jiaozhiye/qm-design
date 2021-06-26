@@ -7,8 +7,8 @@
 import { PropType } from 'vue';
 import PropTypes from '../../../_utils/vue-types';
 import { isNumber } from 'lodash-es';
-import { ComponentSize } from '../../../_utils/types';
 import { isValidComponentSize, isValidWidthUnit } from '../../../_utils/validators';
+import { ITableSize } from './types';
 
 const columnItem = {
   dataIndex: PropTypes.string.isRequired,
@@ -129,7 +129,7 @@ export default {
   rowKey: PropTypes.oneOfType([PropTypes.string, PropTypes.func]).def('uid'),
   // 表格尺寸
   size: {
-    type: String as PropType<'default' | ComponentSize>,
+    type: String as PropType<ITableSize>,
     validator: (val: string): boolean => {
       return val === 'default' || isValidComponentSize(val);
     },

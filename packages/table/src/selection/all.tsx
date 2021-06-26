@@ -29,23 +29,25 @@ export default defineComponent({
     };
   },
   computed: {
+    size(): string {
+      return this.$$table.tableSize !== 'mini' ? 'small' : 'mini';
+    },
     isFilterable(): boolean {
       const { rowSelection } = this.$$table;
       return rowSelection.filterable ?? !0;
     },
     filterAllRowKeys(): string[] {
-      const { allTableData, getRowKey, rowSelection } = this.$$table;
+      const { allTableData, allRowKeys, rowSelection } = this.$$table;
       const { disabled = noop } = rowSelection;
-      return allTableData.filter((row) => !disabled(row)).map((row) => getRowKey(row, row.index));
+      return allRowKeys.filter((key, index) => !disabled(allTableData[index]));
     },
     indeterminate(): boolean {
-      return this.selectionKeys.length > 0 && intersection(this.selectionKeys, this.filterAllRowKeys).length < this.filterAllRowKeys.length;
+      // 性能待优化
+      // this.selectionKeys.length > 0 && intersection(this.selectionKeys, this.filterAllRowKeys).length < this.filterAllRowKeys.length;
+      return this.selectionKeys.length > 0 && this.selectionKeys.length < this.filterAllRowKeys.length;
     },
     selectable(): boolean {
       return !this.indeterminate && this.selectionKeys.length > 0;
-    },
-    size(): string {
-      return this.$$table.tableSize !== 'mini' ? 'small' : 'mini';
     },
   },
   methods: {
@@ -69,7 +71,9 @@ export default defineComponent({
       if (rowSelection.fetchAllRowKeys) {
         this.$$table.selectionKeys = val ? await this.getAllSelectionKeys() : [];
       } else {
-        this.$$table.selectionKeys = val ? union(selectionKeys, filterAllRowKeys) : selectionKeys.filter((x) => !filterAllRowKeys.includes(x));
+        // 性能待优化
+        // this.$$table.selectionKeys = val ? union(selectionKeys, filterAllRowKeys) : selectionKeys.filter((x) => !filterAllRowKeys.includes(x));
+        this.$$table.selectionKeys = val ? filterAllRowKeys.slice(0) : [];
       }
     },
     selectAllHandle(): void {

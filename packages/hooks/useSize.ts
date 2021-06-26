@@ -5,13 +5,14 @@
  * @Last Modified time: 2021-02-26 08:29:16
  */
 import { useGlobalConfig } from './useGlobalConfig';
+import { ComponentSize } from '../_utils/types';
 
 type IProps = {
-  size?: string;
+  size?: ComponentSize;
   [key: string]: any;
 };
 
-export const useSize = (props: IProps): Record<'$size', string> => {
+export const useSize = (props: IProps): Record<'$size', ComponentSize | ''> => {
   const $DESIGN = useGlobalConfig();
 
   return {

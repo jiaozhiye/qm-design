@@ -59,6 +59,14 @@ export default {
         setCellValue(this.summaries, x.dataIndex, Number(getCellValue(summationData, x.summation.dataKey)));
       });
   },
+  // 表格的查询参数
+  createTableParams(): Record<string, any> {
+    const params = {};
+    if (this.isServiceSummation) {
+      Object.assign(params, { [config.groupSummary.summaryFieldName]: this.createColumnSummary(), usedJH: 1 });
+    }
+    return params;
+  },
   // ajax 获取数据
   async getTableData(): Promise<void> {
     const { summation, fetch, fetchParams } = this;

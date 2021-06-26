@@ -7,7 +7,7 @@
 import { CSSProperties, defineComponent } from 'vue';
 import { isEqual } from 'lodash-es';
 import { JSXNode, Nullable } from '../../../_utils/types';
-import { IColumn, IDerivedRowKey, IFetchParams, IRecord } from './types';
+import { IColumn, IDerivedRowKey, ITableSize, IFetchParams, IRecord } from './types';
 
 import baseProps from './props';
 import Store from '../store';
@@ -59,6 +59,10 @@ export default defineComponent({
       superFilters: [],
       // dom 节点集合
       elementStore: {},
+      // 表格的查询参数
+      fetchParams: {},
+      // 缓存数据
+      allRowKeysMap: new Map(),
     });
     return {
       // 组件 store 仓库
@@ -93,7 +97,6 @@ export default defineComponent({
       // 存放纵向 Y 虚拟滚动相关信息
       scrollYStore: {
         startIndex: 0,
-        visibleIndex: 0,
         endIndex: 0,
         offsetSize: 0,
         visibleSize: 0,
@@ -184,8 +187,7 @@ export default defineComponent({
       return this.flattenColumns.some((column) => column.filter);
     },
     isServiceSummation(): boolean {
-      this.serviceSummation = this.flattenColumns.some((x) => !!x.summation?.dataKey);
-      return this.serviceSummation;
+      return this.flattenColumns.some((x) => !!x.summation?.dataKey);
     },
     isSelectCollection(): boolean {
       return this.showSelectCollection && this.isFetch && this.rowSelection?.type === 'checkbox';
@@ -208,28 +210,28 @@ export default defineComponent({
     isFetch(): boolean {
       return !!this.fetch;
     },
-    fetchParams(): IFetchParams {
+    variableParams(): IFetchParams {
       const orderby = createOrderBy(this.sorter);
       const query = this.formatFiltersParams(this.filters, this.superFilters);
       const params = this.isFetch ? this.fetch.params : null;
       const sorter = orderby ? { [config.sorterFieldName]: orderby } : null;
       const filter = query.length ? { [config.filterFieldName]: query } : null;
-      const summary = this.serviceSummation ? { [config.groupSummary.summaryFieldName]: this.createColumnSummary(), usedJH: 1 } : null;
       return {
         ...sorter,
         ...filter,
-        ...summary,
         ...params,
         ...this.pagination,
       };
     },
+    fetchParams(): IFetchParams {
+      return Object.assign({}, this.variableParams, this.createTableParams());
+    },
     bordered(): boolean {
       return this.border || this.isGroup;
     },
-    tableSize(): string {
+    tableSize(): ITableSize {
       const { $size } = useSize(this.$props);
-      Object.assign(this.scrollYStore, { rowHeight: config.rowHeightMaps[$size] });
-      return $size;
+      return $size || 'default';
     },
     shouldUpdateHeight(): boolean {
       return this.height || this.maxHeight || this.isTableEmpty;
@@ -288,6 +290,17 @@ export default defineComponent({
     sorter(): void {
       this.$emit('change', ...this.tableChange);
     },
+    allRowKeys(next: string[], prev: string[]): void {
+      if (isEqual(next, prev)) return;
+      this.allRowKeysMap.clear();
+      next.forEach((x, i) => this.allRowKeysMap.set(x, i));
+    },
+    tableSize: {
+      handler(next: string): void {
+        this.scrollYStore.rowHeight = config.rowHeightMaps[next];
+      },
+      immediate: true,
+    },
     pagination: {
       handler(): void {
         this.$emit('change', ...this.tableChange);
@@ -299,7 +312,7 @@ export default defineComponent({
       this.clearTableFilter();
       this.clearSuperSearch();
     },
-    fetchParams(next: IFetchParams, prev: IFetchParams): void {
+    variableParams(next: IFetchParams, prev: IFetchParams): void {
       const { clearableAfterFetched = !0 } = this.rowSelection || {};
       const isOnlyPageChange = this.onlyPaginationChange(next, prev);
       if (!isOnlyPageChange) {

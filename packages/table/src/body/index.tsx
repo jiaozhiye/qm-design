@@ -95,7 +95,7 @@ export default defineComponent({
     this.event2.remove();
   },
   methods: {
-    setElementStore() {
+    setElementStore(): void {
       const { elementStore } = this.$$table;
       elementStore[`$tableBody`] = this.$refs[`table-body`];
       elementStore[`$tableYspace`] = this.$refs[`y-space`];

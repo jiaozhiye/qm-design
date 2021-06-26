@@ -50,7 +50,7 @@ const selectionMixin = {
       return result;
     },
     createSelectionRows(selectedKeys: string[]): IRecord[] {
-      const { allTableData, allRowKeys, selectionRows, getRowKey, isFetch } = this;
+      const { allTableData, allRowKeys, allRowKeysMap, selectionRows, getRowKey, isFetch } = this;
       if (isFetch) {
         return [
           ...selectionRows.filter((row) => selectedKeys.includes(getRowKey(row, row.index))),
@@ -60,10 +60,18 @@ const selectionMixin = {
           }),
         ];
       }
-      return selectedKeys.map((x) => {
-        let index = allRowKeys.findIndex((key) => key === x);
-        return allTableData[index];
-      });
+      const result: IRecord[] = [];
+      for (let i = 0, len = selectedKeys.length; i < len; i++) {
+        let key = selectedKeys[i];
+        if (!allRowKeysMap.has(key)) continue;
+        result.push(allTableData[allRowKeysMap.get(key)]);
+      }
+      return result;
+      // 性能待优化
+      // return selectedKeys.map((x) => {
+      //   let index = allRowKeys.findIndex((key) => key === x);
+      //   return allTableData[index];
+      // });
     },
     // 选择列已选中 keys
     createSelectionKeys(keys: string[]): string[] {
