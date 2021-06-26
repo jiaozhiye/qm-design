@@ -149,9 +149,11 @@ export default {
   loadScrollYData(scrollTop = 0): void {
     const { scrollYStore } = this;
     const { startIndex, endIndex, offsetSize, visibleSize, rowHeight } = scrollYStore;
+
     const toVisibleIndex = Math.floor(scrollTop / rowHeight);
     const offsetStartIndex = Math.max(0, toVisibleIndex - 1 - offsetSize);
     const offsetEndIndex = toVisibleIndex + visibleSize + offsetSize;
+
     if (toVisibleIndex <= startIndex || toVisibleIndex >= endIndex - visibleSize - 1) {
       if (startIndex !== offsetStartIndex || endIndex !== offsetEndIndex) {
         scrollYStore.startIndex = offsetStartIndex;

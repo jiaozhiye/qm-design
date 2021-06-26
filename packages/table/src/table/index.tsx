@@ -138,9 +138,6 @@ export default defineComponent({
     };
   },
   computed: {
-    $vTable() {
-      return this.$refs[`table`];
-    },
     $$tableBody() {
       return this.$refs[`tableBody`];
     },
@@ -389,6 +386,7 @@ export default defineComponent({
     });
   },
   mounted() {
+    this.setElementStore();
     this.doLayout();
     this.bindEvents();
     this.createResizeState();

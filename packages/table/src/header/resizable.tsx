@@ -27,14 +27,14 @@ export default defineComponent({
 
       const _this = this;
       const dom = ev.target as HTMLElement;
-      const { $vTable, $$tableBody, columns, doLayout, setLocalColumns } = this.$$table;
+      const { elementStore, $$tableBody, columns, doLayout, setLocalColumns } = this.$$table;
       const target = this.$resizableBar;
 
       const half = dom.offsetWidth / 2;
       const disX = ev.clientX;
-      const left = getNodeOffset(dom, $vTable).left - $$tableBody.$el.scrollLeft + half;
+      const left = getNodeOffset(dom, elementStore[`$table`]).left - $$tableBody.$el.scrollLeft + half;
 
-      $vTable.classList.add('c--resize');
+      elementStore[`$table`].classList.add('c--resize');
       target.style.left = `${left}px`;
       target.style.display = 'block';
 
@@ -54,7 +54,7 @@ export default defineComponent({
       };
 
       document.onmouseup = function () {
-        $vTable.classList.remove('c--resize');
+        elementStore[`$table`].classList.remove('c--resize');
         target.style.display = 'none';
 
         this.onmousemove = null;

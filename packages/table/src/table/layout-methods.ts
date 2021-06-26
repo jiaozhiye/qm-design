@@ -9,13 +9,17 @@ import { addResizeListener, removeResizeListener } from '../../../_utils/resize-
 import { prevent } from '../../../_utils/dom';
 
 export default {
+  setElementStore(): void {
+    const { elementStore } = this;
+    elementStore[`$table`] = this.$refs[`table`];
+  },
   createResizeState(): void {
-    const { offsetWidth, offsetHeight } = this.$vTable;
+    const { offsetWidth, offsetHeight } = this.elementStore[`$table`];
     this.resizeState = Object.assign({}, { width: offsetWidth, height: offsetHeight });
   },
   updateElsHeight(): void {
     const { tableHeader, tableFooter } = this.$refs;
-    const tableOuterHeight = this.$vTable.offsetHeight;
+    const tableOuterHeight = this.elementStore[`$table`].offsetHeight;
     this.layout.headerHeight = (this.showHeader ? tableHeader?.$el.offsetHeight : 0) || 0;
     this.layout.footerHeight = (this.showFooter ? tableFooter?.$el.offsetHeight : 0) || 0;
     // body 可视区高度
@@ -26,10 +30,10 @@ export default {
   resizeListener(): void {
     const { width: oldWidth, height: oldHeight } = this.resizeState;
     // X 方向
-    const width = this.$vTable.offsetWidth;
+    const width = this.elementStore[`$table`].offsetWidth;
     const isXChange = oldWidth !== width;
     // Y 方向
-    const height = this.$vTable.offsetHeight;
+    const height = this.elementStore[`$table`].offsetHeight;
     const isYChange = this.shouldUpdateHeight && oldHeight !== height;
     const shouldUpdateLayout = isXChange || isYChange;
     if (!shouldUpdateLayout) return;
@@ -43,17 +47,17 @@ export default {
     ev && prevent(ev);
     if (this.height !== 'auto') return;
     const disY = this.showPagination ? 50 : 10;
-    this.autoHeight = window.innerHeight - this.$vTable.getBoundingClientRect().top - disY;
+    this.autoHeight = window.innerHeight - this.elementStore[`$table`].getBoundingClientRect().top - disY;
     this.doLayout();
   },
   bindEvents(): void {
-    addResizeListener(this.$vTable, this.resizeListener);
+    addResizeListener(this.elementStore[`$table`], this.resizeListener);
     if (this.height !== 'auto') return;
     this.resizeEvent = addEventListener(window, 'resize', this.calcTableHeight);
     this.calcTableHeight();
   },
   removeEvents(): void {
-    removeResizeListener(this.$vTable, this.resizeListener);
+    removeResizeListener(this.elementStore[`$table`], this.resizeListener);
     this.resizeEvent?.remove();
   },
   doLayout(): void {

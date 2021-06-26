@@ -17,7 +17,7 @@ const columnsMixin = {
       return createFilterColumns([...(expandableColumn ? [expandableColumn] : []), ...(selectionColumn ? [selectionColumn] : []), ...baseColumns]);
     },
     updateColumnsWidth(): void {
-      const tableWidth: number = this.$vTable.clientWidth;
+      const tableWidth: number = this.elementStore[`$table`].clientWidth;
       const scrollYWidth: number = this.scrollY ? this.layout.gutterWidth : 0;
       const { defaultColumnWidth } = config;
 

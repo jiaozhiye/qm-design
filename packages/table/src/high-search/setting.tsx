@@ -46,9 +46,6 @@ export default defineComponent({
     };
   },
   computed: {
-    $$vTable() {
-      return this.$refs[`search`];
-    },
     highSearchKey(): string {
       return this.$$table.uniqueKey ? `search_${this.$$table.uniqueKey}` : '';
     },
@@ -102,7 +99,7 @@ export default defineComponent({
                 <el-button
                   type="text"
                   onClick={() => {
-                    this.$$vTable.REMOVE_RECORDS(row);
+                    this.$refs[`search`].REMOVE_RECORDS(row);
                   }}
                 >
                   {t('qm.table.highSearch.removeText')}
@@ -279,7 +276,7 @@ export default defineComponent({
       return result;
     },
     insertRowsHandle(): void {
-      this.$$vTable.INSERT_RECORDS({ logic: 'and' });
+      this.$refs[`search`].INSERT_RECORDS({ logic: 'and' });
     },
     toggleBracket(row: IRecord, column: IColumn): void {
       const { dataIndex } = column;
