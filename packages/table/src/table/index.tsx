@@ -59,8 +59,6 @@ export default defineComponent({
       superFilters: [],
       // dom 节点集合
       elementStore: {},
-      // 表格的查询参数
-      fetchParams: {},
       // 缓存数据
       allRowKeysMap: new Map(),
     });
