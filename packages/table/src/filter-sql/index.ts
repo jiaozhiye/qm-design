@@ -27,7 +27,7 @@ export const where = <T extends IRecord>(array: T[], query: string): T[] => {
   // replace AND, OR to &&, ||
   query = sf.replace_symbols(query);
   query = vr.replace_variables(query, 'array[i]');
-  // console.log(`Conditionals`, query);
+  // console.log(`conditionals: `, query);
 
   for (let i = 0, len = array.length; i < len; i++) {
     if (eval(query)) {

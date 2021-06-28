@@ -175,6 +175,9 @@ export default defineComponent({
     showPagination(): boolean {
       return this.isFetch || this.webPagination;
     },
+    bordered(): boolean {
+      return this.border || this.isGroup;
+    },
     isGroup(): boolean {
       return convertToRows(this.tableColumns).length > 1;
     },
@@ -208,7 +211,7 @@ export default defineComponent({
     isFetch(): boolean {
       return !!this.fetch;
     },
-    variableParams(): IFetchParams {
+    refParams(): IFetchParams {
       const orderby = createOrderBy(this.sorter);
       const query = this.formatFiltersParams(this.filters, this.superFilters);
       const params = this.isFetch ? this.fetch.params : null;
@@ -222,10 +225,7 @@ export default defineComponent({
       };
     },
     fetchParams(): IFetchParams {
-      return Object.assign({}, this.variableParams, this.createTableParams());
-    },
-    bordered(): boolean {
-      return this.border || this.isGroup;
+      return Object.assign({}, this.refParams, this.createTableParams());
     },
     tableSize(): ITableSize {
       const { $size } = useSize(this.$props);
@@ -310,7 +310,7 @@ export default defineComponent({
       this.clearTableFilter();
       this.clearSuperSearch();
     },
-    variableParams(next: IFetchParams, prev: IFetchParams): void {
+    refParams(next: IFetchParams, prev: IFetchParams): void {
       const { clearableAfterFetched = !0 } = this.rowSelection || {};
       const isOnlyPageChange = this.onlyPaginationChange(next, prev);
       if (!isOnlyPageChange) {
