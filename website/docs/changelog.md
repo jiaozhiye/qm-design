@@ -2,6 +2,13 @@
 
 `qm-design` 严格遵循 Semantic Versioning 2.0.0 语义化版本规范。
 
+### 1.0.0-beta.24
+
+2021-02-29
+
+- 🌟 [Drawer] 新增了 START_LOADING、STOP_LOADING 方法
+- 🌟 [Dialog] 新增了 START_LOADING、STOP_LOADING 方法
+
 ### 1.0.0-beta.23
 
 2021-02-28
