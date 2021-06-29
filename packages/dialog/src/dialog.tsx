@@ -28,6 +28,11 @@ export default defineComponent({
   name: 'QmDialog',
   componentName: 'QmDialog',
   inheritAttrs: false,
+  provide() {
+    return {
+      $$dialog: this,
+    };
+  },
   directives: { Draggable },
   props: {
     visible: PropTypes.bool.def(false),
@@ -73,9 +78,9 @@ export default defineComponent({
   },
   emits: ['update:visible', 'open', 'opened', 'close', 'closed', 'afterVisibleChange', 'viewportChange'],
   data() {
-    Object.assign(this, { insideSpinCtrl: isUndefined(this.loading) });
     return {
-      spinning: this.loading,
+      spinning: false,
+      sloading: false,
       fullscreen: false,
     };
   },
@@ -90,11 +95,6 @@ export default defineComponent({
       return this.fullscreen ? '0px' : `calc((100vh - ${getParserWidth(this.height)}) / 2)`;
     },
   },
-  watch: {
-    loading(val: boolean): void {
-      this.spinning = val;
-    },
-  },
   mounted() {
     this.setDialogStyle();
   },
@@ -103,7 +103,7 @@ export default defineComponent({
   },
   methods: {
     open(): void {
-      if (this.insideSpinCtrl && (this.destroyOnClose || !this.panelOpened)) {
+      if (isUndefined(this.loading) && (this.destroyOnClose || !this.panelOpened)) {
         this.spinning = true;
       }
       this.fullscreen = false;
@@ -117,7 +117,7 @@ export default defineComponent({
       this.addStopEvent();
       this.$emit('opened');
       this.$emit('afterVisibleChange', true);
-      if (this.insideSpinCtrl) {
+      if (isUndefined(this.loading)) {
         setTimeout(() => (this.spinning = false), 200);
       }
     },
@@ -190,6 +190,12 @@ export default defineComponent({
     DO_CLOSE(): void {
       this.$refs[`dialog`].handleClose();
     },
+    START_LOADING() {
+      this.sloading = true;
+    },
+    STOP_LOADING() {
+      this.sloading = false;
+    },
   },
   render(): JSXNode {
     const { fullscreen, disTop, height, containerStyle, $props } = this;
@@ -228,7 +234,7 @@ export default defineComponent({
     return (
       <el-dialog ref="dialog" {...wrapProps} v-slots={{ title: () => this.renderHeader() }}>
         {/* @ts-ignore */}
-        <Spin spinning={this.spinning} tip="Loading..." containerStyle={{ height: '100%' }}>
+        <Spin spinning={this.loading || this.sloading || this.spinning} tip="Loading..." containerStyle={{ height: '100%' }}>
           <div class="dialog-container" style={containerStyle}>
             {this.$slots.default?.()}
           </div>

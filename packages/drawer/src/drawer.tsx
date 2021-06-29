@@ -33,6 +33,11 @@ export default defineComponent({
   name: 'QmDrawer',
   componentName: 'QmDrawer',
   inheritAttrs: false,
+  provide() {
+    return {
+      $$drawer: this,
+    };
+  },
   props: {
     visible: PropTypes.bool.def(false),
     title: PropTypes.string,
@@ -72,16 +77,11 @@ export default defineComponent({
   },
   emits: ['update:visible', 'open', 'opened', 'close', 'closed', 'afterVisibleChange', 'viewportChange'],
   data() {
-    Object.assign(this, { insideSpinCtrl: isUndefined(this.loading) });
     return {
-      spinning: this.loading,
+      spinning: false,
+      sloading: false,
       fullscreen: false,
     };
-  },
-  watch: {
-    loading(val: boolean): void {
-      this.spinning = val;
-    },
   },
   computed: {
     direction(): string {
@@ -97,7 +97,7 @@ export default defineComponent({
   },
   methods: {
     open(): void {
-      if (this.insideSpinCtrl && (this.destroyOnClose || !this.panelOpened)) {
+      if (isUndefined(this.loading) && (this.destroyOnClose || !this.panelOpened)) {
         this.spinning = true;
       }
       this.fullscreen = false; // 取消全屏
@@ -110,7 +110,7 @@ export default defineComponent({
       this.$emit('opened');
       this.$emit('afterVisibleChange', true);
       this.$refs[`drawer`].drawerRef.classList.remove('gpu');
-      if (this.insideSpinCtrl) {
+      if (isUndefined(this.loading)) {
         setTimeout(() => (this.spinning = false), 300);
       }
     },
@@ -169,6 +169,12 @@ export default defineComponent({
     DO_CLOSE(): void {
       this.$refs[`drawer`].handleClose();
     },
+    START_LOADING() {
+      this.sloading = true;
+    },
+    STOP_LOADING() {
+      this.sloading = false;
+    },
   },
   render(): JSXNode {
     const { contentSize, direction, containerStyle, $props } = this;
@@ -205,7 +211,7 @@ export default defineComponent({
     return (
       <el-drawer ref="drawer" {...wrapProps} v-slots={{ title: () => this.renderHeader() }}>
         {/* @ts-ignore */}
-        <Spin spinning={this.spinning} tip="Loading..." containerStyle={{ height: '100%' }}>
+        <Spin spinning={this.loading || this.sloading || this.spinning} tip="Loading..." containerStyle={{ height: '100%' }}>
           <div class="drawer-container" style={containerStyle}>
             {this.$slots.default?.()}
           </div>
