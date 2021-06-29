@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-02-09 09:03:59
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-05-07 15:29:06
+ * @Last Modified time: 2021-06-29 14:01:58
  */
 import { defineComponent, PropType, CSSProperties } from 'vue';
 import addEventListener from 'add-dom-event-listener';
@@ -85,7 +85,7 @@ export default defineComponent({
     };
   },
   computed: {
-    $$dialog() {
+    $dialog() {
       return this.$refs[`dialog`].dialogRef;
     },
     disTop(): string {
@@ -134,19 +134,19 @@ export default defineComponent({
     },
     setDialogStyle(): void {
       if (this.height === 'auto' || this.height === 'none') return;
-      setStyle(this.$$dialog, { height: this.fullscreen ? 'auto' : getParserWidth(this.height) });
+      setStyle(this.$dialog, { height: this.fullscreen ? 'auto' : getParserWidth(this.height) });
     },
     setDialogBodyStyle(): void {
       this.$nextTick(() => {
         const maxHeight: string =
           this.height !== 'auto' || this.fullscreen
             ? 'none'
-            : `calc(100vh - ${this.disTop} * 2 - ${this.$$dialog.querySelector('.el-dialog__header').offsetHeight}px)`;
-        setStyle(this.$$dialog.querySelector('.el-dialog__body'), { maxHeight });
+            : `calc(100vh - ${this.disTop} * 2 - ${this.$dialog.querySelector('.el-dialog__header').offsetHeight}px)`;
+        setStyle(this.$dialog.querySelector('.el-dialog__body'), { maxHeight });
       });
     },
     resetDialogPosition(): void {
-      setStyle(this.$$dialog, { marginTop: this.disTop, marginLeft: 'auto', marginRight: 'auto' });
+      setStyle(this.$dialog, { marginTop: this.disTop, marginLeft: 'auto', marginRight: 'auto' });
     },
     addStopEvent(): void {
       this.stopEvent = addEventListener(document.body, 'mousedown', stop);
