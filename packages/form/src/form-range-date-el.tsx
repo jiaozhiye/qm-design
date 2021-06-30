@@ -112,7 +112,7 @@ export default defineComponent({
           disabledDate={(time: Date): boolean => {
             return setDisabledDate(time, [minDateTime, maxDateTime]);
           }}
-          shortcuts={shortCuts ? pickers : []}
+          shortcuts={shortCuts && dateType.includes('date') ? pickers : []}
           onChange={(): void => onChange(form[fieldName])}
         />
         {descOptions && this.$$form.createFormItemDesc({ fieldName, ...descOptions })}

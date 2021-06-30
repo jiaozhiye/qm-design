@@ -149,7 +149,7 @@ export default defineComponent({
             disabledDate={(time: Date): boolean => {
               return setDisabledDate(time, [minDateTime, form[fieldName][1]]);
             }}
-            shortcuts={shortCuts ? pickers : []}
+            shortcuts={shortCuts && dateType.includes('date') ? pickers : []}
             onChange={(): void => onChange(form[fieldName])}
             onFocus={(): void => {
               this.$nextTick(() => {
