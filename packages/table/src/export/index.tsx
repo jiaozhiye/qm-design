@@ -116,8 +116,8 @@ export default defineComponent({
           currentPage: undefined,
           pageSize: undefined,
         });
-        if (res.data) {
-          download(res.data, fileName);
+        if (res) {
+          download(res, fileName);
           this.recordExportLog();
         }
       } catch (err) {}

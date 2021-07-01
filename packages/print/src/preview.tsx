@@ -246,9 +246,9 @@ export default defineComponent({
               </el-button>
             </span>
             <span>
-              <el-button icon="el-icon-printer" type="primary" onClick={this.printClickHandle}>
+              <qm-button icon="el-icon-printer" type="primary" onClick={this.printClickHandle}>
                 打印
-              </el-button>
+              </qm-button>
             </span>
           </div>
           <div class="main">

@@ -633,12 +633,12 @@ export default defineComponent({
         <el-col key="-" span={colSpan} offset={offset * colSpan} style={{ textAlign: 'right' }}>
           {/* @ts-ignore */}
           <Space containerStyle={{ marginRight: '10px' }}>
-            <el-button type="primary" size={$size} icon="iconfont icon-search" onClick={this.submitForm}>
+            <qm-button type="primary" size={$size} icon="iconfont icon-search" onClick={this.submitForm}>
               {t('qm.form.search')}
-            </el-button>
-            <el-button size={$size} icon="iconfont icon-reload" onClick={this.resetForm}>
+            </qm-button>
+            <qm-button size={$size} icon="iconfont icon-reload" onClick={this.resetForm}>
               {t('qm.form.reset')}
-            </el-button>
+            </qm-button>
           </Space>
           {isFieldsDefine && <FieldsFilter size={$size} list={this.list} uniqueKey={this.uniqueKey} />}
           {showFilterCollapse ? (
@@ -661,12 +661,12 @@ export default defineComponent({
           <el-col key="-" span={colSpan}>
             <el-form-item label={''}>
               <Space>
-                <el-button type="primary" size={$size} onClick={this.submitForm}>
+                <qm-button type="primary" size={$size} onClick={this.submitForm}>
                   {t('qm.form.save')}
-                </el-button>
-                <el-button size={$size} onClick={this.resetForm}>
+                </qm-button>
+                <qm-button size={$size} onClick={this.resetForm}>
                   {t('qm.form.reset')}
-                </el-button>
+                </qm-button>
               </Space>
             </el-form-item>
           </el-col>

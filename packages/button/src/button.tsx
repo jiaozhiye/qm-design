@@ -74,6 +74,15 @@ export default defineComponent({
       icon,
       loading: ajaxing || loading,
       disabled: isDisabled,
+      onKeydown: (ev: KeyboardEvent): void => {
+        if (ev.keyCode !== 13) return;
+        ev.preventDefault();
+      },
+      onKeyup: (ev: KeyboardEvent): void => {
+        if (ev.keyCode !== 13) return;
+        this.$emit('click');
+        ajaxClick && this.clickHandler();
+      },
     };
 
     if (!confirm) {
