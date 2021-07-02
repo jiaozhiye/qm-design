@@ -30,14 +30,14 @@ const Draggable: ObjectDirective = {
         if (l < 0) {
           l = 0;
         }
-        if (l > winWdith - outerWidth) {
-          l = winWdith - outerWidth;
+        if (l > winWdith - outerWidth - 1) {
+          l = winWdith - outerWidth - 1;
         }
         if (t < 0) {
           t = 0;
         }
-        if (t > winHeight - outerHeight) {
-          t = winHeight - outerHeight;
+        if (t > winHeight - outerHeight - 1) {
+          t = winHeight - outerHeight - 1;
         }
 
         setStyle($outer, { marginLeft: `${l}px`, marginTop: `${t}px` });
