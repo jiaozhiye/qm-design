@@ -87,7 +87,7 @@ export default defineComponent({
       for (let i = 0; i < distances.length; i++) {
         const t1: number = distances[i];
         const t2: number = distances[i + 1] || 10000;
-        if (top >= t1 && top < t2) {
+        if (top >= t1 - 1 && top < t2) {
           index = i;
         }
       }
@@ -109,7 +109,7 @@ export default defineComponent({
         behavior: 'smooth',
         boundary: this.$refs[`scroll`],
       });
-      this.timer = setTimeout(() => (this.state = 'ready'), 400);
+      this.timer = setTimeout(() => (this.state = 'ready'), 500);
     },
   },
   render(): JSXNode {
