@@ -6,7 +6,8 @@
  */
 import ExcelJS from 'exceljs';
 import { isFunction } from 'lodash-es';
-import { getCellValue, convertToRows, deepFindColumn } from '../utils';
+import { getCellValue, convertToRows, getVNodeText, deepFindColumn } from '../utils';
+import { isVNode } from '../../../_utils/util';
 import { download } from '../../../_utils/download';
 import { t } from '../../../locale';
 import { IAlign, IColumn, IRecord } from '../table/types';
@@ -186,7 +187,8 @@ const exportMixin = {
           columns.forEach((column: IColumn, columnIndex: number) => {
             const { dataIndex, summation } = column;
             const text = summation?.render ? summation.render(dataList) : getCellValue(row, dataIndex);
-            colFoot[dataIndex] = columnIndex === 0 && text === '' ? t('qm.table.config.summaryText') : text;
+            colFoot[dataIndex] =
+              columnIndex === 0 && text === '' ? t('qm.table.config.summaryText') : isVNode(text) ? getVNodeText(text).join('') : text;
           });
           footList.push(colFoot);
         });

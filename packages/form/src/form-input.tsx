@@ -337,7 +337,7 @@ export default defineComponent({
               this.$refs[type].blur();
             });
           }}
-          onKeydown={(ev) => {
+          onKeyup={(ev) => {
             if (ev.keyCode !== 13) return;
             if (isSearchHelper) return;
             onEnter(ev.target.value.trim());
@@ -348,10 +348,10 @@ export default defineComponent({
               ? (): JSXNode => {
                   if (isSearchHelper) {
                     return (
-                      <el-button
+                      <qm-button
                         icon="el-icon-search"
                         style={disabled && { cursor: 'not-allowed' }}
-                        onClick={(): void => {
+                        click={(): void => {
                           if (disabled) return;
                           openSearchHelper(form[fieldName]);
                         }}

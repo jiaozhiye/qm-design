@@ -8,8 +8,8 @@ import { defineComponent } from 'vue';
 import { get } from 'lodash-es';
 import dayjs from 'dayjs';
 
-import { getCellValue, setCellValue, convertToRows, filterTableColumns } from '../utils';
-import { deepToRaw } from '../../../_utils/util';
+import { getCellValue, setCellValue, convertToRows, getVNodeText, filterTableColumns } from '../utils';
+import { deepToRaw, isVNode } from '../../../_utils/util';
 import { getPrefixCls } from '../../../_utils/prefix';
 import { t } from '../../../locale';
 import { download } from '../../../_utils/download';
@@ -177,7 +177,9 @@ export default defineComponent({
                   .map((column, index) => {
                     const { dataIndex, summation } = column;
                     const text = summation?.render ? summation.render(dataList) : getCellValue(row, dataIndex);
-                    return `<td>${index === 0 && text === '' ? t('qm.table.config.summaryText') : text}</td>`;
+                    return `<td>${
+                      index === 0 && text === '' ? t('qm.table.config.summaryText') : isVNode(text) ? getVNodeText(text).join('') : text
+                    }</td>`;
                   })
                   .join('')}</tr>`
             )
