@@ -230,6 +230,7 @@ export default {
   // 树结构配置项
   treeStructure: PropTypes.shape({
     defaultExpandAllRows: PropTypes.bool, // 默认展开所有行
+    defaultFoldAllRows: PropTypes.bool, // 默认收起所有行
     expandedRowKeys: PropTypes.array, // 展开行的 key 数组，支持动态赋值
   }),
   summation: PropTypes.shape({

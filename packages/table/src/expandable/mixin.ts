@@ -31,7 +31,10 @@ const expandableMixin = {
       }
       // 树结构
       if (isTreeTable) {
-        const { defaultExpandAllRows, expandedRowKeys = [] } = treeStructure || {};
+        const { defaultExpandAllRows, defaultFoldAllRows, expandedRowKeys = [] } = treeStructure || {};
+        if (defaultFoldAllRows) {
+          return [];
+        }
         const mergedRowKeys = [...selectionKeys, ...expandedRowKeys];
         const result: string[] = [];
         if (mergedRowKeys.length) {

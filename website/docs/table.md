@@ -332,6 +332,7 @@
 | 参数                 | 说明                   | 类型     | 默认值 |
 | -------------------- | ---------------------- | -------- | ------ |
 | defaultExpandAllRows | 默认展开树表格的所有行 | boolean  | -      |
+| defaultFoldAllRows   | 默认收起树表格的所有行 | boolean  | -      |
 | expandedRowKeys      | 展开行的 rowKey 数组   | string[] | -      |
 
 ### exportExcel
