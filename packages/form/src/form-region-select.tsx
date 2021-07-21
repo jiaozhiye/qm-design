@@ -183,6 +183,7 @@ export default defineComponent({
   render(): JSXNode {
     const { form } = this.$$form;
     const {
+      type,
       label,
       fieldName,
       labelWidth,

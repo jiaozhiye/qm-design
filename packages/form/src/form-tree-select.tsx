@@ -94,6 +94,7 @@ export default defineComponent({
     const { isFetch, multiple, width } = this;
     const { form } = this.$$form;
     const {
+      type,
       label,
       fieldName,
       labelWidth,

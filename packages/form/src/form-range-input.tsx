@@ -18,7 +18,7 @@ export default defineComponent({
   props: ['option'],
   render(): JSXNode {
     const { form } = this.$$form;
-    const { label, fieldName, labelWidth, labelOptions, descOptions, clearable = !0, readonly, disabled, onChange = noop } = this.option;
+    const { type, label, fieldName, labelWidth, labelOptions, descOptions, clearable = !0, readonly, disabled, onChange = noop } = this.option;
     this.$$form.setViewValue(fieldName, form[fieldName].join('-'));
     return (
       <el-form-item

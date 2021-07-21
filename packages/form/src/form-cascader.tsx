@@ -19,10 +19,7 @@ export default defineComponent({
   inject: ['$$form'],
   props: ['option', 'multiple'],
   data() {
-    const { form } = this.$$form as any;
-    const { fieldName } = this.option;
     return {
-      cascaderValue: this.createCascaderValue(form[fieldName]),
       itemList: [],
     };
   },
@@ -43,13 +40,13 @@ export default defineComponent({
     this.isFetch && this.getItemList();
   },
   methods: {
-    createFormValue(vals: any): string | string[] {
+    createFormValue(vals: any[] | null): string | string[] {
       if (!this.multiple) {
-        return vals.join(',');
+        return vals?.join(',') || '';
       }
-      return vals.map((arr) => arr.join(','));
+      return vals?.map((arr) => arr.join(',')) || [];
     },
-    createCascaderValue(val: string | string[] = ''): any[] {
+    createCascaderValue(val: string | string[] = ''): string[] | string[][] {
       if (!this.multiple) {
         return (val as string).split(',');
       }
@@ -102,6 +99,12 @@ export default defineComponent({
       this.itemList = itemList ?? [];
     }
     this.$$form.setViewValue(fieldName, this.createViewText(form[fieldName]));
+    const wrapProps = {
+      modelValue: this.createCascaderValue(form[fieldName]),
+      'onUpdate:modelValue': (val): void => {
+        form[fieldName] = this.createFormValue(val);
+      },
+    };
     return (
       <el-form-item
         key={fieldName}
@@ -113,18 +116,18 @@ export default defineComponent({
         }}
       >
         <el-cascader
-          v-model={this.cascaderValue}
+          {...wrapProps}
           props={{ children: 'children', label: 'text', multiple }}
           options={this.itemList}
           clearable={clearable}
           disabled={disabled}
           placeholder={!disabled ? placeholder : ''}
           style={{ ...style }}
+          readonly={readonly}
           filterable
           collapse-tags
           show-all-levels
           onChange={() => {
-            form[fieldName] = this.createFormValue(this.cascaderValue);
             onChange(form[fieldName]);
           }}
         />
