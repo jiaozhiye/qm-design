@@ -93,7 +93,7 @@
 | type         | 字段类型，[配置项](#formItemType)，必要参数                   | string                           | -      |
 | fieldName    | 字段数据名，不能重复，必要参数                                | string                           | -      |
 | label        | label 名称，必要参数                                          | string                           | -      |
-| labelWidth   | label 标签宽度                                                | number \| string                 | 80     |
+| labelWidth   | label 标签宽度，支持 auto                                     | number \| string                 | 80     |
 | description  | label 表述信息                                                | string                           | -      |
 | hidden       | 是否隐藏，不占页面空间                                        | boolean                          | -      |
 | invisible    | 是否可见，占页面空间                                          | boolean                          | -      |
