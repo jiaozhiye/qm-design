@@ -128,7 +128,7 @@ export default defineComponent({
       <el-form-item
         key={fieldName}
         label={label}
-        labelWidth={labelWidth && getParserWidth(labelWidth)}
+        labelWidth={labelWidth ? getParserWidth(labelWidth) : ''}
         prop={fieldName}
         v-slots={{
           label: (): JSXNode => labelOptions && this.$$form.createFormItemLabel({ label, ...labelOptions }),
