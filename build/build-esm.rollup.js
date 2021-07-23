@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-02-12 09:22:19
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-05-12 22:22:35
+ * @Last Modified time: 2021-07-23 17:12:19
  */
 'use strict';
 
@@ -39,7 +39,7 @@ export default [
       typescript({
         outDir: 'lib',
         sourceMap: false,
-        include: ['packages/**/*', 'typings/vue-shim.d.ts'],
+        include: ['packages/**/*', 'typings/index.d.ts'],
         exclude: ['node_modules/**'],
       }),
       babel({
