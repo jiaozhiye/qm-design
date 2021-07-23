@@ -18,9 +18,9 @@
     "build:locale": "cross-env BABEL_ENV=utils babel packages/locale --extensions .ts --out-dir lib/locale",
     "build:theme": "gulp build --gulpfile ./build/build-style.gulp.js",
     "clean:lib": "rimraf lib",
-    "lint": "eslint ./src --ext .vue,.js,.ts",
-    "lint-fix": "eslint --fix ./src --ext .vue,.js,.ts",
-    "format": "prettier --write \"./src/**/*.{vue,js,ts}\"",
+    "lint": "eslint ./src --ext .js,.ts,.jsx,.tsx,.vue",
+    "lint-fix": "eslint --fix ./src --ext .js,.ts,.jsx,.tsx,.vue",
+    "format": "prettier --write \"./src/**/*.{js,ts,jsx,tsx,vue}\"",
     "website-dev": "cross-env NODE_ENV=development BABEL_ENV=web webpack serve --progress --config ./website/webpack.config.js",
     "website-build": "rimraf website-dist && cross-env NODE_ENV=production BABEL_ENV=web webpack --config ./website/webpack.config.js"
   },
@@ -28,8 +28,8 @@
     "pre-commit": "lint-staged"
   },
   "lint-staged": {
-    "src/*.{js,ts,vue}": [
-      "eslint 'src/**/*.{js,ts,vue}'",
+    "src/*.{js,ts,jsx,tsx,vue}": [
+      "eslint 'src/**/*.{js,ts,jsx,tsx,vue}'",
       "git add"
     ]
   },

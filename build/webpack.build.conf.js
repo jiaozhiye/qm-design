@@ -2,7 +2,7 @@
  * @Author: 焦质晔
  * @Date: 2021-02-08 14:35:05
  * @Last Modified by: 焦质晔
- * @Last Modified time: 2021-06-22 19:50:10
+ * @Last Modified time: 2021-07-23 16:01:42
  */
 'use strict';
 
@@ -10,8 +10,9 @@ const utils = require('./utils');
 const webpack = require('webpack');
 const nodeExternals = require('webpack-node-externals');
 const { VueLoaderPlugin } = require('vue-loader');
-// const pkg = require('../package.json');
-// const deps = Object.keys(pkg.dependencies);
+
+const pkg = require('../package.json');
+const deps = Object.keys(pkg.dependencies);
 
 process.env.NODE_ENV = 'production';
 
